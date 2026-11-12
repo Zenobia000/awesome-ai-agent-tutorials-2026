@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab5-B 審批狀態圖</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.u{position:absolute;font-size:24px;line-height:1.45;color:var(--muted)}
+.c{position:absolute;text-align:center;line-height:1.3}
+</style></head><body><div class="slide">
+  <h1>Lab 5-B：寫入前先過審批閘門</h1>
+  <p class="lead">唯讀查詢直接跑；寫入或刪除先停在三角閘門，等管理員決定。</p>
+
+  <div class="abs lbl mut" style="left:110px;top:555px">START</div>
+  <div class="c" style="left:260px;top:560px;width:200px;font-size:32px">agent</div>
+  <div class="c" style="left:110px;top:788px;width:140px;font-size:26px">END</div>
+  <div class="u" style="left:115px;top:705px">回答</div>
+
+  <div class="abs lbl mut" style="left:450px;top:283px">結果／拒絕理由，都寫回 messages</div>
+  <div class="u" style="left:445px;top:438px">寫入／刪除</div>
+  <div class="u" style="left:470px;top:686px">SELECT</div>
+
+  <div class="c" style="left:590px;top:495px;width:220px"><span class="lbl ver">審批閘門</span><br><span style="font-size:24px;color:var(--muted)">interrupt()</span></div>
+  <div class="c" style="left:920px;top:412px;width:260px;font-size:26px">管理員決定</div>
+  <div class="u ind" style="left:1190px;top:392px">approve</div>
+  <div class="u" style="left:1062px;top:333px">reject</div>
+  <div class="c" style="left:1290px;top:495px;width:220px;font-size:26px">execute_sql</div>
+  <div class="u" style="left:770px;top:714px">run_query（唯讀）</div>
+  <div class="u" style="left:450px;top:856px">查詢結果</div>
+
+  <div class="abs lbl" style="left:1100px;top:628px">PostgresSaver 每一步存一格（同一個 thread_id）</div>
+  <div class="u ver" style="left:1100px;top:775px;width:700px">interrupt() 停在這一格；恢復時從這裡讀回，不用重跑前面</div>
+
+  <div class="read"><em>怎麼讀：</em>從左邊的圓出發。上路是寫入（過閘門、等人決定），下路是唯讀；右下是閘門停住時狀態存在哪。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C, ln={strokeWidth:3};
+/* agent */
+D.arrow(185,580,252,580,ln);
+D.ci(360,580,200,'#f7d6cf',{stroke:S.ver,strokeWidth:3.2});
+/* END */
+D.arrow(308,664,215,768,ln);
+D.rect(110,775,140,60,'#fbf9f4',{fillStyle:'solid',strokeWidth:2.6});
+/* 上路：寫入 */
+D.arrow(442,528,646,457,ln);
+D.tri(700,430,130,'#f7d6cf',{stroke:S.ver,strokeWidth:3.2});
+D.arrow(772,430,910,430,ln);
+D.rect(920,390,260,80,'#fbf9f4',{fillStyle:'solid',strokeWidth:2.8});
+D.arrow(1186,430,1330,430,{strokeWidth:3,stroke:S.ind});
+D.tri(1400,430,130,S.mus,{strokeWidth:2.5});
+/* 上路回流匯流排 */
+D.line(1400,352,1400,322,ln);
+D.line(1400,322,360,322,ln);
+D.arrow(360,322,360,474,ln);
+D.line(1050,388,1050,322,{strokeWidth:3,stroke:S.ver});
+/* 下路：唯讀 */
+D.arrow(440,632,660,718,ln);
+D.tri(700,730,130,S.mus,{strokeWidth:2.5});
+D.curve([[700,790],[690,855],[540,860],[420,850]],ln);
+D.line(420,850,360,850,ln);
+D.arrow(360,850,360,684,ln);
+/* 存檔格 */
+[0,1,2,3,4,5].forEach(i=>{
+  const hot=i===2;
+  D.rect(1100+i*105,680,75,75,hot?'#f7e7c0':'#d9e1ee',{fillStyle:'solid',stroke:hot?S.ver:S.ind,strokeWidth:hot?4:2.8});
+  if(i<5) D.arrow(1100+i*105+78,717,1100+i*105+102,717,{strokeWidth:2.2});
+});
+</script></body></html>

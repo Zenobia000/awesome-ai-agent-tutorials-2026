@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>通用 Agent 加 Skills</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.sg{position:absolute;height:70px;line-height:70px;text-align:center;font-size:24px;white-space:nowrap}
+.u{position:absolute;font-size:24px;line-height:1.45;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>通用 Agent＋可插拔 Skills</h1>
+  <p class="lead">Skill 是一個資料夾。agent 按需讀取，沒用到的時候只佔一行描述。</p>
+
+<div class="code" style="left:110px;top:300px">my-skill/
+├── SKILL.md      <span class="c">名稱、描述、做法</span>
+├── scripts/      <span class="c">可執行腳本</span>
+├── references/   <span class="c">參考文件</span>
+└── assets/       <span class="c">範本、資源</span></div>
+
+  <div class="abs lbl" style="left:300px;top:575px">按需讀取</div>
+  <div class="abs lbl ver" style="left:110px;top:760px;width:300px;text-align:center">通用 agent</div>
+  <div class="abs" style="left:110px;top:815px;width:690px;font-size:28px;line-height:1.5">Tools 給能力，Skills 給做法。</div>
+
+  <div class="abs lbl ind" style="left:880px;top:300px">L1　啟動時：只載入每個 skill 的名稱和描述</div>
+  <div class="abs lbl ind" style="left:880px;top:450px">L2　判斷相關：才讀整份 SKILL.md</div>
+  <div class="abs lbl ind" style="left:880px;top:600px">L3　需要時：才讀附檔</div>
+
+  <div class="sg" style="left:880px;top:345px;width:200px">system prompt</div>
+  <div class="sg" style="left:1088px;top:345px;width:270px">各 skill 名稱＋描述</div>
+  <div class="sg" style="left:880px;top:495px;width:200px">system prompt</div>
+  <div class="sg" style="left:1088px;top:495px;width:270px">各 skill 名稱＋描述</div>
+  <div class="sg" style="left:1366px;top:495px;width:270px">pdf/SKILL.md 整份</div>
+  <div class="sg" style="left:880px;top:645px;width:200px">system prompt</div>
+  <div class="sg" style="left:1088px;top:645px;width:270px">各 skill 名稱＋描述</div>
+  <div class="sg" style="left:1366px;top:645px;width:270px">pdf/SKILL.md 整份</div>
+  <div class="sg" style="left:1644px;top:645px;width:166px">forms.md</div>
+
+  <div class="bridge" style="left:880px;top:765px;width:930px"><span class="k">你已經會的</span>一個通用 backbone＋可插拔的 task head（遷移學習）。分層讀取就像 lazy loading。</div>
+  <div class="read"><em>怎麼讀：</em>左邊是一個 skill 的資料夾；右邊是 agent 的 context 隨任務一層一層變長。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C;
+D.ci(260,670,150,'ver',{fillStyle:'hachure',hachureGap:9,strokeWidth:2.6});
+D.arrow(260,590,260,545,{strokeWidth:3});
+const seg=(x,y,w,fill,stroke)=>D.rect(x,y,w,70,fill,{fillStyle:'solid',stroke,strokeWidth:2.6});
+const A=['#fbf9f4',S.ink],B=['#d9e1ee',S.ind],C=['#f7e7c0','#b98a12'];
+[345,495,645].forEach(y=>{seg(880,y,200,...A);seg(1088,y,270,...B);});
+seg(1366,495,270,...C);seg(1366,645,270,...C);seg(1644,645,166,...C);
+</script></body></html>

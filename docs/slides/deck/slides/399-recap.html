@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組三小結</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.pts{position:absolute;left:110px;top:250px;width:840px}
+ul.dots.pts li{font-size:30px;line-height:1.5;margin:44px 0}
+.lt{position:absolute;font-size:30px;line-height:1.2}
+.n{position:absolute;text-align:center;font-size:24px;line-height:1.3;width:110px}
+</style></head><body><div class="slide">
+  <h1>模組 3 小結</h1>
+  <ul class="dots pts">
+    <li>RAG＝改輸入、不改權重：離線建庫，在線問答。</li>
+    <li>切分決定檢索上限：沿標題切，小片段命中、回傳大段落。</li>
+    <li>兩路各有盲區：BM25 抓字面、向量抓語意，RRF 融合。</li>
+    <li>重排用 Cross-Encoder 精挑，只放 3–5 段進提示詞。</li>
+    <li>檢索後自評，不夠就重查：模組五 Agent 的前奏。</li>
+  </ul>
+
+  <div class="lt ind" style="left:1010px;top:290px">離線鏈路</div>
+  <div class="lt ver" style="left:1010px;top:560px">在線鏈路</div>
+  <div id="n"></div>
+  <div class="next">下一章：知識圖譜與 GraphRAG</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const N=document.getElementById('n');
+const lab=(x,y,t)=>{const d=document.createElement('div');d.className='n';d.style.cssText=`left:${x-55}px;top:${y}px`;d.textContent=t;N.appendChild(d);};
+const BL=['#d9e1ee',D.C.ind],YL=['#f7e7c0','#b98a12'];
+const sq=(cx,cy,s,[f,st])=>D.sq(cx-s/2,cy-s/2,s,f,{fillStyle:'solid',stroke:st,strokeWidth:2.6});
+const mdl=(cx,cy,d)=>D.ci(cx,cy,d,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+const ar=(a,b,y)=>D.arrow(a,y,b,y,{strokeWidth:2.4});
+/* 離線 */
+const Y1=420,X1=[1070,1240,1410,1580,1750];
+sq(X1[0],Y1,56,BL);D.tri(X1[1],Y1,66,'mus',{strokeWidth:2.4});
+[-34,0,34].forEach(dx=>sq(X1[2]+dx,Y1,28,YL));mdl(X1[3],Y1,62);sq(X1[4],Y1,62,BL);
+D.line(X1[4]-31,Y1-10,X1[4]+31,Y1-10,{strokeWidth:1.8});D.line(X1[4]-31,Y1+10,X1[4]+31,Y1+10,{strokeWidth:1.8});
+ar(X1[0]+36,X1[1]-40,Y1);ar(X1[1]+40,X1[2]-62,Y1);ar(X1[2]+62,X1[3]-40,Y1);ar(X1[3]+40,X1[4]-40,Y1);
+['文件','載入','分塊','向量化','向量庫'].forEach((t,i)=>lab(X1[i],i===4?Y1-76:Y1+44,t));
+/* 在線 */
+const Y2=700,X2=[1055,1170,1285,1400,1515,1630,1745];
+sq(X2[0],Y2,48,BL);mdl(X2[1],Y2,58);D.tri(X2[2],Y2,62,'mus',{strokeWidth:2.4});mdl(X2[3],Y2,58);sq(X2[4],Y2,52,YL);mdl(X2[5],Y2,62);sq(X2[6],Y2,48,BL);
+[[30,32],[32,38],[38,32],[32,30],[30,34],[34,30]].forEach(([a,b],i)=>ar(X2[i]+a,X2[i+1]-b,Y2));
+['問題','改寫','召回','重排','組裝','生成','回答'].forEach((t,i)=>lab(X2[i],Y2+40,t));
+/* 向量庫 → 召回 */
+D.dash(X1[4],Y1+34,X1[4],520,{strokeWidth:2.2});
+D.dash(X1[4],520,X2[2],520,{strokeWidth:2.2});
+D.arrow(X2[2],520,X2[2],Y2-44,{strokeWidth:2.2});
+</script></body></html>

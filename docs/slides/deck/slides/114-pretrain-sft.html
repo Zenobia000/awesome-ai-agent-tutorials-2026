@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>預訓練到對話模型</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;font-size:26px}
+</style></head><body><div class="slide">
+  <h1>預訓練 → 指令微調：遷移學習的老套路</h1>
+  <p class="lead">你做過 ImageNet 預訓練再 fine-tune。LLM 也分階段：先學接龍，再學聽話。</p>
+  <div id="g"></div>
+  <div class="read"><em>怎麼讀：</em>上排是你已經會的 CV 流程，下排是 LLM 的對應流程。方塊是資料，圓是模型，箭頭上寫的是那一步在做什麼。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+const CX=[285,700,1115,1530];
+const row=(cy,title,tc,nodes,arrows)=>{
+  el(110,cy-120,700,40,title,'font-size:30px;justify-content:flex-start;color:'+tc);
+  nodes.forEach((n,i)=>{const x=CX[i];
+    if(n.sq){D.rect(x-75,cy-50,150,100,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:2.6});el(x-75,cy-50,150,100,n.in,'font-size:24px');}
+    else{D.ci(x,cy,140,n.fill,{fillStyle:'solid',stroke:D.C.ink,strokeWidth:2.6});el(x-70,cy-30,140,60,n.in,'font-size:24px');}
+    el(x-130,cy+78,260,64,n.cap,'font-size:24px;color:#5b574f');});
+  arrows.forEach((t,i)=>{const x1=CX[i]+(i===0?80:75),x2=CX[i+1]-75;
+    D.arrow(x1,cy,x2,cy,{strokeWidth:2.8});
+    el(x1-30,cy-92,x2-x1+60,74,t,'font-size:24px;line-height:1.3');});
+};
+row(430,'你已經會的：CV','#2b4c7e',
+ [{sq:1,in:'ImageNet<br>圖片＋標籤',cap:'海量、有標註'},{fill:'#f7d6cf',in:'backbone',cap:'預訓練好的特徵提取器'},{fill:'#f7d6cf',in:'你的分類器',cap:'換成你的任務'}],
+ ['預訓練<br>分類 1000 類','fine-tune<br>少量你的標註']);
+row(745,'LLM','#e0442b',
+ [{sq:1,in:'海量<br>原始文字',cap:'標籤是下一個字，免費'},{fill:'#f7d6cf',in:'base<br>模型',cap:'會接龍，不一定聽指令'},{fill:'#f7d6cf',in:'會答題<br>的模型',cap:'會照指令回答'},{fill:'#f7d6cf',in:'對話<br>模型',cap:'可以直接拿來聊天'}],
+ ['預訓練<br>猜下一個 token','指令微調<br>少量「指令→回答」配對','偏好對齊<br>再用人類偏好調一次']);
+</script></body></html>

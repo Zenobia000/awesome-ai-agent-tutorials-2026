@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab7 Server 程式</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cap{position:absolute;font-size:24px;color:var(--muted)}
+.mid{position:absolute;left:880px;top:424px;width:180px;text-align:center;font-size:24px;line-height:1.4}
+</style></head><body><div class="slide">
+  <h1>Lab7 關鍵程式：函式簽名就是工具定義</h1>
+  <p class="lead">官方 SDK 讀你的型別註記與 docstring，自動產生模型看得到的工具說明。</p>
+
+  <div class="cap" style="left:110px;top:292px">server.py</div>
+  <div class="code" style="left:110px;top:332px"><span class="k">from</span> mcp.server <span class="k">import</span> MCPServer
+<span class="k">import</span> pandas <span class="k">as</span> pd
+mcp = MCPServer(<span class="s">"excel-analyst"</span>)
+
+@mcp.tool()
+<span class="k">def</span> describe_excel(<span class="hl">path: str</span>) -&gt; str:
+    <span class="hl">"""讀取 Excel，回傳欄位名稱與前五列。"""</span>
+    <span class="k">return</span> pd.read_excel(path).head().to_string()
+<span class="k">if</span> __name__ == <span class="s">"__main__"</span>:
+    mcp.run(transport=<span class="s">"stdio"</span>)</div>
+
+  <div class="mid">SDK 自動<br>轉成工具定義</div>
+
+  <div class="cap" style="left:1075px;top:292px">模型看到的 tools/list 項目 <span class="tag">示意</span></div>
+  <div class="code" style="left:1075px;top:332px">{
+  "name": "describe_excel",
+  "description":
+    <span class="hl">"讀取 Excel，回傳欄位名稱與前五列。"</span>,
+  "inputSchema": {
+    "type": "object",
+    "properties": {<span class="hl">"path": {"type": "string"}</span>},
+    "required": ["path"]
+  }
+}</div>
+
+  <div class="cap" style="left:1075px;top:756px;width:735px;line-height:1.5">別在 stdio Server 裡 print()：stdout 是協定專用管線，要記錄就用 logging（寫 stderr）。</div>
+
+  <div class="cap" style="left:110px;top:770px">改成 HTTP 給 Dify 接（埠號以實際為準）：</div>
+  <div class="code" style="left:110px;top:808px">uv run mcp run server.py --transport streamable-http
+<span class="c"># Dify 填入：http://host.docker.internal:8000/mcp</span></div>
+
+  <div class="read"><em>怎麼讀：</em>左邊是你寫的函式，右邊是模型實際看到的說明；Server 的程式不變，只換傳輸。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.arrow(878,520,1060,520,{strokeWidth:3});
+</script></body></html>

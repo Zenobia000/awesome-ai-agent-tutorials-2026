@@ -1,0 +1,101 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>參考文獻（一）</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.mn{position:absolute;left:194px;width:166px}
+.mn .a{font-size:34px;line-height:1.2;color:var(--ind)}
+.mn .b{font-size:24px;line-height:1.3;color:var(--muted);margin-top:6px}
+.en{position:absolute;width:660px}
+.en .t{font-size:28px;line-height:1.35}
+.en .au{font-size:24px;line-height:1.4;color:var(--muted)}
+.en .u{font-size:24px;line-height:1.35;color:var(--ind);overflow-wrap:anywhere}
+</style></head><body><div class="slide">
+  <h1>參考文獻（一）：模組一到四</h1>
+  <div id="host"></div>
+  <div class="read"><em>怎麼讀：</em>每個模組挑兩份最好懂的；網址省略開頭的 https://，標題照原文。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const C=D.C,host=document.getElementById('host');
+const el=(cls,x,y,html)=>{const d=document.createElement('div');d.className=cls;d.style.left=x+'px';d.style.top=y+'px';d.innerHTML=html;host.appendChild(d);};
+const DATA=[
+ {
+  "no": "模組一",
+  "name": "LLM 基礎",
+  "shape": "ci",
+  "refs": [
+   [
+    "Transformers, the tech behind LLMs",
+    "3Blue1Brown（Grant Sanderson）",
+    "www.3blue1brown.com/lessons/gpt"
+   ],
+   [
+    "【生成式AI導論 2024】第10講：今日的語言模型是如何做文字接龍的—淺談 Transformer",
+    "李宏毅（台大）",
+    "www.youtube.com/watch?v=uhNsUCb2fJI"
+   ]
+  ]
+ },
+ {
+  "no": "模組二",
+  "name": "提示詞與<br>結構化輸出",
+  "shape": "sq",
+  "refs": [
+   [
+    "Prompt engineering",
+    "OpenAI API 文件",
+    "developers.openai.com/api/docs/guides/prompt-engineering"
+   ],
+   [
+    "Delimiters won't save you from prompt injection",
+    "Simon Willison，2023",
+    "simonwillison.net/2023/May/11/delimiters-wont-save-you/"
+   ]
+  ]
+ },
+ {
+  "no": "模組三",
+  "name": "企業級 RAG",
+  "shape": "tri",
+  "refs": [
+   [
+    "What Is Retrieval-Augmented Generation, aka RAG?",
+    "Rick Merritt / NVIDIA Blog",
+    "blogs.nvidia.com/blog/what-is-retrieval-augmented-generation/"
+   ],
+   [
+    "Hybrid Search Explained",
+    "Erika Shorten / Weaviate Blog",
+    "weaviate.io/blog/hybrid-search-explained"
+   ]
+  ]
+ },
+ {
+  "no": "模組四",
+  "name": "知識圖譜與<br>GraphRAG",
+  "shape": "ci",
+  "refs": [
+   [
+    "Graph RAG Explained",
+    "Nir Diamant，2025",
+    "newsletter.diamant-ai.com/p/graph-rag-explained"
+   ],
+   [
+    "What is Cypher?",
+    "Neo4j Getting Started 官方文件",
+    "neo4j.com/docs/getting-started/cypher/"
+   ]
+  ]
+ }
+];
+const Y0=208,P=184,H=166,EX=[394,1122];
+DATA.forEach((m,i)=>{
+  const y=Y0+i*P;
+  D.rect(110,y,254,H,'#d9e1ee',{fillStyle:'solid',stroke:C.ind,strokeWidth:3});
+  const gx=150,gy=y+H/2;
+  if(m.shape==='ci')D.ci(gx,gy,56,C.ver,{strokeWidth:2.2});
+  else if(m.shape==='sq')D.sq(gx-26,gy-26,52,'ind',{strokeWidth:2.2});
+  else D.tri(gx,gy+2,64,C.mus,{strokeWidth:2.2});
+  el('mn',200,y+38,'<div class="a">'+m.no+'</div><div class="b">'+m.name+'</div>');
+  m.refs.forEach((r,j)=>{const x=EX[j];
+    D.rect(x,y+14,16,16,'#d9e1ee',{fillStyle:'solid',stroke:C.ind,strokeWidth:2});
+    el('en',x+28,y+6,'<div class="t">'+r[0]+'</div><div class="au">'+r[1]+'</div><div class="u">'+r[2].replace(/([\/\-])/g,'$1<wbr>')+'</div>');});
+});
+</script></body></html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>loss 到 trace</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.bridge.row{width:790px;left:110px;height:132px}
+.nw{position:absolute;left:1040px;width:770px;height:132px;padding:22px 30px;font-size:28px;line-height:1.55}
+.nw .k{display:block;font-size:24px;color:var(--ver);margin-bottom:6px}
+</style></head><body><div class="slide">
+  <h1>訓練看 loss，上線看 trace 與評測</h1>
+  <p class="lead">模型上線後，你盯的東西換了名字，但思路和訓練時一樣。</p>
+
+  <div class="bridge row" style="top:295px"><span class="k">你已經會的</span>看 loss 曲線，找訓練哪裡出問題</div>
+  <div class="nw" style="top:295px"><span class="k">上線後你看的</span>看 trace，找哪一步慢、哪一步錯</div>
+
+  <div class="bridge row" style="top:445px"><span class="k">你已經會的</span>驗證集（val set）</div>
+  <div class="nw" style="top:445px"><span class="k">上線後你看的</span>評測集（eval dataset）：輸入加參考答案</div>
+
+  <div class="bridge row" style="top:595px"><span class="k">你已經會的</span>新 checkpoint 不能比舊的差才部署</div>
+  <div class="nw" style="top:595px"><span class="k">上線後你看的</span>回歸測試：新版本不能比 baseline 差</div>
+
+  <div class="bridge row" style="top:745px"><span class="k">你已經會的</span>部署後監控 data drift</div>
+  <div class="nw" style="top:745px"><span class="k">上線後你看的</span>線上評測：用真實流量，沒有標準答案</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊是訓練時的老習慣，右邊是它在 LLM 應用上的對應物；新的難題只有一個：評分器本身也要被驗證。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+[295,445,595,745].forEach(t=>{
+  D.rect(1040,t,770,132,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+  D.arrow(910,t+66,1025,t+66,{strokeWidth:3});
+});
+</script></body></html>

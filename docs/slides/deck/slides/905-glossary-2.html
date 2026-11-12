@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>術語表（二）</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.tm{position:absolute;width:520px}
+.tm .w{font-size:30px;line-height:1.25;padding-left:40px}
+.tm .w i{font-style:normal;font-size:24px;color:var(--muted);margin-left:10px}
+.tm .d{font-size:26px;line-height:1.36;color:var(--ink);margin-top:3px}
+.tm .d b{color:var(--ind)}
+.key{position:absolute;left:1130px;top:116px;width:680px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>術語表（二）：模組五到八</h1>
+  <div class="key">圓＝模型相關　方＝資料與狀態　三角＝動作與閘門<br>依模組順序排列；忘了就回來查</div>
+  <div id="host"></div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const C=D.C,host=document.getElementById('host');
+const T=[
+ [
+  "Agent",
+  "m",
+  "把模型放進「想 → 做 → 看」的迴圈，配上記憶與工具。",
+  "智能體"
+ ],
+ [
+  "tool calling",
+  "t",
+  "模型輸出「要呼叫哪個函式、參數是什麼」（JSON），由程式去執行。",
+  "工具呼叫"
+ ],
+ [
+  "ReAct",
+  "m",
+  "Thought → Action → Observation：邊想邊做，看了結果再想下一步。",
+  ""
+ ],
+ [
+  "StateGraph",
+  "d",
+  "LangGraph 的圖：State 存狀態、Node 做事、Edge 決定下一步去哪。",
+  ""
+ ],
+ [
+  "reducer",
+  "d",
+  "多個節點同時寫同一欄位時的合併規則。例：operator.add 是追加，不是覆蓋。",
+  ""
+ ],
+ [
+  "checkpointer",
+  "d",
+  "每一步存一份狀態快照，可暫停、恢復、回溯；thread_id 隔離不同會話。",
+  "檢查點"
+ ],
+ [
+  "HITL",
+  "t",
+  "人在回路：高風險動作前暫停，等人批准或改參數再繼續。",
+  "Human-in-the-loop"
+ ],
+ [
+  "Supervisor",
+  "m",
+  "主管 agent：拆任務、派給包成工具的子 agent，再統整回覆。",
+  ""
+ ],
+ [
+  "LoRA",
+  "m",
+  "凍結原權重 W，旁邊只訓練兩個小矩陣 B·A；7B 模型約 0.06%–0.3% 的參數。",
+  ""
+ ],
+ [
+  "QLoRA",
+  "m",
+  "基座壓成 4-bit 再加 LoRA 省顯存；合併時要回到原精度基座。",
+  ""
+ ],
+ [
+  "chat template",
+  "d",
+  "把 messages 攤平成帶角色標記的字串。不符時：loss 正常，推理卻停不下來。",
+  "對話模板"
+ ],
+ [
+  "MCP",
+  "t",
+  "工具與資料的標準協定（Host、Client、Server），一次寫好、多處可接。",
+  ""
+ ],
+ [
+  "trace",
+  "d",
+  "一次執行的完整紀錄：每步耗時、token、輸入輸出。",
+  "追蹤"
+ ],
+ [
+  "eval",
+  "m",
+  "用評測集打分；LLM-as-judge 是讓另一個模型當評審。改動後跑一遍，防退步。",
+  "評測"
+ ],
+ [
+  "vibe coding",
+  "m",
+  "自然語言規劃 → AI 生成程式 → 人審查。Karpathy 於 2025-02 提出。",
+  ""
+ ]
+];
+const X=[110,700,1290],Y0=206,P=152;
+T.forEach((t,i)=>{
+  const x=X[Math.floor(i/5)],y=Y0+(i%5)*P;
+  const d=document.createElement('div');d.className='tm';d.style.left=x+'px';d.style.top=y+'px';
+  d.innerHTML='<div class="w">'+t[0]+(t[3]?'<i>'+t[3]+'</i>':'')+'</div><div class="d">'+t[2]+'</div>';
+  host.appendChild(d);
+  const gy=y+19;
+  if(t[1]==='m')D.ci(x+12,gy,24,C.ver,{strokeWidth:2});
+  else if(t[1]==='d')D.sq(x,gy-12,24,'ind',{strokeWidth:2});
+  else D.tri(x+12,gy+1,30,C.mus,{strokeWidth:2});
+});
+/* 欄與欄之間的細線 */
+[670,1260].forEach(x=>D.line(x,214,x,950,{stroke:'#d3cdbf',strokeWidth:1.8,roughness:1.6}));
+</script></body></html>

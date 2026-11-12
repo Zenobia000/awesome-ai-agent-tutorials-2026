@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>評測流程</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.h{position:absolute;top:292px;font-size:34px;line-height:1.2}
+.s{position:absolute;font-size:26px;color:var(--muted);line-height:1.4;text-align:center}
+.gr{position:absolute;left:840px;width:440px;height:82px;line-height:82px;font-size:26px;padding-left:22px}
+.n{position:absolute;font-size:24px;line-height:1.5;color:var(--muted)}
+.bridge.inline{padding:18px 30px}
+</style></head><body><div class="slide">
+  <h1>評測：給 LLM 應用一張驗證集</h1>
+  <p class="lead">評測集、評分器、對 baseline 的比較，就是 LLM 版的驗證流程；改完就跑一次，退步就擋下來。</p>
+
+  <div class="h" style="left:110px">評測集</div>
+  <div class="s" style="left:110px;top:538px;width:330px">輸入加參考答案</div>
+  <div class="s" style="left:525px;top:588px;width:200px">待測的新版本</div>
+  <div class="h" style="left:840px">評分器</div>
+  <div class="gr" style="top:335px">程式規則：格式、關鍵字</div>
+  <div class="gr" style="top:427px">LLM 評審：給 pass／fail</div>
+  <div class="gr" style="top:519px">人工標註：最準也最貴</div>
+  <div class="n" style="left:840px;top:620px;width:440px">LLM 評審能大量跑，但自己也要被驗證</div>
+  <div class="s" style="left:1350px;top:528px;width:120px">分數</div>
+  <div class="abs" style="left:1490px;top:565px;width:320px;text-align:center"><div style="font-size:32px" class="ver">回歸測試</div><div style="font-size:26px;line-height:1.45">新版本不能比 baseline 差，才放行</div></div>
+
+  <div class="bridge inline" style="left:110px;top:775px;width:1700px"><span class="k">你已經會的</span>評測集＝驗證集；評分器＝評估指標；新版本不能比 baseline 差＝新 checkpoint 在驗證集上不能比舊的差，才部署。</div>
+  <div class="read"><em>怎麼讀：</em>由左往右跑一遍：評測集餵給新版本，評分器打分，分數過了三角閘門才放行。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const L=['#d9e1ee',D.C.ind];
+const A=o=>Object.assign({strokeWidth:2.8},o||{});
+const cy=468;
+[120,230,340].forEach(x=>D.sq(x,cy-45,90,L[0],{fillStyle:'solid',stroke:L[1],strokeWidth:2.8}));
+D.arrow(445,cy,520,cy,A());
+D.ci(625,cy,190,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+D.arrow(730,cy,826,cy,A());
+/* 評分器三格 */
+D.rect(840,335,440,82,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+D.rect(840,427,440,82,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+D.rect(840,519,440,82,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.5});
+D.arrow(1290,cy,1360,cy,A());
+D.sq(1370,cy-40,80,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+D.arrow(1460,cy,1530,cy,A());
+D.tri(1650,cy-10,150,'mus',{strokeWidth:2.6});
+</script></body></html>

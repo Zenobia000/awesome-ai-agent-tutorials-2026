@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>三種原語：誰決定用</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.col{position:absolute;width:520px}
+.nm{position:absolute;font-size:46px}
+.tg{position:absolute;width:520px;font-size:28px;color:var(--muted)}
+.who{position:absolute;width:330px}
+.who .q{font-size:24px;color:var(--muted)}
+.who .a{font-size:44px;line-height:1.2}
+.ds{position:absolute;width:520px;font-size:27px;line-height:1.5}
+.ex{position:absolute;font-family:"JetBrains Mono",monospace;font-size:24px}
+</style></head><body><div class="slide">
+  <h1>三種原語：差在「誰決定用」</h1>
+  <p class="lead">MCP Server 能提供的東西只有三類；記住誰握有觸發權，就記住了它們的用途與風險。</p>
+
+  <div class="nm" style="left:110px;top:295px;color:#b98a12">Tools</div>
+  <div class="tg" style="left:110px;top:355px">能做事的函式</div>
+  <div class="who" style="left:280px;top:430px"><div class="q">誰決定何時用</div><div class="a ver">模型</div></div>
+  <div class="ds" style="left:110px;top:605px">會有副作用（寫檔、寄信、訂房），所以客戶端通常要讓使用者先核准。</div>
+  <div class="ex" style="left:110px;top:760px"><span style="font-family:Huninn,sans-serif;color:var(--muted)">例　</span>describe_excel</div>
+
+  <div class="nm" style="left:700px;top:295px;color:var(--ind)">Resources</div>
+  <div class="tg" style="left:700px;top:355px">唯讀的資料來源</div>
+  <div class="who" style="left:870px;top:430px"><div class="q">誰決定何時用</div><div class="a ind">應用程式</div></div>
+  <div class="ds" style="left:700px;top:605px">不是「靜態」：可以用模板依參數動態產生，也能訂閱變化。</div>
+  <div class="ex" style="left:700px;top:760px"><span style="font-family:Huninn,sans-serif;color:var(--muted)">例　</span>weather://forecast/{city}/{date}</div>
+
+  <div class="nm" style="left:1290px;top:295px">Prompts</div>
+  <div class="tg" style="left:1290px;top:355px">現成的提示詞模板</div>
+  <div class="who" style="left:1460px;top:430px"><div class="q">誰決定何時用</div><div class="a">使用者</div></div>
+  <div class="ds" style="left:1290px;top:605px">使用者主動挑一個來用（例如斜線指令），Server 把參數填進模板。</div>
+  <div class="ex" style="left:1290px;top:760px"><span style="font-family:Huninn,sans-serif;color:var(--muted)">例　</span>plan-vacation</div>
+
+  <div class="bridge inline" style="left:110px;top:830px;width:1700px"><span class="k">你已經會的</span>Tool 的 inputSchema 就是函式簽名；模型挑工具，像在候選動作上做一次分類。</div>
+  <div class="read"><em>怎麼讀：</em>三角是工具、方塊是資料；每欄右側寫的是「誰有權在對話中觸發它」。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.tri(190,500,130,'mus',{strokeWidth:2.5});
+D.sq(730,440,120,'ind',{strokeWidth:2.5});
+D.sq(1320,440,120,'grey',{strokeWidth:2.5});
+D.dash(665,300,665,790,{strokeWidth:2,stroke:D.C.grey});
+D.dash(1255,300,1255,790,{strokeWidth:2,stroke:D.C.grey});
+</script></body></html>

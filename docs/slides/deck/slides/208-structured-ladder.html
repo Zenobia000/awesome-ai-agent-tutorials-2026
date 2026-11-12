@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>結構化輸出三層保障</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.st{position:absolute;width:390px;padding:22px 26px;display:flex;flex-direction:column}
+.st .t{font-size:30px;line-height:1.3}.st .g{font-size:26px;line-height:1.4;color:var(--ind);margin-top:auto}.st .d{font-size:26px;line-height:1.4;margin-top:6px}
+.fl{position:absolute;width:390px;font-size:24px;line-height:1.45;color:var(--ver)}
+.hd{position:absolute;left:1410px;font-size:30px;line-height:1.3}
+.m{font-family:'JetBrains Mono',monospace;font-size:22px}
+.rx{position:absolute;left:1410px;width:400px;font-size:26px;line-height:1.45}
+</style></head><body><div class="slide">
+  <h1>結構化輸出：三層保障，層層補洞</h1>
+  <p class="lead">三層疊著用，不是三選一：每一層補上一層會漏掉的東西。</p>
+
+  <div class="fl" style="left:110px;top:482px"><b>仍會失敗：</b><br>多吐說明、Markdown 外框</div>
+  <div class="fl" style="left:530px;top:392px"><b>仍會失敗：</b><br>模型拒答、輸出被截斷</div>
+  <div class="fl" style="left:950px;top:302px"><b>仍會失敗：</b><br>驗證不過：重試或報錯，不能放行</div>
+
+  <div class="st" style="left:110px;top:560px;height:210px"><div class="t">1　提示要求</div><div class="d">在提示詞寫「只輸出 JSON」，靠模型自覺。</div><div class="g">保證：沒有</div></div>
+  <div class="st" style="left:530px;top:470px;height:300px"><div class="t">2　原生結構化輸出</div><div class="d">schema 編成文法，解碼時不合法的 token 被遮掉。tool calling 是同一機制。</div><div class="g">保證：完成時符合 schema</div></div>
+  <div class="st" style="left:950px;top:380px;height:390px"><div class="t">3　Pydantic 驗證</div><div class="d">解析後再查型別、範圍、業務規則：schema 表達不了的限制，在程式端擋。</div><div class="g">保證：程式收到的必定過驗證</div></div>
+
+  <div class="hd ver" style="top:284px">實物：被截斷的輸出</div>
+  <div class="code" style="left:1410px;top:332px;width:400px">stop_reason: max_tokens
+{"sql": "SELECT SUM(am</div>
+  <div class="rx" style="top:462px">不是合法 JSON，也不符合 schema。格式保證只在「完成且沒拒答」時成立，所以要檢查 stop_reason。</div>
+  <div class="rx mut" style="top:628px;font-size:24px;line-height:1.55">三家都有原生支援：<br>OpenAI　<span class="m">json_schema</span><br>Anthropic　<span class="m">output_config.format</span><br>Ollama　<span class="m">format</span> 參數</div>
+
+  <div class="bridge" style="left:110px;top:806px;width:1700px"><span class="k">你已經會的</span>約束解碼＝每一步把不合法 token 的機率遮成 0 再 softmax，和 attention mask 設 −∞ 是同一招。</div>
+  <div class="read"><em>怎麼讀：</em>階梯越高保證越強，方塊上方朱紅字是那一層仍會漏掉的情況；三層疊起來用。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const st=(x,y,h,fill,stroke)=>D.rect(x,y,390,h,fill,{fillStyle:'solid',stroke,strokeWidth:3});
+st(110,560,210,'#f7d6cf',D.C.ver);
+st(530,470,300,'#f7e7c0','#b98a12');
+st(950,380,390,'#d9e1ee',D.C.ind);
+
+</script></body></html>

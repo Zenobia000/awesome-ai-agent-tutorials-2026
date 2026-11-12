@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>CoT 論文原圖對照</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.fig{left:110px;top:262px;width:1200px}
+.fig img{width:100%;height:auto;max-height:none}
+.pn{position:absolute;left:1360px;width:450px;padding:16px 24px}
+.pn .t{font-size:30px;line-height:1.3;margin-bottom:4px}
+.pn p{font-size:26px;line-height:1.45}
+.nw{white-space:nowrap}
+.src{left:110px;top:906px;width:1700px}
+#o{position:absolute;inset:0;z-index:3;pointer-events:none}
+</style></head><body><div class="slide">
+  <h1>CoT 原圖：差別只在範例答案</h1>
+  <p class="lead">原論文的做法是在範例答案裡寫出中間算式（204 頁改用一句「請一步一步想」，目的相同）。</p>
+
+  <div class="fig"><img src="../assets/figures/m2/p-cot-fig1.png" alt="Wei et al. 2022 Fig. 1：Standard Prompting 與 Chain-of-Thought Prompting 對照"></div>
+
+  <div class="pn" style="top:270px;height:168px"><div class="t" style="color:#b98a12">① 唯一的差別</div><p>右邊的範例答案多寫了中間算式（藍底）；其他字都一樣。</p></div>
+  <div class="pn" style="top:478px;height:168px"><div class="t ind">② CoT：寫出步驟，答對</div><p>照範例一步步算：先 <span class="nw">23−20＝3</span>，再 <span class="nw">3＋6＝9</span>，答對。</p></div>
+  <div class="pn" style="top:686px;height:168px"><div class="t ver">③ Standard：直接答，答錯</div><p>範例只給答案，模型照做：<span class="nw">27</span>。</p></div>
+
+  <div class="src">來源：Wei et al.（2022）〈Chain-of-Thought Prompting Elicits Reasoning in Large Language Models〉Fig. 1（p.1），CC BY 4.0（arXiv:2201.11903）；原圖未改動。</div>
+  <div class="read"><em>怎麼讀：</em>左右兩個 prompt 的題目相同；先看①（範例裡多出的藍底步驟），再比較②③兩個輸出的對錯。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<svg id="o" width="1920" height="1080"></svg>
+<script>const D=Draw('r'),O=Draw('o');
+const MUS='#b98a12',IND=D.C.ind,VER=D.C.ver,OV=document.getElementById('o');
+/* 右側說明框 */
+D.rect(1360,270,450,168,'#f7e7c0',{fillStyle:'solid',stroke:MUS,strokeWidth:3});
+D.rect(1360,478,450,168,'#d9e1ee',{fillStyle:'solid',stroke:IND,strokeWidth:3});
+D.rect(1360,686,450,168,'#f7d6cf',{fillStyle:'solid',stroke:VER,strokeWidth:3});
+
+/* 圖座標（原圖 2009×979）→ 頁面座標；原圖在卡片內 (128,280) 起、寬 1164 */
+const S=1164/2009,OX=128,OY=280,px=x=>OX+x*S,py=y=>OY+y*S;
+/* 手繪圓角框（比橢圓更不會切到整行文字）；畫在最上層，原圖不動 */
+const rr=(x1,y1,x2,y2,c)=>{const a=px(x1),b=py(y1),e=px(x2),f=py(y2),r=20;
+  const d=`M${a+r} ${b} L${e-r} ${b} Q${e} ${b} ${e} ${b+r} L${e} ${f-r} Q${e} ${f} ${e-r} ${f} L${a+r} ${f} Q${a} ${f} ${a} ${f-r} L${a} ${b+r} Q${a} ${b} ${a+r} ${b} Z`;
+  OV.appendChild(O.rc.path(d,{stroke:c,strokeWidth:5,roughness:1.5,fill:'none'}));};
+rr(1030,310,1975,440,MUS);   /* ① 範例裡多出的步驟（藍底） */
+rr(1030,738,1975,962,IND);   /* ② CoT 輸出：步驟＋答對 */
+rr(40,758,525,842,VER);      /* ③ Standard 輸出：27 與叉 */
+
+/* 箭頭到說明框 */
+const ar=(x1,y1,x2,y2,c)=>O.arrow(x1,y1,x2,y2,{stroke:c,strokeWidth:3.4});
+ar(px(1975)+4,py(376)-6,1352,372,MUS);
+ar(px(1975)+4,py(848)-30,1352,590,IND);
+/* ③ 的說明框在右側底部：線從圈的下緣繞過卡片下方 */
+O.curve([[px(282),py(842)+2],[px(282)+6,886],[620,892],[1180,890],[1318,884],[1342,816]],{stroke:VER,strokeWidth:3.4});
+O.arrow(1334,830,1356,788,{stroke:VER,strokeWidth:3.4});
+</script></body></html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>智能體動物園</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.u{position:absolute;font-size:24px;line-height:1.45;color:var(--muted)}
+.cl{position:absolute;width:300px;text-align:center;font-size:26px}
+.it{position:absolute;left:1270px;width:540px;font-size:28px;line-height:1.5}
+</style></head><body><div class="slide">
+  <h1>一個場景一個 agent：智能體動物園</h1>
+  <p class="lead">請假、報銷、訂票、合約……各自一套提示詞、工具、部署，場景一多就維護不動。<span class="tag">本課轉述</span></p>
+
+  <div class="abs lbl ver" style="left:160px;top:292px">做法：每個場景各做一個專用 agent</div>
+  <div class="cl" style="left:130px;top:503px">請假 agent</div>
+  <div class="cl" style="left:490px;top:503px">報銷 agent</div>
+  <div class="cl" style="left:850px;top:503px">訂票 agent</div>
+  <div class="cl" style="left:130px;top:763px">合約 agent</div>
+  <div class="cl" style="left:490px;top:763px">客服 agent</div>
+  <div class="cl" style="left:850px;top:763px">週報 agent</div>
+  <div class="u" style="left:130px;top:828px;width:1020px">每個籠子：圓＝模型，方＝提示詞，三角＝工具。每一個都要單獨維護。</div>
+
+  <div class="abs lbl ver" style="left:1270px;top:292px">維護起來會怎樣</div>
+  <div class="it" style="top:350px">同一個修正，要在每個 agent 各改一次</div>
+  <div class="it" style="top:476px">共用的規範（格式、權限、語氣）被複製貼上，慢慢走樣</div>
+  <div class="it" style="top:652px">場景一多，誰來決定把請求交給哪個 agent，又成了新問題</div>
+  <div class="abs" style="left:1270px;top:820px;width:540px;font-size:28px;line-height:1.5;color:var(--ind)">下一頁：一個通用 agent，把場景知識做成可插拔的 Skills</div>
+
+  <div class="read"><em>怎麼讀：</em>每個虛線籠子是一個專用 agent；左邊是這種做法，右邊是它帶來的維護成本。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C, cage={strokeLineDash:[12,10],stroke:S.grey,strokeWidth:2.5};
+D.cross(135,303,13,{strokeWidth:4});
+[130,490,850].forEach(x=>[335,595].forEach(y=>{
+  D.rect(x,y,300,215,null,cage);
+  D.ci(x+95,y+85,104,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+  D.rect(x+180,y+40,48,48,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.8});
+  D.tri(x+205,y+128,58,S.mus,{strokeWidth:2.5});
+}));
+/* 右欄方塊項目符號 + 下一頁箭頭 */
+[367,493,669].forEach(y=>D.sq(1220,y+8,22,S.ver,{fillStyle:'solid'}));
+</script></body></html>

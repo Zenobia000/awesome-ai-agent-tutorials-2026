@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>create_agent 與 middleware</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.mono{font-family:"JetBrains Mono","Noto Sans Mono CJK TC",monospace}
+.chip{position:absolute;font-size:22px;line-height:1;text-align:center;height:40px;padding-top:9px}
+.sm{position:absolute;font-size:26px;line-height:1;text-align:center}
+</style></head><body><div class="slide">
+  <h1>create_agent：把圖預先接好</h1>
+  <p class="lead">LangChain 1.x 把「模型 ⇄ 工具」的圖接好了；想改行為，用 middleware 掛上去。</p>
+
+  <div class="abs mono" style="left:140px;top:304px;font-size:30px">create_agent</div>
+  <div class="abs note" style="left:370px;top:310px">LangChain 1.x，內建「模型 ⇄ 工具」迴圈</div>
+  <div class="chip" style="left:150px;top:358px;width:215px">ModelCallLimit</div>
+  <div class="chip" style="left:380px;top:358px;width:205px">ToolCallLimit</div>
+  <div class="chip" style="left:600px;top:358px;width:225px">HumanInTheLoop</div>
+  <div class="abs note" style="left:840px;top:362px;width:170px">＋摘要、PII…</div>
+  <div class="sm" style="left:225px;top:507px;width:150px">model</div>
+  <div class="abs lbl mus" style="left:705px;top:590px;width:150px;text-align:center">tools</div>
+  <div class="abs lbl mut" style="left:470px;top:470px;width:220px;text-align:center">要工具</div>
+  <div class="abs lbl mut" style="left:470px;top:590px;width:220px;text-align:center;display:none">結果回來</div>
+  <div class="abs lbl mut" style="left:540px;top:392px;display:none">x</div>
+
+  <div class="abs lbl" style="left:140px;top:707px;font-size:28px">LangGraph runtime：StateGraph、checkpointer、interrupt</div>
+
+  <div class="code" style="left:1070px;top:285px;width:740px">agent = create_agent(
+    model="ollama:qwen3:14b",
+    tools=[get_price, calc],
+    system_prompt="你是購物助手",
+    middleware=[
+        ModelCallLimitMiddleware(run_limit=10),
+        ToolCallLimitMiddleware(run_limit=10),
+    ],
+)
+agent.invoke({"messages": [("user", "…")]})</div>
+  <div class="abs note" style="left:1070px;top:695px;width:740px"><span class="tag">示意</span>　上限數值依任務自訂。<br>from langchain.agents import create_agent<br>middleware 類別在 langchain.agents.middleware</div>
+
+  <div class="bridge inline" style="left:110px;top:846px;width:1700px"><span class="k">你已經會的</span>框架堆疊 ≈ CUDA → PyTorch → Lightning：create_agent 是最上層，底下仍是 LangGraph。</div>
+  <div class="read"><em>怎麼讀：</em>外框是 create_agent 預先接好的迴圈；上排積木是可掛的 middleware；最底下是它跑在上面的 LangGraph。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee',VL='#f7d6cf',ML='#f7e7c0';
+D.rect(110,290,900,370,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3.2});
+[[150,215],[380,205],[600,225]].forEach(c=>D.rect(c[0],358,c[1],40,ML,{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.4}));
+D.rect(140,415,830,225,null,{stroke:D.C.grey,strokeWidth:2.2,strokeLineDash:[10,8]});
+/* 迴圈 */
+D.ci(300,520,150,VL,{stroke:D.C.ver,strokeWidth:3});
+D.tri(780,520,150,'mus',{strokeWidth:2.6});
+D.curve([[390,470],[540,425],[705,475]],{strokeWidth:3});D.arrow(672,455,707,477,{strokeWidth:3});
+D.curve([[715,565],[540,620],[385,565]],{strokeWidth:3});D.arrow(420,594,384,566,{strokeWidth:3});
+/* 底座 */
+D.rect(110,690,900,70,'#ebe6da',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:3});
+D.arrow(560,688,560,664,{strokeWidth:2.6});
+</script></body></html>

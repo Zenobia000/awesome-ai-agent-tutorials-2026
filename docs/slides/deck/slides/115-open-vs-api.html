@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>開放權重與商業 API</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;font-size:26px}
+.ax{position:absolute;left:110px;width:170px;font-size:34px}
+.c{position:absolute;font-size:30px;line-height:1.45}.c small{display:block;font-size:24px;color:var(--muted);margin-top:6px}
+</style></head><body><div class="slide">
+  <h1>開放權重，還是商業 API？</h1>
+  <p class="lead">一個 LLM 就是「參數檔＋跑它的程式」。差別在這兩樣東西放在誰那裡。</p>
+  <div id="g"></div>
+  <div class="ax" style="top:542px">隱私</div><div class="ax" style="top:672px">成本</div><div class="ax" style="top:802px">可客製</div>
+  <div class="c" style="left:300px;top:528px;width:690px">資料不出你的機器或內網。<small>適合不能外傳的資料</small></div>
+  <div class="c" style="left:1080px;top:528px;width:730px">請求要送到供應商那邊，得看合約與合規。<small>資料能不能外送，先看公司規定</small></div>
+  <div class="c" style="left:300px;top:658px;width:690px">先付硬體，之後不再按量計費（電費另計）。<small>用量越大，越划算</small></div>
+  <div class="c" style="left:1080px;top:658px;width:730px">不用買硬體，按 token 計費：用越多付越多。<small>用量小、想先試試，很方便</small></div>
+  <div class="c" style="left:300px;top:788px;width:690px">可以微調、量化，自己決定怎麼部署（模組六）。<small>模型的行為與部署都由你控制</small></div>
+  <div class="c" style="left:1080px;top:788px;width:730px">主要靠提示詞；能調什麼，由供應商決定。<small>要不要能微調，看供應商有沒有開放</small></div>
+  <div class="read"><em>怎麼讀：</em>左右對照三個維度。本課 Lab 1 兩邊都接：本地 Ollama 為主，雲端 API 備援。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+el(300,276,690,44,'開放權重（open weights）','font-size:34px;color:#2b4c7e;justify-content:flex-start');
+el(1080,276,730,44,'商業 API','font-size:34px;color:#e0442b;justify-content:flex-start');
+/* 左：全在你這裡 */
+D.rect(300,336,400,126,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3,strokeLineDash:[12,10]});
+D.ci(380,399,84,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+el(440,350,255,100,'權重檔<br>＋ 執行程式','font-size:26px');
+el(300,470,690,36,'你的機器 ／ 內網　例：Qwen、DeepSeek（本課用）','font-size:24px;color:#5b574f;justify-content:flex-start');
+/* 右：模型在雲端 */
+D.rect(1080,364,210,70,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.6});el(1080,364,210,70,'你的程式');
+D.arrow(1300,399,1470,399,{strokeWidth:2.8});el(1300,356,170,36,'網路','font-size:24px;color:#5b574f');
+D.ci(1550,399,110,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+el(1620,360,190,80,'供應商的<br>伺服器','font-size:24px;color:#5b574f');
+el(1080,470,730,36,'例：Claude、GPT 系列（型號常換，不寫死）','font-size:24px;color:#5b574f;justify-content:flex-start');
+/* 分隔 */
+D.line(110,516,1810,516,{stroke:D.C.grey,strokeWidth:2});D.line(110,646,1810,646,{stroke:D.C.grey,strokeWidth:2});D.line(110,776,1810,776,{stroke:D.C.grey,strokeWidth:2});D.line(110,906,1810,906,{stroke:D.C.grey,strokeWidth:2});
+D.dash(1030,276,1030,900,{stroke:D.C.grey,strokeWidth:2});
+</script></body></html>

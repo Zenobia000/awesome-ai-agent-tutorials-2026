@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>履歷改寫前後</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cd{position:absolute;top:300px}
+.cd .k{font-size:28px;margin-bottom:8px}
+.it{position:absolute;left:740px;width:1030px}
+.it .l{position:absolute;left:0;top:0;width:230px;font-size:28px;line-height:1.35}
+.it .x{margin-left:240px;font-size:26px;line-height:1.5}
+.it b{color:var(--ver)}
+.ch{position:absolute;top:724px;width:310px;height:68px;line-height:68px;text-align:center;font-size:28px}
+.pl{position:absolute;top:724px;width:50px;height:68px;line-height:68px;text-align:center;font-size:34px}
+</style></head><body><div class="slide">
+  <h1>履歷：從「熟悉」改成「做了什麼、好多少」</h1>
+  <p class="lead">每一行都要有動作、有對照基準、有量化結果。</p>
+
+  <div class="cd" style="left:140px;width:470px;top:322px"><div class="k ver">改寫前</div><div style="font-size:34px;line-height:1.45">熟悉 LangChain，會調用 OpenAI API</div></div>
+  <div class="abs" style="left:140px;top:560px;width:470px;font-size:26px;line-height:1.5;color:var(--muted)">沒有問題、沒有對照、沒有數字，看不出你做過什麼。</div>
+
+  <div class="abs" style="left:740px;top:322px;font-size:28px"><span class="ind">改寫後</span>　<span class="tag">範本數字</span></div>
+  <div class="it" style="top:386px"><div class="l ind">檢索優化</div><div class="x">BM25＋向量混合檢索，加 Cross-Encoder 重排；內部文件 Top-3 召回準確率 <b>68% → 91%</b></div></div>
+  <div class="it" style="top:490px"><div class="l ind">安全與狀態控制</div><div class="x">高風險運維指令加入人在回路（HITL）審批；PostgresSaver 保存跨會話狀態</div></div>
+  <div class="it" style="top:594px"><div class="l ind">性能與成本</div><div class="x">LangSmith 全鏈路 tracing，優化 prompt 與工具邊界；平均對話延遲 <b>−35%</b>、單次任務 Token <b>−42%</b></div></div>
+
+  <div class="ch" style="left:110px">做了什麼</div><div class="pl" style="left:420px">＋</div>
+  <div class="ch" style="left:470px">對照基準</div><div class="pl" style="left:780px">＋</div>
+  <div class="ch" style="left:830px">量化結果</div><div class="pl" style="left:1140px">＋</div>
+  <div class="ch" style="left:1190px;width:420px">怎麼驗證：公開 trace</div>
+
+  <div class="bridge inline" style="left:110px;top:828px;width:1700px"><span class="k">你已經會的</span>履歷像論文的 results 段：方法、指標、對照組；沒有 baseline 的數字沒有意義。</div>
+  <div class="read"><em>怎麼讀：</em>左邊是常見的無效寫法；右邊每一行都是「動作＋基準＋結果」；最下面是這個公式。數字都是課綱範本，不是實測。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.rect(110,300,540,390,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+D.cross(450,515,38,{strokeWidth:6});
+D.rect(700,300,1110,390,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+[110,470,830,1190].forEach((x,i)=>D.rect(x,724,i==3?420:310,68,i==3?'#f7e7c0':'#d9e1ee',{fillStyle:'solid',stroke:i==3?'#b98a12':D.C.ind,strokeWidth:2.8}));
+</script></body></html>

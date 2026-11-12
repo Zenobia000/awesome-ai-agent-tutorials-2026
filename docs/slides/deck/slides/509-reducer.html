@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Reducer 合併規則</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:40px;line-height:1.2}
+.mono{font-family:"JetBrains Mono","Noto Sans Mono CJK TC",monospace}
+.nl{position:absolute;font-size:26px;line-height:1.2;width:170px;text-align:right}
+.wr{position:absolute;font-size:22px;line-height:1}
+.rs{position:absolute;width:230px;text-align:center}
+</style></head><body><div class="slide">
+  <h1>Reducer：同時寫入怎麼合併</h1>
+  <p class="lead">預設是覆蓋；想合併，就在欄位上明講「怎麼合併」。</p>
+
+  <div class="hd ver" style="left:110px;top:290px">預設：覆蓋</div>
+  <div class="hd ind" style="left:1040px;top:290px">加 reducer：追加</div>
+
+  <div class="nl" style="left:110px;top:372px">search_web</div>
+  <div class="nl" style="left:110px;top:482px">search_db</div>
+  <div class="wr mono" style="left:430px;top:358px">["web"]</div>
+  <div class="wr mono" style="left:420px;top:508px">["db"]</div>
+  <div class="rs" style="left:660px;top:372px;font-size:30px">results</div>
+  <div class="rs mono" style="left:660px;top:440px;font-size:26px">["db"]</div>
+  <div class="abs lbl ver" style="left:600px;top:548px;width:310px;text-align:center;font-size:28px">只留最後寫的值</div>
+
+  <div class="nl" style="left:1040px;top:372px">search_web</div>
+  <div class="nl" style="left:1040px;top:482px">search_db</div>
+  <div class="wr mono" style="left:1360px;top:358px">["web"]</div>
+  <div class="wr mono" style="left:1350px;top:508px">["db"]</div>
+  <div class="rs" style="left:1590px;top:372px;font-size:30px">results</div>
+  <div class="rs mono" style="left:1590px;top:440px;font-size:24px">["web", "db"]</div>
+  <div class="abs lbl ind" style="left:1570px;top:548px;width:270px;text-align:center;font-size:28px">兩個值都留下來</div>
+
+  <div class="code" style="left:110px;top:600px;width:770px">class State(TypedDict):
+    results: list</div>
+  <div class="code" style="left:1040px;top:600px;width:770px">class State(TypedDict):
+    results: Annotated[list, operator.add]</div>
+  <div class="abs note" style="left:110px;top:726px;width:770px">先後執行的兩個節點，是後者覆蓋前者；若同一步並行寫入，LangGraph 乾脆拋 InvalidUpdateError。</div>
+  <div class="abs note" style="left:1040px;top:726px;width:770px">messages 欄位請用內建的 add_messages（可依訊息 id 更新）。</div>
+
+  <div class="bridge inline" style="left:110px;top:812px;width:1700px"><span class="k">你已經會的</span>PyTorch 的 .grad 預設累加（所以每步要 zero_grad）；LangGraph 相反：預設覆蓋，要累加得明講。</div>
+  <div class="read"><em>怎麼讀：</em>兩個三角是並行的工具節點，都要寫同一個欄位；左邊只留一個值，右邊靠 operator.add 把兩個值接在一起。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee';
+function panel(dx,over){
+  D.tri(320+dx,385,84,'mus',{strokeWidth:2.4});
+  D.tri(320+dx,495,84,'mus',{strokeWidth:2.4});
+  D.arrow(372+dx,395,650+dx,430,{strokeWidth:3});
+  D.arrow(372+dx,498,650+dx,470,{strokeWidth:3});
+  D.rect(650+dx,360,230,170,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+}
+panel(0);panel(930);
+D.cross(612,408,16,{strokeWidth:5});
+D.line(660,402,880,402,{strokeWidth:1.6,stroke:D.C.ind});
+D.line(1590,402,1810,402,{strokeWidth:1.6,stroke:D.C.ind});
+D.dash(980,300,980,780,{strokeWidth:1.8,stroke:D.C.grey});
+</script></body></html>

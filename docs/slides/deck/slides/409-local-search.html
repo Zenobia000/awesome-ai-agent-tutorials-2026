@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Local Search 實體入口</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ch{position:absolute;font-size:24px;line-height:1.35;color:var(--muted);text-align:center}
+.bx{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;font-size:28px;line-height:1.3}
+</style></head><body><div class="slide">
+  <h1>Local Search：用實體當入口</h1>
+  <p class="lead">問題先和「實體描述」的向量比對，找到入口實體，再把相關資料收集成上下文。</p>
+
+  <div class="ch" style="left:110px;top:296px;width:300px">問題</div>
+  <div class="bx" style="left:110px;top:400px;width:300px;height:130px;padding:0 20px;font-size:26px">「韓立身邊有哪些重要的人和物？」</div>
+
+  <div class="ch" style="left:480px;top:545px;width:140px;transform:translateX(-5px)">embedding<br>模型</div>
+  <div class="ch" style="left:700px;top:296px;width:240px">實體描述的向量<br>（找入口）</div>
+  <div class="bx" style="left:700px;top:370px;width:240px;height:64px">厲飛雨</div>
+  <div class="bx" style="left:700px;top:450px;width:240px;height:64px">韓立</div>
+  <div class="bx" style="left:700px;top:530px;width:240px;height:64px">七玄門</div>
+  <div class="bx" style="left:700px;top:610px;width:240px;height:64px">掌天瓶</div>
+
+  <div class="ch" style="left:1040px;top:296px;width:360px">照對應表收集<br>（排序、過濾）</div>
+  <div class="bx" style="left:1040px;top:370px;width:360px;height:90px">相關文字片段</div>
+  <div class="bx" style="left:1040px;top:500px;width:360px;height:90px">所屬社群的報告</div>
+  <div class="bx" style="left:1040px;top:630px;width:360px;height:90px">鄰近實體與關係</div>
+
+  <div class="ch" style="left:1480px;top:296px;width:330px">塞進同一個<br>context window</div>
+  <div class="abs" style="left:1555px;top:455px;width:170px;text-align:center;font-size:32px;line-height:80px">LLM</div>
+  <div class="bx" style="left:1585px;top:640px;width:110px;height:70px">答案</div>
+
+  <div class="bridge inline" style="left:110px;top:790px;width:1700px"><span class="k">你已經會的</span>入口仍是模組三的向量檢索，只是檢索的對象從 chunk 換成了「實體描述」。</div>
+  <div class="read"><em>怎麼讀：</em>左邊的向量比對只負責找入口；之後不跑 Cypher，而是照建索引時存好的對應表收集資料。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IND=['#d9e1ee',D.C.ind],MUS=['#f7e7c0','#b98a12'];
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:3},o||{}));
+const ar=(x1,y1,x2,y2,o)=>D.arrow(x1,y1,x2,y2,Object.assign({strokeWidth:3},o));
+R(110,400,300,130,['#f3efe6',D.C.ink],{strokeWidth:2.5});
+ar(416,465,478,465);
+D.ci(540,465,130,'ver',{fillStyle:'hachure',strokeWidth:2.5});
+ar(608,465,692,482);
+R(700,370,240,64,IND);R(700,450,240,64,MUS);R(700,530,240,64,IND);R(700,610,240,64,IND);
+/* 入口 → 三種來源 */
+[415,545,675].forEach(y=>ar(946,482,1032,y,{strokeWidth:2.8}));
+R(1040,370,360,90,IND);R(1040,500,360,90,IND);R(1040,630,360,90,IND);
+/* 匯流 → LLM */
+D.ci(1640,520,170,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+[415,545,675].forEach((y,i)=>ar(1408,y,[1558,1553,1562][i],[475,520,570][i],{strokeWidth:2.8}));
+ar(1640,612,1640,632);
+R(1585,640,110,70,['#fbf9f4',D.C.ink]);
+</script></body></html>

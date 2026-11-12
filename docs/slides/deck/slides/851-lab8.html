@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab8 整合步驟</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.st{position:absolute;top:300px;width:380px;height:195px;padding:22px 26px 0 26px}
+.st .t{font-size:32px;line-height:1.3}
+.st .d{font-size:26px;line-height:1.45;color:var(--muted);margin-top:26px}
+.sn{position:absolute;top:322px;width:56px;height:56px;line-height:56px;text-align:center;font-size:32px}
+.cap{position:absolute;font-size:24px;color:var(--muted)}
+.tr{position:absolute;width:740px;font-size:26px;line-height:1.45}
+.tr b{color:var(--ver);font-size:28px}
+</style></head><body><div class="slide">
+  <h1>Lab8：整合旗艦專案，留下公開 trace</h1>
+  <p class="lead">把前幾章的零件接成一套，再用一條 trace 證明它真的跑過。</p>
+
+  <div class="st" style="left:110px"><div class="t" style="margin-left:70px">接起來</div><div class="d">把前幾章的零件接成一條鏈</div></div>
+  <div class="st" style="left:550px"><div class="t" style="margin-left:70px">開追蹤</div><div class="d">設好 LangSmith 環境變數，跑一輪完整對話</div></div>
+  <div class="st" style="left:990px"><div class="t" style="margin-left:70px">讀 trace</div><div class="d">哪一步最慢、token 花在哪、哪個工具回錯</div></div>
+  <div class="st" style="left:1430px"><div class="t" style="margin-left:70px">公開分享</div><div class="d">產生公開連結，放進 README 與履歷</div></div>
+  <div class="sn" style="left:130px">1</div><div class="sn" style="left:570px">2</div><div class="sn" style="left:1010px">3</div><div class="sn" style="left:1450px">4</div>
+
+  <div class="cap" style="left:110px;top:530px">步驟 2 的設定</div>
+  <div class="code" style="left:110px;top:568px">export LANGSMITH_TRACING=<span class="s">true</span>
+export LANGSMITH_API_KEY=<span class="s">&lt;你自己的 key&gt;</span>
+export LANGSMITH_PROJECT=<span class="s">devagent-platform</span></div>
+  <div class="abs note" style="left:110px;top:748px;width:860px">公開分享的操作畫面以開課當天的 LangSmith 介面為準；本課尚未逐頁核對。</div>
+
+  <div class="abs" style="left:1040px;top:540px;font-size:28px"><span class="ind">面試沙盤：三個經典陷阱</span></div>
+  <div class="tr" style="left:1040px;top:598px"><b>多智能體通訊衝突</b><br>子 agent 之間傳遞的上下文互相覆蓋或打架</div>
+  <div class="tr" style="left:1040px;top:688px"><b>向量檢索漂移</b><br>資料或 embedding 模型更新後，檢索結果跟著變</div>
+  <div class="tr" style="left:1040px;top:778px"><b>冷啟動延遲</b><br>第一次請求特別慢，用 trace 量出來再壓</div>
+
+  <div class="read"><em>怎麼讀：</em>上排四步是整合流程；左下是追蹤設定，右下是拿這個專案去面試時最常被追問的三件事。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+[110,550,990,1430].forEach((x,i)=>{
+  D.rect(x,300,380,195,i==3?'#f7e7c0':'#fbf9f4',{fillStyle:'solid',stroke:i==3?'#b98a12':D.C.ind,strokeWidth:3});
+  D.sq(x+20,322,56,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.5});
+  if(i<3)D.arrow(x+386,408,x+436,408,{strokeWidth:2.8});
+});
+D.rect(1020,520,790,340,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+</script></body></html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab 3 架構</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ln{position:absolute;left:110px;font-size:38px;line-height:1.2}
+.ln span{font-size:26px;color:var(--muted);margin-left:16px}
+.n{position:absolute;text-align:center;font-size:28px;line-height:1.25}
+.n i{display:block;font-style:normal;font-size:22px;line-height:1.35;color:var(--muted);margin-top:2px}
+.n code{font-family:"JetBrains Mono",monospace;font-size:22px}
+.side{position:absolute;font-size:24px;line-height:1.4}
+</style></head><body><div class="slide">
+  <h1>Lab 3 架構：兩路召回，融合後重排</h1>
+  <p class="lead">本地 Chroma 沒有內建混合檢索（那是 Chroma Cloud 才有的功能），所以 BM25 和 RRF 都要自己做。</p>
+
+  <div class="ln ind" style="top:286px">離線建庫<span>跑一次，資料更新時重跑</span></div>
+  <div class="ln ver" style="top:636px">在線問答<span>每次提問</span></div>
+  <div id="labels"></div>
+  <div class="side" style="left:1430px;top:352px;width:370px;font-size:26px;line-height:1.45">本地 Chroma 只做向量檢索。<br>BM25 索引另外建；<br>融合排序自己寫 RRF。</div>
+  <div class="side ind" style="left:810px;top:540px;width:280px">建 BM25 索引（自己做）</div>
+
+  <div class="read"><em>怎麼讀：</em>上排把白皮書切片後存兩份：向量進 Chroma、字面進 BM25；下排兩路各撈一批，RRF 融合，重排後前 3 段進提示詞。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const box=document.getElementById('labels');
+const lab=(x,y,w,name,desc)=>{const d=document.createElement('div');d.className='n';d.style.cssText=`left:${x-w/2}px;top:${y}px;width:${w}px`;d.innerHTML=name+(desc?`<i>${desc}</i>`:'');box.appendChild(d);};
+const BL=['#d9e1ee',D.C.ind],YL=['#f7e7c0','#b98a12'];
+const sq=(cx,cy,s,[f,st],w)=>D.sq(cx-s/2,cy-s/2,s,f,{fillStyle:'solid',stroke:st,strokeWidth:w||2.8});
+const mdl=(cx,cy,d)=>D.ci(cx,cy,d,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+const db=(cx,cy,s)=>{sq(cx,cy,s,BL);D.line(cx-s/2,cy-s*0.18,cx+s/2,cy-s*0.18,{strokeWidth:2});D.line(cx-s/2,cy+s*0.18,cx+s/2,cy+s*0.18,{strokeWidth:2});};
+const ar=(x1,y1,x2,y2)=>D.arrow(x1,y1,x2,y2,{strokeWidth:2.8});
+
+D.rect(1400,330,410,150,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.8});
+/* 離線 */
+const Y1=396;
+sq(190,Y1,80,BL);lab(190,Y1+54,200,'白皮書','Markdown 檔');
+D.tri(420,Y1,100,'mus',{strokeWidth:2.6});lab(420,Y1+54,220,'結構切分','依標題層級');
+[-52,0,52].forEach(dx=>sq(650+dx,Y1,40,YL));lab(650,Y1+54,220,'片段','附 metadata');
+mdl(900,Y1,96);lab(900,Y1+58,220,'向量化','<code>bge-m3</code>');
+db(1150,Y1,96);lab(1150,Y1+58,240,'本地 Chroma','PersistentClient');
+ar(235,Y1,358,Y1);ar(482,Y1,568,Y1);ar(722,Y1,840,Y1);ar(952,Y1,1090,Y1);
+/* 片段 → BM25 索引 */
+const Y2=590;
+D.line(785,Y1,785,Y2,{strokeWidth:2.8});
+D.arrow(785,Y2,1096,Y2,{strokeWidth:2.8});
+db(1150,Y2,80);
+
+/* 在線 */
+const Y3=775;
+sq(170,Y3,72,BL);lab(170,Y3+50,160,'問題','');
+const YU=712,YD=836;
+ar(212,Y3-10,420,YU+6);ar(212,Y3+10,420,YD-6);
+D.tri(470,YU,92,'mus',{strokeWidth:2.6});
+D.tri(470,YD,92,'mus',{strokeWidth:2.6});
+const tl=(x,y,t,d)=>{const e=document.createElement('div');e.className='n';e.style.cssText=`left:${x}px;top:${y}px;width:230px;text-align:left`;e.innerHTML=t+`<i>${d}</i>`;box.appendChild(e);};
+tl(528,YU-30,'向量查詢','Top-K，套版本過濾');
+tl(528,YD-30,'BM25 查詢','Top-K，同樣套過濾');
+D.tri(850,Y3,96,'mus',{strokeWidth:2.6});lab(850,Y3+56,220,'RRF 融合','自己寫，依名次');
+ar(752,YU+6,790,Y3-22);ar(752,YD-6,790,Y3+22);
+mdl(1090,Y3,100);lab(1090,Y3+58,260,'重排','<code>bge-reranker-v2-m3</code>');
+ar(905,Y3,1030,Y3);
+[-52,0,52].forEach(dx=>sq(1300+dx,Y3,40,YL,3));lab(1300,Y3+40,200,'前 3 段','進提示詞');
+ar(1148,Y3,1230,Y3);
+mdl(1520,Y3,100);lab(1520,Y3+58,200,'生成','LLM');
+ar(1372,Y3,1460,Y3);
+sq(1730,Y3,72,BL);lab(1730,Y3+50,160,'回答','');
+ar(1582,Y3,1690,Y3);
+</script></body></html>

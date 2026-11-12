@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>答案放中間會漏看</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+#ch{position:absolute;left:110px;top:270px;width:960px;height:580px}
+#ch text{font-family:"Huninn","Noto Sans CJK TC",sans-serif}
+.ph{position:absolute;left:1110px;width:700px}
+.ph .t{font-size:30px;line-height:1.3}
+table.t{table-layout:fixed;width:700px;font-size:26px}
+table.t th,table.t td{padding:7px 8px;white-space:nowrap}
+table.t td.n,table.t th.n{text-align:right}
+table.t td.lo{color:var(--ver)}
+.src{left:110px;top:866px;width:1700px}
+</style></head><body><div class="slide">
+  <h1>答案埋在中間，比不給文件還差</h1>
+  <p class="lead">同樣 20 份文件，只改「含答案那份」排第幾：GPT-3.5-Turbo 從 75.8% 掉到 53.8%。</p>
+
+  <svg id="ch" viewBox="0 0 960 580" width="960" height="580"></svg>
+
+  <div class="ph" style="top:284px"><div class="t">四個模型，同一個實驗<span class="tag" style="margin-left:14px">準確率 %</span></div></div>
+  <div class="ph" style="top:330px"><table class="t">
+    <colgroup><col style="width:212px"><col style="width:100px"><col style="width:100px"><col style="width:100px"><col style="width:188px"></colgroup>
+    <tr><th>模型</th><th class="n">第 1 篇</th><th class="n">最低</th><th class="n">末篇</th><th class="n">closed-book</th></tr>
+    <tr><td>GPT-3.5-Turbo</td><td class="n">75.8</td><td class="n lo">53.8</td><td class="n">63.2</td><td class="n">56.1</td></tr>
+    <tr><td>Claude-1.3</td><td class="n">59.9</td><td class="n">55.9</td><td class="n">60.1</td><td class="n">48.3</td></tr>
+    <tr><td>LongChat-13B</td><td class="n">68.6</td><td class="n">52.5</td><td class="n">55.0</td><td class="n">35.0</td></tr>
+    <tr><td>MPT-30B</td><td class="n">53.7</td><td class="n">51.8</td><td class="n">56.3</td><td class="n">31.5</td></tr>
+  </table></div>
+  <div class="ph note" style="top:640px">closed-book＝完全不給文件，模型憑記憶作答。最低＝五個位置中最低的一個；朱紅字＝跌破自己的 closed-book，只有 GPT-3.5-Turbo。</div>
+  <div class="ph" style="top:760px;font-size:28px;line-height:1.5"><span class="ind">工程後果</span>　重排後把最相關的片段放最前面或最後面，別埋在中間。</div>
+
+  <div class="src">來源：Liu et al.（2023）〈Lost in the Middle: How Language Models Use Long Contexts〉Table 1（p.5）、Table 6（附錄 G，p.18），依表內數字重繪；20 份文件約 4K token。arXiv:2307.03172，arXiv 預設授權，未放原圖。</div>
+  <div class="read"><em>怎麼讀：</em>藍線是答案放在第幾篇的準確率：兩頭高、中間低；掉到紅虛線下的陰影區，就是「給了文件還不如不給」。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const R=document.getElementById('r');
+/* 卡片底（手繪框，圖表本身用 SVG 直線） */
+D.rect(110,270,960,580,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+
+/* ── 圖表：Liu et al. Table 6，GPT-3.5-Turbo，20 份文件 ── */
+const NS='http://www.w3.org/2000/svg',ch=document.getElementById('ch');
+const L=84,T=104,W=816,H=370,V0=45,V1=80;
+const X=p=>L+(p-1)/19*W, Y=v=>T+(V1-v)/(V1-V0)*H;
+const mk=(tag,attrs,txt)=>{const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(txt!=null)e.textContent=txt;ch.appendChild(e);return e;};
+const data=[[1,75.8],[5,57.2],[10,53.8],[15,55.4],[20,63.2]],CB=56.1;
+mk('text',{x:L-40,y:36,'font-size':26,fill:'#1b1b1b'},'GPT-3.5-Turbo 多文件問答準確率（%）');
+/* 圖例：closed-book */
+mk('line',{x1:L-40,y1:72,x2:L+14,y2:72,stroke:'#e0442b','stroke-width':3.5,'stroke-dasharray':'12 9'});
+mk('text',{x:L+28,y:80,'font-size':24,fill:'#e0442b'},'closed-book 56.1%：完全不給文件時的準確率');
+/* 格線與 y 刻度 */
+[50,60,70,80].forEach(v=>{mk('line',{x1:L,y1:Y(v),x2:L+W,y2:Y(v),stroke:'#ddd7c8','stroke-width':1.5});
+  mk('text',{x:L-14,y:Y(v)+8,'text-anchor':'end','font-size':24,fill:'#5b574f'},v);});
+mk('line',{x1:L,y1:Y(V0),x2:L+W,y2:Y(V0),stroke:'#1b1b1b','stroke-width':2.5});
+mk('line',{x1:L,y1:Y(V0),x2:L,y2:Y(V1),stroke:'#1b1b1b','stroke-width':2.5});
+/* x 刻度 */
+data.forEach(([p])=>{mk('line',{x1:X(p),y1:Y(V0),x2:X(p),y2:Y(V0)+8,stroke:'#1b1b1b','stroke-width':2.5});
+  mk('text',{x:X(p),y:Y(V0)+36,'text-anchor':'middle','font-size':24,fill:'#1b1b1b'},p);});
+mk('text',{x:L+W/2,y:Y(V0)+74,'text-anchor':'middle','font-size':24,fill:'#5b574f'},'含答案的那份文件，在 20 份裡排第幾');
+/* 低於 closed-book 的陰影（線性內插交點：p≈6.62、p≈15.45） */
+mk('polygon',{points:[[X(6.62),Y(CB)],[X(10),Y(53.8)],[X(15),Y(55.4)],[X(15.45),Y(CB)]].map(a=>a.join(',')).join(' '),fill:'#f7d6cf',opacity:.95});
+/* closed-book 基準線 */
+mk('line',{x1:L,y1:Y(CB),x2:L+W,y2:Y(CB),stroke:'#e0442b','stroke-width':3.5,'stroke-dasharray':'12 9'});
+/* 資料線與點 */
+mk('polyline',{points:data.map(([p,v])=>X(p)+','+Y(v)).join(' '),fill:'none',stroke:'#2b4c7e','stroke-width':5,'stroke-linejoin':'round'});
+data.forEach(([p,v])=>mk('circle',{cx:X(p),cy:Y(v),r:9,fill:'#2b4c7e',stroke:'#fbf9f4','stroke-width':3}));
+mk('text',{x:X(1)+16,y:Y(75.8)-8,'font-size':26,fill:'#2b4c7e'},'75.8');
+mk('text',{x:X(5)+16,y:Y(57.2)-14,'font-size':26,fill:'#2b4c7e'},'57.2');
+mk('text',{x:X(15)+8,y:Y(55.4)-24,'text-anchor':'middle','font-size':26,fill:'#2b4c7e'},'55.4');
+mk('text',{x:X(20),y:Y(63.2)-20,'text-anchor':'middle','font-size':26,fill:'#2b4c7e'},'63.2');
+/* 中段標註 */
+mk('text',{x:X(10.05),y:Y(48.6),'text-anchor':'middle','font-size':26,fill:'#e0442b'},'中間掉到 53.8%');
+mk('text',{x:X(10.05),y:Y(48.6)+31,'text-anchor':'middle','font-size':24,fill:'#e0442b'},'比不給文件還低');
+
+/* 手繪圈：圈出低於基準的區段（卡片座標 → 頁面座標） */
+const gx=x=>110+x, gy=y=>270+y;
+R.appendChild(D.rc.ellipse(gx(X(10.05)),gy(Y(55.3)),400,64,{stroke:D.C.ver,strokeWidth:4,roughness:1.8}));
+</script></body></html>

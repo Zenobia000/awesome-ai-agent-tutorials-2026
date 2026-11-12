@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>GraphRAG 兩派分清</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.colh{position:absolute;font-size:30px;color:var(--muted);text-align:center}
+.who{position:absolute;display:flex;flex-direction:column;justify-content:center;padding:0 26px}
+.who .n{font-size:34px;line-height:1.25}.who .s{font-size:26px;line-height:1.4;margin-top:8px}.who .m{font-size:24px;line-height:1.4;color:var(--muted);margin-top:6px}
+.cell{position:absolute;font-size:26px;line-height:1.45}
+</style></head><body><div class="slide">
+  <h1>兩派 GraphRAG：差在怎麼取上下文</h1>
+  <p class="lead">同樣叫 GraphRAG：一派讀預先寫好的社群報告，一派用 Cypher 沿關係走。</p>
+
+  <div class="colh" style="left:410px;top:270px;width:430px">建圖</div>
+  <div class="colh" style="left:910px;top:270px;width:430px">找入口</div>
+  <div class="colh" style="left:1410px;top:270px;width:400px">展開上下文</div>
+
+  <div class="who" style="left:110px;top:320px;width:270px;height:250px"><div class="n ind">Microsoft GraphRAG</div><div class="s">社群報告派</div><div class="m">不跑 Cypher，<br>不用 Neo4j</div></div>
+  <div class="who" style="left:110px;top:630px;width:270px;height:250px"><div class="n mus">Neo4j 系</div><div class="s">Cypher 多跳派</div><div class="m">本章 Lab 走這派</div></div>
+
+  <div class="cell" style="left:454px;top:436px;width:344px">LLM 抽實體與關係，Leiden 分社群，預先寫好社群報告</div>
+  <div class="cell" style="left:954px;top:436px;width:344px">Local：問題對「實體描述」做 embedding 比對。Global：直接讀報告</div>
+  <div class="cell" style="left:1454px;top:436px;width:334px">照對應表收集文字片段、報告、鄰近實體，排序過濾後塞進 context</div>
+
+  <div class="cell" style="left:454px;top:746px;width:344px">LLM 抽三元組，消歧後用 MERGE 寫進 Neo4j</div>
+  <div class="cell" style="left:954px;top:746px;width:344px">LLM 從問題抽出角色名，到圖中定位節點</div>
+  <div class="cell" style="left:1454px;top:746px;width:334px">Cypher 沿關係走 1–2 跳，結果格式化成背景文字</div>
+
+  <div class="abs" style="left:1075px;top:660px;width:100px;height:52px;line-height:52px;text-align:center;font-size:26px">韓立</div>
+  <div class="read"><em>怎麼讀：</em>每一行由左往右讀。第一行的終點是「報告與對應表」，第二行的終點是「Cypher 查到的路徑」。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IND=['#d9e1ee',D.C.ind],MUS=['#f7e7c0','#b98a12'],VER=['#f7d6cf',D.C.ver];
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:3},o||{}));
+const sq=(x,y,s,f)=>R(x,y,s,s,f,{strokeWidth:2.5});
+const llm=(x,y,d)=>D.ci(x,y,d,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+const blob=(x,y,w,h,col)=>D.poly([[x,y+10],[x+w*0.3,y-4],[x+w,y+8],[x+w+4,y+h*0.6],[x+w*0.6,y+h+6],[x+6,y+h]],null,{stroke:col,strokeWidth:2.5,strokeLineDash:[8,7]});
+const ar=(x1,y1,x2,y2)=>D.arrow(x1,y1,x2,y2,{strokeWidth:3});
+/* 左側名牌與三欄卡片 */
+R(110,320,270,250,IND);R(110,630,270,250,MUS);
+[[320],[630]].forEach(([y])=>{const CF=['#fbf9f4',D.C.grey];R(430,y,390,250,CF,{strokeWidth:2.5});R(930,y,390,250,CF,{strokeWidth:2.5});R(1430,y,380,250,CF,{strokeWidth:2.5});
+  ar(826,y+125,922,y+125);ar(1326,y+125,1422,y+125);});
+
+/* 第一行：Microsoft */
+llm(480,375,66);ar(520,375,560,375);
+blob(580,345,60,60,D.C.ind);sq(595,358,16,IND);sq(615,378,16,IND);
+blob(660,345,60,60,'#b98a12');sq(675,358,16,MUS);sq(695,378,16,MUS);
+blob(740,345,60,60,D.C.ver);sq(755,358,16,VER);sq(775,378,16,VER);
+llm(980,375,66);ar(1020,375,1060,375);
+sq(1075,355,42,IND);sq(1135,355,42,MUS);sq(1195,355,42,IND);
+sq(1590,353,44,MUS);
+[[1500,375],[1690,352],[1690,398]].forEach(([x,y])=>{D.line(1612,375,x,y,{strokeWidth:2.5});sq(x-16,y-16,32,IND);});
+
+/* 第二行：Neo4j 系 */
+llm(480,685,66);ar(520,685,560,685);
+const g=[[590,700],[650,665],[720,705],[780,668]];
+D.line(598,708,658,673,{strokeWidth:2.5});D.line(658,673,728,713,{strokeWidth:2.5});D.line(728,713,788,676,{strokeWidth:2.5});
+g.forEach(([x,y])=>sq(x-8,y-8,32,IND));
+llm(980,685,66);ar(1020,685,1060,685);
+R(1075,660,100,52,MUS,{strokeWidth:2.5});
+D.tri(1480,685,74,'mus',{strokeWidth:2.5});ar(1535,690,1575,690);
+D.line(1620,690,1690,690,{strokeWidth:2.5});D.line(1690,690,1750,665,{strokeWidth:2.5});
+[[1590,672],[1665,672],[1730,647]].forEach(([x,y])=>sq(x,y,36,IND));
+</script></body></html>

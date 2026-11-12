@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>語義切分 vs 代理切分</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ph{position:absolute;top:340px;font-size:38px;line-height:1.2}
+.ps{position:absolute;top:392px;font-size:26px;line-height:1.4;color:var(--muted)}
+.cl{position:absolute;font-size:24px;line-height:1.35}
+.bridge.inline{padding:14px 30px}
+</style></head><body><div class="slide">
+  <h1>語義切分 vs 代理切分：誰來判斷切點</h1>
+  <p class="lead">名字像，做法不同。semantic chunking 只用 embedding 算距離，不用 LLM；agentic chunking 才讓 LLM 讀文字做判斷。</p>
+
+  <div class="ph ind" style="left:110px">Semantic chunking：用距離找切點</div>
+  <div class="ps" style="left:110px">不用 LLM。embedding 模型給每句一個向量，比相鄰兩句。</div>
+  <div class="ph ver" style="left:1010px">Agentic chunking：讓 LLM 判斷</div>
+  <div class="ps" style="left:1010px">沒有標準 API；每句都要呼叫 LLM，成本高。</div>
+
+  <div class="cl mut" style="left:110px;top:516px">相鄰兩句的距離<span class="tag" style="margin-left:12px">示意</span></div>
+  <div class="cl ver" style="left:140px;top:590px">門檻</div>
+  <div class="cl" style="left:110px;top:742px;width:790px">高於門檻的峰值就是切點。LlamaIndex 的 <code style="font-family:'JetBrains Mono',monospace;font-size:22px">SemanticSplitterNodeParser</code> 取第 95 百分位；LangChain 的 <code style="font-family:'JetBrains Mono',monospace;font-size:22px">SemanticChunker</code> 已停止維護。</div>
+
+  <div class="cl" style="left:1010px;top:742px;width:800px">逐句讀進來，LLM 決定這句歸入哪一塊，或另開新塊。像是請人邊讀邊分章節。</div>
+  <div class="cl mut" style="left:1030px;top:668px;width:240px;text-align:center">一句一句送入</div>
+  <div class="abs" style="left:1280px;top:546px;width:160px;text-align:center;font-size:40px">LLM</div>
+
+  <div class="bridge inline" style="left:110px;top:868px;width:1700px"><span class="k">你已經會的</span>找切點＝在序列上找突變（change-point detection），門檻用百分位數設，像調 threshold。</div>
+  <div class="read"><em>怎麼讀：</em>左邊靠一條距離曲線決定刀口；右邊靠圓（LLM）逐句歸類。兩邊都叫「智慧切分」，但只有右邊要付 LLM 的錢。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const GR=[['#d9e1ee',D.C.ind],['#f7e7c0','#b98a12'],['#d9e1ee',D.C.ind]];
+const sq=(x,y,s,[f,st],w)=>D.sq(x,y,s,f,{fillStyle:'solid',stroke:st,strokeWidth:w||2.5});
+/* ── 左：Semantic ── 9 句，8 個相鄰間隙 */
+const grp=i=>i<=3?0:(i<=6?1:2);
+for(let i=0;i<9;i++)sq(130+i*86,440,56,GR[grp(i)]);
+const gx=i=>130+i*86+56+15;           // 間隙中心 x
+const base=720,H=150;                  // 圖表基線與高度
+const v=[0.25,0.32,0.2,0.92,0.28,0.22,0.86,0.3];
+D.line(130,base,880,base,{strokeWidth:2.2});D.line(130,base,130,base-H-10,{strokeWidth:2.2});
+D.curve(v.map((a,i)=>[gx(i),base-a*H]),{strokeWidth:3,stroke:D.C.ind});
+D.dash(130,base-0.6*H,880,base-0.6*H,{stroke:D.C.ver,strokeWidth:2.5});
+[3,6].forEach(i=>{D.dash(gx(i),425,gx(i),base,{stroke:D.C.ver,strokeWidth:3.5});});
+/* ── 右：Agentic ── */
+[0,1,2,3].forEach(i=>sq(1040+(i%2)*70,440+Math.floor(i/2)*70,48,[['#d9e1ee',D.C.ind],['#d9e1ee',D.C.ind],['#f7e7c0','#b98a12'],['#f7e7c0','#b98a12']][i],2.5));
+D.arrow(1190,500,1275,545,{strokeWidth:2.8});
+D.ci(1360,570,160,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+/* 兩個片段容器 */
+D.rect(1560,440,240,110,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+D.rect(1560,600,240,110,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+[0,1,2].forEach(i=>sq(1580+i*70,470,48,['#d9e1ee',D.C.ind],2.5));
+[0,1].forEach(i=>sq(1580+i*70,630,48,['#f7e7c0','#b98a12'],2.5));
+D.arrow(1440,545,1550,495,{strokeWidth:2.8});
+D.arrow(1440,600,1550,650,{strokeWidth:2.8});
+</script></body></html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab5-A 手寫 ReAct</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.u{position:absolute;font-size:24px;line-height:1.45;color:var(--muted)}
+.c{position:absolute;text-align:center;line-height:1.25}
+</style></head><body><div class="slide">
+  <h1>Lab 5-A：50 行手寫 ReAct agent</h1>
+  <p class="lead">純 Python＋OpenAI 相容 SDK，兩個工具：查價、運算。沒有任何 agent 框架。</p>
+
+  <div class="c" style="left:110px;top:430px;width:150px;font-size:26px">messages</div>
+  <div class="c" style="left:335px;top:435px;width:130px;font-size:28px">LLM</div>
+  <div class="abs lbl" style="left:490px;top:462px">tool_calls</div>
+  <div class="abs lbl" style="left:625px;top:345px;width:70px;text-align:center">工具</div>
+  <div class="abs lbl ver" style="left:230px;top:292px;width:340px;text-align:center">沒有 tool_calls → return</div>
+  <div class="abs lbl" style="left:250px;top:632px">結果 append 回 messages</div>
+
+<div class="code" style="left:110px;top:690px;width:640px">def get_price(item: str) -> float:
+    """查商品單價"""   # → 工具說明
+    return PRICES[item]</div>
+
+<div class="code" style="left:770px;top:290px">def run(question: str, max_steps: int = 8) -> str:
+    messages = [{"role": "user", "content": question}]
+<span class="hl">    for _ in range(max_steps):              # 終止條件 1：步數上限</span>
+        msg = client.chat.completions.create(
+            model=MODEL, messages=messages, tools=SCHEMAS
+        ).choices[0].message
+        messages.append(msg)                # 模型的回覆也要存進去
+<span class="hl">        if not msg.tool_calls:              # 終止條件 2：沒有要工具</span>
+            return msg.content
+        for call in msg.tool_calls:
+            args = json.loads(call.function.arguments)
+            result = TOOLS[call.function.name](**args)
+            messages.append({"role": "tool",
+                "tool_call_id": call.id, "content": str(result)})</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊是迴圈的樣子；右邊是同一個迴圈的程式碼，兩個黃底行是終止條件。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C;
+D.rect(110,410,150,80,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:3});
+D.arrow(266,450,332,450,{strokeWidth:3});
+D.ci(400,450,130,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+D.arrow(470,450,612,450,{strokeWidth:3});
+D.tri(660,450,110,S.mus,{strokeWidth:2.5});
+D.arrow(400,383,400,333,{strokeWidth:3,stroke:S.ver});
+D.curve([[690,512],[620,600],[300,610],[190,500]],{strokeWidth:3});
+D.arrow(200,515,186,497,{strokeWidth:3});
+</script></body></html>

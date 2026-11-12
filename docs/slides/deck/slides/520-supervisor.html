@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Supervisor 多智能體</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.c{position:absolute;text-align:center;line-height:1.25}
+.u{position:absolute;font-size:24px;line-height:1.45;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>Supervisor：子 agent 就是工具</h1>
+  <p class="lead">使用者丟來一句混合指令，Supervisor 拆開、派給子 agent、再統整回覆。</p>
+
+  <div class="c" style="left:110px;top:545px;width:150px;font-size:28px">使用者<br>指令</div>
+  <div class="u" style="left:110px;top:665px;width:290px">「週二下午跟 Ann 開會，再把議程寄給她」<span class="tag">示意</span></div>
+
+  <div class="c" style="left:400px;top:555px;width:240px;font-size:38px">Supervisor</div>
+  <div class="abs lbl ver" style="left:400px;top:730px;width:240px;text-align:center">拆解、路由、統整</div>
+
+  <div class="u" style="left:648px;top:392px;width:140px">一句話請求</div>
+  <div class="u" style="left:668px;top:528px;width:160px">只回摘要</div>
+
+  <div class="abs lbl mut" style="left:818px;top:310px">對上層而言，整包只是一個工具</div>
+  <div class="abs lbl mut" style="left:818px;top:612px">對上層而言，整包只是一個工具</div>
+  <div class="abs lbl" style="left:780px;top:490px;width:240px;text-align:center">schedule_event</div>
+  <div class="abs lbl" style="left:780px;top:795px;width:240px;text-align:center">manage_email</div>
+  <div class="c" style="left:1135px;top:395px;width:170px;font-size:26px">Calendar<br>Agent</div>
+  <div class="c" style="left:1135px;top:700px;width:170px;font-size:26px">Email<br>Agent</div>
+  <div class="abs lbl" style="left:1600px;top:363px">查空檔</div>
+  <div class="abs lbl" style="left:1600px;top:453px">建行程</div>
+  <div class="abs lbl" style="left:1600px;top:718px">寄信</div>
+
+  <div class="u" style="left:150px;top:836px;width:560px">langgraph-supervisor 套件已封存；官方現行做法就是把子 agent 包成工具</div>
+
+  <div class="read"><em>怎麼讀：</em>從左邊的圓（Supervisor）出發。它看得到的只有三角（工具），每個三角後面藏著一個子 agent。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C;
+/* 使用者 */
+D.rect(110,490,150,130,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:3});
+D.arrow(268,555,382,575,{strokeWidth:3});
+/* Supervisor */
+D.ci(520,580,260,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+/* 泳道 */
+const dash={strokeLineDash:[12,10],stroke:S.grey,strokeWidth:2.5};
+D.rect(790,300,1040,255,null,dash);
+D.rect(790,600,1040,255,null,dash);
+/* Supervisor ↔ 包裝工具 */
+D.arrow(618,492,822,442,{strokeWidth:3});
+D.arrow(828,478,640,526,{strokeWidth:3,stroke:S.ind});
+D.arrow(618,668,822,718,{strokeWidth:3});
+D.arrow(828,742,640,694,{strokeWidth:3,stroke:S.ind});
+/* 包裝工具 */
+D.tri(900,432,120,S.mus,{strokeWidth:2.5});
+D.tri(900,737,120,S.mus,{strokeWidth:2.5});
+/* 子 agent */
+D.arrow(970,445,1122,430,{strokeWidth:2.5});
+D.arrow(970,750,1122,735,{strokeWidth:2.5});
+D.ci(1220,425,170,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+D.ci(1220,730,170,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+/* 低階工具 */
+D.arrow(1310,408,1500,385,{strokeWidth:2.5});
+D.arrow(1310,440,1500,470,{strokeWidth:2.5});
+D.arrow(1310,730,1500,735,{strokeWidth:2.5});
+D.tri(1550,378,80,S.mus,{strokeWidth:2.5});
+D.tri(1550,468,80,S.mus,{strokeWidth:2.5});
+D.tri(1550,733,80,S.mus,{strokeWidth:2.5});
+/* 已封存標記 */
+D.cross(128,858,13,{strokeWidth:4});
+</script></body></html>

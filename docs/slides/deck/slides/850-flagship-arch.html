@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>旗艦專案分層架構</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.rl{position:absolute;left:110px;width:235px;font-size:26px;line-height:1.3;color:var(--muted)}
+.t1{position:absolute;font-size:30px;line-height:1.3}
+.t2{position:absolute;font-size:24px;line-height:1.4;color:var(--muted)}
+.ck{position:absolute;text-align:center;font-size:24px;line-height:40px}
+</style></head><body><div class="slide">
+  <h1>旗艦專案：五層架構</h1>
+  <p class="lead">一個 Supervisor 分派給三個子 agent；狀態與追蹤各自獨立一層。</p>
+
+  <div class="rl" style="top:312px">前端交互層</div>
+  <div class="t1" style="left:380px;top:298px">前端　HTTP／SSE 串流，呈現思考步驟與工具調用</div>
+  <div class="t2 ver" style="left:380px;top:342px;color:var(--ver)">Agent Chat UI 的 repo 已於 2026-11-03 封存：另選前端，或 fork 一份固定版本</div>
+
+  <div class="rl" style="top:440px">核心編排層</div>
+  <div class="t1" style="left:1150px;top:432px">Supervisor</div>
+  <div class="t2" style="left:1150px;top:472px">拆解任務、路由到子 agent</div>
+
+  <div class="rl" style="top:610px">專業子 agent</div>
+  <div class="t1" style="left:470px;top:552px">DocAgent</div><div class="t2" style="left:470px;top:590px">技術文件問答</div>
+  <div class="t1" style="left:965px;top:552px">DBAgent</div><div class="t2" style="left:965px;top:590px">安全的 Text2SQL</div>
+  <div class="t1" style="left:1460px;top:552px">OpsAgent</div><div class="t2" style="left:1460px;top:590px">運維操作</div>
+  <div class="ck" style="left:385px;top:660px;width:190px">ChromaDB</div>
+  <div class="ck" style="left:595px;top:660px;width:190px">Neo4j</div>
+  <div class="ck" style="left:900px;top:660px;width:380px">Text2SQL＋Pydantic</div>
+  <div class="ck" style="left:1375px;top:660px;width:180px">健康檢查、日誌</div>
+  <div class="t2" style="left:1668px;top:656px;width:130px">HITL 審批後才執行</div>
+
+  <div class="rl" style="top:778px">持久狀態層</div>
+  <div class="t1" style="left:380px;top:776px">PostgresSaver　<span class="mut" style="font-size:26px">checkpoint 與跨對話狀態</span></div>
+  <div class="rl" style="top:858px">可觀測性層</div>
+  <div class="t1" style="left:380px;top:856px">LangSmith　<span class="mut" style="font-size:26px">每次執行的 token、耗時、錯誤堆疊</span></div>
+
+  <div class="read"><em>怎麼讀：</em>由上往下是一次請求的路徑；圓是會推理的模型，方塊是資料與狀態，三角是動作與審批閘門。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const LIND=['#d9e1ee',D.C.ind];
+/* 前端 */
+D.rect(360,285,1450,100,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.6,strokeLineDash:[12,9]});
+D.arrow(1085,388,1085,414,{strokeWidth:2.6});
+/* Supervisor */
+D.ci(1085,462,92,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+D.line(1085,508,1085,522,{strokeWidth:2.4});D.line(590,522,1580,522,{strokeWidth:2.4});
+[590,1085,1580].forEach(x=>D.arrow(x,522,x,533,{strokeWidth:2.4}));
+/* 子 agent 三欄 */
+[[370,'#fbf9f4'],[865,'#fbf9f4'],[1360,'#fbf9f4']].forEach(([x,f])=>D.rect(x,535,440,215,f,{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.4}));
+[[420,585],[915,585],[1410,585]].forEach(([x,y])=>D.ci(x,y,70,'ver',{fillStyle:'hachure',strokeWidth:2.3}));
+/* Doc 資料 */
+D.rect(385,654,190,52,LIND[0],{fillStyle:'solid',stroke:LIND[1],strokeWidth:2.4});
+D.rect(595,654,190,52,LIND[0],{fillStyle:'solid',stroke:LIND[1],strokeWidth:2.4});
+/* DB */
+D.rect(900,654,380,52,LIND[0],{fillStyle:'solid',stroke:LIND[1],strokeWidth:2.4});
+/* Ops：工具 + HITL 閘門 */
+D.rect(1375,654,180,52,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.4});
+D.arrow(1560,680,1596,680,{strokeWidth:2.2});
+D.tri(1625,680,68,'#f7d6cf',{stroke:D.C.ver,strokeWidth:2.8});
+/* 狀態、追蹤 */
+D.rect(360,765,1450,60,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.rect(360,845,1450,60,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:3});
+[590,1085,1580].forEach(x=>D.dash(x,752,x,763,{strokeWidth:2}));
+</script></body></html>

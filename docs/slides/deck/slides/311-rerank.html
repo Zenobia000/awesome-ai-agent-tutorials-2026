@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>雙塔與 Cross-Encoder</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ph{position:absolute;top:300px;font-size:34px;line-height:1.2}
+.cl{position:absolute;font-size:26px;line-height:1.35}
+.cap{position:absolute;top:722px;width:790px;font-size:28px;line-height:1.45}
+.bridge.inline{padding:14px 30px}
+</style></head><body><div class="slide">
+  <h1>重排：把問題和片段放在一起讀</h1>
+  <p class="lead">雙塔各讀各的，快；Cross-Encoder 一起讀，準但貴。差別在問題和片段什麼時候碰面。</p>
+
+  <div class="ph ind" style="left:110px">雙塔（bi-encoder）：各自算向量</div>
+  <div class="ph ver" style="left:1010px">Cross-Encoder：一起讀，直接打分</div>
+  <div id="t"></div>
+
+  <div class="cap" style="left:110px">文件向量事先算好，查詢只比距離：<b>快</b>，但各讀各的。</div>
+  <div class="cap" style="left:1010px">每一對都要過一次模型，不能預先算：<b>準</b>，但慢。</div>
+
+  <div class="bridge inline" style="left:110px;top:812px;width:1700px"><span class="k">你已經會的</span>雙塔＝siamese network，共用權重各編一個向量；Cross-Encoder＝兩張圖 concat 後進同一個網路（early fusion），輸出 sigmoid 的二元分類器。</div>
+  <div class="read"><em>怎麼讀：</em>左邊問題和片段各進一次模型、各出一個向量再比距離；右邊兩者拼在一起進模型，直接出分數。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const T=document.getElementById('t');
+const tx=(x,y,w,t,c,st)=>{const d=document.createElement('div');d.className='cl '+(c||'');d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;${st||''}`;d.innerHTML=t;T.appendChild(d);};
+const BL=['#d9e1ee',D.C.ind],YL=['#f7e7c0','#b98a12'];
+const sq=(x,y,s,[f,st],w)=>D.sq(x,y,s,f,{fillStyle:'solid',stroke:st,strokeWidth:w||2.8});
+const mdl=(cx,cy,d)=>D.ci(cx,cy,d,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+const lab=(x,y,s,t)=>tx(x,y+s/2-17,s,t,'',"text-align:center;font-size:28px;line-height:34px");
+const A=o=>Object.assign({strokeWidth:2.8},o||{});
+/* 兩半之間的分隔 */
+D.dash(980,305,980,760,{strokeWidth:2,stroke:D.C.grey});
+/* ── 左：雙塔（兩條各自獨立的路，最後才比距離） ── */
+const y1=435,y2=625,ym=530;
+sq(110,y1-45,90,BL);lab(110,y1-45,90,'問題');
+sq(110,y2-45,90,YL);lab(110,y2-45,90,'片段');
+D.arrow(210,y1,290,y1,A());D.arrow(210,y2,290,y2,A());
+mdl(360,y1,130);mdl(360,y2,130);
+D.dash(360,y1+65,360,y2-65,A());tx(378,y1+68,160,'共用權重','mut');
+D.arrow(435,y1,515,y1,A());D.arrow(435,y2,515,y2,A());
+D.rect(525,y1-50,44,100,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});tx(582,y1-17,40,'u','',"font-size:28px");
+D.rect(525,y2-50,44,100,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.8});tx(582,y2-17,40,'v','',"font-size:28px");
+D.arrow(625,y1,705,ym-12,A());D.arrow(625,y2,705,ym+12,A());
+tx(715,ym-18,230,'cosine 相似度','',"font-size:28px;line-height:1.3");
+/* ── 右：Cross-Encoder（先拼在一起，再進模型） ── */
+sq(1030,y1-45,90,BL);lab(1030,y1-45,90,'問題');
+sq(1030,y2-45,90,YL);lab(1030,y2-45,90,'片段');
+D.line(1130,y1,1205,ym-4,A());D.line(1130,y2,1205,ym+4,A());
+D.arrow(1205,ym,1290,ym,A());
+mdl(1390,ym,200);
+D.arrow(1500,ym,1590,ym,A());
+D.rect(1600,ym-45,90,90,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.8});
+tx(1540,ym+58,210,'相關分數<br>0 到 1','',"font-size:28px;line-height:1.3;text-align:center");
+</script></body></html>

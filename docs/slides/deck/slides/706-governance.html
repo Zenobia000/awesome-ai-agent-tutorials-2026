@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>MCP 的治理</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.dt{position:absolute;font-size:32px}
+.n1{position:absolute;left:110px;top:410px;width:370px;text-align:center}
+.n1 .t{font-size:46px}.n1 .d{font-size:28px;color:var(--muted);margin-top:8px}
+.n2t{position:absolute;left:630px;top:378px;width:630px;font-size:30px;line-height:1.45}
+.n2t small{display:block;font-size:24px;color:var(--muted)}
+.pj{position:absolute;width:190px;text-align:center;font-size:30px;line-height:1.3}
+.pj small{display:block;font-size:24px;color:var(--muted)}
+.n3{position:absolute;left:1405px;top:400px;width:380px}
+.n3 .t{font-size:40px;margin-bottom:10px}.n3 .d{font-size:28px;line-height:1.5}
+.lab{position:absolute;font-size:24px;color:var(--muted)}
+.take{position:absolute;left:110px;top:755px;width:1700px;padding:26px 36px;font-size:34px;line-height:1.4}
+</style></head><body><div class="slide">
+  <h1>MCP 由誰管：起源與治理要分開講</h1>
+  <p class="lead">Anthropic 發起；2025-12 起捐給 Linux Foundation 旗下的基金會，技術方向仍由維護者決定。</p>
+
+  <div class="dt" style="left:110px;top:315px">2024-11-25</div>
+  <div class="dt" style="left:610px;top:315px">2025-12-09</div>
+  <div class="dt" style="left:1380px;top:315px">現在</div>
+
+  <div class="n1"><div class="t">Anthropic</div><div class="d">發布 MCP</div></div>
+  <div class="lab" style="left:495px;top:402px">捐出</div>
+
+  <div class="n2t">Linux Foundation 旗下<br>Agentic AI Foundation（AAIF）</div>
+  <div class="lab" style="left:640px;top:512px">創始專案</div>
+  <div class="pj" style="left:635px;top:560px">MCP<small>Anthropic</small></div>
+  <div class="pj" style="left:850px;top:560px">goose<small>Block</small></div>
+  <div class="pj" style="left:1065px;top:560px">AGENTS.md<small>OpenAI</small></div>
+
+  <div class="n3"><div class="t">誰決定技術</div><div class="d">既有 maintainers 繼續決定，<br>走公開提案流程（SEP）；<br>基金會不主導技術。</div></div>
+
+  <div class="take">面試兩件事都要講：<b>起源</b>是 Anthropic，<b>今天的治理</b>是中立基金會。</div>
+
+  <div class="read"><em>怎麼讀：</em>由左往右：一家公司發起 → 進入中立基金會，和另外兩個專案並列 → 技術仍照提案流程演進。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.rect(110,360,370,200,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.arrow(486,460,602,460,{strokeWidth:3});
+D.rect(610,360,670,340,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3.2});
+[635,850,1065].forEach((x,i)=>D.rect(x,550,190,130,i==0?'#d9e1ee':'#fbf9f4',{fillStyle:'solid',stroke:i==0?D.C.ind:D.C.grey,strokeWidth:i==0?3:2.5}));
+D.arrow(1286,460,1392,460,{strokeWidth:3});
+D.rect(1380,360,430,340,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:3});
+D.rect(110,740,1700,110,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+</script></body></html>

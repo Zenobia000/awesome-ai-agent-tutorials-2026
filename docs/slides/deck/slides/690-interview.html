@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組六面試題</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.t{position:absolute;font-size:24px;line-height:1.3;white-space:nowrap}
+.t.qt{font-size:30px;line-height:1.42;white-space:normal}
+.t.qk{color:#b98a12}
+.t.n{font-size:26px;line-height:42px;height:42px;text-align:center;color:#fff}
+.t.c{text-align:center}
+</style></head><body><div class="slide">
+  <h1>面試：RAG 還是微調，LoRA 值不值</h1>
+  <p class="lead">三題都在考你說不說得出「條件」，不是背結論。</p>
+  <div id="g"></div>
+  <div class="read"><em>怎麼讀：</em>左邊黃框是題目，右邊小圖把「回答維度」畫在本章主視覺上（示意）；紅圈編號是順序；第三題是追問，答不出條件會被問倒。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r'),G=document.getElementById('g');
+/* ── 共用版型：左題目卡、右縮圖面板、紅圈編號＝回答順序 ── */
+const IN=['#d9e1ee',D.C.ind],MU=['#f7e7c0','#b98a12'],VR=['#f7d6cf',D.C.ver],PA=['#fbf9f4',D.C.grey],GY=['#ece8dc',D.C.grey];
+const T=(x,y,t,c,w,st)=>{const e=document.createElement('div');e.className='t '+(c||'');e.style.cssText=`left:${x}px;top:${y}px;`+(w?`width:${w}px;`:'')+(st||'');e.innerHTML=t;G.appendChild(e);return e};
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:2.6},o));
+const S=(x,y,s,f,o)=>R(x,y,s,s,f,o);
+const A=(x1,y1,x2,y2,o)=>D.arrow(x1,y1,x2,y2,Object.assign({strokeWidth:2.6},o));
+const LN=(x1,y1,x2,y2,o)=>D.line(x1,y1,x2,y2,Object.assign({strokeWidth:2.4},o));
+const DS=(x1,y1,x2,y2,o)=>D.dash(x1,y1,x2,y2,Object.assign({strokeWidth:2.4},o));
+const TL=(cx,cy,s)=>D.tri(cx,cy,s,'mus',{strokeWidth:2.4});
+const GT=(cx,cy,s)=>D.tri(cx,cy,s,'#f7d6cf',{stroke:D.C.ver,strokeWidth:2.6});
+const MC=(cx,cy,d)=>D.ci(cx,cy,d,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+const ML=(cx,cy,d,o)=>D.ci(cx,cy,d,'#f7d6cf',Object.assign({fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.6},o));
+const N=(x,y,n)=>{D.ci(x,y,42,'ver',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2});T(x-21,y-21,n,'n',42)};
+const chip=(x,y,s,t,f)=>{S(x,y,s,f);T(x,y,t,'c',s,`height:${s}px;line-height:${s}px;font-size:26px`)};
+const LB=(x,y,w,h,t,f,fs)=>{R(x,y,w,h,f);T(x,y,t,'c',w,`height:${h}px;line-height:${h}px;font-size:${fs||24}px`)};
+const card=(i,y,H,q)=>{const QF=H>250?32:30;R(110,y,560,H,MU,{strokeWidth:3});T(140,y+16,'題 '+(i+1),'qk');
+  T(140,y+50,`<div>${q}</div>`,'qt',500,`height:${H-64}px;display:flex;align-items:center;font-size:${QF}px`);
+  A(676,y+H/2,716,y+H/2,{strokeWidth:3});R(722,y,1088,H,PA,{strokeWidth:3});};
+const ROWS=[280,503,726],H=205;
+
+/* 右欄標籤：圖上的紅圈與這裡的編號一一對應 */
+const LG=(x,y,i,cy,t)=>{N(x+718,y+cy,i);T(x+748,y+cy-16,t)};
+
+/* 題 1：RAG 還是微調（602 縮圖：知識 × 行為） */
+card(0,ROWS[0],H,'面對企業垂直問答，怎麼決定用 RAG 還是微調？兩者怎麼結合？');
+(()=>{const x=722,y=ROWS[0];
+  const mx=x+100,my=y+34,cw=250,ch=64;
+  R(mx,my,cw,ch,IN);R(mx+cw,my,cw,ch,MU);R(mx,my+ch,cw,ch,GY);R(mx+cw,my+ch,cw,ch,VR);
+  [['RAG',0,0],['RAG＋微調',1,0],['Prompt',0,1],['微調',1,1]].forEach(([t,c,r])=>T(mx+c*cw,my+r*ch,t,'c',cw,`height:${ch}px;line-height:${ch}px;font-size:26px`));
+  A(x+80,my+2*ch+8,x+80,my-8,{strokeWidth:2.4});A(x+86,my+2*ch+14,mx+2*cw+10,my+2*ch+14,{strokeWidth:2.4});
+  T(x+30,y+4,'知識','mut');T(mx+2*cw+16,my+2*ch+2,'行為','mut');
+  N(x+52,y+176,1);N(mx+10,my+4,2);N(mx+cw+10,my+4,3);
+  LG(x,y,1,38,'缺知識還是缺行為？');
+  LG(x,y,2,96,'更新頻率、溯源要求');
+  LG(x,y,3,154,'微調管風格，RAG 供事實');
+})();
+
+/* 題 2：LoRA 對比全參數（603 縮圖） */
+card(1,ROWS[1],H,'LoRA 相較全參數微調，工程優勢和資源消耗差在哪？');
+(()=>{const x=722,y=ROWS[1];
+  R(x+30,y+82,20,66,IN);
+  LN(x+50,y+115,x+84,y+115);LN(x+84,y+48,x+84,y+160);A(x+84,y+48,x+116,y+48,{strokeWidth:2.4});A(x+84,y+160,x+116,y+160,{strokeWidth:2.4});
+  LB(x+120,y+20,170,56,'W（凍結）',IN);
+  D.poly([[x+120,y+130],[x+120,y+190],[x+196,y+160]],'#f7d6cf',{stroke:D.C.ver,strokeWidth:2.4});T(x+126,y+146,'A');
+  D.poly([[x+290,y+130],[x+290,y+190],[x+214,y+160]],'#f7d6cf',{stroke:D.C.ver,strokeWidth:2.4});T(x+266,y+146,'B');
+  D.ci(x+380,y+112,40,'#ffffff',{fillStyle:'solid',strokeWidth:2.2});T(x+380-20,y+112-17,'+','c',40,'font-size:30px');
+  A(x+290,y+48,x+366,y+100,{strokeWidth:2.4});A(x+290,y+160,x+368,y+126,{strokeWidth:2.4});
+  A(x+404,y+112,x+426,y+112,{strokeWidth:2.4});R(x+430,y+82,20,66,IN);
+  N(x+205,y+98,1);N(x+400,y+60,3);
+  S(x+500,y+90,52,VR);T(x+500,y+90,'A·B','c',52,'height:52px;line-height:52px');
+  A(x+558,y+106,x+586,y+106,{strokeWidth:2.2});A(x+586,y+124,x+558,y+124,{strokeWidth:2.2});
+  S(x+592,y+90,52,MU);T(x+592,y+90,'A′B′','c',52,'height:52px;line-height:52px');
+  N(x+572,y+52,2);
+  LG(x,y,1,34,'可訓練參數通常不到 1%');
+  LG(x,y,2,92,'adapter 很小、可替換');
+  LG(x,y,3,150,'合併零延遲，<br>QLoRA 24GB 可跑');
+})();
+
+/* 題 3：LoRA 等於全量微調嗎（605 縮圖：loss 曲線） */
+card(2,ROWS[2],H,'「LoRA 效果等於全量微調」這句話對嗎？');
+(()=>{const x=722,y=ROWS[2];
+  A(x+50,y+188,x+50,y+16,{strokeWidth:2.2});A(x+44,y+184,x+476,y+184,{strokeWidth:2.2});
+  const P=(a)=>a.map(([dx,dy])=>[x+dx,y+dy]);
+  D.curve(P([[64,40],[110,100],[170,138],[260,158],[360,166],[460,170]]),{strokeWidth:3});
+  D.curve(P([[64,40],[110,100],[170,140],[260,160],[360,168],[460,172]]),{stroke:D.C.ver,strokeWidth:2.8,strokeLineDash:[8,6]});
+  D.curve(P([[64,40],[110,100],[170,134],[260,142],[360,144],[460,144]]),{stroke:'#b98a12',strokeWidth:3});
+  N(x+220,y+82,1);N(x+400,y+108,2);
+  [[510,'學',[80,50]],[590,'忘',[80,40]]].forEach(([bx,t,[a,b]])=>{R(x+bx,y+184-a,26,a,IN,{strokeWidth:2.2});R(x+bx+30,y+184-b,26,b,VR,{strokeWidth:2.2});T(x+bx,y+70,t,'c',56)});
+  N(x+598,y+38,3);
+  LG(x,y,1,40,'成立：中小資料集，<br>且加在所有層');
+  LG(x,y,2,116,'不成立：程式碼、繼續預訓練');
+  LG(x,y,3,166,'學得少，也忘得少');
+})();
+
+</script></body></html>

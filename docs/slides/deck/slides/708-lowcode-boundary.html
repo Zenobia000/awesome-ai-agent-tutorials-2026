@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>低代碼與程式碼的邊界</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.pt{position:absolute;font-size:38px}
+.nl{position:absolute;width:160px;text-align:center;font-size:24px;color:var(--muted)}
+.bl{position:absolute;width:740px;font-size:27px;line-height:1.45}
+.bl div{padding-left:34px;position:relative;margin-bottom:2px}
+.bl div::before{content:"";position:absolute;left:4px;top:.5em;width:14px;height:14px;background:var(--ind)}
+.ax{position:absolute;font-size:24px;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>低代碼與程式碼：看路徑誰決定</h1>
+  <p class="lead">路徑事先畫得出來，用畫布；要模型依狀態決定下一步，用程式碼；兩邊都能經 MCP 互接。</p>
+
+  <div class="ax" style="left:110px;top:292px">路徑由人事先畫好　可預測、好維護</div>
+  <div class="ax" style="right:110px;top:292px;text-align:right">路徑由模型決定　有彈性、要自己控制</div>
+
+  <div class="pt ind" style="left:136px;top:400px">Dify／n8n　固定流程畫布</div>
+  <div class="nl" style="left:120px;top:575px">輸入</div>
+  <div class="nl" style="left:300px;top:575px">LLM</div>
+  <div class="nl" style="left:480px;top:575px">工具</div>
+  <div class="nl" style="left:660px;top:575px">輸出</div>
+  <div class="bl" style="left:136px;top:635px"><div>路徑事先畫得出來</div><div>快速交付：Web 應用、API 一鍵發布</div><div>整合多：排程、Webhook、Slack、Email</div></div>
+
+  <div class="pt ver" style="left:1046px;top:400px">LangGraph　模型決定下一步</div>
+  <div class="nl" style="left:1050px;top:575px">狀態</div>
+  <div class="nl" style="left:1250px;top:575px">決定下一步</div>
+  <div class="nl" style="left:1540px;top:575px">工具</div>
+  <div class="bl" style="left:1046px;top:635px"><div>有狀態，依狀態動態分支</div><div>要控制：重試、人工審批、暫停恢復</div><div>每一步的狀態可存檔、可回溯</div></div>
+
+  <div class="abs lbl ind" style="left:910px;top:495px;width:100px;text-align:center">MCP</div>
+
+  <div class="bridge inline" style="left:110px;top:808px;width:1700px"><span class="k">你已經會的</span>Keras 搭得快、細節看不到；自己寫 PyTorch training loop 慢一點，但每一步都能動手腳。</div>
+  <div class="read"><em>怎麼讀：</em>左邊整條路徑是人畫好的直線；右邊由圓（模型）在狀態與工具之間來回，走幾圈由它決定。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.arrow(110,335,1810,335,{strokeWidth:2.5,stroke:D.C.grey});
+D.rect(110,385,790,395,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.rect(1020,385,790,395,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+D.arrow(910,540,1010,540,{strokeWidth:2.5,stroke:D.C.grey});D.arrow(1010,540,910,540,{strokeWidth:2.5,stroke:D.C.grey});
+/* 左：直線 */
+const L=['#d9e1ee',D.C.ind];
+D.sq(165,485,70,L[0],{fillStyle:'solid',stroke:L[1],strokeWidth:2.5});
+D.ci(380,520,92,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.5});
+D.tri(560,520,80,'mus',{strokeWidth:2.5});
+D.sq(705,485,70,L[0],{fillStyle:'solid',stroke:L[1],strokeWidth:2.5});
+D.arrow(240,520,326,520,{strokeWidth:2.5});D.arrow(430,520,516,520,{strokeWidth:2.5});D.arrow(606,520,698,520,{strokeWidth:2.5});
+/* 右：迴圈 */
+D.sq(1095,485,70,L[0],{fillStyle:'solid',stroke:L[1],strokeWidth:2.5});
+D.dash(1170,520,1278,520,{strokeWidth:2.5});
+D.ci(1330,520,100,'ver',{fillStyle:'hachure',strokeWidth:2.5});
+D.tri(1620,520,80,'mus',{strokeWidth:2.5});
+D.curve([[1375,487],[1470,452],[1566,487]],{strokeWidth:2.8});D.arrow(1540,470,1572,492,{strokeWidth:2.8});
+D.curve([[1566,557],[1470,592],[1380,555]],{strokeWidth:2.8});D.arrow(1408,576,1376,553,{strokeWidth:2.8});
+</script></body></html>

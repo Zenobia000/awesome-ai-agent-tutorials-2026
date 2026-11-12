@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>環境與工具總覽</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.base{position:absolute;top:278px;font-size:30px;line-height:1.2}
+.base .r{font-size:24px;color:var(--muted);margin-left:10px}
+.mh{position:absolute;font-size:30px;line-height:1.2}
+.mh span{color:var(--muted);font-size:24px;margin-left:12px}
+.nm{position:absolute;font-size:28px;line-height:1.2}
+.rl{position:absolute;font-size:24px;line-height:1.3;color:var(--muted)}
+.lgs{position:absolute;display:flex;align-items:center;justify-content:flex-end;gap:8px;height:48px;font-size:28px;color:var(--muted)}
+.lgs .logo{width:auto}
+.src{position:absolute;font-size:22px;line-height:1.4;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>環境與工具：一張圖看完</h1>
+  <p class="lead">每個模組新增哪些工具；Python 與 Docker 是底座，每章都在用。</p>
+  <div class="base" style="left:150px"><span class="ind">底座</span>　Python<span class="r">全程的主力語言</span></div>
+  <div class="base" style="left:820px">Docker<span class="r">起 Neo4j、PostgreSQL、Dify 這類服務</span></div>
+  <img class="logo" src="../assets/figures/logos/python.svg" alt="Python" style="position:absolute;left:560px;top:274px;height:42px">
+  <div id="cards"></div>
+  <div class="src" style="left:1230px;top:980px;width:580px;text-align:right">Logo 為各自所有者的商標，僅用來指稱該工具。</div>
+  <div class="read"><em>怎麼讀：</em>圓是跑模型的、方是存資料與狀態的、三角是讓模型動手或把關的。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* 底座條 */
+D.rect(110,262,1700,66,'#e7e1d2',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+D.line(790,272,790,318,{stroke:D.C.grey,strokeWidth:2});
+
+const C=D.C, host=document.getElementById('cards');
+const el=(cls,x,y,html,w)=>{const d=document.createElement('div');d.className=cls;d.style.left=x+'px';d.style.top=y+'px';if(w)d.style.width=w+'px';d.innerHTML=html;host.appendChild(d);};
+const shape=(t,x,y)=>{ if(t==='c')D.ci(x,y,34,C.ver,{strokeWidth:2}); else if(t==='s')D.sq(x-16,y-16,32,'ind',{strokeWidth:2}); else D.tri(x,y,38,C.mus,{strokeWidth:2}); };
+const mods=[
+ ['模組一','LLM 基礎',[['c','Ollama','本地跑模型'],['c','雲端模型 API','備援與對照']]],
+ ['模組二','提示詞與結構化輸出',[['s','Pydantic','驗證輸出格式'],['t','Moderation API','內容審核閘門']]],
+ ['模組三','企業級 RAG',[['s','ChromaDB','本地向量庫'],['c','bge-m3','跨語種嵌入'],['c','bge-reranker-v2-m3','重排模型']]],
+ ['模組四','知識圖譜',[['s','Neo4j','圖資料庫與 Cypher'],['t','langchain_neo4j','讓 LLM 抽三元組']]],
+ ['模組五','Agent 與 LangGraph',[['s','LangGraph','狀態圖編排'],['s','PostgreSQL','存檢查點']]],
+ ['模組六','LoRA 微調',[['c','LLaMA-Factory','LoRA 訓練工具'],['c','Qwen 系列','基座模型']]],
+ ['模組七','MCP 與低代碼',[['t','MCP 官方 SDK','寫 Server'],['t','Dify／n8n','低代碼工作流'],['t','Cherry Studio','MCP 客戶端']]],
+ ['模組八','轉職衝刺',[['s','LangSmith','trace 與評測'],['c','Cursor／Claude Code','AI 輔助開發']]],
+];
+/* logo：Docker、Anthropic、OpenAI、Neo4j 條款未確認，PostgreSQL 不可與其他 logo 並排 → 一律保留文字 */
+const LG='../assets/figures/logos/',LOGOS={
+ 'Ollama':[['ollama.svg',44]],'ChromaDB':[['chromadb.svg',36]],'LangGraph':[['langgraph.svg',28]],'Qwen 系列':[['qwen.svg',44]],
+ 'MCP 官方 SDK':[['mcp.svg',44]],'Dify／n8n':[['dify.svg',48],['／'],['n8n.svg',48]],'Cherry Studio':[['cherry-studio.png',44]],'LangSmith':[['langsmith.svg',28]]};
+const cw=400,gap=33.3,ch=284,y0=344,rowGap=24;
+mods.forEach((m,i)=>{
+  const col=i%4,row=Math.floor(i/4),x=110+col*(cw+gap),y=y0+row*(ch+rowGap);
+  const hi=(i===2||i===4);
+  D.rect(x,y,cw,ch,hi?'#fbf3dc':'#fbf9f4',{fillStyle:'solid',stroke:hi?'#b98a12':C.grey,strokeWidth:hi?3:2.5});
+  el('mh',x+22,y+16,'<b style="color:var(--ind)">'+m[0]+'</b><span>'+m[1]+'</span>');
+  const n=m[2].length,off=Math.round(((ch-62)-(n*68-3))/2);
+  m[2].forEach((c,j)=>{const cy=y+56+off+j*68;
+    shape(c[0],x+42,cy+22);
+    el('nm',x+78,cy,c[1]);el('rl',x+78,cy+34,c[2]);
+    const lg=LOGOS[c[1]];if(lg){const b=document.createElement('div');b.className='lgs';b.style.cssText=`left:${x+22}px;top:${cy+30-24}px;width:${cw-44}px`;
+      b.innerHTML=lg.map(g=>g.length===1?g[0]:`<img class="logo" src="${LG+g[0]}" alt="${c[1]}" style="height:${g[1]}px">`).join('');host.appendChild(b);}});
+});
+</script></body></html>

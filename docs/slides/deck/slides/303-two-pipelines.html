@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>RAG 離線與在線兩條鏈路</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ln{position:absolute;left:110px;font-size:40px;line-height:1.2}
+.ln span{font-size:26px;color:var(--muted);margin-left:18px}
+.n{position:absolute;text-align:center;font-size:30px;line-height:1.25}
+.n i{display:block;font-style:normal;font-size:24px;line-height:1.4;color:var(--muted);margin-top:2px}
+.bridge.inline{padding:14px 30px}
+</style></head><body><div class="slide">
+  <h1>RAG 的兩條鏈路：離線建庫，在線問答</h1>
+  <p class="lead">文件先離線處理成可搜尋的向量庫；使用者提問時，才走在線鏈路查庫、組裝、生成。</p>
+
+  <div class="ln ind" style="top:282px">離線鏈路<span>資料更新時才跑，慢一點沒關係</span></div>
+  <div class="ln ver" style="top:588px">在線鏈路<span>每次提問都要跑，要快</span></div>
+  <div class="abs note" style="left:1540px;top:340px;width:270px">向量庫是兩條鏈路唯一的交會點：離線寫入，在線讀取。</div>
+  <div class="abs note" style="left:880px;top:582px;width:600px;text-align:center">召回＝向這座庫發問</div>
+  <div id="labels"></div>
+
+  <div class="bridge inline" style="left:110px;top:872px;width:1700px"><span class="k">你已經會的</span>離線＝先把資料集過一遍 backbone，存成特徵庫；在線＝查表，再前向傳播。</div>
+  <div class="read"><em>怎麼讀：</em>上排先做一次，把文件變成向量庫；下排每次提問都走一遍。方塊是資料，圓是模型，三角是動作。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const box=document.getElementById('labels');
+const lab=(x,y,w,name,desc)=>{const d=document.createElement('div');d.className='n';d.style.cssText=`left:${x-w/2}px;top:${y}px;width:${w}px`;d.innerHTML=name+(desc?`<i>${desc}</i>`:'');box.appendChild(d);};
+const BL=['#d9e1ee',D.C.ind],YL=['#f7e7c0','#b98a12'];
+const sq=(cx,cy,s,[f,st])=>D.sq(cx-s/2,cy-s/2,s,f,{fillStyle:'solid',stroke:st,strokeWidth:2.8});
+const mdl=(cx,cy,d)=>D.ci(cx,cy,d,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+const arr=(a,b,y)=>D.arrow(a+14,y,b-14,y,{strokeWidth:2.8});
+
+/* 離線：文件 → 載入 → 分塊 → 向量化 → 向量庫 */
+const Y1=390, X1=[250,520,790,1060,1330];
+sq(X1[0],Y1,100,BL);
+D.tri(X1[1],Y1,112,'mus',{strokeWidth:2.6});
+[-64,0,64].forEach(dx=>sq(X1[2]+dx,Y1,54,YL));
+mdl(X1[3],Y1,108);
+sq(X1[4],Y1,110,BL);D.line(X1[4]-55,Y1-18,X1[4]+55,Y1-18,{strokeWidth:2});D.line(X1[4]-55,Y1+18,X1[4]+55,Y1+18,{strokeWidth:2});
+arr(X1[0]+50,X1[1]-56,Y1);arr(X1[1]+56,X1[2]-91,Y1);arr(X1[2]+91,X1[3]-54,Y1);arr(X1[3]+54,X1[4]-55,Y1);
+lab(X1[0],458,230,'原始文件','PDF、Markdown');
+lab(X1[1],458,230,'載入清洗','解析成乾淨文字');
+lab(X1[2],458,230,'分塊','切成小片段（chunk）');
+lab(X1[3],458,230,'向量化','embedding 模型');
+lab(X1[4],458,300,'入庫','向量＋原文＋附加標籤');
+
+/* 在線：問題 → 改寫 → 召回 → 重排 → 組裝 → 生成 → 回答 */
+const Y2=715, X2=[220,467,713,960,1207,1453,1700];
+sq(X2[0],Y2,80,BL);
+mdl(X2[1],Y2,100);
+D.tri(X2[2],Y2,110,'mus',{strokeWidth:2.6});
+mdl(X2[3],Y2,100);
+sq(X2[4],Y2,90,YL);
+mdl(X2[5],Y2,110);
+sq(X2[6],Y2,80,BL);
+[[40,50],[50,55],[55,50],[50,45],[45,55],[55,40]].forEach(([a,b],i)=>arr(X2[i]+a,X2[i+1]-b,Y2));
+lab(X2[0],785,230,'問題','使用者提問');
+lab(X2[1],785,230,'改寫','讓問句好搜');
+lab(X2[2],785,230,'召回','關鍵詞＋向量');
+lab(X2[3],785,230,'重排','挑最相關的');
+lab(X2[4],785,230,'組裝','拼成提示詞');
+lab(X2[5],785,230,'生成','LLM 作答');
+lab(X2[6],785,230,'回答','');
+
+/* 向量庫 → 召回：虛線肘形 */
+D.dash(X1[4]+58,Y1,1490,Y1,{strokeWidth:2.6});
+D.dash(1490,Y1,1490,575,{strokeWidth:2.6});
+D.dash(1490,575,X2[2],575,{strokeWidth:2.6});
+D.arrow(X2[2],575,X2[2],645,{strokeWidth:2.6});
+/* 右上註解框 */
+D.rect(1525,325,285,150,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.5});
+</script></body></html>

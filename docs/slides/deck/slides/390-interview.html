@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>面試：RAG 檢索</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.t{position:absolute;font-size:24px;line-height:1.3;white-space:nowrap}
+.t.qt{font-size:30px;line-height:1.42;white-space:normal}
+.t.qk{color:#b98a12}
+.t.n{font-size:26px;line-height:42px;height:42px;text-align:center;color:#fff}
+.t.c{text-align:center}
+</style></head><body><div class="slide">
+  <h1>面試高頻題：RAG 檢索</h1>
+  <p class="lead">每題先給結論，再照紅圈編號依序展開，最後講取捨。</p>
+  <div id="g"></div>
+  <div class="read"><em>怎麼讀：</em>左邊黃框是題目，右邊小圖把「回答維度」畫在本章主視覺上（示意）；紅圈編號是回答順序，先講 1 再講 2。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r'),G=document.getElementById('g');
+/* ── 共用版型：左題目卡、右縮圖面板、紅圈編號＝回答順序 ── */
+const IN=['#d9e1ee',D.C.ind],MU=['#f7e7c0','#b98a12'],VR=['#f7d6cf',D.C.ver],PA=['#fbf9f4',D.C.grey];
+const T=(x,y,t,c,w,st)=>{const e=document.createElement('div');e.className='t '+(c||'');e.style.cssText=`left:${x}px;top:${y}px;`+(w?`width:${w}px;`:'')+(st||'');e.innerHTML=t;G.appendChild(e);return e};
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:2.6},o));
+const S=(x,y,s,f,o)=>R(x,y,s,s,f,o);
+const A=(x1,y1,x2,y2,o)=>D.arrow(x1,y1,x2,y2,Object.assign({strokeWidth:2.6},o));
+const N=(x,y,n)=>{D.ci(x,y,42,'ver',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2});T(x-21,y-21,n,'n',42)};
+const chip=(x,y,s,t,f)=>{S(x,y,s,f);T(x,y,t,'c',s,`height:${s}px;line-height:${s}px;font-size:26px`)};
+const card=(i,y,H,q)=>{R(110,y,560,H,MU,{strokeWidth:3});T(140,y+16,'題 '+(i+1),'qk');T(140,y+50,`<div>${q}</div>`,'qt',500,`height:${H-64}px;display:flex;align-items:center`);
+  A(676,y+H/2,716,y+H/2,{strokeWidth:3});R(722,y,1088,H,PA,{strokeWidth:3});};
+const ROWS=[280,503,726],H=205;
+
+/* 題 1：兩路召回 → RRF（309 縮圖） */
+card(0,ROWS[0],H,'BM25 與向量檢索各有哪些不足？怎麼互補？');
+(()=>{const x=722,y=ROWS[0];
+  N(x+40,y+106,1);
+  T(x+84,y+10,'BM25：抓不到換句話說','ind');
+  [...'ABCDE'].forEach((t,i)=>chip(x+84+i*54,y+46,46,t,'AC'.includes(t)?MU:IN));
+  T(x+84,y+100,'向量：分不清型號、錯誤碼','ind');
+  [...'CFAGH'].forEach((t,i)=>chip(x+84+i*54,y+138,46,t,'AC'.includes(t)?MU:IN));
+  A(x+362,y+70,x+424,y+96);A(x+362,y+162,x+424,y+128);
+  N(x+448,y+30,2);T(x+478,y+16,'互補：RRF<br>依名次融合');
+  [...'CABF'].forEach((t,i)=>chip(x+438+i*54,y+88,46,t,'AC'.includes(t)?MU:IN));
+  T(x+438,y+148,'C、A 兩路都靠前','mut');
+  N(x+760,y+30,3);T(x+790,y+16,'取捨：各取幾筆、<br>k 取多少');
+  R(x+790,y+100,240,64,IN);T(x+790,y+100,'1／(k＋名次)','c',240,'height:64px;line-height:64px;font-size:28px');
+})();
+
+/* 題 2：父子片段（312 縮圖） */
+card(1,ROWS[1],H,'父文檔檢索器怎麼兼顧命中精度與生成上下文的完整？');
+(()=>{const x=722,y=ROWS[1];
+  S(x+22,y+120,46,VR);T(x+22,y+120,'問','c',46,'height:46px;line-height:46px;font-size:26px');
+  N(x+138,y+30,1);T(x+168,y+16,'小片段進向量庫，<br>意思集中、比對準');
+  R(x+110,y+90,340,100,['#fbf9f4',D.C.grey],{strokeLineDash:[10,9],strokeWidth:2.4});
+  [0,1,2,3].forEach(i=>S(x+130+i*78,y+116,48,i?IN:MU));
+  A(x+72,y+143,x+124,y+143,{stroke:D.C.ver,strokeWidth:3});
+  N(x+500,y+30,2);T(x+530,y+16,'命中後回傳<br>所屬的父段落');
+  A(x+456,y+141,x+498,y+141);
+  R(x+506,y+90,250,100,['#fbf1d6','#b98a12']);
+  [0,1,2,3].forEach(i=>S(x+530+i*52,y+118,40,i?IN:MU));
+  N(x+800,y+30,3);T(x+830,y+16,'取捨：太大變雜訊，<br>同父段落要去重');
+  S(x+812,y+100,44,MU);S(x+862,y+100,44,MU);A(x+914,y+122,x+954,y+122);S(x+962,y+100,44,MU);
+  T(x+812,y+156,'兩次命中 → 回傳一次','mut');
+})();
+
+/* 題 3：雙塔 → Cross-Encoder → 漏斗（311 縮圖） */
+card(2,ROWS[2],H,'已經有向量檢索，為什麼還要 <span style="white-space:nowrap">Cross-Encoder</span> 重排？');
+(()=>{const x=722,y=ROWS[2];
+  N(x+40,y+36,1);T(x+70,y+22,'雙塔各自編碼，<br>可預先算');
+  [[100,IN],[148,MU]].forEach(([dy,f],k)=>{const yy=y+dy+4;S(x+24,yy,36,f);A(x+66,yy+18,x+98,yy+18,{strokeWidth:2.4});
+    D.ci(x+122,yy+18,40,'ver',{fillStyle:'hachure',strokeWidth:2.2});A(x+148,yy+18,x+180,yy+18,{strokeWidth:2.4});R(x+186,yy+2,16,34,f,{strokeWidth:2.2});});
+  N(x+290,y+36,2);T(x+320,y+22,'Cross-Encoder<br>一起讀，更準');
+  S(x+280,y+100,36,IN);S(x+280,y+148,36,MU);A(x+322,y+120,x+372,y+146,{strokeWidth:2.4});A(x+322,y+168,x+372,y+150,{strokeWidth:2.4});
+  D.ci(x+400,y+148,56,'ver',{fillStyle:'hachure',strokeWidth:2.4});T(x+436,y+132,'逐對算','mut');
+  N(x+640,y+36,3);T(x+670,y+22,'漏斗：粗篩 10–20 段，<br>精排 3–5 段');
+  [...'abcdefghijkl'].forEach((_,i)=>S(x+618+(i%6)*32,y+100+Math.floor(i/6)*36,24,IN,{strokeWidth:2}));
+  A(x+808,y+132,x+846,y+132);D.ci(x+878,y+132,50,'ver',{fillStyle:'hachure',strokeWidth:2.4});A(x+910,y+132,x+948,y+132);
+  [0,1,2].forEach(i=>S(x+956+i*38,y+116,30,MU,{strokeWidth:2.2}));
+})();
+</script></body></html>

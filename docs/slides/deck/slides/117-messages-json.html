@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>messages JSON 實物</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;font-size:24px}
+.m{font-family:"JetBrains Mono",monospace;font-size:22px}
+</style></head><body><div class="slide">
+  <h1>OpenAI 相容 API：一則請求長這樣</h1>
+  <p class="lead">本地 Ollama 與多數雲端 API 都吃同一種格式。對話就是一個 messages 陣列，每個元素有角色與內容。</p>
+  <div class="code" style="left:110px;top:282px"><span class="k">POST</span> http://localhost:11434/v1/chat/completions
+{
+  <span class="s">"model"</span>: <span class="s">"qwen3.5:9b"</span>,
+  <span class="s">"messages"</span>: [
+<span class="hl">    {"role": "system", "content": "你是簡潔的助理。"},</span>
+<span class="hl">    {"role": "user",   "content": "用一句話解釋 token。"}</span>
+  ],
+  <span class="s">"temperature"</span>: 0.6,
+  <span class="s">"stream"</span>: true
+}</div>
+  <p class="abs" style="left:110px;top:716px;width:980px;font-size:26px;line-height:1.55;color:#5b574f">role ＝這句話是誰說的：system 是給模型的規則，user 是你，assistant 是模型之前的回覆。Ollama 不檢查 api_key，隨便填一個字串。</p>
+  <div id="g"></div>
+  <div class="bridge inline" style="left:110px;top:838px;width:1700px"><span class="k">你已經會的</span>像 PyTorch 換 device（cpu／cuda）：同一支程式，換 base_url 就換後端。</div>
+  <div class="read"><em>怎麼讀：</em>左邊是真實的請求內容（黃底是對話本身）；右邊是同一支程式，只換 base_url，就能接本地或雲端的模型。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(c,x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a '+c;e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+D.rect(1140,456,190,110,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+el('',1140,456,190,110,'你的程式<br>OpenAI SDK','font-size:24px');
+el('',1120,574,230,36,'只換 base_url','font-size:24px;color:#e0442b');
+const T=[{y:340,a:'Ollama（本機）',b:'localhost:11434/v1'},{y:511,a:'DeepSeek（雲端）',b:'api.deepseek.com'},{y:682,a:'其他雲端 API',b:'換 base_url 與 key'}];
+T.forEach(t=>{
+  D.line(1334,511,1420,t.y,{strokeWidth:2.4});
+  D.ci(1480,t.y,120,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+  el('',1550,t.y-40,260,80,'<span style="font-size:26px">'+t.a+'</span><br><span class="m" style="color:#5b574f">'+t.b+'</span>','justify-content:flex-start;text-align:left;flex-direction:column;align-items:flex-start;justify-content:center');
+});
+</script></body></html>

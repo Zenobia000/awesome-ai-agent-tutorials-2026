@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組八面試題</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.t{position:absolute;font-size:24px;line-height:1.3;white-space:nowrap}
+.t.qt{font-size:30px;line-height:1.42;white-space:normal}
+.t.qk{color:#b98a12}
+.t.n{font-size:26px;line-height:42px;height:42px;text-align:center;color:#fff}
+.t.c{text-align:center}
+</style></head><body><div class="slide">
+  <h1>面試題：幻覺與穩定性</h1>
+  <p class="lead">兩題都是「一層擋不住，所以要分層」；回答時按層次由外到內講。</p>
+  <div id="g"></div>
+  <div class="read"><em>怎麼讀：</em>左邊黃框是題目，右邊小圖把「回答維度」畫在旗艦專案架構上（示意）；紅圈編號是順序，各用一句話講完再舉例。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r'),G=document.getElementById('g');
+/* ── 共用版型：左題目卡、右縮圖面板、紅圈編號＝回答順序 ── */
+const IN=['#d9e1ee',D.C.ind],MU=['#f7e7c0','#b98a12'],VR=['#f7d6cf',D.C.ver],PA=['#fbf9f4',D.C.grey],GY=['#ece8dc',D.C.grey];
+const T=(x,y,t,c,w,st)=>{const e=document.createElement('div');e.className='t '+(c||'');e.style.cssText=`left:${x}px;top:${y}px;`+(w?`width:${w}px;`:'')+(st||'');e.innerHTML=t;G.appendChild(e);return e};
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:2.6},o));
+const S=(x,y,s,f,o)=>R(x,y,s,s,f,o);
+const A=(x1,y1,x2,y2,o)=>D.arrow(x1,y1,x2,y2,Object.assign({strokeWidth:2.6},o));
+const LN=(x1,y1,x2,y2,o)=>D.line(x1,y1,x2,y2,Object.assign({strokeWidth:2.4},o));
+const DS=(x1,y1,x2,y2,o)=>D.dash(x1,y1,x2,y2,Object.assign({strokeWidth:2.4},o));
+const TL=(cx,cy,s)=>D.tri(cx,cy,s,'mus',{strokeWidth:2.4});
+const GT=(cx,cy,s)=>D.tri(cx,cy,s,'#f7d6cf',{stroke:D.C.ver,strokeWidth:2.6});
+const MC=(cx,cy,d)=>D.ci(cx,cy,d,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+const ML=(cx,cy,d,o)=>D.ci(cx,cy,d,'#f7d6cf',Object.assign({fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.6},o));
+const N=(x,y,n)=>{D.ci(x,y,42,'ver',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2});T(x-21,y-21,n,'n',42)};
+const chip=(x,y,s,t,f)=>{S(x,y,s,f);T(x,y,t,'c',s,`height:${s}px;line-height:${s}px;font-size:26px`)};
+const LB=(x,y,w,h,t,f,fs)=>{R(x,y,w,h,f);T(x,y,t,'c',w,`height:${h}px;line-height:${h}px;font-size:${fs||24}px`)};
+const card=(i,y,H,q)=>{const QF=H>250?32:30;R(110,y,560,H,MU,{strokeWidth:3});T(140,y+16,'題 '+(i+1),'qk');
+  T(140,y+50,`<div>${q}</div>`,'qt',500,`height:${H-64}px;display:flex;align-items:center;font-size:${QF}px`);
+  A(676,y+H/2,716,y+H/2,{strokeWidth:3});R(722,y,1088,H,PA,{strokeWidth:3});};
+const ROWS=[280,620],H=320;
+
+/* 題 1：四道防線（850 縮圖，由前到後） */
+card(0,ROWS[0],H,'生產環境中，如何評估與降低大模型應用的幻覺？');
+(()=>{const x=722,y=ROWS[0],cx=i=>x+157+i*262;
+  const head=(i,t)=>{N(cx(i)-100,y+36,i+1);T(cx(i)-70,y+24,t,'ind')};
+  const sub=(i,t)=>T(cx(i)-120,y+238,t,'c',240);
+  head(0,'提示詞');LB(cx(0)-58,y+112,116,80,'禁止編造',IN);D.cross(cx(0)+54,y+112,14,{strokeWidth:3.5});sub(0,'負面約束，<br>禁止編造');
+  head(1,'檢索');TL(cx(1)-52,y+156,66);A(cx(1)-14,y+150,cx(1)+16,y+150,{strokeWidth:2.2});MC(cx(1)+50,y+152,58);
+  T(cx(1)-84,y+198,'召回','c',64,'font-size:24px');T(cx(1)+16,y+198,'重排','c',68);sub(1,'混合召回加重排，<br>提升背景相關性');
+  head(2,'驗證');MC(cx(2),y+160,84);
+  D.curve([[cx(2)-40,y+128],[cx(2)-48,y+86],[cx(2)+48,y+86],[cx(2)+40,y+128]],{strokeWidth:2.4});A(cx(2)+46,y+114,cx(2)+40,y+128,{strokeWidth:2.4});
+  sub(2,'Self-RAG 讓<br>模型自我檢查');
+  head(3,'架構');GT(cx(3),y+162,104);T(cx(3)-60,y+158,'審批','c',120,'color:#e0442b');sub(3,'高風險操作<br>設審批阻斷');
+  [0,1,2].forEach(i=>A(cx(i)+78,y+150,cx(i+1)-84,y+150));
+})();
+
+/* 題 2：長流程穩定（850 縮圖） */
+card(1,ROWS[1],H,'面對長流程、多工具的複雜 Agent 任務，如何保證執行穩定？');
+(()=>{const x=722,y=ROWS[1];
+  const head=(cx,i,t)=>{N(cx-130,y+36,i);T(cx-100,y+24,t,'ind')};
+  const sub=(cx,t)=>T(cx-150,y+238,t,'c',300);
+  // ① 問題
+  head(x+190,1,'問題');MC(x+190,y+160,84);
+  [[60,112],[320,112],[60,208],[320,208],[190,96]].forEach(([dx,dy])=>{LN(x+190,y+160,x+dx,y+dy+4,{strokeWidth:1.8});TL(x+dx,y+dy,34)});
+  D.cross(x+300,y+160,14,{strokeWidth:3.5});
+  sub(x+190,'單一 agent 的<br>認知負載過重');
+  // ② 解法一
+  head(x+544,2,'解法一');MC(x+544,y+120,64);
+  [-100,0,100].forEach(dx=>{LN(x+544,y+150,x+544+dx,y+176,{strokeWidth:2});ML(x+544+dx,y+196,44)});
+  sub(x+544,'Supervisor 架構，<br>職能解耦');
+  // ③ 解法二
+  head(x+918,3,'解法二');
+  [0,1,2,3].forEach(i=>{S(x+800+i*66,y+110,48,IN);if(i<3)A(x+850+i*66,y+134,x+864+i*66,y+134,{strokeWidth:2.2})});
+  R(x+800,y+192,246,38,IN);T(x+800,y+192,'Checkpointer','c',246,'height:38px;line-height:38px');
+  D.curve([[x+1022,y+166],[x+1004,y+184],[x+940,y+184],[x+924,y+166]],{stroke:D.C.ver,strokeWidth:2.6});A(x+926,y+176,x+922,y+162,{stroke:D.C.ver,strokeWidth:2.6});
+  sub(x+918,'Checkpointer 做故障<br>重試與狀態回滾');
+})();
+
+</script></body></html>

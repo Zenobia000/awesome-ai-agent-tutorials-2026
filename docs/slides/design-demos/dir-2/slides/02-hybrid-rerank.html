@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>混合檢索與重排</title>
+<link rel="stylesheet" href="_base.css">
+<style>.chip{position:absolute;width:60px;height:60px;line-height:58px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:26px}</style>
+</head><body><div class="slide">
+  <h1>混合檢索：兩路粗篩，一次精排</h1>
+  <p class="lead">關鍵詞抓得到型號和錯誤碼，向量抓得到換句話說；兩路都撈，再交給重排模型挑最相關的三段。</p>
+
+  <div class="abs" style="left:110px;top:430px;width:300px"><div class="d mono" style="font-size:22px">query</div><div style="font-size:28px;line-height:1.45">「ERR-4012<br>要怎麼排除？」</div></div>
+  <div class="abs mono cy" style="left:500px;top:318px;font-size:24px">BM25 · 關鍵詞</div>
+  <div class="abs mono cy" style="left:500px;top:548px;font-size:24px">dense · 向量語意</div>
+  <div class="abs mono" style="left:1010px;top:330px;font-size:24px">union + dedup</div>
+  <div class="abs mono am" style="left:1420px;top:360px;width:200px;text-align:center;font-size:24px">cross-encoder</div>
+  <div class="abs lbl am" style="left:1420px;top:520px;width:200px;text-align:center">重排</div>
+  <div class="abs mono" style="left:1680px;top:300px;font-size:24px">→ prompt</div>
+  <div class="abs d" style="left:1010px;top:650px;width:380px;font-size:24px">A–H 是文件片段（示意）<br>C、A 兩路都撈到</div>
+  <div class="abs mono" style="left:640px;top:450px;font-size:22px;color:#9fb3c8">Top-5</div>
+  <div class="abs mono" style="left:640px;top:680px;font-size:22px;color:#9fb3c8">Top-5</div>
+  <div class="abs mono" style="left:1135px;top:610px;font-size:22px;color:#9fb3c8">≤ 10</div>
+  <div class="abs mono" style="left:1805px;top:450px;font-size:22px;color:#9fb3c8">Top-3</div>
+  <div id="chips"></div>
+
+  <div class="bridge" style="left:110px;top:780px;width:1700px;border-color:#9fb3c8"><span class="k" style="display:inline;margin-right:18px">// 你已經會的</span>兩階段物件偵測：先大量產生候選框（便宜、求全），再用分類器精判（貴、求準）。檢索同理。</div>
+  <div class="read"><em>怎麼讀：</em>由左往右讀。尺寸線標的是每一段留下幾個片段——越往右越少、越準。</div>
+</div>
+<svg class="bp" id="s" width="1920" height="1080" fill="none" stroke="#e8eef5" stroke-width="2.2">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5fd3e8" stroke="none"/></marker></defs>
+  <rect x="100" y="415" width="330" height="130"/>
+  <path d="M435 450 L490 385" stroke="#5fd3e8" marker-end="url(#a)"/><path d="M435 510 L490 600" stroke="#5fd3e8" marker-end="url(#a)"/>
+  <path d="M925 390 L995 430" stroke="#5fd3e8" marker-end="url(#a)"/><path d="M925 610 L995 560" stroke="#5fd3e8" marker-end="url(#a)"/>
+  <path d="M1350 495 L1430 495" stroke="#5fd3e8" marker-end="url(#a)"/>
+  <polygon points="1440,410 1600,440 1600,550 1440,580" stroke="#f2b24a" stroke-width="3"/>
+  <path d="M1605 495 L1670 495" stroke="#5fd3e8" marker-end="url(#a)"/>
+  <!-- 尺寸線 -->
+  <g stroke="#9fb3c8" stroke-width="1.4"><path d="M500 435 H920 M500 427v16 M920 427v16"/><path d="M500 665 H920 M500 657v16 M920 657v16"/>
+  <path d="M1010 595 H1345 M1010 587v16 M1345 587v16"/><path d="M1790 345 V610 M1782 345h16 M1782 610h16"/></g>
+</svg>
+<script>
+const s=document.getElementById('s'),box=document.getElementById('chips'),NS='http://www.w3.org/2000/svg';
+const chip=(x,y,t,c)=>{const r=document.createElementNS(NS,'rect');Object.entries({x,y,width:60,height:60,stroke:c,'stroke-width':c==='#e8eef5'?2:3}).forEach(([k,v])=>r.setAttribute(k,v));s.appendChild(r);
+ const d=document.createElement('div');d.className='chip';d.style.left=x+'px';d.style.top=y+'px';d.style.color=c;d.textContent=t;box.appendChild(d)};
+const W='#e8eef5',C='#5fd3e8',A='#f2b24a';
+'ABCDE'.split('').forEach((t,i)=>chip(500+i*85,360,t,'AC'.includes(t)?C:W));
+'CFAGH'.split('').forEach((t,i)=>chip(500+i*85,590,t,'AC'.includes(t)?C:W));
+'ABCD'.split('').forEach((t,i)=>chip(1010+i*85,420,t,W));
+'EFGH'.split('').forEach((t,i)=>chip(1010+i*85,505,t,W));
+'CAF'.split('').forEach((t,i)=>chip(1690,350+i*90,t,A));
+</script></body></html>

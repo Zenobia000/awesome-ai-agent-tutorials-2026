@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>對話模板與 loss 遮罩</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.sx{position:absolute;font-size:26px;line-height:1.4}
+.code{font-variant-ligatures:none;font-feature-settings:"liga" 0,"calt" 0}
+.pn{position:absolute;left:1040px;top:584px;width:770px;font-size:28px;line-height:1.5}
+.pn div{margin:6px 0 6px 44px;position:relative}
+</style></head><body><div class="slide">
+  <h1>chat template：把對話排成 token 序列</h1>
+  <p class="lead">模型只會接續 token。模板規定角色標記和結束符怎麼擺，訓練和推理必須用同一套。</p>
+
+  <div class="code" style="left:110px;top:296px;width:720px">[
+  {<span class="k">"role"</span>: <span class="s">"system"</span>, <span class="k">"content"</span>: <span class="s">"你是問診助理"</span>},
+  {<span class="k">"role"</span>: <span class="s">"user"</span>, <span class="k">"content"</span>: <span class="s">"最近一直頭痛"</span>},
+  {<span class="k">"role"</span>: <span class="s">"assistant"</span>, <span class="k">"content"</span>: <span class="s">"頭痛幾天了？"</span>}
+]</div>
+  <div class="abs lbl" style="left:830px;top:376px;width:170px;text-align:center">套模板</div>
+  <div class="code" style="left:1010px;top:296px;width:460px"><span class="k">&lt;|im_start|&gt;</span>system
+你是問診助理<span class="k">&lt;|im_end|&gt;</span>
+<span class="k">&lt;|im_start|&gt;</span>user
+最近一直頭痛<span class="k">&lt;|im_end|&gt;</span>
+<span class="hl"><span class="k">&lt;|im_start|&gt;</span>assistant</span>
+頭痛幾天了？<span class="hl"><span class="k">&lt;|im_end|&gt;</span></span></div>
+  <div class="sx note" style="left:1490px;top:296px;width:320px">Qwen 系列的模板。Mistral 用 [INST]，Zephyr 用 &lt;|user|&gt;，各家不同，不能混用。</div>
+
+  <div class="abs lbl mut" style="left:110px;top:560px">模型實際看到的 token 序列</div>
+  <div class="sx" style="left:110px;top:668px;width:500px">system、user、assistant 開頭標記<br><b style="color:var(--muted)">不算 loss</b></div>
+  <div class="sx" style="left:620px;top:668px;width:380px"><span class="ver">回答＋結束符，算 loss</span><br>結束符讓它學會「在這裡停」</div>
+
+  <div class="pn"><div class="ver" style="margin-left:0;font-size:30px">模板和基座不符時的真實症狀</div>
+    <div>loss 照樣下降，看不出問題</div>
+    <div>推理時停不下來</div>
+    <div>重複輸出、角色錯亂</div></div>
+
+  <div class="bridge inline" style="left:110px;top:836px;width:1700px"><span class="k">你已經會的</span>灰色那段就是語意分割裡的 ignore_index=255：不參與 loss；特殊 token 像類別編碼規範，兩端要一致。</div>
+  <div class="read"><em>怎麼讀：</em>先看上排：messages 變成帶標記的字串；再看中間的方塊列：只有朱紅色的回答部分被拿來算 loss。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.arrow(836,424,1000,424,{strokeWidth:2.6});
+/* token 序列：灰＝不算 loss；朱紅＝算 loss（共 17 格，最後一格是結束符） */
+for(let i=0;i<17;i++){const x=110+i*51,ans=i>=10;
+  D.rect(x,604,42,52,ans?'#f7d6cf':'#d3cdbf',{fillStyle:'solid',stroke:ans?D.C.ver:D.C.grey,strokeWidth:2.2});}
+/* 症狀框的叉 */
+[662,710,758].forEach(y=>D.cross(1054,y,12,{strokeWidth:3.4}));
+</script></body></html>

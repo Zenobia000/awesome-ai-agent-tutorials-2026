@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>八個模組地圖</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.num{position:absolute;top:278px;width:120px;text-align:center;font-size:42px;line-height:1}
+.m{position:absolute;width:195px;text-align:center;font-size:30px;line-height:1.2;color:var(--ind)}
+.n{position:absolute;width:195px;text-align:center;font-size:28px;line-height:1.3}
+.h{position:absolute;width:195px;text-align:center;font-size:54px;line-height:1}
+.key{position:absolute;width:195px;text-align:center;font-size:26px;line-height:1.2}
+.lg{position:absolute;font-size:24px;line-height:1.3;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>八個模組，二十小時</h1>
+  <p class="lead">橫條寬度＝學時；淺色是講解，深色是實作。模組三和模組五占了近一半時間。</p>
+  <div id="bars"></div>
+  <div class="read"><em>怎麼讀：</em>上面是八個模組依學時排成一條時間軸，下面是各模組的名稱和學時；黃色是重點章。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const C=D.C,host=document.getElementById('bars');
+const el=(cls,x,y,html,w)=>{const d=document.createElement('div');d.className=cls;d.style.left=x+'px';d.style.top=y+'px';if(w)d.style.width=w+'px';d.innerHTML=html;host.appendChild(d);};
+/* [編號, 名稱, 學時, 講解, 實作, 圖形] 數字出自課綱學時表 */
+const M=[
+ ['一','大模型底層<br>與本地運行',2,1.0,1.0,'ci'],
+ ['二','提示詞與<br>結構化輸出',2,0.8,1.2,'sq'],
+ ['三','企業級 RAG',4,1.5,2.5,'tri'],
+ ['四','知識圖譜與<br>GraphRAG',2,0.8,1.2,'ci'],
+ ['五','Agent 與<br>LangGraph',5,1.8,3.2,'sq'],
+ ['六','LoRA 微調<br>與私有化部署',2,0.8,1.2,'tri'],
+ ['七','MCP 與<br>低代碼',1.5,0.5,1.0,'ci'],
+ ['八','轉職衝刺',1.5,0.7,0.8,'sq'],
+];
+const X0=110,S=85,BY=340,BH=84;               /* 20 小時 × 85px = 1700px */
+const cw=195,cg=20,CY=548,CH=372;
+let x=X0;
+M.forEach((m,i)=>{
+  const [no,name,h,t,p,shp]=m,w=h*S,tw=t*S,pw=p*S,hi=(i===2||i===4);
+  const lt=hi?'#f7e7c0':'#d9e1ee', st=hi?'#b98a12':C.ind, fc=hi?C.mus:C.ind;
+  D.rect(x,BY,tw,BH,lt,{fillStyle:'solid',stroke:st,strokeWidth:2.5});
+  D.rect(x+tw,BY,pw,BH,fc,{fillStyle:'hachure',stroke:st,strokeWidth:2.5});
+  el('num',x+w/2-60,278,no);
+  /* 連到下方卡片 */
+  const cx=110+i*(cw+cg);
+  D.line(x+w/2,BY+BH+6,cx+cw/2,CY-8,{stroke:C.grey,strokeWidth:2.2});
+  /* 卡片 */
+  D.rect(cx,CY,cw,CH,hi?'#fbf3dc':'#fbf9f4',{fillStyle:'solid',stroke:hi?'#b98a12':C.grey,strokeWidth:hi?3.5:2.5});
+  const gx=cx+cw/2,gy=CY+118;
+  if(shp==='ci')D.ci(gx,gy,78,C.ver,{strokeWidth:2.4});
+  else if(shp==='sq')D.sq(gx-38,gy-38,76,'ind',{strokeWidth:2.4});
+  else D.tri(gx,gy,92,C.mus,{strokeWidth:2.4});
+  if(hi){D.rect(cx+42,CY+10,cw-84,36,C.mus,{fillStyle:'solid',stroke:C.ink,strokeWidth:2});el('key',cx,CY+14,'重點章');}
+  el('m',cx,CY+172,'模組'+no);
+  el('n',cx,CY+212,name);
+  el('h',cx,CY+CH-76,(h%1?h.toFixed(1):h)+'h');
+  x+=w;
+});
+/* 圖例 */
+D.rect(1380,226,26,20,'#d9e1ee',{fillStyle:'solid',stroke:C.ind,strokeWidth:2});
+el('lg',1414,218,'講解');
+D.rect(1500,226,26,20,C.ind,{fillStyle:'hachure',stroke:C.ind,strokeWidth:2});
+el('lg',1534,218,'實作');
+</script></body></html>

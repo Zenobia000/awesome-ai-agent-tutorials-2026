@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組六小結</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.pts{position:absolute;left:110px;top:250px;width:990px}
+.pts li{font-size:32px;line-height:1.5;margin:32px 0}
+.ql{position:absolute;text-align:center;font-size:30px;line-height:1.3;width:320px}
+</style></head><body><div class="slide">
+  <h1>模組 6 小結</h1>
+
+  <ul class="dots pts">
+    <li>缺知識用 RAG，缺行為才微調；兩者可疊加。</li>
+    <li>LoRA 凍結 W，只訓練旁路 B·A；參數通常不到 1%。</li>
+    <li>條件對了才追得上全量微調：中小資料集、加在所有層。</li>
+    <li>QLoRA 把 W 存成 4-bit；合併要回原精度基座。</li>
+    <li>chat template 要對齊；不符時 loss 看不出問題。</li>
+  </ul>
+
+  <div class="abs note" style="left:1166px;top:228px;width:360px">知識維度 ↑</div>
+  <div class="ql ind" style="left:1160px;top:410px">RAG</div>
+  <div class="ql" style="left:1480px;top:410px;color:#b98a12">RAG＋微調</div>
+  <div class="ql" style="left:1160px;top:640px">Prompt</div>
+  <div class="ql ver" style="left:1480px;top:640px">微調</div>
+  <div class="abs note" style="left:1450px;top:776px;width:360px;text-align:right">行為維度 →</div>
+
+  <div class="abs" style="left:110px;top:610px;width:990px;padding:22px 32px;font-size:32px;line-height:1.5;background:var(--mus-l)">心法：缺知識，改輸入（RAG）；缺行為，改權重（微調）。</div>
+
+  <div class="next">下一章：MCP 與低代碼</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const q=(x,y,fill,stroke)=>D.rect(x,y,320,230,fill,{fillStyle:'solid',stroke,strokeWidth:2.6});
+q(1160,280,'#d9e1ee',D.C.ind);q(1480,280,'#f7e7c0','#b98a12');q(1160,510,'#ebe6da',D.C.grey);q(1480,510,'#f7d6cf',D.C.ver);
+const W=(cx,cy)=>D.ci(cx,cy,70,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+const O=(cx,cy)=>D.ci(cx,cy,70,null,{strokeWidth:2.6});
+const doc=(cx,cy)=>{D.sq(cx-22,cy-22,44,'ind',{strokeWidth:2});D.arrow(cx+30,cy,cx+56,cy,{strokeWidth:2.2});};
+doc(1160+160-100,280+80);O(1160+160+36,280+80);
+doc(1480+160-100,280+80);W(1480+160+36,280+80);
+O(1160+160,510+80);W(1480+160,510+80);
+D.rect(110,610,990,100,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.8});
+D.arrow(1140,762,1140,262,{strokeWidth:2.4});D.arrow(1140,762,1810,762,{strokeWidth:2.4});
+</script></body></html>

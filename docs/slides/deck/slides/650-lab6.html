@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab 6：問診風格微調</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.rw{position:absolute;left:1040px;width:770px;font-size:26px;line-height:1.4}
+.rw .t{font-size:30px;display:block}
+.rw .mono{font-family:"JetBrains Mono",monospace;font-size:22px;background:var(--mus-l);padding:1px 8px}
+</style></head><body><div class="slide">
+  <h1>Lab 6：用 LLaMA-Factory 做問診風格 LoRA</h1>
+  <p class="lead">一個 yaml 決定一次微調；兩個數字照常用值：r = 8，alpha = 16。</p>
+
+  <div class="abs note" style="left:110px;top:282px">clinic_lora.yaml</div>
+  <div class="code" style="left:110px;top:318px;width:800px"><span class="k">model_name_or_path</span>: Qwen/Qwen3-8B
+<span class="k">do_train</span>: true       <span class="c"># 沒寫就只評估、不訓練</span>
+<span class="k">finetuning_type</span>: lora
+<span class="hl"><span class="k">lora_rank</span>: 8</span>          <span class="c"># r</span>
+<span class="hl"><span class="k">lora_alpha</span>: 16</span>        <span class="c"># 一般取 rank × 2</span>
+<span class="k">lora_target</span>: all      <span class="c"># 所有線性層都加</span>
+<span class="k">dataset</span>: clinic_sharegpt <span class="c"># 要先註冊，見下頁</span>
+<span class="hl"><span class="k">template</span>: qwen3</span>       <span class="c"># 必須和基座對應</span>
+<span class="k">learning_rate</span>: 1.0e-4
+<span class="k">num_train_epochs</span>: 3.0
+<span class="k">val_size</span>: 0.1
+<span class="k">eval_strategy</span>: epoch   <span class="c"># 每個 epoch 評估一次</span>
+<span class="k">logging_steps</span>: 10      <span class="c"># 每 10 步記一次 loss</span>
+<span class="k">output_dir</span>: saves/qwen3-8b/lora/clinic</div>
+
+  <div class="rw" style="top:310px"><span class="t">資料</span>問診／客服風格 JSON（ShareGPT 格式）</div>
+  <div class="rw" style="top:460px"><span class="t">訓練</span>Qwen3-8B 凍結，只訓練旁路 A、B（RTX 4090）<br><span class="mono">llamafactory-cli train clinic_lora.yaml</span></div>
+  <div class="rw" style="top:640px"><span class="t">檢查點</span>adapter：只含 A、B 的小檔案</div>
+  <div class="rw" style="top:770px"><span class="t">匯出與驗證</span>併回原精度基座，載入前後對話比身份標籤和專業話術</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊是這次微調的全部設定，高亮三行是重點；右邊是它跑出來的四步，每一步產出什麼。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S={strokeWidth:2.6};
+const X=975;
+D.sq(X-32,306,64,'ind',{strokeWidth:2.4});
+D.ci(X,500,72,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+D.sq(X-26,646,52,'#e0442b',{fillStyle:'solid',strokeWidth:2.2});
+D.ci(X,806,72,'#f7e7c0',{stroke:'#b98a12',strokeWidth:2.6});
+D.arrow(X,374,X,458,S);D.arrow(X,542,X,634,S);D.arrow(X,708,X,766,S);
+</script></body></html>

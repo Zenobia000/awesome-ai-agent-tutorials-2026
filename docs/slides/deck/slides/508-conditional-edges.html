@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>條件邊就是路由</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.sm{position:absolute;font-size:24px;line-height:1;text-align:center}
+.mono{font-family:"JetBrains Mono","Noto Sans Mono CJK TC",monospace}
+</style></head><body><div class="slide">
+  <h1>條件邊：讓流程有分岔</h1>
+  <p class="lead">條件邊就是路由：一個普通函式讀 state，回傳「下一個節點叫什麼名字」。</p>
+
+  <div class="sm" style="left:110px;top:571px;width:100px">START</div>
+  <div class="sm" style="left:285px;top:545px;width:170px;font-size:26px">call_model</div>
+  <div class="abs lbl ver mono" style="left:560px;top:672px;width:200px;text-align:center">route(state)</div>
+  <div class="sm" style="left:880px;top:420px;width:140px;font-size:26px;display:none">run_tool</div>
+  <div class="abs lbl mus" style="left:875px;top:493px;width:150px;text-align:center">run_tool</div>
+  <div class="sm" style="left:895px;top:718px;width:110px">END</div>
+  <div class="abs lbl mut" style="left:690px;top:446px;width:170px;text-align:center;transform:rotate(-32deg)">有 tool_calls</div>
+  <div class="abs lbl mut" style="left:716px;top:634px;width:200px;text-align:center;transform:rotate(29deg)">沒有 → 結束</div>
+  <div class="abs lbl mut" style="left:505px;top:415px;width:260px">工具跑完，回到模型</div>
+
+  <div class="code" style="left:1060px;top:285px;width:750px">def route(state: MessagesState):
+    last = state["messages"][-1]
+    if last.tool_calls:
+        return "run_tool"
+    return END
+
+g.add_conditional_edges(
+    "call_model", route, ["run_tool", END])
+g.add_edge("run_tool", "call_model")</div>
+  <div class="abs note" style="left:1060px;top:670px;width:750px">對照 505：手寫迴圈裡的 <span class="mono" style="font-size:22px">if not msg.tool_calls</span>，現在變成圖上的一條邊。<br>MessagesState 內建 messages 欄位（下一頁說它怎麼合併）。</div>
+
+  <div class="abs lbl" style="left:205px;top:792px">實線＝固定邊</div>
+  <div class="abs lbl" style="left:610px;top:792px">虛線＝條件邊，由 route 決定走哪條</div>
+
+  <div class="bridge inline" style="left:110px;top:850px;width:1700px"><span class="k">你已經會的</span>early-exit 網路、MoE 的 gating 同理：依輸入決定走哪條路；router 只是普通函式。</div>
+  <div class="read"><em>怎麼讀：</em>菱形是路由函式：有 tool_calls 就走上面去呼叫工具，沒有就走下面結束；工具跑完固定回到模型。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee',VL='#f7d6cf';
+D.rect(110,560,100,48,'#ebe6da',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.6});
+D.arrow(215,584,280,584,{strokeWidth:3.2});
+D.ci(370,584,170,VL,{stroke:D.C.ver,strokeWidth:3.2});
+D.arrow(455,584,578,584,{strokeWidth:3.2});
+D.dia(660,584,150,VL,{stroke:D.C.ver,strokeWidth:3.2});
+D.tri(950,420,150,'mus',{strokeWidth:2.6});
+D.dash(715,545,880,440,{strokeWidth:3.2});D.arrow(850,458,882,438,{strokeWidth:3.2});
+D.rect(895,705,110,50,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+D.dash(715,625,890,722,{strokeWidth:3.2});D.arrow(860,708,892,724,{strokeWidth:3.2});
+D.curve([[905,340],[640,290],[400,505]],{strokeWidth:3.2});D.arrow(412,468,398,505,{strokeWidth:3.2});
+/* 圖例 */
+D.line(110,806,190,806,{strokeWidth:3.2});
+D.dash(520,806,600,806,{strokeWidth:3.2});
+</script></body></html>

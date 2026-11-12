@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>課程封面：20 小時實戰</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.kicker{position:absolute;left:114px;top:120px;font-size:34px;color:var(--ind)}
+.title{position:absolute;left:110px;top:185px;width:1000px;font-size:104px;line-height:1.22;font-weight:400}
+.hours{position:absolute;left:110px;top:545px;width:500px;text-align:center;font-size:64px;line-height:1}
+.sub{position:absolute;left:114px;top:690px;width:900px;font-size:34px;line-height:1.6;color:var(--muted)}
+.llm{position:absolute;left:1300px;top:508px;width:280px;text-align:center;font-size:64px;line-height:1}
+</style></head><body><div class="slide">
+  <div class="kicker">2026 轉職必備課程</div>
+  <div class="title">AI Agent 與<br>大模型全棧工程師</div>
+  <div class="hours">20 小時實戰</div>
+  <div class="sub">從你已經會的深度學習出發，<br>一路做到能上線、能審批、看得見的多智能體系統。</div>
+  <div class="llm">LLM</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const svg=document.getElementById('r');
+/* 「20 小時實戰」底色塊 */
+D.rect(110,520,500,110,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+/* 大圓＝模型；軌道上交替排方（資料／記憶）與三角（工具／閘門） */
+const cx=1440,cy=560,R=320;
+svg.appendChild(D.rc.circle(cx,cy,2*R,{stroke:D.C.grey,strokeWidth:2.5,roughness:1.2,strokeLineDash:[12,12]}));
+D.ci(cx,cy,340,'ver',{fillStyle:'hachure',strokeWidth:2.8});
+for(let i=0;i<6;i++){
+  const a=(-90+i*60)*Math.PI/180,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);
+  D.dash(cx+190*Math.cos(a),cy+190*Math.sin(a),cx+(R-64)*Math.cos(a),cy+(R-64)*Math.sin(a),{strokeWidth:2.4});
+  if(i%2===0) D.tri(x,y,124,'mus',{strokeWidth:2.5}); else D.sq(x-50,y-50,100,'ind',{strokeWidth:2.5});
+}
+</script></body></html>

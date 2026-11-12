@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Agent 四大支柱</title>
+<link rel="stylesheet" href="_base.css"></head><body><div class="slide">
+  <h1>Agent＝模型＋迴圈</h1>
+  <p class="lead" style="width:680px">模型本身不會動手。把它放進「想 → 做 → 看」的迴圈，接上記憶和工具，才成為 Agent。</p>
+  <div class="bridge" style="left:110px;top:560px;width:660px"><span class="k">// 你已經會的</span>訓練好的網路是 y = f(x)：呼叫一次就結束。Agent <b>不改模型</b>，而是把 f 放進迴圈——這一輪的輸出，決定下一輪呼叫哪個工具。</div>
+
+  <div class="abs mono" style="left:1160px;top:470px;width:280px;text-align:center;font-size:52px">LLM</div>
+  <div class="abs lbl" style="left:1160px;top:545px;width:280px;text-align:center">大腦：決定下一步</div>
+  <div class="abs" style="left:870px;top:150px"><div style="font-size:34px">記憶</div><div class="d mono" style="font-size:22px">state · checkpoint</div></div>
+  <div class="abs" style="left:1605px;top:190px"><div style="font-size:34px">工具</div><div class="d">真正碰到外部世界</div></div>
+  <div class="abs mono" style="left:1625px;top:322px;font-size:24px">search_docs()</div>
+  <div class="abs mono am" style="left:1625px;top:442px;font-size:24px">run_sql()</div>
+  <div class="abs lbl am" style="left:1625px;top:478px;font-size:22px">需人工審批</div>
+  <div class="abs mono rd" style="left:1625px;top:562px;font-size:24px">send_email()</div>
+  <div class="abs lbl rd" style="left:1625px;top:598px;font-size:22px">危險操作</div>
+  <div class="abs mono cy" style="left:1462px;top:425px;font-size:20px">action</div>
+  <div class="abs mono cy" style="left:1462px;top:604px;font-size:20px">observation</div>
+  <div class="abs" style="left:1100px;top:760px;width:440px;text-align:center"><div style="font-size:34px">規劃</div><div class="d">Thought → Action → Observation<br>一圈一圈走到答案</div></div>
+
+  <div class="read"><em>怎麼讀：</em>從中央 LLM 出發：青線是資料流。琥珀＝要人工點頭才執行，紅＝會改動外部的危險動作。</div>
+</div>
+<svg class="bp" width="1920" height="1080" fill="none" stroke="#e8eef5" stroke-width="2.5">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5fd3e8" stroke="none"/></marker></defs>
+  <!-- LLM -->
+  <rect x="1160" y="420" width="280" height="190" stroke="#5fd3e8" stroke-width="3"/>
+  <path d="M1150 420h-14M1160 410v-14M1450 610h14M1440 620v14" stroke="#9fb3c8"/>
+  <!-- 記憶：資料庫圓柱 -->
+  <ellipse cx="960" cy="250" rx="90" ry="22"/><path d="M870 250v110M1050 250v110"/><path d="M870 360a90 22 0 0 0 180 0"/>
+  <path d="M870 290a90 22 0 0 0 180 0" stroke-dasharray="6 6" stroke="#9fb3c8"/>
+  <path d="M1040 380 L1170 450" stroke="#5fd3e8" marker-end="url(#a)"/>
+  <!-- 工具架 -->
+  <rect x="1605" y="300" width="230" height="80"/>
+  <rect x="1605" y="420" width="230" height="96" stroke="#f2b24a" stroke-width="3"/>
+  <rect x="1605" y="540" width="230" height="96" stroke="#ff6a5c" stroke-width="3"/>
+  <path d="M1440 470 L1595 470" stroke="#5fd3e8" marker-end="url(#a)"/>
+  <path d="M1600 590 L1450 590" stroke="#5fd3e8" stroke-dasharray="10 8" marker-end="url(#a)"/>
+  <!-- 規劃迴圈 -->
+  <path d="M1220 620 C1180 720 1420 720 1380 625" stroke="#5fd3e8" marker-end="url(#a)"/>
+  <!-- 左欄分隔尺寸線 -->
+  <path d="M820 140 V960" stroke="#9fb3c8" stroke-width="1" stroke-dasharray="4 10"/>
+</svg></body></html>

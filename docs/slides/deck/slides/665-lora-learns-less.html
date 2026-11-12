@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>LoRA 學得少也忘得少</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ch{position:absolute;top:310px;width:548px;height:400px}
+.ch text{font-family:"Huninn","Noto Sans CJK TC",sans-serif}
+.tk{position:absolute;top:716px;width:520px;font-size:26px;line-height:1.45}
+.lg{position:absolute;top:262px;font-size:26px;line-height:1.3;white-space:nowrap}
+.lg i{display:inline-block;width:46px;height:0;border-top:5px solid;vertical-align:middle;margin-right:12px}
+.cl{position:absolute;left:110px;top:812px;width:1700px;font-size:30px;line-height:1.4}
+.src{left:110px;top:868px;width:1700px}
+</style></head><body><div class="slide">
+  <h1>LoRA 學得少，但忘得也少</h1>
+  <p class="lead">Llama-2-7B 學寫程式：資料量大時 LoRA 落後；指令微調要 r 夠大才追上；但它忘得少。</p>
+
+  <div class="lg" style="left:110px"><i style="border-color:#1b1b1b"></i>全量微調</div>
+  <div class="lg" style="left:330px"><i style="border-color:#2b4c7e"></i>LoRA r=256</div>
+  <div class="lg" style="left:590px"><i style="border-color:#5b7fb5"></i>LoRA r=64</div>
+  <div class="lg" style="left:826px"><i style="border-color:#9db5d8"></i>LoRA r=16</div>
+  <div class="lg note" style="left:1100px;top:264px;color:var(--muted)">r＝LoRA 旁路的秩（容量旋鈕）</div>
+
+  <div id="cs"></div>
+  <div class="tk" style="left:130px"></div>
+  <div class="tk" style="left:696px"></div>
+  <div class="tk" style="left:1262px"></div>
+
+  <div class="cl"><span class="ver">LoRA 效果有條件：</span>資料量大會落後、r 要夠大；換來的是忘得比較少。</div>
+  <div class="src">來源：依 Biderman et al.（2024）〈LoRA Learns Less and Forgets Less〉附錄 D Table S1（p.27）、Table S5、S6（p.28）重繪；Llama-2-7B，學習＝HumanEval pass@1，保留＝HellaSwag、ARC-Challenge、WinoGrande 三項平均。arXiv:2405.09673，CC BY 4.0。</div>
+  <div class="read"><em>怎麼讀：</em>三張圖同一組顏色：黑線是全量微調。左圖黑線在上＝LoRA 落後；中圖深藍追上；右圖黑線在下＝全量忘得多。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const R=document.getElementById('r');
+const NS='http://www.w3.org/2000/svg',host=document.getElementById('cs');
+const CARDX=[110,676,1242],CY=310;
+CARDX.forEach(x=>D.rect(x,CY-4,548,492,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5}));
+const COL={ft:'#1b1b1b',r256:'#2b4c7e',r64:'#5b7fb5',r16:'#9db5d8'};
+const order=['r16','r64','r256','ft'];   /* 繪製順序：全量畫在最上層 */
+function chart(i,c){
+  const svg=document.createElementNS(NS,'svg');svg.setAttribute('class','ch');svg.setAttribute('viewBox','0 0 548 400');svg.style.left=CARDX[i]+'px';host.appendChild(svg);
+  const mk=(t,a,tx)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(tx!=null)e.textContent=tx;svg.appendChild(e);return e;};
+  const L=84,R_=c.rm==null?94:c.rm,T=96,B=308,W=548-L-R_,n=c.xs.length;
+  const X=j=>L+(n===1?0:j/(n-1)*W)+ (W/(n-1))*0.0, Y=v=>B-(v-c.y0)/(c.y1-c.y0)*(B-T);
+  mk('text',{x:20,y:36,'font-size':28,fill:c.tc},c.title);
+  mk('text',{x:20,y:68,'font-size':22,fill:'#5b574f'},c.sub);
+  c.ticks.forEach(v=>{mk('line',{x1:L,y1:Y(v),x2:L+W,y2:Y(v),stroke:'#ddd7c8','stroke-width':1.5});
+    mk('text',{x:L-10,y:Y(v)+7,'text-anchor':'end','font-size':22,fill:'#5b574f'},v.toFixed(2));});
+  mk('line',{x1:L,y1:B,x2:L+W,y2:B,stroke:'#1b1b1b','stroke-width':2.5});
+  mk('line',{x1:L,y1:T-10,x2:L,y2:B,stroke:'#1b1b1b','stroke-width':2.5});
+  c.xs.forEach((t,j)=>{mk('text',{x:X(j),y:B+28,'text-anchor':'middle','font-size':22,fill:'#1b1b1b'},t);});
+  mk('text',{x:L+W/2,y:B+58,'text-anchor':'middle','font-size':22,fill:'#5b574f'},c.xt);
+  order.forEach(k=>{const d=c.data[k],f=k==='ft';
+    mk('polyline',{points:d.map((v,j)=>X(j)+','+Y(v)).join(' '),fill:'none',stroke:COL[k],'stroke-width':f?4.5:3.5,'stroke-linejoin':'round'});
+    d.forEach((v,j)=>mk('circle',{cx:X(j),cy:Y(v),r:f?5.5:5,fill:COL[k],stroke:'#fbf9f4','stroke-width':1.5}));});
+  (c.labels||[]).forEach(l=>mk('text',{x:X(l.j)+(l.dx||0),y:Y(l.v)+(l.dy||0),'text-anchor':l.a||'middle','font-size':22,fill:COL[l.k]==='#9db5d8'?'#5b7fb5':COL[l.k]},l.t));
+  return {X:j=>CARDX[i]+X(j),Y:v=>CY+Y(v)};
+}
+/* Table S1／S2（p.27）、S5／S6（p.28），Llama-2-7B */
+const A=chart(0,{title:'① 持續預訓練：大量資料',tc:'#e0442b',sub:'Starcoder-Python，HumanEval pass@1',
+  xs:['0.25','0.5','1','2','4','8','16','20'],xt:'訓練 token（十億）',y0:0.12,y1:0.28,ticks:[0.15,0.20,0.25],
+  data:{r16:[.143,.144,.141,.141,.154,.159,.162,.162],r64:[.142,.146,.141,.153,.157,.176,.194,.196],r256:[.144,.142,.143,.159,.159,.208,.211,.224],ft:[.152,.153,.172,.181,.218,.258,.255,.263]},
+  labels:[{k:'ft',j:7,v:.263,t:'0.263',dx:22,dy:7,a:'start'},{k:'r256',j:7,v:.224,t:'0.224',dx:22,dy:7,a:'start'}]});
+const B=chart(1,{title:'② 指令微調：中小資料',tc:'#2b4c7e',sub:'Magicoder-Evol-110K，HumanEval pass@1',
+  rm:44,xs:['1','2','4','8','16'],xt:'訓練輪數（epoch）',y0:0.15,y1:0.60,ticks:[0.2,0.3,0.4,0.5],
+  data:{r16:[.197,.275,.358,.338,.324],r64:[.249,.339,.417,.392,.405],r256:[.299,.385,.498,.437,.466],ft:[.302,.464,.470,.497,.416]},
+  labels:[{k:'r256',j:2,v:.498,t:'0.498',dy:-34},{k:'ft',j:3,v:.497,t:'0.497',dy:-20},{k:'r16',j:2,v:.358,t:'0.358',dy:32}]});
+const C=chart(2,{title:'③ 忘了多少：指令微調',tc:'#2b4c7e',sub:'保留分數，越高越好',
+  xs:['1','2','4','8','16'],xt:'訓練輪數（epoch）',y0:0.38,y1:0.68,ticks:[0.4,0.5,0.6],
+  data:{r16:[.653,.648,.652,.646,.609],r64:[.652,.651,.632,.580,.510],r256:[.655,.659,.631,.552,.517],ft:[.595,.579,.512,.446,.414]},
+  labels:[{k:'r16',j:4,v:.609,t:'0.609',dx:24,dy:7,a:'start'},{k:'ft',j:4,v:.414,t:'0.414',dx:24,dy:7,a:'start'}]});
+
+/* 手繪圈：各圖的重點 */
+const ell=(cx,cy,w,h,c)=>R.appendChild(D.rc.ellipse(cx,cy,w,h,{stroke:c,strokeWidth:4,roughness:1.6}));
+ell(A.X(7),(A.Y(.263)+A.Y(.224))/2,34,92,D.C.ver);
+ell(B.X(2),B.Y(.498),38,38,D.C.ind);
+ell(B.X(3),B.Y(.497),38,38,D.C.ind);
+ell(C.X(4),(C.Y(.609)+C.Y(.414))/2,34,170,D.C.ind);
+
+/* 圖下說明 */
+const tks=document.querySelectorAll('.tk');
+tks[0].innerHTML='<span class="ver">20B token：</span>全量 0.263，<br>LoRA r=256 只有 0.224。';
+tks[1].innerHTML='<span class="ind">最好的一輪：</span>r=256 0.498、<br>全量 0.497；r=16 僅 0.358。';
+tks[2].innerHTML='<span class="ind">第 16 輪：</span>全量剩 0.414，<br>LoRA r=16 還有 0.609。';
+</script></body></html>

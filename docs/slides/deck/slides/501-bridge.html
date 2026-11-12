@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>從 f(x) 到迴圈</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:38px;line-height:1.3}
+.tx{position:absolute;font-size:34px;line-height:1;text-align:center}
+.row{position:absolute;font-size:28px;line-height:1.4;width:740px}
+</style></head><body><div class="slide">
+  <h1>f(x) 呼叫一次，與放進迴圈</h1>
+  <p class="lead">你寫過的網路，一次前向就結束；Agent 讓同一個 f 的輸出，決定下一輪做什麼。</p>
+
+  <div class="hd ind" style="left:110px;top:300px">你已經會的：一次前向</div>
+  <div class="hd ver" style="left:1090px;top:300px">這一章：把 f 放進迴圈</div>
+
+  <div class="tx" style="left:140px;top:451px;width:110px">x</div>
+  <div class="tx" style="left:365px;top:451px;width:170px">f</div>
+  <div class="tx" style="left:650px;top:451px;width:110px">y</div>
+  <div class="abs note" style="left:110px;top:600px;width:740px;text-align:center">輸入一次、輸出一次，結束</div>
+
+  <div class="tx" style="left:1165px;top:450px;width:170px;font-size:30px">LLM</div>
+  <div class="abs lbl mut" style="left:1410px;top:392px">動作</div>
+  <div class="abs lbl mut" style="left:1390px;top:572px">結果</div>
+  <div class="abs lbl mus" style="left:1540px;top:548px;width:200px;text-align:center">工具</div>
+  <div class="abs lbl ver" style="left:1090px;top:588px;width:150px;text-align:center">答案</div>
+  <div class="abs note" style="left:1090px;top:630px;width:720px">模型自己決定：再呼叫工具，或交出答案</div>
+  <div class="abs lbl mut" style="left:870px;top:410px;width:190px;text-align:center">包進迴圈</div>
+
+  <div class="row" style="left:110px;top:720px">一次 forward：輸入進、預測出</div>
+  <div class="row" style="left:1090px;top:720px">一輪 agent：訊息進、動作或答案出</div>
+  <div class="row" style="left:110px;top:788px">要多步？你自己寫 for 迴圈</div>
+  <div class="row" style="left:1090px;top:788px">要多步？由模型決定再不再走一輪</div>
+  <div class="row" style="left:110px;top:856px">RNN 推論：hidden state 要自己帶到下一步</div>
+  <div class="row" style="left:1090px;top:856px">API 沒有記憶：整串 messages 要自己帶</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊是你熟悉的一次前向；右邊同一個 f 被放進迴圈，下面三列是一一對應的老朋友。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee',VL='#f7d6cf',ML='#f7e7c0';
+/* 左：x → f → y */
+D.rect(140,410,110,110,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.arrow(260,465,365,465,{strokeWidth:3});
+D.ci(450,465,170,VL,{stroke:D.C.ver,strokeWidth:3});
+D.arrow(540,465,640,465,{strokeWidth:3});
+D.rect(650,410,110,110,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+/* 中：大箭頭 */
+D.arrow(880,465,1050,465,{strokeWidth:4});
+/* 右：LLM ⇄ 工具 */
+D.ci(1250,465,170,VL,{stroke:D.C.ver,strokeWidth:3});
+D.tri(1640,460,170,'mus',{strokeWidth:2.6});
+D.curve([[1335,425],[1450,375],[1560,425]],{strokeWidth:3});D.arrow(1530,405,1568,430,{strokeWidth:3});
+D.curve([[1580,505],[1455,560],[1340,508]],{strokeWidth:3});D.arrow(1375,535,1338,509,{strokeWidth:3});
+D.arrow(1215,545,1180,585,{strokeWidth:3,stroke:D.C.ver});
+/* 三列的連線 */
+[744,812,880].forEach(y=>D.dash(870,y,1070,y,{strokeWidth:2.5}));
+</script></body></html>

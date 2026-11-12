@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>訓練／驗證 loss 與過擬合</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.pn{position:absolute;left:1070px;width:740px;padding:18px 28px}
+.pn .t{font-size:32px;line-height:1.3}
+.pn .s{font-size:24px;color:var(--muted);line-height:1.4;margin-bottom:6px}
+.pn p{font-size:27px;line-height:1.5}
+.lg{position:absolute;font-size:26px;line-height:1.3}
+.sw{display:inline-block;width:50px;height:0;vertical-align:middle;margin-right:12px}
+</style></head><body><div class="slide">
+  <h1>看 loss：驗證 loss 回升就該停</h1>
+  <p class="lead">訓練 loss 一路下降不代表變好；驗證 loss 的谷底，才是該存下來的檢查點。</p>
+
+  <div class="abs" style="left:110px;top:296px;font-size:28px">loss 與訓練 epoch<span class="tag" style="margin-left:14px">示意</span></div>
+  <div class="abs note" style="left:96px;top:358px;width:64px;text-align:right">loss</div>
+  <div class="abs note" style="left:180px;top:734px;width:800px;text-align:center">訓練 epoch →</div>
+  <div class="lg ind" style="left:210px;top:372px"><span class="sw" style="border-top:4px solid var(--ind)"></span>訓練 loss</div>
+  <div class="lg ver" style="left:210px;top:416px"><span class="sw" style="border-top:4px solid var(--ver)"></span>驗證 loss</div>
+  <div class="lg ver" style="left:700px;top:372px;width:260px">過擬合區：<br>訓練還在降，<br>驗證開始升</div>
+  <div class="lg" style="left:290px;top:470px;width:210px;text-align:right">早停：<br>存這個檢查點</div>
+
+  <div class="pn" style="top:296px"><div class="t ver">過擬合</div><div class="s">驗證 loss 回升，輸出像在背訓練集</div>
+    <p>降學習率、減 epoch、早停<br>加 weight decay、擴充資料、降 alpha</p></div>
+  <div class="pn" style="top:526px"><div class="t ind">欠擬合</div><div class="s">訓練 loss 自己也降不下去</div>
+    <p>提高學習率、增加 epoch、加大 r 與 alpha</p></div>
+  <div class="abs" style="left:1070px;top:722px;width:740px;font-size:26px;line-height:1.5;color:var(--muted)">Unsloth 的經驗值：多數情況 1–3 epoch；訓練 loss 低於 0.2 多半已經過擬合。</div>
+
+  <div class="bridge inline" style="left:110px;top:836px;width:1700px"><span class="k">你已經會的</span>bias–variance 和早停：盯驗證集的谷底，不盯訓練集。</div>
+  <div class="read"><em>怎麼讀：</em>藍線一路下降，朱紅線先降後升；兩線分岔的地方就是該停的地方，右邊兩框是看到症狀後的處方。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* 過擬合區底色 */
+D.rect(520,350,450,372,'#f7d6cf',{fillStyle:'solid',stroke:'#f7d6cf',strokeWidth:1});
+D.arrow(170,726,980,726,{strokeWidth:2.6});D.arrow(170,726,170,350,{strokeWidth:2.6});
+D.curve([[190,440],[260,560],[350,640],[460,686],[600,708],[760,718],[940,722]],{strokeWidth:3.8,stroke:D.C.ind});
+D.curve([[190,450],[260,566],[350,640],[430,664],[520,666],[640,654],[780,624],[940,584]],{strokeWidth:3.8,stroke:D.C.ver});
+D.dash(520,350,520,726,{strokeWidth:2.6});
+D.arrow(420,540,508,652,{strokeWidth:2.4});
+/* 右側處方框 */
+D.rect(1070,296,740,196,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.8});
+D.rect(1070,526,740,150,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+</script></body></html>

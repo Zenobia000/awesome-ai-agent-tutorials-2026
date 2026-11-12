@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>評測的兩派觀點</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ct{position:absolute;font-size:26px;line-height:1.45}
+.ttl{position:absolute;font-size:38px;line-height:1.2}
+.cap{position:absolute;width:240px;font-size:26px;line-height:1.45;text-align:center}
+.vl{position:absolute;font-size:28px;line-height:1.3}
+</style></head><body><div class="slide">
+  <h1>評測的兩派：先做哪一件</h1>
+  <p class="lead">兩派的差別在第一步：先看資料找出真正會錯的地方，還是先把成功標準寫成評測。</p>
+
+  <div class="ttl ind" style="left:146px;top:322px">先做錯誤分析</div>
+  <div class="ct" style="left:146px;top:376px;width:750px">親自看 30 條以上 trace，只為你「發現」的錯寫 evaluator。</div>
+  <div class="cap" style="left:148px;top:572px">逐條看 trace<br>寫筆記</div>
+  <div class="cap" style="left:400px;top:572px">歸成失敗類別<br>數一數</div>
+  <span class="tag" style="position:absolute;left:608px;top:420px">示意</span>
+  <div class="cap" style="left:652px;top:572px">最大宗的錯<br>寫 evaluator</div>
+
+  <div class="ttl ver" style="left:1026px;top:322px">先寫評測再改</div>
+  <div class="ct" style="left:1026px;top:376px;width:750px">評測驅動：先定好成功標準，再邊改邊跑評測。</div>
+  <div class="cap" style="left:1028px;top:572px">先寫評測<br>定好成功標準</div>
+  <div class="cap" style="left:1280px;top:572px">再改 prompt<br>或程式</div>
+  <div class="cap" style="left:1532px;top:572px">跑評測<br>分數說了算</div>
+
+  <div class="vl" style="left:215px;top:795px;width:1500px">兩派都同意：成功標準非常明確的硬性約束（例如「絕不提及競品」），先寫評測。</div>
+  <div class="src" style="left:110px;top:885px;width:1700px"><span class="tag" style="margin-right:12px">本課轉述</span>來源：Husain、Shankar（2026）〈AI Evals: Everything You Need to Know〉；Yan〈Patterns for Building LLM-based Systems &amp; Products〉</div>
+
+  <div class="read"><em>怎麼讀：</em>左右各是一條由左往右的做法；底下黃框是兩派的共同點。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C, A=o=>Object.assign({strokeWidth:2.8},o||{});
+D.rect(110,300,820,400,'#fbf9f4',{fillStyle:'solid',stroke:S.ind,strokeWidth:3});
+D.rect(990,300,820,400,'#fbf9f4',{fillStyle:'solid',stroke:S.ver,strokeWidth:3});
+/* 左：錯誤分析（trace → 失敗類別 → 只對最大宗寫 evaluator） */
+const cy=500, BL=['#d9e1ee',S.ind];
+for(let i=0;i<6;i++){const r=Math.floor(i/3),c=i%3;D.sq(190+c*56,cy-52+r*56,44,BL[0],{fillStyle:'solid',stroke:BL[1],strokeWidth:2.4});}
+D.arrow(360,cy,432,cy,A());
+D.bars(445,cy-60,150,120,[5,2,1,3],[S.ver,S.grey,S.grey,S.grey],5);
+D.arrow(610,cy,700,cy,A());
+D.tri(772,cy-4,110,'mus',{strokeWidth:2.6});
+/* 右：評測驅動（評測 → 改 → 跑評測） */
+D.sq(1098,cy-50,100,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.8});
+D.arrow(1212,cy,1334,cy,A());
+D.ci(1400,cy,110,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+D.arrow(1466,cy,1586,cy,A());
+D.tri(1652,cy-4,110,'mus',{strokeWidth:2.6});
+/* 底部共同點 */
+D.rect(110,770,1700,90,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+D.tri(165,816,52,'mus',{strokeWidth:2.4});
+</script></body></html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>怎麼讀這份投影片</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:40px;line-height:1.2}
+.ex{position:absolute;left:146px;top:362px;width:750px;font-size:32px;line-height:1.5}
+.ex .hl{background:var(--mus-l);padding:0 6px}
+.def{position:absolute;left:172px;top:458px;width:690px;font-size:26px;line-height:1.5}
+.step{position:absolute;top:662px;width:240px;font-size:26px;line-height:1.45;text-align:center}
+.step b{display:block;font-size:30px;color:var(--ind);font-weight:400;margin-bottom:2px}
+.lg{position:absolute;left:1134px;width:680px}
+.lg .t{font-size:30px;line-height:1.25}
+.lg .d{font-size:24px;line-height:1.3;color:var(--muted)}
+.tg{position:absolute;left:1034px;font-size:26px;line-height:1.3}
+.tg .tag{display:inline-block;width:150px;text-align:center;margin-right:22px}
+</style></head><body><div class="slide">
+  <h1>怎麼讀這份投影片</h1>
+  <p class="lead">術語第一次出現就定義；圖形和標記全課固定。</p>
+
+  <div class="hd ind" style="left:110px;top:262px">術語怎麼查</div>
+  <div class="hd" style="left:1034px;top:262px;color:#b98a12">圖形與標記</div>
+
+  <div class="ex">模型先把文字切成 <span class="hl">token</span>，再一個一個預測下一個。</div>
+  <div class="def"><b style="color:var(--ind)">token</b>：模型讀寫文字的最小單位，可能是一個字或半個詞。例：unbelievable → un｜believ｜able。</div>
+
+  <div class="step" style="left:110px"><b>第一次出現</b>一句白話<br>＋一個例子</div>
+  <div class="step" style="left:400px"><b>之後</b>直接使用，<br>不再解釋</div>
+  <div class="step" style="left:690px"><b>忘了</b>翻最後的附錄<br>術語表</div>
+
+  <div class="lg" style="top:340px"><div class="t">圓：LLM，會推理的模型</div><div class="d">含 reranker、embedding 模型</div></div>
+  <div class="lg" style="top:430px"><div class="t">方：狀態、資料、記憶</div><div class="d">文件片段、對話狀態、資料庫</div></div>
+  <div class="lg" style="top:520px"><div class="t">三角：工具動作、風險閘門</div><div class="d">查資料、跑 SQL；HITL 人工審批</div></div>
+  <div class="lg" style="top:610px"><div class="t">朱紅叉：錯誤示範</div><div class="d">踩坑頁與反例</div></div>
+
+  <div class="tg" style="top:734px"><span class="tag">示意</span>數字與曲線只為說明，不是實測</div>
+  <div class="tg" style="top:786px"><span class="tag">範本數字</span>履歷範本裡的數字，不是真實成果</div>
+  <div class="tg" style="top:838px"><span class="tag">本課轉述</span>課程轉述的說法，非原文用語</div>
+  <div class="tg" style="top:890px"><span class="tag">本課整理</span>課程自行歸納，不是業界共識</div>
+
+  <div class="read"><em>怎麼讀：</em>左半是術語的查法，右半是圖形與標記的固定含義；之後每一頁都照這套規則。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const C=D.C;
+/* 左：迷你投影片＋定義泡泡 */
+D.rect(110,330,820,282,'#fbf9f4',{fillStyle:'solid',stroke:C.ink,strokeWidth:3});
+D.rect(150,444,740,132,'#d9e1ee',{fillStyle:'solid',stroke:C.ind,strokeWidth:3});
+D.dash(462,412,462,440,{strokeWidth:2.6,stroke:C.ind});
+/* 三步驟 */
+[110,400,690].forEach((x,i)=>{D.rect(x,646,240,142,i===0?'#f7e7c0':'#fbf9f4',{fillStyle:'solid',stroke:i===0?'#b98a12':C.grey,strokeWidth:2.8});});
+D.arrow(356,717,394,717,{strokeWidth:2.8});D.arrow(646,717,684,717,{strokeWidth:2.8});
+/* 分隔線 */
+D.dash(975,262,975,930,{stroke:C.grey,strokeWidth:2});
+/* 右：圖形圖例 */
+D.ci(1068,372,56,C.ver,{strokeWidth:2.2});
+D.sq(1042,444,52,'ind',{strokeWidth:2.2});
+D.tri(1068,551,60,C.mus,{strokeWidth:2.2});
+D.cross(1068,638,22,{strokeWidth:5});
+</script></body></html>

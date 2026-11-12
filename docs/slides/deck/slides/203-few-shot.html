@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>少樣本：從示例學格式</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.bx{position:absolute;text-align:center;font-size:24px;line-height:1.2;display:flex;align-items:center;justify-content:center}
+.rt{position:absolute;left:1090px;width:720px}
+.rt .t{font-size:30px;line-height:1.3}.rt .d{font-size:26px;line-height:1.45;color:var(--muted);margin-top:4px}
+</style></head><body><div class="slide">
+  <h1>少樣本：從示例學格式</h1>
+  <p class="lead">把幾組「輸入 → 輸出」放進提示詞，模型就照這個樣子續寫——不改任何權重。</p>
+
+  <div class="code" style="left:110px;top:290px;width:900px">把客服留言分類，只輸出 JSON。
+
+留言：包裹三天還沒到　<span class="c"># 示例 1</span>
+{"type":"物流","urgent":false}
+
+留言：被重複扣款，請立刻處理　<span class="c"># 示例 2</span>
+{"type":"帳務","urgent":true}
+
+留言：App 一打開就閃退
+<span class="hl">{"type":"技術","urgent":false}</span>　<span class="c"># 模型續寫</span></div>
+  <div class="abs note" style="left:110px;top:708px;width:900px">黃底是模型自己續寫的；Anthropic 文件建議放 3–5 個示例。</div>
+
+  <!-- 右：兩條路 -->
+  <div class="rt" style="top:288px"><div class="t ind">few-shot：改輸入</div></div>
+  <div class="rt" style="top:468px"><div class="d">示例跟著輸入一起送進去。權重不動，這次問完就沒了。</div></div>
+  <div class="rt" style="top:540px"><div class="t ver">微調：改權重</div></div>
+  <div class="rt" style="top:720px;display:none"></div>
+  <div class="rt" style="top:728px"><div class="d">改的是模型本身，之後每次推論都帶著新權重。</div></div>
+  <div id="bx"></div>
+
+  <div class="bridge" style="left:110px;top:790px;width:1700px"><span class="k">你已經會的</span>訓練資料要經過反向傳播才能改變權重。few-shot 的示例也是「示範資料」，但只活在這一次的輸入裡：沒有梯度，推論完就消失。</div>
+  <div class="read"><em>怎麼讀：</em>上面一排是 few-shot，圓（模型）不變；下面一排是微調，圓被資料改寫。差別在「示範放哪裡」。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const host=document.getElementById('bx');
+const lab=(x,y,w,h,t)=>{const d=document.createElement('div');d.className='bx';Object.assign(d.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});d.textContent=t;host.appendChild(d);};
+const sq=(x,y,t,fill,stroke)=>{D.rect(x,y,84,84,fill,{fillStyle:'solid',stroke,strokeWidth:2.8});lab(x,y,84,84,t);};
+const IND=['#d9e1ee',D.C.ind],MUS=['#f7e7c0','#b98a12'];
+/* 行 A：few-shot */
+sq(1090,350,'示例',...IND);sq(1190,350,'示例',...IND);sq(1290,350,'新問題',...MUS);
+D.arrow(1385,392,1455,392,{strokeWidth:2.5});
+D.ci(1545,392,130,'#f7d6cf',{strokeWidth:2.8});lab(1480,352,130,80,'權重不動');
+D.arrow(1620,392,1690,392,{strokeWidth:2.5});
+sq(1700,350,'輸出',...MUS);
+/* 行 B：微調 */
+sq(1090,610,'資料',...IND);sq(1190,610,'資料',...IND);sq(1290,610,'資料',...IND);
+D.arrow(1385,652,1455,652,{strokeWidth:2.5});
+D.ci(1545,652,130,'#f7d6cf',{stroke:D.C.ver,strokeWidth:4.5});lab(1480,612,130,80,'新權重');
+lab(1380,690,90,30,'梯度');
+D.dash(1070,325,1070,730,{stroke:D.C.grey,strokeWidth:2});
+</script></body></html>

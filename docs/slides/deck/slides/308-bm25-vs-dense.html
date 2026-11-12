@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>BM25 與向量的盲區</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ch{position:absolute;top:326px;width:630px;text-align:center;font-size:36px}
+.cs{position:absolute;top:376px;width:630px;text-align:center;font-size:24px;color:var(--muted)}
+.rl{position:absolute;left:110px;width:390px}
+.rl .t{font-size:32px;line-height:1.3}
+.rl .d{font-size:26px;line-height:1.4;color:var(--muted);margin-top:6px}
+.cell{position:absolute;width:630px;height:140px}
+.cell .m{position:absolute;left:96px;top:24px;width:520px;font-size:28px;line-height:1.4}
+.cell .s{position:absolute;left:96px;top:88px;width:520px;font-size:24px;line-height:1.3;color:var(--muted)}
+.bridge.inline{padding:14px 30px}
+</style></head><body><div class="slide">
+  <h1>關鍵詞與向量：各有一塊看不見的地方</h1>
+  <p class="lead">BM25 逐字比對，向量比對語意。一方的強項，正是另一方的盲區。<span class="tag">示意</span></p>
+
+  <div class="ch ind" style="left:510px">BM25　關鍵詞</div>
+  <div class="ch ind" style="left:1180px">向量　語意</div>
+  <div class="cs" style="left:510px">依詞的頻率與稀有度打分，不用訓練</div>
+  <div class="cs" style="left:1180px">文字變成向量，比意思遠近</div>
+
+  <div class="rl" style="top:430px"><div class="t">型號、錯誤碼</div><div class="d">問：「ERR-4012 怎麼排除？」</div></div>
+  <div class="rl" style="top:640px"><div class="t">換句話說</div><div class="d">問：「程式老是自己關掉」</div></div>
+
+  <div class="cell" style="left:510px;top:410px"><div class="m">撈到「ERR-4012：認證逾時」</div><div class="s">字面完全相同，命中</div></div>
+  <div class="cell" style="left:1180px;top:410px"><div class="m">撈成「ERR-4021：磁碟空間不足」</div><div class="s">長得像、語意分不開，拿錯</div></div>
+  <div class="cell" style="left:510px;top:620px"><div class="m">撈不到「應用程式發生 crash 並退出」</div><div class="s">和問句沒有任何共同的詞</div></div>
+  <div class="cell" style="left:1180px;top:620px"><div class="m">撈到「應用程式發生 crash 並退出」</div><div class="s">意思相近，命中</div></div>
+
+  <div class="bridge inline" style="left:110px;top:822px;width:1700px"><span class="k">你已經會的</span>BM25 像 CNN 之前的 SIFT／HOG：手工設計、逐字比對；向量是學出來的特徵，抓語意，抓不準字面。</div>
+  <div class="read"><em>怎麼讀：</em>黃色是命中，淡紅加叉是漏掉或拿錯。對角線是各自的強項，另一條對角線是盲區——所以要兩路一起用。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const HIT=['#f7e7c0','#b98a12'],MISS=['#f7d6cf',D.C.ver];
+const cell=(x,y,[f,st])=>{D.rect(x,y,630,140,f,{fillStyle:'solid',stroke:st,strokeWidth:3});};
+const icon=(x,y,hit)=>{D.sq(x+28,y+48,44,hit?'#fbf9f4':'#fbf9f4',{fillStyle:'solid',stroke:hit?'#b98a12':D.C.ver,strokeWidth:2.8});if(!hit)D.cross(x+50,y+70,16,{strokeWidth:4});};
+[[510,410,1],[1180,410,0],[510,620,0],[1180,620,1]].forEach(([x,y,h])=>{cell(x,y,h?HIT:MISS);icon(x,y,h);});
+/* 列標籤旁的分隔線 */
+D.line(110,598,1810,598,{stroke:D.C.grey,strokeWidth:1.8});
+</script></body></html>

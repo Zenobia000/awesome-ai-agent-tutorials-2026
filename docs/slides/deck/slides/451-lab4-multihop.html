@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab 4 多跳提問流程</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.sn{position:absolute;width:320px;text-align:center;font-size:30px;line-height:1.3}
+.sa{position:absolute;width:300px;text-align:center;font-size:26px;line-height:1.45;color:var(--muted)}
+.mono{font-family:"JetBrains Mono","Noto Sans Mono CJK TC",monospace;font-size:24px;color:var(--ink)}
+.cl{position:absolute;font-size:24px;line-height:1.35}
+</style></head><body><div class="slide">
+  <h1>Lab 4：一次多跳提問怎麼跑</h1>
+  <p class="lead">模型只負責兩頭：抽出角色名、組織答案。中間的 Cypher 是寫好的模板。</p>
+
+  <div class="sn" style="left:50px;top:420px">提問</div>
+  <div class="sn" style="left:400px;top:420px">抽出角色</div>
+  <div class="sn" style="left:750px;top:420px">Cypher 多跳</div>
+  <div class="sn" style="left:1100px;top:420px">格式化成上下文</div>
+  <div class="sn" style="left:1450px;top:420px">回答</div>
+
+  <div class="sa" style="left:60px;top:470px">「和韓立同門派的人，<br>還有誰？」</div>
+  <div class="sa mono" style="left:410px;top:470px">["韓立"]</div>
+  <div class="sa" style="left:760px;top:470px">把名字填進模板，<br>唯讀執行</div>
+  <div class="sa" style="left:1110px;top:470px">七玄門的成員：<br>韓立、厲飛雨、墨大夫</div>
+  <div class="sa" style="left:1460px;top:470px">韓立的同門有<br>厲飛雨、墨大夫。</div>
+
+  <div class="cl lbl ind" style="left:110px;top:625px">實際執行的 Cypher（結果為示意）</div>
+  <div class="code" style="left:110px;top:668px"><span class="k">MATCH</span> (h:Person {name: <span class="s">$name</span>})-[:MEMBER_OF]-&gt;(s:Sect)
+      &lt;-[:MEMBER_OF]-(p:Person)
+<span class="k">RETURN</span> s.name <span class="k">AS</span> sect, p.name <span class="k">AS</span> peer
+<span class="c">// → 七玄門 | 厲飛雨</span>
+<span class="c">// → 七玄門 | 墨大夫</span></div>
+
+  <div class="bridge" style="left:1010px;top:668px;width:800px"><span class="k">你已經會的</span>模組二的 Text2SQL 讓模型寫整句 SQL；這裡只讓模型抽名字，Cypher 是固定模板，更好驗證、更可控。</div>
+  <div class="read"><em>怎麼讀：</em>由左往右：圓是 LLM，三角是工具動作（跑 Cypher），方塊是資料；程式碼對應中間的三角。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IND=['#d9e1ee',D.C.ind];
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:3},o||{}));
+const ar=(x1,y1,x2,y2)=>D.arrow(x1,y1,x2,y2,{strokeWidth:3});
+const cy=350,cxs=[210,560,910,1260,1610];
+R(cxs[0]-50,cy-50,100,100,IND);
+D.ci(cxs[1],cy,110,'ver',{fillStyle:'hachure',strokeWidth:2.5});
+D.tri(cxs[2],cy,120,'mus',{strokeWidth:2.8});
+R(cxs[3]-50,cy-50,100,100,IND);
+D.ci(cxs[4],cy,110,'ver',{fillStyle:'hachure',strokeWidth:2.5});
+[[270,500],[620,850],[970,1200],[1320,1550]].forEach(([a,b])=>ar(a+16,cy,b-16,cy));
+</script></body></html>

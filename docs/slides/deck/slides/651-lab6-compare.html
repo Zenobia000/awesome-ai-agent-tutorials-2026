@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab 6：微調前後對比</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.pt{position:absolute;font-size:34px;line-height:1.3}
+.pt span{font-size:24px;color:var(--muted);margin-left:14px}
+.a{position:absolute;font-size:30px;line-height:1.5}
+.ck{position:absolute;font-size:26px;line-height:1.4}
+.lb{position:absolute;font-size:24px;line-height:1.35}
+</style></head><body><div class="slide">
+  <h1>微調前後：差在「怎麼答」</h1>
+  <p class="lead">同一句「最近一直頭痛」丟給基座和微調後的模型：身份、話術、格式變了，知識沒有多。</p>
+
+  <div class="pt" style="left:110px;top:276px">微調前（基座）<span class="tag" style="margin-left:14px">示意</span></div>
+  <div class="pt ver" style="left:990px;top:276px">微調後（LoRA）<span class="tag" style="margin-left:14px">示意</span></div>
+
+  <div class="a" style="left:150px;top:346px;width:730px">頭痛的原因有很多，常見的有壓力、睡眠不足、偏頭痛等。建議多休息、多喝水，症狀持續請就醫。</div>
+  <div class="a" style="left:1030px;top:346px;width:740px">您好，我是安心診所的問診助理。先了解幾件事：頭痛持續幾天了？痛在哪個位置？有沒有發燒或噁心？</div>
+
+  <div class="ck" style="left:190px;top:476px;width:700px">身份標籤：沒有<br>專業話術：泛泛科普<br>格式：一段長話，沒有追問</div>
+  <div class="ck" style="left:1070px;top:476px;width:700px">身份標籤：有，說出診所與角色<br>專業話術：先問診，再給建議<br>格式：逐點追問</div>
+
+  <div class="abs" style="left:110px;top:620px;width:1700px;font-size:30px;line-height:1.5;padding:8px 30px;background:var(--mus-l)">微調改的是行為。藥品、政策這類會變的事實，仍要交給 RAG。</div>
+
+  <div class="lb" style="left:110px;top:706px">24GB 單卡（RTX 4090）加進 clinic_lora.yaml</div>
+  <div class="lb" style="left:700px;top:706px">自訂資料集：在 <span class="ind">data/dataset_info.json</span> 註冊；資料有 system 欄就要列出，否則被略過</div>
+
+  <div class="code" style="left:110px;top:746px"><span class="c"># 建議值，未在 8B 實測</span>
+<span class="k">bf16</span>: true
+<span class="k">per_device_train_batch_size</span>: 1
+<span class="k">gradient_accumulation_steps</span>: 8</div>
+
+  <div class="code" style="left:700px;top:746px"><span class="k">"clinic_sharegpt"</span>: {
+  <span class="k">"file_name"</span>: <span class="s">"clinic.json"</span>,
+  <span class="k">"formatting"</span>: <span class="s">"sharegpt"</span>,
+  <span class="k">"columns"</span>: {<span class="k">"messages"</span>: <span class="s">"conversations"</span>, <span class="hl"><span class="k">"system"</span>: <span class="s">"system"</span></span>}}</div>
+
+  <div class="read"><em>怎麼讀：</em>上方兩欄是同一句輸入，三項對照就是 Lab 要驗收的「身份標籤與專業話術遵循度」（回答僅為示意）；最下面是開跑前要補的設定。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.rect(110,326,800,274,'#ebe6da',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.8});
+D.rect(990,326,820,274,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.8});
+D.dash(150,462,870,462,{strokeWidth:2,stroke:D.C.grey});D.dash(1030,462,1770,462,{strokeWidth:2,stroke:D.C.ver});
+/* 前：三叉；後：三勾 */
+[494,530,566].forEach(y=>D.cross(160,y,11,{strokeWidth:3.6}));
+const tick=(x,y)=>{D.line(x-12,y,x-3,y+10,{strokeWidth:3.8,stroke:D.C.ind});D.line(x-3,y+10,x+14,y-12,{strokeWidth:3.8,stroke:D.C.ind});};
+[494,530,566].forEach(y=>tick(1040,y));
+</script></body></html>

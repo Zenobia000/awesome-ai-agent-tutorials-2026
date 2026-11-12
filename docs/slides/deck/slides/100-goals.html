@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組 1 章首：學習目標</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.mod{position:absolute;left:110px;top:80px;font-size:110px;line-height:1.15}
+.name{position:absolute;left:110px;top:225px;width:820px;font-size:80px;line-height:1.15}
+.heart{position:absolute;left:110px;top:345px;width:760px}
+.goals{position:absolute;left:1010px;top:110px;width:800px}
+.goals ul.dots li{font-size:32px;line-height:1.5;margin:46px 0}
+.lab{position:absolute;left:150px;top:876px;width:1620px;font-size:28px;line-height:1.5}
+.lab .k{display:block;font-size:34px;color:var(--ind);line-height:1.4}
+</style></head><body><div class="slide">
+  <div class="mod">模組 1</div>
+  <h1 class="name">從深度學習到 LLM</h1>
+  <p class="lead heart">把 LLM 看成一個詞表上的 softmax 分類器，再把這個分類器跑成迴圈。</p>
+
+  <div class="goals">
+    <h2>學習目標</h2>
+    <ul class="dots" style="margin-top:20px">
+      <li>說出文字怎麼變成數字：token、id、embedding</li>
+      <li>用 softmax 分類器的角度看懂生成與溫度</li>
+      <li>講出 attention 為什麼取代 RNN，以及 O(N²) 的代價</li>
+      <li>解釋模型為何記不住對話：每次都重送歷史</li>
+      <li>依顯存挑本地模型，用同一個介面接本地與雲端</li>
+    </ul>
+  </div>
+
+  <div class="lab"><span class="k">本章實戰：Lab 1 雙軌對話客戶端</span>本地 Ollama 為主、雲端 API 備援，連不上就自動切換，輸出用串流。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.ci(330,670,280,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+D.rect(110,860,1700,140,'#f7e7c0',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:3});
+</script></body></html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Attention 公式逐項拆解</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.fm{position:absolute;left:110px;top:268px;height:150px;display:flex;align-items:center;white-space:nowrap;line-height:1}
+.fm .lhs{font-size:32px;color:var(--muted);margin-right:16px}
+.fm .big{font-size:54px}
+.fm .par{font-size:100px;font-weight:200;line-height:.9;margin:0 2px;transform:translateY(-3px)}
+.fr{display:inline-flex;flex-direction:column;align-items:center;margin:0 4px}
+.fr .num{padding:0 12px 8px}.fr .den{padding:8px 12px 0}
+.fr .bar{align-self:stretch;height:4px;background:var(--ink)}
+.rt{display:inline-block;border-top:4px solid var(--ink);padding-top:1px;margin-left:1px}
+sub,sup{font-size:.52em;line-height:0}
+.q{color:var(--ind)}.k{color:#b98a12}.v{color:var(--ver)}
+.op{position:absolute;left:110px;width:190px;font-size:40px;line-height:1.1}
+.op small{display:block;font-size:24px;color:var(--muted);margin-top:4px}
+.tx{position:absolute;left:660px;width:492px;font-size:26px;line-height:1.3}
+.cap{position:absolute;font-size:22px;line-height:1;color:var(--muted);text-align:center;width:120px;margin-left:-60px;white-space:nowrap}
+.sym{position:absolute;font-size:30px;line-height:1;width:20px;text-align:center}
+.pr{position:absolute;left:1160px;width:650px}
+.pr .h{font-size:34px;line-height:1.3}
+.pr p{font-size:28px;line-height:1.45}
+.bl{position:absolute;font-size:24px;line-height:1.3;text-align:center;width:320px}
+.src{left:110px;top:884px;width:1700px}
+</style></head><body><div class="slide">
+  <h1>Attention 公式：逐項拆解</h1>
+  <p class="lead">每一項對應 110 頁的哪個矩陣；以及為什麼要除以 √d<sub>k</sub>。<span class="tag" style="margin-left:14px">進階</span></p>
+
+  <div class="fm" id="fm">
+    <span class="lhs">Attention(Q, K, V) ＝</span>
+    <span class="big" id="t3">softmax</span><span class="par">(</span>
+    <span class="fr big"><span class="num" id="t1"><span class="q">Q</span><span class="k">K</span><sup style="color:var(--ink)">T</sup></span><span class="bar"></span><span class="den" id="t2">√<span class="rt">d<sub>k</sub></span></span></span>
+    <span class="par">)</span><span class="big v" id="t4">V</span>
+  </div>
+
+  <div id="rows"></div>
+
+  <div class="pr" style="top:262px"><div class="h">為什麼要除以 √d<sub>k</sub>？</div></div>
+  <div class="pr" style="top:312px"><p>Q·K 是 d<sub>k</sub> 項乘積相加：d<sub>k</sub> 越大，分數越分散（標準差約 √d<sub>k</sub> 倍）。</p></div>
+  <div class="pr note" style="top:402px">前提：q、k 各分量獨立、平均 0、變異數 1。</div>
+  <div class="abs" style="left:1700px;top:398px"><span class="tag">示意</span></div>
+
+  <div class="bl" style="left:1160px;top:452px">有除：分數 1、2、3</div>
+  <div class="bl" style="left:1490px;top:452px">沒除：分數 8、16、24</div>
+  <div class="bridge" style="left:1160px;top:660px;width:650px"><span class="k">你已經會的</span>softmax 一飽和（近乎 one-hot），梯度 p(1−p) 趨近 0，和 sigmoid、tanh 飽和一樣。÷√d<sub>k</sub> 把分數拉回不飽和區。</div>
+
+  <div class="src">來源：Vaswani et al.（2017）〈Attention Is All You Need〉§3.2.1 式 (1) 與腳註 4（p.4），公式重新排版，未放原圖；arXiv:1706.03762，arXiv 預設授權。右側示意假設 d<sub>k</sub>＝64（√d<sub>k</sub>＝8），權重為實算。</div>
+  <div class="read"><em>怎麼讀：</em>左邊由上往下就是公式由內往外的計算順序，顏色對回 110 頁（藍 Q、黃 K、粉紅 V）；右邊看除不除的差別。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const HUE={q:['#e9edf5','#d9e1ee','#9fb4d3'],k:['#fbf1d9','#f7e7c0','#e8b53a'],v:['#fbe6e1','#f7d6cf','#e89a8a'],
+  sc:['#e9edf5','#d9e1ee','#9fb4d3','#2b4c7e'],wt:['#fbf1d9','#f7e7c0','#e8b53a','#b98a12']};
+const rnd=(i,j,s)=>Math.abs(Math.sin(i*12.9898+j*78.233+s)*43758.5453)%1;
+const rand=(h,s)=>(i,j)=>HUE[h][Math.floor(rnd(i,j,s)*3)];
+const mat=(x,y,r,c,cell,fn)=>{for(let i=0;i<r;i++)for(let j=0;j<c;j++)D.rect(x+j*cell,y+i*cell,cell,cell,fn(i,j),{fillStyle:'solid',stroke:'#f3efe6',strokeWidth:1.4,roughness:0.5});
+  D.rect(x-2,y-2,c*cell+4,r*cell+4,null,{stroke:D.C.ink,strokeWidth:2});};
+const S=[[3,1,0,1],[1,3,2,0],[0,2,3,1],[1,0,1,3]],S2=[[2,1,0,1],[1,2,1,0],[0,1,2,1],[1,0,1,2]],Wt=[[3,1,0,1],[2,3,1,0],[0,2,3,1],[1,0,2,3]];
+const CELL=17,rows=document.getElementById('rows');
+const el=(cls,x,y,html,st)=>{const d=document.createElement('div');d.className=cls;d.style.left=x+'px';d.style.top=y+'px';if(st)d.style.cssText+=st;d.innerHTML=html;rows.appendChild(d);return d;};
+/* 一列：運算標籤 ＋ 矩陣算式 ＋ 說明。items: ['m',r,c,fill,cap] 或 ['s','×'] */
+function row(y0,no,op,sub,items,text){
+  el('op',110,y0+2,`<span style="font-size:26px;color:var(--ind)">${no}</span> ${op}<small>${sub}</small>`);
+  let x=330;
+  items.forEach(it=>{
+    if(it[0]==='m'){const[,r,c,fn,cap]=it;mat(x,y0+4,r,c,CELL,fn);el('cap',x+c*CELL/2,y0+4+r*CELL+6,cap);x+=c*CELL+16;}
+    else{el('sym',x,y0+4+2*CELL-16,it[1]);x+=20+16;}
+  });
+  el('tx',660,y0+2,text);
+}
+const Q=rand('q',20),Kt=rand('k',21),V=rand('v',30),Z=rand('v',31);
+row(430,'①','Q K<sup style="font-size:.5em">T</sup>','4×3 乘 3×4',[['m',4,3,Q,'Q 4×3'],['s','×'],['m',3,4,Kt,'Kᵀ 3×4'],['s','＝'],['m',4,4,(i,j)=>HUE.sc[S[i][j]],'分數 4×4']],
+  'Q 每列和 K 每列做內積，<br>得到 4×4 分數表（110 頁藍格）。');
+row(540,'②','÷ √d<sub>k</sub>','整張表同除一數',[['m',4,4,(i,j)=>HUE.sc[S[i][j]],'分數'],['s','→'],['m',4,4,(i,j)=>HUE.sc[S2[i][j]],'值變小']],
+  '同除一個常數 √d<sub>k</sub>；<br>d<sub>k</sub>＝K 的欄數（110 頁是 3）。<br>數值變小，相對大小不變。');
+row(650,'③','softmax','每一列各自算',[['m',4,4,(i,j)=>HUE.sc[S2[i][j]],'縮放後'],['s','→'],['m',4,4,(i,j)=>HUE.wt[Wt[i][j]],'列和 1']],
+  '每一列各自變成<br>合計 1 的權重（110 頁黃格）。');
+row(760,'④','<span class="v">V</span>','權重加權 V',[['m',4,4,(i,j)=>HUE.wt[Wt[i][j]],'權重'],['s','×'],['m',4,3,V,'V 4×3'],['s','＝'],['m',4,3,Z,'輸出 Z']],
+  '用權重把各 token 的 V 加權相加，<br>得到輸出 Z（110 頁粉紅 4×3）。');
+/* 分隔細線 */
+[532,642,752].forEach(y=>D.line(110,y,1140,y,{stroke:'#d3cdbf',strokeWidth:1.5,roughness:.6}));
+
+/* ── 右側：softmax 權重（直線矩形，數字為實算）── */
+D.rect(1160,440,650,200,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+const NS='http://www.w3.org/2000/svg',cv=document.createElementNS(NS,'svg');
+cv.setAttribute('width','650');cv.setAttribute('height','170');cv.setAttribute('viewBox','0 0 650 170');cv.style.cssText='position:absolute;left:1160px;top:468px';
+document.querySelector('.slide').appendChild(cv);
+const mk=(t,a,tx)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(tx!=null)e.textContent=tx;cv.appendChild(e);};
+const sm=a=>{const m=Math.max(...a),e=a.map(v=>Math.exp(v-m)),s=e.reduce((x,y)=>x+y,0);return e.map(v=>v/s);};
+const grp=(x0,sc,col)=>{const w=sm(sc),BH=74,B=124;
+  mk('line',{x1:x0,y1:B,x2:x0+250,y2:B,stroke:'#1b1b1b','stroke-width':2.5});
+  w.forEach((p,i)=>{const bx=x0+16+i*76,h=Math.max(p*BH,2);
+    mk('rect',{x:bx,y:B-h,width:56,height:h,fill:col[0],stroke:col[1],'stroke-width':3});
+    mk('text',{x:bx+28,y:B-h-10,'text-anchor':'middle','font-size':24,fill:'#1b1b1b'},p.toFixed(2));
+    mk('text',{x:bx+28,y:B+26,'text-anchor':'middle','font-size':22,fill:'#5b574f'},sc[i]);});};
+grp(40,[1,2,3],['#d9e1ee','#2b4c7e']);
+grp(372,[8,16,24],['#f7d6cf','#e0442b']);
+</script></body></html>

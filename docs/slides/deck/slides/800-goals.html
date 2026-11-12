@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組八 轉職衝刺</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.goal{position:absolute;left:960px;top:178px;width:850px}
+ul.dots.goal li{font-size:30px;margin:22px 0}
+.lab{position:absolute;left:110px;top:840px;width:1700px;height:135px;padding:24px 36px;font-size:30px;line-height:1.55}
+</style></head><body><div class="slide">
+  <h1 class="xl abs" style="left:110px;top:80px">模組八</h1>
+  <h2 class="abs ind" style="left:110px;top:225px;font-size:56px">轉職衝刺</h2>
+  <p class="lead abs" style="left:110px;top:315px;width:740px">心法：看得見才修得了，寫得出數字才算成果。</p>
+
+  <h2 class="abs" style="left:960px;top:100px">學習目標</h2>
+  <ul class="dots goal">
+    <li>讀懂一條 trace：每一步的耗時、token、輸入與輸出</li>
+    <li>說出 eval 怎麼對應驗證集，LLM 評審為何也要驗證</li>
+    <li>分清 Vibe Coding 與 AI 輔助工程，能解釋才 commit</li>
+    <li>把旗艦專案寫成履歷：有動作、有對照基準、有數字</li>
+    <li>整合旗艦專案，產出一條公開的 trace</li>
+  </ul>
+
+  <div class="lab"><span class="mus">本章實戰</span>　Lab8 旗艦專案整合：把 Supervisor 與 Doc／DB／Ops 三個子 agent 接成一套，開 LangSmith 追蹤，產出公開 trace，再做面試沙盤。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.sq(190,520,270,'ind',{strokeWidth:2.6});
+D.ci(610,570,100,'ver',{fillStyle:'hachure',strokeWidth:2.5});
+D.tri(620,740,100,'mus',{strokeWidth:2.5});
+D.line(460,600,562,578,{strokeWidth:2.5});
+D.line(460,720,580,738,{strokeWidth:2.5});
+D.rect(110,840,1700,135,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+</script></body></html>

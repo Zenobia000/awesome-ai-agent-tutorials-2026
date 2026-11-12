@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>從你會的走到 LLM</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.col{position:absolute;top:268px;font-size:30px}
+.cell{position:absolute;width:640px;height:92px;display:flex;align-items:center;padding:0 28px;font-size:28px;line-height:1.3}
+.mid{position:absolute;left:760px;width:400px;text-align:center;font-size:26px;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>從你會的，走到 LLM</h1>
+  <p class="lead">這一章每個新概念，都是你已經熟悉的東西換了名字。</p>
+  <div class="col ind" style="left:110px">你會的（深度學習）</div>
+  <div class="col ver" style="left:1170px">本章要學的（LLM）</div>
+  <div id="rows"></div>
+  <div class="read"><em>怎麼讀：</em>左邊是你已經會的，右邊是它在 LLM 裡的樣子，中間那句是兩者的差別。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const rows=[
+ ['nn.Embedding：整數 id → 向量','token embedding：文字 → id → 向量','同一個東西'],
+ ['分類器：softmax 輸出 1000 類','語言模型：softmax 輸出整個詞表','類別換成詞表'],
+ ['RNN：隱藏狀態一步一步傳','attention：每個位置直接看全部','改成加權平均'],
+ ['遷移學習：預訓練 ＋ fine-tune','預訓練 → 指令微調 → 對話模型','同一套路'],
+ ['一次 forward pass：x → y','逐字生成：輸出接回輸入','放進迴圈']];
+const box=document.getElementById('rows');
+rows.forEach((r,i)=>{const y=325+i*112;
+  D.rect(110,y,640,92,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+  D.rect(1170,y,640,92,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.8});
+  D.arrow(765,y+46,1155,y+46,{strokeWidth:2.8});
+  const add=(cls,x,t)=>{const e=document.createElement('div');e.className=cls;e.style.left=x+'px';e.style.top=y+'px';e.innerHTML=t;box.appendChild(e);return e};
+  add('cell',110,r[0]);add('cell',1170,r[1]);
+  const m=add('mid',0,r[2]);m.style.top=(y+2)+'px';m.style.left='760px';m.style.height='40px';
+});
+</script></body></html>

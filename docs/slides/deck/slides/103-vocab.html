@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>詞表與切分粒度</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.rl{position:absolute;left:110px;width:350px}
+.rl .n{font-size:34px}.rl .d{font-size:24px;line-height:1.4;color:var(--muted);margin-top:4px}
+.t{position:absolute;display:flex;align-items:center;justify-content:center;font-size:28px}
+.id{position:absolute;text-align:center;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--muted)}
+.hc{position:absolute;font-size:26px;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>為什麼不是一個字一個 token？</h1>
+  <p class="lead">切太粗，詞表爆炸、沒見過的詞就卡住；切太細，序列變長。subword 取中間。</p>
+  <div class="hc" style="left:1210px;top:300px">詞表大小</div>
+  <div class="hc" style="left:1540px;top:300px">序列長度 <span class="tag">示意</span></div>
+  <div id="rows"></div>
+  <div class="bridge inline" style="left:110px;top:822px;width:1700px"><span class="k">你已經會的</span>詞表大小就是最後一層 softmax 的類別數，實務上約 5 萬到 15 萬個 token。</div>
+  <div class="read"><em>怎麼讀：</em>同一個詞 unbelievable，三種切法各一列；右邊兩根長條比較詞表和序列的取捨，最下一列是實際採用的 subword。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const box=document.getElementById('rows');
+const el=(c,x,y,w,h,t,st)=>{const e=document.createElement('div');e.className=c;e.style.cssText=`left:${x}px;top:${y}px;`+(w?`width:${w}px;`:'')+(h?`height:${h}px;`:'')+(st||'');e.innerHTML=t;box.appendChild(e);return e};
+const F=['#d9e1ee','#f7e7c0','#f7d6cf'],S=[D.C.ind,'#b98a12',D.C.ver];
+const R=[
+ {y:350,n:'整詞',d:'詞表巨大；沒見過的詞＝未知',toks:['unbelievable'],w:[300],v:230,s:30,vl:'很大',sl:'最短'},
+ {y:520,n:'單字元',d:'詞表最小；序列最長',toks:'unbelievable'.split(''),w:Array(12).fill(36),v:40,s:230,vl:'很小',sl:'最長'},
+ {y:690,n:'subword',d:'常見的整個留著，罕見的拆開',toks:['un','belie','vable'],w:[70,120,130],v:120,s:100,vl:'中等',sl:'適中',ids:[359,31798,23760]}];
+R.forEach(r=>{
+  el('rl',110,r.y-6,350,0,`<div class="n">${r.n}</div><div class="d">${r.d}</div>`);
+  let x=490;
+  r.toks.forEach((t,i)=>{const w=r.w[i],h=r.toks.length>3?44:64;const y=r.y+(r.toks.length>3?10:0);
+    D.rect(x,y,w,h,F[i%3],{fillStyle:'solid',stroke:S[i%3],strokeWidth:2.4});
+    el('t',x,y,w,h,t,r.toks.length>3?'font-size:24px':'');
+    if(r.ids)el('id',x-20,y+h+8,w+40,0,r.ids[i]);
+    x+=w+6;});
+  D.rect(1210,r.y+10,r.v,34,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.4});
+  D.rect(1540,r.y+10,r.s,34,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.4});
+  el('hc',1210+r.v+14,r.y+8,0,0,r.vl);el('hc',1540+r.s+14,r.y+8,0,0,r.sl);
+});
+</script></body></html>

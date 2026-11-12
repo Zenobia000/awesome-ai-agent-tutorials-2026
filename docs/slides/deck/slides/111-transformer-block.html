@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Transformer 一層的組成</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.25;font-size:28px}
+.n{position:absolute;font-size:24px;line-height:1.45;color:var(--muted);text-align:center}
+.n b{display:block;font-size:26px;color:var(--ind);margin-bottom:2px}
+</style></head><body><div class="slide">
+  <h1>Transformer 一層：attention ＋ MLP</h1>
+  <p class="lead">一層＝attention＋MLP，疊很多層。今天的 LLM 用的是只看前面 token 的 decoder 版本。</p>
+  <div id="g"></div>
+  <div class="n" style="left:250px;top:630px;width:250px"><b>＝ 你會的查表</b>nn.Embedding 查表，再加位置資訊</div>
+  <div class="n" style="left:520px;top:630px;width:250px"><b>＝ 加權平均</b>各位置依內容交換資訊</div>
+  <div class="n" style="left:840px;top:630px;width:260px"><b>＝ 全連接網路</b>每個位置各自過一次</div>
+  <div class="n" style="left:1190px;top:630px;width:260px"><b>＝ 分類器最後一層</b>向量 → 詞表上的機率</div>
+  <div class="bridge inline" style="left:110px;top:790px;width:1700px"><span class="k">你已經會的</span>殘差＝ResNet 的 skip；LayerNorm＝BatchNorm 的近親。新東西只有 attention。</div>
+  <div class="read"><em>怎麼讀：</em>由左往右走完整個模型；虛線框是「一層」，同樣的結構疊 N 次；每個方塊下面是它對應的已知元件。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+const CY=480,box=(x,w,t,f,s)=>{D.rect(x,CY-45,w,90,f,{fillStyle:'solid',stroke:s,strokeWidth:2.8});el(x,CY-45,w,90,t);};
+box(110,110,'token<br>id','#d9e1ee',D.C.ind);
+D.arrow(224,CY,282,CY,{strokeWidth:2.6});
+box(290,180,'Embedding<br>＋ 位置','#d9e1ee',D.C.ind);
+D.arrow(474,CY,538,CY,{strokeWidth:2.6});
+/* 一層 */
+D.rect(520,318,630,288,null,{stroke:D.C.ink,strokeWidth:2.6,strokeLineDash:[12,10]});
+el(520,272,630,44,'一層（結構相同，疊 N 次）','font-size:26px;color:#1b1b1b');
+box(545,170,'Self-<br>Attention','#f7e7c0','#b98a12');
+D.arrow(717,CY,759,CY,{strokeWidth:2.6});
+D.rect(765,CY-22,44,44,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:2.4});el(765,CY-22,44,44,'＋','font-size:30px');
+D.arrow(811,CY,853,CY,{strokeWidth:2.6});
+box(859,170,'MLP','#f7e7c0','#b98a12');
+D.arrow(1031,CY,1073,CY,{strokeWidth:2.6});
+D.rect(1079,CY-22,44,44,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:2.4});el(1079,CY-22,44,44,'＋','font-size:30px');
+/* 殘差 */
+D.line(532,CY,532,376,{strokeWidth:2.4,stroke:D.C.ver});D.line(532,376,787,376,{strokeWidth:2.4,stroke:D.C.ver});D.arrow(787,376,787,CY-26,{strokeWidth:2.4,stroke:D.C.ver});
+D.line(838,CY,838,376,{strokeWidth:2.4,stroke:D.C.ver});D.line(838,376,1101,376,{strokeWidth:2.4,stroke:D.C.ver});D.arrow(1101,376,1101,CY-26,{strokeWidth:2.4,stroke:D.C.ver});
+el(580,330,420,34,'殘差：把輸入直接加回來','font-size:24px;color:#e0442b');
+D.arrow(1153,CY,1212,CY,{strokeWidth:2.6});
+box(1220,200,'Linear<br>＋ softmax','#d9e1ee',D.C.ind);
+D.arrow(1424,CY,1488,CY,{strokeWidth:2.6});
+/* 小長條 */
+const b=D.bars(1500,CY-60,300,110,[.52,.18,.12,.07,.04],['#d9e1ee'],.52,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.2});
+D.rect(b[0].x,b[0].y,b[0].w,b[0].h,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.2});
+el(1480,CY+58,340,64,'下一個 token 的機率<br>（前面看過的長條圖）','font-size:24px;color:#5b574f');
+</script></body></html>

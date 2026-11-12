@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>子 agent 包成工具</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.u{position:absolute;font-size:24px;line-height:1.45;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>子 agent 包成工具：外面只看到一個函式</h1>
+  <p class="lead">上層 agent 只知道名字、說明書、輸入輸出；裡面幾步、用了哪些工具，它看不到。</p>
+
+<div class="code" style="left:110px;top:290px;width:980px"><span class="c"># 子 agent：自己的工具、自己的提示詞</span>
+calendar_agent = <span class="k">create_agent</span>(
+    model,
+    tools=[get_available_time_slots, create_calendar_event],
+    system_prompt=<span class="s">"你只負責排行程。"</span>)
+
+<span class="hl">@tool</span>
+<span class="k">def</span> schedule_event(request: str) -> str:
+<span class="hl">    """用自然語言排行程，例：『週二下午跟 Ann 開會』"""</span>
+    result = calendar_agent.invoke(
+        {<span class="s">"messages"</span>: [{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: request}]})
+<span class="hl">    return result["messages"][-1].text</span>   <span class="c"># 只回摘要</span></div>
+
+  <div class="u" style="left:1190px;top:420px;width:230px">docstring 就是上層看到的說明書</div>
+  <div class="abs lbl" style="left:1590px;top:412px;width:230px;line-height:1.5"><span class="mut">輸入</span>　一句話<br><span class="mut">輸出</span>　一段摘要</div>
+  <div class="abs lbl" style="left:1570px;top:318px">上層 agent</div>
+  <div class="abs lbl" style="left:1250px;top:685px;width:100px;text-align:center">子 agent</div>
+  <div class="abs lbl ind" style="left:1190px;top:548px">上層看得到</div>
+  <div class="abs lbl mut" style="left:1190px;top:600px">上層看不到</div>
+  <div class="abs lbl" style="left:1535px;top:658px">查空檔</div>
+  <div class="abs lbl" style="left:1535px;top:738px">建行程</div>
+  <div class="u" style="left:1190px;top:790px;width:600px">自己的 context、多步推理、自己的低階工具</div>
+
+  <div class="bridge inline" style="left:110px;top:840px;width:1700px"><span class="k">你已經會的</span>把子網路包成一個 <b>nn.Module</b>：外層只看 forward 的輸入輸出，不管裡面幾層。</div>
+  <div class="read"><em>怎麼讀：</em>左邊是整個介面的程式碼；右上是上層看到的，右下是被藏起來的子 agent。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C;
+D.ci(1500,335,100,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+D.arrow(1500,390,1500,432,{strokeWidth:3});
+D.tri(1500,510,130,S.mus,{strokeWidth:2.5});
+D.line(1190,585,1830,585,{strokeWidth:3,stroke:S.ink});
+D.ci(1300,700,130,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+D.arrow(1368,684,1448,668,{strokeWidth:2.5});
+D.arrow(1368,716,1448,752,{strokeWidth:2.5});
+D.tri(1485,670,70,S.mus,{strokeWidth:2.5});
+D.tri(1485,750,70,S.mus,{strokeWidth:2.5});
+</script></body></html>

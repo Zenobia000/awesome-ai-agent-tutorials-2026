@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組七小結</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.rc{position:absolute;left:110px;top:222px;width:850px}
+ul.dots.rc li{font-size:30px;line-height:1.5;margin:46px 0}
+.mt{position:absolute;left:1010px;font-size:30px}
+</style></head><body><div class="slide">
+  <h1>模組七小結</h1>
+  <ul class="dots rc">
+    <li>MCP 把 N × M 個客製接頭，降成 N + M 個標準介面</li>
+    <li>Host 為每個 Server 開一個 Client；資料層與傳輸層分開</li>
+    <li>三種原語看「誰決定用」：Tools 模型、Resources 應用、Prompts 使用者</li>
+    <li>本機走 stdio、遠端走 Streamable HTTP；stdio 絕不 print() 到 stdout</li>
+    <li>路徑固定用 Dify／n8n，要依狀態動態決定用 LangGraph；兩邊能經 MCP 互接</li>
+  </ul>
+  <div class="mt ver" style="top:222px">沒有 MCP：<b style="color:var(--ver)">12</b> 個接頭</div>
+  <div class="mt ind" style="top:552px">有 MCP：<b style="color:var(--ind)">7</b> 個介面</div>
+  <div class="next">下一章：轉職衝刺</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const mini=(y0,mcp)=>{
+  const A=[40,120,200].map(d=>y0+d), T=[0,80,160,240].map(d=>y0+d);
+  if(!mcp) A.forEach(a=>T.forEach(t=>D.line(1156,a,1572,t,{stroke:D.C.ver,strokeWidth:1.6,roughness:0.8})));
+  else{
+    A.forEach(a=>D.line(1156,a,1330,a,{strokeWidth:2}));
+    T.forEach(t=>D.line(1390,t,1572,t,{strokeWidth:2}));
+    D.rect(1330,y0-20,60,280,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+  }
+  A.forEach(a=>D.ci(1130,a,52,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.6}));
+  T.forEach(t=>D.tri(1600,t,50,'mus',{strokeWidth:2.2}));
+};
+mini(300,false);
+mini(630,true);
+</script></body></html>

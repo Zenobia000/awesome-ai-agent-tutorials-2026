@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>50 行手寫 agent</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.g{position:absolute;left:1100px;width:710px;font-size:26px;line-height:1.4}
+.g b{color:var(--ink);font-weight:400}
+</style></head><body><div class="slide">
+  <h1>50 行手寫 agent 的解剖</h1>
+  <p class="lead">核心迴圈只有十幾行；加上 client 與工具定義，整份約 50 行（Lab5-A）。</p>
+
+  <div class="code" style="left:110px;top:275px;width:880px">messages = [{"role": "user", "content": question}]
+
+<span class="k">for</span> _ <span class="k">in</span> range(MAX_STEPS):
+    resp = client.chat.completions.create(
+        model=MODEL, messages=messages, tools=TOOLS)
+    msg = resp.choices[0].message
+    messages.append(msg)
+    <span class="k">if not</span> <span class="hl">msg.tool_calls</span>:
+        <span class="k">return</span> msg.content
+    <span class="k">for</span> call <span class="k">in</span> msg.tool_calls:
+        args = json.loads(call.function.arguments)
+        out = REGISTRY[call.function.name](**args)
+        messages.append({"role": "tool",
+            "tool_call_id": call.id, "content": str(out)})</div>
+
+  <div class="g" style="top:297px">messages：這次對話的全部記憶</div>
+  <div class="g" style="top:369px">迴圈；<b>MAX_STEPS</b> 是保險絲</div>
+  <div class="g" style="top:441px">呼叫模型：整串 messages＋工具清單一起送</div>
+  <div class="g" style="top:513px">這一輪的回覆也存進 messages</div>
+  <div class="g" style="top:567px">終止條件：沒要工具＝說完了，回傳答案</div>
+  <div class="g" style="top:657px">解析 arguments（JSON 字串）→ 真的執行 → 結果以 role: tool 追加，下一圈模型就讀得到</div>
+
+  <div class="bridge inline" style="left:110px;top:848px;width:1700px"><span class="k">你已經會的</span>迴圈＝訓練迴圈的 for step in range(...)；messages 清單＝迴圈裡一路累積的狀態。</div>
+  <div class="read"><em>怎麼讀：</em>左邊是程式，右邊是每一段在做什麼；方、圓、三角和全 deck 同義；菱形是「這一圈要不要結束」的判斷。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee',VL='#f7d6cf';
+const y0=275,yt=a=>y0+22+36*a+4,yb=b=>y0+22+36*(b+1)-4;
+const br=(a,b,col)=>{const x=1015,c=col||D.C.ink,o={strokeWidth:3,stroke:c};D.line(x,yt(a),x,yb(b),o);D.line(x-10,yt(a),x,yt(a),o);D.line(x-10,yb(b),x,yb(b),o);};
+br(0,0,D.C.ind);br(2,2);br(3,5,D.C.ver);br(6,6,D.C.ind);br(7,8,D.C.ver);br(9,13,'#b98a12');
+D.rect(1046,299,30,30,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.4});
+D.ci(1061,442,34,VL,{stroke:D.C.ver,strokeWidth:2.4});
+D.rect(1046,515,30,30,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.4});
+D.dia(1061,586,40,VL,{stroke:D.C.ver,strokeWidth:2.4});
+D.tri(1061,684,44,'mus',{strokeWidth:2.2});
+</script></body></html>

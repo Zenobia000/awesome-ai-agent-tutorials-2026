@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組 1 小結</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;font-size:26px}
+ul.dots{position:absolute;left:110px;top:240px;width:800px}
+ul.dots li{font-size:32px;line-height:1.5;margin:30px 0}
+</style></head><body><div class="slide">
+  <h1>模組 1 小結</h1>
+  <ul class="dots">
+    <li>文字 → token id → embedding：先切分，再查表</li>
+    <li>LLM ＝ 詞表上的 softmax 分類器；生成＝跑成迴圈</li>
+    <li>attention ＝ 依內容的加權平均；代價是 O(N²)</li>
+    <li>模型無狀態：記憶靠每次重送整串 messages</li>
+    <li>本地與雲端走同一個 OpenAI 相容介面</li>
+  </ul>
+  <div id="g"></div>
+  <div class="next">下一章：提示詞工程與結構化輸出</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+/* ★ 縮小版：輸入 → 圓（模型）→ 機率長條，輸出接回輸入 */
+['今天','天','氣','真'].forEach((t,i)=>{const x=990+i*68;D.rect(x,470,62,56,['#d9e1ee','#f7e7c0','#f7d6cf','#d9e1ee'][i],{fillStyle:'solid',stroke:[D.C.ind,'#b98a12',D.C.ver,D.C.ind][i],strokeWidth:2.2});el(x,470,62,56,t,'font-size:22px');});
+D.arrow(1268,498,1330,498,{strokeWidth:2.6});
+D.ci(1440,498,190,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+el(1370,468,140,60,'LLM','font-size:34px');
+D.arrow(1546,498,1600,498,{strokeWidth:2.6});
+const b=D.bars(1610,430,200,130,[.52,.18,.12,.07,.04],['#d9e1ee'],.52,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2});
+D.rect(b[0].x,b[0].y,b[0].w,b[0].h,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2});
+/* 迴圈 */
+D.curve([[1710,578],[1700,690],[1420,720],[1130,700],[1030,600],[1020,540]],{stroke:D.C.ver,strokeWidth:3});
+D.arrow(1024,562,1021,534,{stroke:D.C.ver,strokeWidth:3});
+el(1130,730,500,40,'抽出一個 token，接回輸入','font-size:26px;color:#e0442b');
+</script></body></html>

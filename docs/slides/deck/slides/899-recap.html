@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組八小結</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.rc{position:absolute;left:110px;top:222px;width:880px}
+ul.dots.rc li{font-size:30px;line-height:1.5;margin:58px 0}
+</style></head><body><div class="slide">
+  <h1>模組八小結</h1>
+  <ul class="dots rc">
+    <li>trace 把黑盒拆成一棵 run 樹，每步有耗時、token、輸入輸出</li>
+    <li>eval 就是 LLM 版的驗證集；評分器自己也要被驗證</li>
+    <li>Vibe Coding 不看程式碼；進 repo 的程式碼要能解釋才 commit</li>
+    <li>你站在 API 線之上，並能往下延伸到微調（三層為本課整理）</li>
+    <li>履歷寫「動作＋基準＋結果」，再用公開 trace 佐證</li>
+  </ul>
+  <div class="next">下一步：大總結</div>
+  <div class="abs note" style="left:1070px;top:246px">前端</div>
+  <div class="abs note" style="left:1070px;top:664px">PostgresSaver</div>
+  <div class="abs note" style="left:1070px;top:754px">LangSmith</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* 縮小版五層 */
+D.rect(1040,230,770,70,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.4,strokeLineDash:[10,8]});
+D.arrow(1425,303,1425,330,{strokeWidth:2.4});
+D.ci(1425,375,76,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+[1190,1425,1660].forEach(x=>D.arrow(x===1425?1425:(x<1425?1395:1455),x===1425?415:405,x,460,{strokeWidth:2.2}));
+[1190,1425,1660].forEach(x=>D.ci(x,500,64,'ver',{fillStyle:'hachure',strokeWidth:2.2}));
+D.rect(1130,560,120,44,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.2});
+D.rect(1365,560,120,44,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.2});
+D.tri(1660,585,56,'#f7d6cf',{stroke:D.C.ver,strokeWidth:2.4});
+D.rect(1040,650,770,60,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+D.rect(1040,740,770,60,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:2.8});
+</script>
+</body></html>

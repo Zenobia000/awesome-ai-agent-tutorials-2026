@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>多 agent 的 token 代價</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.v{position:absolute;width:200px;text-align:center;font-size:34px;line-height:1.2}
+.n{position:absolute;width:200px;text-align:center;font-size:26px}
+.t{position:absolute;left:1074px;width:736px;font-size:26px;line-height:1.5}
+.t .h{font-size:34px;line-height:1.3;margin-bottom:4px}
+.bridge.inline{padding:18px 30px}
+</style></head><body><div class="slide">
+  <h1>多 agent 的代價：token 約 15 倍</h1>
+  <p class="lead">每個子 agent 都跑自己的迴圈、各用各的 context。agent 越多，token 帳單越大。</p>
+
+  <div class="abs lbl ver" style="left:110px;top:300px">token 用量（相對聊天）</div>
+  <div class="v" style="left:157px;top:683px">1×</div>
+  <div class="v" style="left:390px;top:612px">約 4×</div>
+  <div class="v" style="left:623px;top:290px">約 15×</div>
+  <div class="n" style="left:157px;top:800px">聊天</div>
+  <div class="n" style="left:390px;top:800px">單 agent</div>
+  <div class="n" style="left:623px;top:800px">多 agent</div>
+  <div class="src" style="left:110px;top:858px;width:860px">出處：Anthropic 多智能體研究系統（2025-06）</div>
+
+  <div class="t" style="top:340px"><div class="h ind">值得用</div>可平行、廣度優先的研究類任務，資訊量超過單一 context。</div>
+  <div class="t" style="top:520px"><div class="h ver">不值得用</div>需要共享 context 的任務，或大多數寫程式任務。</div>
+
+  <div class="bridge inline" style="left:1010px;top:700px;width:800px"><span class="k">你已經會的</span>scaling law：多花算力換更好的結果。多 agent 同理，只是花的是 token。</div>
+  <div class="read"><em>怎麼讀：</em>柱子越高，同一件事花的 token 越多；右邊是什麼情況下值得多花這筆錢。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C;
+D.bars(140,340,700,440,[1,4,15],[S.grey,S.ind,S.ver],15);
+/* 右側標記：勾＝值得，叉＝不值得（朱紅叉＝錯誤示範） */
+D.line(1012,372,1030,392,{stroke:S.ind,strokeWidth:5});D.line(1030,392,1060,352,{stroke:S.ind,strokeWidth:5});
+D.cross(1036,552,17);
+</script></body></html>

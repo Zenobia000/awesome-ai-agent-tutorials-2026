@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>ReAct 論文原圖對照</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.fig{left:110px;top:262px;width:1051px}
+.fig img{width:100%;height:auto;max-height:none}
+.pn{position:absolute;left:1190px;width:620px;padding:12px 24px 10px 100px}
+.pn .t{font-size:28px;line-height:1.3;margin-bottom:2px}
+.pn p{font-size:26px;line-height:1.4}
+.nw{white-space:nowrap}
+.src{left:110px;top:892px;width:1700px}
+#o{position:absolute;inset:0;z-index:3;pointer-events:none}
+</style></head><body><div class="slide">
+  <h1>ReAct 原圖：Thought、Act、Obs</h1>
+  <p class="lead">503 頁的三步，在論文裡就是這三個標籤，每一輪都照 Thought → Act → Obs 走。</p>
+
+  <div class="fig"><img src="../assets/figures/m5/p-react-fig1-1d-crop.png" alt="Yao et al. 2022 Fig. 1(1d)：ReAct 在 HotpotQA 的軌跡，截取前兩輪"></div>
+
+  <div class="pn" style="top:262px;height:134px"><div class="t ver">Thought：想</div><p>先寫下推理：<br>要搜尋 <span class="nw">Apple Remote</span>。</p></div>
+  <div class="pn" style="top:404px;height:134px"><div class="t" style="color:#b98a12">Act：做（503 的 Action）</div><p><span class="nw">Search[…]</span>＝呼叫搜尋工具<br>對應 <span class="nw">tool_calls</span>。</p></div>
+  <div class="pn" style="top:546px;height:134px"><div class="t ind">Obs：看（503 的 Observation）</div><p>搜尋結果寫回上下文<br>對應 <span class="nw">role: tool</span> 訊息。</p></div>
+  <div class="pn" style="top:688px;height:134px;padding-left:24px"><p style="font-size:26px;color:var(--ink)">圖的後半（已裁掉）還有第 3、4 輪。<br>最後一步 <span class="nw">Finish[…]</span> 結束迴圈，<br>就是 503 的 Final Answer。</p></div>
+
+  <div class="abs note" style="left:110px;top:840px;width:1700px">同一題的其他做法（Standard、CoT、Act-only）都答錯，只有 ReAct 答對；原圖其餘三格沒有放進來。</div>
+  <div class="src">來源：Yao et al.（2022）〈ReAct: Synergizing Reasoning and Acting in Language Models〉Fig. 1（p.2）中 (1d) 格的上半部（裁切，未改動內容），CC BY 4.0（arXiv:2210.03629）。裁切檔：assets/figures/m5/p-react-fig1-1d-crop.png。</div>
+  <div class="read"><em>怎麼讀：</em>先看左邊三種顏色的框（一輪 Thought、Act、Obs），再順著箭頭到右邊，對回 503 頁的圓、三角、方。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<svg id="o" width="1920" height="1080"></svg>
+<script>const D=Draw('r'),O=Draw('o');
+const MUS='#b98a12',IND=D.C.ind,VER=D.C.ver,OV=document.getElementById('o');
+/* 右側說明框：底色與 503 一致（圓＝Thought、三角＝Action、方＝Observation） */
+D.rect(1190,262,620,134,'#f7d6cf',{fillStyle:'solid',stroke:VER,strokeWidth:3});
+D.rect(1190,404,620,134,'#f7e7c0',{fillStyle:'solid',stroke:MUS,strokeWidth:3});
+D.rect(1190,546,620,134,'#d9e1ee',{fillStyle:'solid',stroke:IND,strokeWidth:3});
+D.rect(1190,688,620,134,'#ece7da',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+D.ci(1242,329,52,'#ffffff',{stroke:VER,strokeWidth:3});
+D.tri(1242,477,60,'mus',{strokeWidth:2.6});
+D.rect(1216,587,52,52,'#ffffff',{fillStyle:'solid',stroke:IND,strokeWidth:3});
+
+/* 裁切圖座標（1180×612）→ 頁面座標；圖在卡片內 (128,280) 起、寬 1015 */
+const S=1015/1180,OX=128,OY=280,px=x=>OX+x*S,py=y=>OY+y*S;
+const rr=(x1,y1,x2,y2,c)=>{const a=px(x1),b=py(y1),e=px(x2),f=py(y2),r=12;
+  const d=`M${a+r} ${b} L${e-r} ${b} Q${e} ${b} ${e} ${b+r} L${e} ${f-r} Q${e} ${f} ${e-r} ${f} L${a+r} ${f} Q${a} ${f} ${a} ${f-r} L${a} ${b+r} Q${a} ${b} ${a+r} ${b} Z`;
+  OV.appendChild(O.rc.path(d,{stroke:c,strokeWidth:4.5,roughness:1.3,fill:'none'}));};
+rr(28,88,1014,160,VER);     /* Thought 1 */
+rr(28,163,540,195,MUS);     /* Act 1 */
+rr(28,199,1102,309,IND);    /* Obs 1 */
+
+const st=c=>({stroke:c,strokeWidth:3.4});
+O.arrow(px(1014)+6,py(124),1182,334,st(VER));
+O.line(px(540)+8,py(181),1128,py(181),st(MUS));O.arrow(1128,py(181),1182,466,st(MUS));
+O.arrow(px(1102)+6,py(256),1182,606,st(IND));
+</script></body></html>

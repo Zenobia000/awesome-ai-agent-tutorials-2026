@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>踩坑：連不上</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;top:290px;font-size:30px}
+.c{position:absolute;height:170px;padding:22px 28px;font-size:27px;line-height:1.5}
+.c .t{font-size:32px;line-height:1.3;margin-bottom:6px}
+.c .d{color:var(--muted);font-size:26px}
+.c code{font-family:"JetBrains Mono",monospace;font-size:24px}
+</style></head><body><div class="slide">
+  <h1>踩坑：Server 連不上的三種原因</h1>
+  <p class="lead">三個坑都出在 Host 與 Server 之間那條線上。</p>
+
+  <div class="hd ver" style="left:110px">症狀</div>
+  <div class="hd" style="left:720px;color:#b98a12">原因</div>
+  <div class="hd ind" style="left:1330px">修法</div>
+
+  <div class="c" style="left:110px;top:335px;width:540px"><div class="t">一連上就斷</div><div class="d">Host 報連線逾時或解析錯誤，工具清單載不出來</div></div>
+  <div class="c" style="left:720px;top:335px;width:540px">stdio Server 用 <code>print()</code> 往 stdout 寫字，把 JSON-RPC 訊息切壞了——stdout 是協定專用管線</div>
+  <div class="c" style="left:1330px;top:335px;width:480px">除錯訊息改用 <code>logging</code>（寫 stderr）；Server 程式裡不留任何 <code>print()</code></div>
+
+  <div class="c" style="left:110px;top:530px;width:540px"><div class="t">Dify 連不到本機 Server</div><div class="d">連線被拒，或連到的是容器自己</div></div>
+  <div class="c" style="left:720px;top:530px;width:540px">容器裡的 <code>localhost</code> 指的是容器自己；而且 Dify 只接 HTTP 傳輸，不接 stdio</div>
+  <div class="c" style="left:1330px;top:530px;width:480px">Server 改走 Streamable HTTP；網址用 <code>host.docker.internal</code>（Linux 要另設 extra_hosts）</div>
+
+  <div class="c" style="left:110px;top:725px;width:540px"><div class="t">設定好了卻逾時</div><div class="d">Server 起不來，Host 一直在等</div></div>
+  <div class="c" style="left:720px;top:725px;width:540px">Host 啟動子行程時，沒帶你終端機的 PATH 與環境變數；相對路徑也失效</div>
+  <div class="c" style="left:1330px;top:725px;width:480px">command 與路徑寫絕對路徑；環境變數放進設定檔的 <code>env</code>；查看 <code>mcp-server-*.log</code></div>
+
+  <div class="read"><em>怎麼讀：</em>每一列是一個坑，由左往右：看到什麼 → 為什麼 → 怎麼修。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+[335,530,725].forEach(y=>{
+  D.rect(110,y,540,170,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+  D.rect(720,y,540,170,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+  D.rect(1330,y,480,170,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+  D.arrow(656,y+85,714,y+85,{strokeWidth:2.8});
+  D.arrow(1266,y+85,1324,y+85,{strokeWidth:2.8});
+  D.cross(610,y+36,13,{strokeWidth:4});
+});
+</script></body></html>

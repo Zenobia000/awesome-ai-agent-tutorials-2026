@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>LPG 與 RDF 兩種模型</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.el{position:absolute;white-space:nowrap;background:#f3efe6;padding:0 8px;font-size:24px;line-height:34px;color:var(--muted);transform:translate(-50%,-50%)}
+.mono{font-family:"JetBrains Mono","Noto Sans Mono CJK TC",monospace;font-size:24px;line-height:1.45;color:var(--ink)}
+.hd{position:absolute;font-size:44px;line-height:1.2}
+.sub{position:absolute;font-size:26px;line-height:1.45;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>兩種圖資料模型：LPG 與 RDF</h1>
+  <p class="lead">同一件事：記下「韓立加入七玄門的時間」。差別在，時間能不能直接掛在關係上。</p>
+
+  <div class="hd ind" style="left:110px;top:268px">RDF：三元組</div>
+  <div class="sub" style="left:110px;top:330px;width:800px">強項：W3C 標準、URI 全域識別、可推理、利於跨組織交換資料</div>
+  <div class="hd mus" style="left:1020px;top:268px">LPG：標籤屬性圖</div>
+  <div class="sub" style="left:1020px;top:330px;width:790px">強項：邊上能直接掛屬性，圖遍歷好寫；Neo4j 就是這一型</div>
+
+  <div class="sub" style="left:110px;top:740px;width:790px">RDF 1.1 要記「關係的屬性」，得額外建模（例如多造一個事件節點），一件事拆成三條三元組。RDF 1.2 仍是草案，正在補上。</div>
+  <div class="sub" style="left:1020px;top:740px;width:790px">一條邊就夠：時間是這條邊自己的屬性，不必多造節點。</div>
+
+  <div class="bridge inline" style="left:110px;top:850px;width:1700px"><span class="k">你已經會的</span>RDF 像把所有資訊攤平成三欄長表格；LPG 像物件，欄位（屬性）跟著節點和邊走。</div>
+  <div class="read"><em>怎麼讀：</em>左邊為了記時間，被迫多出虛線的事件節點；右邊一條邊帶著屬性就好。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=document.querySelector('.slide');
+const T=(x,y,w,h,html,sty,cls)=>{const d=document.createElement('div');d.className='abs '+(cls||'');d.style.cssText=`left:${x}px;top:${y}px;`+(w?`width:${w}px;`:'')+(h?`height:${h}px;`:'')+(sty||'');d.innerHTML=html;S.appendChild(d);return d;};
+const FILL={p:['#d9e1ee',D.C.ind],s:['#f7e7c0','#b98a12'],w:['#f7d6cf',D.C.ver],g:['#fbf9f4',D.C.grey]};
+const nd=(cx,cy,w,h,t,k,fs,o)=>{const f=FILL[k];D.rect(cx-w/2,cy-h/2,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:3},o||{}));T(cx-w/2,cy-h/2,w,h,t,`display:flex;align-items:center;justify-content:center;font-size:${fs||28}px;`);return {cx,cy,w,h};};
+const clip=(b,tx,ty,pad)=>{const dx=tx-b.cx,dy=ty-b.cy,k=Math.min((b.w/2+pad)/Math.abs(dx||1e-9),(b.h/2+pad)/Math.abs(dy||1e-9));return [b.cx+dx*k,b.cy+dy*k];};
+const link=(a,b,lbl,o)=>{const [x1,y1]=clip(a,b.cx,b.cy,6),[x2,y2]=clip(b,a.cx,a.cy,8);D.arrow(x1,y1,x2,y2,Object.assign({strokeWidth:3},o));
+  if(lbl)T((x1+x2)/2,(y1+y2)/2,0,0,lbl,'','el');};
+
+D.dash(960,290,960,830,{stroke:D.C.grey,strokeWidth:2.5});
+/* 左：RDF，時間要靠事件節點 */
+const ev=nd(505,470,200,72,'加入事件','g',28,{stroke:D.C.ink,strokeLineDash:[9,8]});
+const han=nd(230,665,150,72,'韓立','p'), sec=nd(780,665,170,72,'七玄門','s'), tm=nd(505,665,170,72,'〈時間〉','g');
+link(ev,han,'成員');link(ev,tm,'時間');link(ev,sec,'門派');
+/* 右：LPG，時間掛在邊上 */
+const a=nd(1130,570,150,72,'韓立','p'), b=nd(1700,570,170,72,'七玄門','s');
+link(a,b,'MEMBER_OF');
+D.dash(1415,590,1415,640,{strokeWidth:2.5,stroke:D.C.grey});
+T(1275,642,300,40,'{ since: 〈時間〉 }','','mono');T(1600,640,100,40,'<span class="tag">示意</span>');
+</script></body></html>

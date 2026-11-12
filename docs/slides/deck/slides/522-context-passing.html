@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>子 agent 傳遞上下文</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.e{position:absolute;left:110px;width:570px;height:70px;line-height:70px;padding-left:22px;font-size:26px;white-space:nowrap}
+.u{position:absolute;left:1040px;width:770px;font-size:26px;line-height:1.5;color:var(--muted)}
+.c{position:absolute;width:140px;text-align:center;font-size:24px;line-height:1.25}
+</style></head><body><div class="slide">
+  <h1>子 agent 之間：只傳請求、只回摘要</h1>
+  <p class="lead">每個子 agent 都從空白 context 開始；要共用的資訊，由 Supervisor 轉手寫進下一個請求。</p>
+
+  <div class="abs lbl ind" style="left:110px;top:290px">Supervisor 的 context（它看到的全部）<span class="tag" style="margin-left:14px">示意</span></div>
+  <div class="e" style="top:335px">使用者：週二跟 Ann 開會＋寄議程</div>
+  <div class="e" style="top:425px">→ schedule_event：週二下午跟 Ann 開會</div>
+  <div class="e" style="top:515px">← 摘要：已排週二 15:00–16:00</div>
+  <div class="e" style="top:605px">→ manage_email：通知 Ann 週二 15:00</div>
+  <div class="e" style="top:695px">← 摘要：已寄出</div>
+  <div class="e" style="top:785px">最終回覆：排好了，議程也寄出了</div>
+
+  <div class="c" style="left:850px;top:480px">Calendar<br>Agent</div>
+  <div class="c" style="left:850px;top:660px">Email<br>Agent</div>
+
+  <div class="bridge inline" style="left:1040px;top:300px;width:770px"><span class="k">你已經會的</span>子網路包成 nn.Module，外層只看輸入輸出；子 agent 是請求進、摘要出。</div>
+  <div class="u" style="top:485px">每次呼叫都從空白開始：查了什麼、試了幾步，用完即丟。</div>
+  <div class="u" style="top:665px"><b>時間不是它自己查的</b>，是 Supervisor 從摘要轉手過去的。</div>
+  <div class="u" style="top:790px">最後的回覆只靠兩則摘要寫成，過程 Supervisor 看不到。</div>
+
+  <div class="read"><em>怎麼讀：</em>左欄是 Supervisor 看到的全部；每個圓都是從空白開始的子 agent，只收一句請求、只回一則摘要。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C;
+const E=(y,fill,stroke,w)=>D.rect(110,y,570,70,fill,{fillStyle:'solid',stroke,strokeWidth:w||2.5});
+E(335,'#fbf9f4',S.ink);
+E(425,'#f7e7c0','#b98a12');
+E(515,'#d9e1ee',S.ind);
+E(605,'#f7e7c0',S.ver,4);
+E(695,'#d9e1ee',S.ind);
+E(785,'#fbf9f4',S.ink);
+/* 呼叫與回摘要 */
+D.arrow(688,458,842,486,{strokeWidth:3});
+D.arrow(842,522,688,552,{strokeWidth:3,stroke:S.ind});
+D.arrow(688,638,842,664,{strokeWidth:3});
+D.arrow(842,704,688,730,{strokeWidth:3,stroke:S.ind});
+D.ci(920,505,160,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+D.ci(920,685,160,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+</script></body></html>

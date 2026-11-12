@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>PDF 表格：轉成 Markdown</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cl{position:absolute;font-size:24px;line-height:1.4}
+.cell{position:absolute;font-size:24px;line-height:50px;height:50px;text-align:center;white-space:nowrap}
+.chip{position:absolute;font-size:24px;line-height:44px;height:44px;text-align:center;white-space:nowrap}
+</style></head><body><div class="slide">
+  <h1>PDF 表格：轉成 Markdown，再加專用標記</h1>
+  <p class="lead">直接抽文字會把表格攤平，欄與列的對應就沒了。先轉成 Markdown 表格，再標上 metadata。</p>
+  <div id="t"></div>
+
+  <div class="cl mut" style="left:110px;top:634px;width:400px;text-align:center">PDF 裡的表格</div>
+  <div class="cl ver" style="left:580px;top:336px;width:200px">直接抽文字</div>
+  <div class="cl ind" style="left:570px;top:702px;width:240px;text-align:center">表格解析<br>例：Docling</div>
+  <div class="cl ver" style="left:880px;top:484px;width:930px;font-size:26px">欄與列的對應丟了：看不出「同步時間」是 ERR-4012 的處理方式。</div>
+  <div class="cl" style="left:110px;top:770px;width:700px;font-size:26px;line-height:1.5">表格太長要拆開時，每一塊都要重複表頭；加上 <code style="font-family:'JetBrains Mono',monospace;font-size:22px">type</code> 這類 metadata，檢索時才能認出它是表格、並找回原頁。</div>
+  <div class="code" style="left:880px;top:350px"><span class="c">錯誤碼 原因 處理 ERR-4012 認證逾時</span>
+<span class="c">同步時間 ERR-4021 磁碟已滿 清理空間</span></div>
+  <div class="code" style="left:880px;top:546px">| 錯誤碼 | 原因 | 處理 |
+|---|---|---|
+| ERR-4012 | 認證逾時 | 同步時間 |
+| ERR-4021 | 磁碟已滿 | 清理空間 |</div>
+  <div id="c"></div>
+
+  <div class="read"><em>怎麼讀：</em>左邊是 PDF 裡的表格；上路直接抽文字，下路先解析表格再存成 Markdown，欄列對應才保得住。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const T=document.getElementById('t'),C=document.getElementById('c');
+const put=(host,cls,x,y,w,t,st)=>{const d=document.createElement('div');d.className=cls;d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;${st||''}`;d.textContent=t;host.appendChild(d);};
+/* PDF 頁面與表格 */
+D.rect(110,330,400,290,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+const rows=[['錯誤碼','原因','處理'],['ERR-4012','認證逾時','同步時間'],['ERR-4021','磁碟已滿','清理空間']];
+const cw=[130,120,120], x0=130, y0=380, rh=60;
+D.rect(x0,y0,370,rh*3,null,{strokeWidth:2.2});
+rows.forEach((r,i)=>{ if(i)D.line(x0,y0+i*rh,x0+370,y0+i*rh,{strokeWidth:1.8});
+  let x=x0; r.forEach((t,j)=>{ put(T,'cell',x,y0+i*rh+5,cw[j],t,i===0?'color:#2b4c7e':''); x+=cw[j]; if(j)D.line(x-cw[j],y0,x-cw[j],y0+rh*3,{strokeWidth:1.8}); }); });
+/* 上路：直接抽文字（錯） */
+D.arrow(515,420,870,395,{strokeWidth:2.8,stroke:D.C.ver});
+/* 下路：解析表格 */
+D.arrow(515,560,625,640,{strokeWidth:2.8});
+D.tri(700,640,110,'mus',{strokeWidth:2.6});
+D.arrow(765,640,870,640,{strokeWidth:2.8});
+/* metadata 標籤 */
+const chip=(x,y,t)=>{const w=[...t].reduce((a,c)=>a+(c.charCodeAt(0)>255?24:13),30);D.rect(x,y,w,44,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.5});put(C,'chip',x,y,w,t);return x+w+14;};
+let cx=880;
+cx=chip(cx,764,'type＝table');cx=chip(cx,764,'section＝疑難排解');cx=chip(cx,764,'source＝whitepaper.pdf');
+</script></body></html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>ReAct 迴圈</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.th{color:var(--ver)}.ac{color:#b98a12}.ob{color:var(--ind)}
+.nd{position:absolute;text-align:center;font-size:30px;line-height:1}
+</style></head><body><div class="slide">
+  <h1>ReAct：想 → 做 → 看</h1>
+  <p class="lead">把一次呼叫變成迴圈：模型寫下想法、決定動作，工具回傳觀察，再想下一步。</p>
+
+  <div class="nd" style="left:370px;top:424px;width:220px">Thought</div>
+  <div class="abs lbl mus" style="left:895px;top:730px;font-size:28px">Action</div>
+  <div class="abs lbl ind" style="left:150px;top:852px;width:180px;text-align:center;font-size:28px">Observation</div>
+  <div class="abs lbl ver" style="left:660px;top:290px;font-size:28px">Final Answer</div>
+  <div class="abs lbl mut" style="left:770px;top:505px">要工具</div>
+  <div class="abs lbl mut" style="left:450px;top:765px">結果回來</div>
+  <div class="abs lbl mut" style="left:285px;top:585px">寫進 messages</div>
+
+  <div class="code" style="left:1010px;top:290px;width:800px"><span class="th">Thought: 使用者要三個 USB-C 轉接器的總價，先查單價</span>
+<span class="ac">Action: get_price(item="USB-C 轉接器")</span>
+<span class="ob">Observation: 350</span>
+<span class="th">Thought: 單價有了，三個要乘起來</span>
+<span class="ac">Action: calc("350 * 3")</span>
+<span class="ob">Observation: 1050</span>
+<span class="th">Thought: 資訊夠了，可以回答</span>
+<span class="th">Final Answer: 三個共 1050 元</span></div>
+  <div class="abs note" style="left:1010px;top:650px;width:800px"><span class="tag">示意</span>　對回 502：Action＝tool_calls；Observation＝role: tool 訊息。</div>
+
+  <div class="bridge" style="left:1010px;top:748px;width:800px"><span class="k">你已經會的</span>強化學習的 agent–環境迴圈：動作 → 回饋 → 下一步。<br>ReAct 是同一種結構，policy 換成 LLM。</div>
+  <div class="read"><em>怎麼讀：</em>沿箭頭繞一圈就是一輪；每圈都有「Thought」決定要不要繼續，夠了就從出口交出答案。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee',VL='#f7d6cf';
+D.ci(480,440,220,VL,{stroke:D.C.ver,strokeWidth:3});
+D.tri(780,730,220,'mus',{strokeWidth:2.6});
+D.rect(150,660,180,180,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.curve([[575,525],[705,545],[776,600]],{strokeWidth:3.2});D.arrow(762,575,778,612,{strokeWidth:3.2});
+D.curve([[690,826],[500,895],[340,810]],{strokeWidth:3.2});D.arrow(372,834,336,808,{strokeWidth:3.2});
+D.curve([[238,655],[225,520],[378,466]],{strokeWidth:3.2});D.arrow(342,474,382,464,{strokeWidth:3.2});
+D.arrow(560,372,650,328,{strokeWidth:3.2,stroke:D.C.ver});
+</script></body></html>

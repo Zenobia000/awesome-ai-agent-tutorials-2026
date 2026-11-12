@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>LLM 抽取三元組</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.mono{font-family:"JetBrains Mono","Noto Sans Mono CJK TC",monospace;font-size:24px;color:var(--ink)}
+.box{position:absolute;display:flex;align-items:center}
+</style></head><body><div class="slide">
+  <h1>LLM 把文字變成三元組</h1>
+  <p class="lead">三元組＝（主詞, 關係, 受詞）。每段文字交給 LLM 抽一次，抽完寫進圖。</p>
+
+  <div class="abs lbl ind" style="left:110px;top:338px">文字片段</div>
+  <div class="box" style="left:110px;top:385px;width:370px;height:180px;padding:0 24px;font-size:26px;line-height:1.5">韓立出身七玄門，<br>後來進入黃楓谷；<br>他隨身帶著掌天瓶。</div>
+  <div class="abs" style="left:540px;top:310px;width:200px;text-align:center;font-size:24px;line-height:50px">限定類型</div>
+  <div class="abs" style="left:540px;top:435px;width:200px;text-align:center;font-size:36px;line-height:80px">LLM</div>
+
+  <div class="abs lbl ind" style="left:830px;top:338px">三元組（主詞, 關係, 受詞）</div>
+  <div class="box mono" style="left:830px;top:385px;width:570px;height:64px;padding:0 24px">(韓立, MEMBER_OF, 七玄門)</div>
+  <div class="box mono" style="left:830px;top:465px;width:570px;height:64px;padding:0 24px">(韓立, MEMBER_OF, 黃楓谷)</div>
+  <div class="box mono" style="left:830px;top:545px;width:570px;height:64px;padding:0 24px">(韓立, OWNS, 掌天瓶)</div>
+
+  <div class="box" style="left:1500px;top:385px;width:290px;height:224px;justify-content:center;text-align:center;font-size:30px;line-height:1.5"><div>Neo4j<br><span class="mut" style="font-size:24px">節點＋有型別的邊</span></div></div>
+
+  <div class="bridge" style="left:1070px;top:660px;width:740px"><span class="k">你已經會的</span>限定可抽的類型，就是把開放式生成變成「固定類別的分類」，錯得比較少。</div>
+  <div class="code" style="left:110px;top:665px"><span class="k">from</span> langchain_neo4j <span class="k">import</span> LLMGraphTransformer   <span class="c"># 新路徑</span>
+transformer = LLMGraphTransformer(
+    llm=llm,
+    allowed_nodes=[<span class="s">"Person"</span>, <span class="s">"Sect"</span>, <span class="s">"Treasure"</span>],
+    allowed_relationships=[<span class="s">"MEMBER_OF"</span>, <span class="s">"OWNS"</span>])
+graph_docs = transformer.convert_to_graph_documents(docs)</div>
+  <div class="read"><em>怎麼讀：</em>由左往右：文字進圓（LLM），出來三元組，再寫進圖；程式碼就是中間那顆圓。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=document.querySelector('.slide');
+/* 文字片段（方）→ LLM（圓）→ 三元組（方）→ 圖 */
+D.rect(110,385,370,180,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.rect(540,310,200,50,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.5});
+D.dash(640,362,640,388,{strokeWidth:2.5,stroke:'#b98a12'});
+D.ci(640,475,170,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+[385,465,545].forEach(y=>D.rect(830,y,570,64,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.5}));
+D.rect(1500,385,290,224,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.arrow(486,475,545,475,{strokeWidth:3});D.arrow(738,475,820,475,{strokeWidth:3});D.arrow(1408,497,1490,497,{strokeWidth:3});
+</script>
+
+</body></html>

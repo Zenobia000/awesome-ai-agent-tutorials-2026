@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>思維樹：分支與剪枝</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.nd{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;height:84px;white-space:nowrap;line-height:1.3}
+.nd .a{font-size:28px}.nd .b{font-size:22px;color:var(--muted)}
+.col{position:absolute;font-size:24px;color:var(--muted);text-align:center}
+.rt{position:absolute;left:1450px;width:370px}
+.rt .h{font-size:30px;line-height:1.3}
+.lg{position:absolute;left:1500px;font-size:26px;line-height:1.3}
+.li{position:absolute;left:1450px;width:370px;font-size:26px;line-height:1.4}
+</style></head><body><div class="slide">
+  <h1>思維樹：分支、評估、剪枝</h1>
+  <p class="lead">不只走一條路：每一步先想出幾個候選，讓模型自評，把走不通的剪掉。</p>
+
+  <div id="nodes"></div>
+  <div class="col" style="left:110px;top:726px;width:190px">題目</div>
+  <div class="col" style="left:470px;top:726px;width:290px">第 1 步：3 個候選</div>
+  <div class="col" style="left:900px;top:726px;width:260px">第 2 步：展開</div>
+  <div class="col" style="left:1240px;top:726px;width:150px">第 3 步</div>
+
+  <div class="rt" style="top:284px"><div class="h ind">CoT：一條路走到底</div></div>
+  <div class="rt" style="top:424px"><div class="h ver">ToT：多條路，會剪枝</div></div>
+  <div class="lg" style="top:480px">sure　保留</div>
+  <div class="lg" style="top:526px">maybe　保留</div>
+  <div class="lg" style="top:572px">impossible　剪掉</div>
+  <div class="abs note" style="left:1450px;top:618px;width:370px">自評結果為示意 <span class="tag">示意</span></div>
+  <div class="rt" style="top:672px"><div class="h ind">局限</div></div>
+  <div class="li" style="top:716px">每個節點都是一次模型呼叫</div>
+  <div class="li" style="top:758px">自評會錯，剪錯就回不來</div>
+  <div class="li" style="top:800px">題目要能拆成可評估的步驟</div>
+
+  <div class="bridge" style="left:110px;top:800px;width:1280px"><span class="k">你已經會的</span>beam search 每步只留分數最高的 k 條路。ToT 把它搬到「想法」層級，打分的是模型自己。</div>
+  <div class="read"><em>怎麼讀：</em>由左往右。每個方塊是一步之後剩下的數字；朱紅叉的路被剪掉，其餘走到 24。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const host=document.getElementById('nodes');
+const IND=['#d9e1ee',D.C.ind],MUS=['#f7e7c0','#b98a12'],VER=['#f7d6cf',D.C.ver],INK=['#f3efe6',D.C.ink];
+const node=(x,y,w,a,b,[fill,stroke],cross)=>{
+  D.rect(x,y,w,84,fill,{fillStyle:'solid',stroke,strokeWidth:3});
+  const d=document.createElement('div');d.className='nd';Object.assign(d.style,{left:x+'px',top:y+'px',width:w+'px'});
+  d.innerHTML='<span class="a">'+a+'</span>'+(b?'<span class="b">'+b+'</span>':'');host.appendChild(d);
+  if(cross)D.cross(x+w+34,y+42,16);};
+node(110,478,190,'4 9 10 13','湊出 24',INK);
+node(470,330,290,'4 4 10','13−9=4 · sure',IND);
+node(470,478,290,'6 9 13','10−4=6 · maybe',MUS);
+node(470,626,290,'10 13 13','4+9=13 · impossible',VER,true);
+node(900,288,260,'6 4','10−4=6 · sure',IND);
+node(900,378,260,'8 10','4+4=8 · impossible',VER,true);
+node(900,478,260,'6 4','13−9=4 · sure',IND);
+node(1240,288,150,'6×4=24','',IND);
+const A={strokeWidth:2.6};
+D.arrow(304,520,464,372,A);D.arrow(304,520,464,520,A);D.arrow(304,520,464,668,A);
+D.arrow(764,372,894,330,A);D.arrow(764,372,894,420,{strokeWidth:2.6,strokeLineDash:[10,10]});
+D.arrow(764,520,894,520,A);
+D.arrow(1164,330,1234,330,A);
+/* 右欄示意 */
+for(let i=0;i<4;i++){D.rect(1450+i*92,332,52,52,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.5});if(i<3)D.arrow(1506+i*92,358,1536+i*92,358,{strokeWidth:2.2});}
+D.rect(1450,486,34,34,IND[0],{fillStyle:'solid',stroke:IND[1],strokeWidth:2.5});
+D.rect(1450,532,34,34,MUS[0],{fillStyle:'solid',stroke:MUS[1],strokeWidth:2.5});
+D.rect(1450,578,34,34,VER[0],{fillStyle:'solid',stroke:VER[1],strokeWidth:2.5});
+</script></body></html>

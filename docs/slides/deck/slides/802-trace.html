@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>拆解一條 trace</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;top:296px;font-size:24px;color:var(--muted)}
+.rn{position:absolute;font-size:28px;line-height:40px}
+.vl{position:absolute;font-size:26px;line-height:40px}
+.df{position:absolute;top:690px;width:520px;height:150px;padding:20px 28px}
+.df .t{font-size:34px;line-height:1.2}
+.df .d{font-size:26px;line-height:1.45;color:var(--muted);margin-top:4px}
+.cap{position:absolute;font-size:24px;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>拆解一條 trace</h1>
+  <p class="lead">像 PyTorch Profiler 的耗時瀑布圖：每個節點記下耗時、token、輸入和輸出。</p>
+
+  <div class="hd" style="left:110px">run（樹狀）<span class="tag">示意</span></div>
+  <div class="hd" style="left:520px">時間軸</div>
+  <div class="hd" style="left:930px">耗時</div>
+  <div class="hd" style="left:1050px">token</div>
+
+  <div class="rn" style="left:110px;top:350px">agent（根）</div>
+  <div class="rn" style="left:184px;top:430px">LLM 呼叫 1</div>
+  <div class="rn" style="left:184px;top:510px">tool：search</div>
+  <div class="rn" style="left:184px;top:590px">LLM 呼叫 2</div>
+  <div class="vl" style="left:930px;top:350px">1760 ms</div>
+  <div class="vl" style="left:930px;top:430px">820 ms</div>
+  <div class="vl" style="left:930px;top:510px">300 ms</div>
+  <div class="vl" style="left:930px;top:590px">640 ms</div>
+  <div class="vl" style="left:1050px;top:430px">1.2k</div>
+  <div class="vl" style="left:1050px;top:590px">1.8k</div>
+
+  <div class="cap" style="left:1210px;top:296px">點開「LLM 呼叫 1」看到的內容</div>
+  <div class="code" style="left:1210px;top:336px">run   LLM 呼叫 1
+輸入  <span class="s">"ERR-4012 怎麼排除？"</span>
+輸出  tool_call
+        search("ERR-4012")
+耗時  <span class="hl">820 ms</span>
+token <span class="hl">1.2k</span></div>
+
+  <div class="df" style="left:110px"><div class="t ind">Thread</div><div class="d">一整段多回合對話，用 thread_id 把幾條 trace 串起來</div></div>
+  <div class="df" style="left:700px"><div class="t" style="color:#b98a12">Trace</div><div class="d">一次請求的所有 run，組成一棵樹</div></div>
+  <div class="df" style="left:1290px"><div class="t ver">Run</div><div class="d">一個工作單位：一次模型呼叫、一次檢索、一次工具</div></div>
+  <div class="cap" style="left:645px;top:728px">包含</div>
+  <div class="cap" style="left:1235px;top:728px">包含</div>
+
+  <div class="read"><em>怎麼讀：</em>先看最長的那條橫桿找慢在哪，再點開那一步看輸入輸出，確認是模型答錯還是工具回錯。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=0.216, X0=520;
+const bar=(y,t0,t1,fill,stroke)=>D.rect(X0+t0*S,y,(t1-t0)*S,38,fill,{fillStyle:'solid',stroke,strokeWidth:2.6});
+D.rect(100,425,1090,52,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2});
+D.line(X0,340,X0,640,{strokeWidth:2,stroke:D.C.grey});
+bar(357,0,1760,'#d9e1ee',D.C.ind);
+bar(437,0,820,'#f7d6cf',D.C.ver);
+bar(517,820,1120,'#f7e7c0','#b98a12');
+bar(597,1120,1760,'#f7d6cf',D.C.ver);
+D.ci(152,451,28,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2});
+D.tri(152,531,30,'mus',{strokeWidth:2});
+D.ci(152,611,28,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2});
+D.arrow(1150,451,1200,451,{strokeWidth:2.6});
+[110,700,1290].forEach((x,i)=>D.rect(x,690,520,150,'#fbf9f4',{fillStyle:'solid',stroke:[D.C.ind,'#b98a12',D.C.ver][i],strokeWidth:3}));
+D.arrow(634,765,692,765,{strokeWidth:2.6});
+D.arrow(1224,765,1282,765,{strokeWidth:2.6});
+</script></body></html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>DL 到 Agent 地圖</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:34px;line-height:1.2}
+.bx{position:absolute;height:88px;padding-top:9px}
+.bx .n{font-size:32px;line-height:1.2}
+.bx .s{font-size:24px;line-height:1.35;color:var(--muted)}
+.L{left:140px;width:520px;top:0}
+.R{left:1330px;width:470px}
+.lab{position:absolute;left:730px;width:440px;text-align:center;font-size:24px;line-height:1.3;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>從深度學習到 Agent 的地圖</h1>
+  <p class="lead">左邊是你已經有的，右邊是這門課補上的；連線是「從哪個舊概念長出來」。</p>
+
+  <div class="hd ind" style="left:110px;top:268px">你會的</div>
+  <div class="hd" style="left:1250px;top:268px;color:#b98a12">這門課補的</div>
+
+  <!-- 左欄：你會的 -->
+  <div class="bx L" style="top:339px"><div class="n">RNN／LSTM</div><div class="s">逐步傳遞，一個向量扛全部</div></div>
+  <div class="bx L" style="top:439px"><div class="n">softmax 分類器</div><div class="s">輸出每一類的機率</div></div>
+  <div class="bx L" style="top:539px"><div class="n">embedding 層</div><div class="s">整數 id 查表換成向量</div></div>
+  <div class="bx L" style="top:639px"><div class="n">遷移學習</div><div class="s">預訓練骨幹＋少量資料微調</div></div>
+  <div class="bx L" style="top:739px"><div class="n">訓練迴圈</div><div class="s">forward → loss → 更新</div></div>
+  <div class="bx L" style="top:839px;color:var(--muted)"><div class="n">沒有 DL 對應</div><div class="s">像 USB：一種標準接口</div></div>
+
+  <!-- 右欄：這門課補的 -->
+  <div class="bx R" style="top:389px"><div class="n">LLM</div><div class="s">詞表上的 softmax 分類器</div></div>
+  <div class="bx R" style="top:539px"><div class="n">RAG 檢索增強</div><div class="s">改輸入：把查到的文件塞進去</div></div>
+  <div class="bx R" style="top:639px"><div class="n">微調（LoRA）</div><div class="s">改權重：只訓練旁路小矩陣</div></div>
+  <div class="bx R" style="top:739px"><div class="n">Agent 迴圈</div><div class="s">想 → 做 → 看，轉到有答案</div></div>
+  <div class="bx R" style="top:839px"><div class="n">MCP</div><div class="s">工具的標準接口</div></div>
+
+  <!-- 連線標籤 -->
+  <div class="lab" style="top:342px">attention 取代逐步傳遞</div>
+  <div class="lab" style="top:490px">類別＝詞表上的每個 token</div>
+  <div class="lab" style="top:592px">向量近鄰＝找相關文件</div>
+  <div class="lab" style="top:692px">凍結 W，只學 ΔW</div>
+  <div class="lab" style="top:792px">把 f(x) 放進迴圈</div>
+
+  <div class="read"><em>怎麼讀：</em>每條線都是「你已經會的 → 這門課怎麼用它」；最下面的 MCP 沒有 DL 對應，它只是工程上的標準接口。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const lx=110,lw=560,rx=1250,rw=560,bh=88;
+const left=[339,439,539,639,739], leftGhost=839;
+/* 左欄方塊 */
+left.forEach(y=>D.rect(lx,y,lw,bh,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3}));
+D.rect(lx,leftGhost,lw,bh,'#f3efe6',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5,strokeLineDash:[10,9]});
+/* 右欄方塊（含形狀語意圖示） */
+const right=[[389,'ci'],[539,'sq'],[639,'ci'],[739,'loop'],[839,'tri']];
+right.forEach(([y])=>D.rect(rx,y,rw,bh,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3}));
+const cy=y=>y+bh/2;
+D.ci(1296,cy(389),42,D.C.ver,{strokeWidth:2.2});
+D.sq(1276,cy(539)-20,40,'ind',{strokeWidth:2.2});
+D.ci(1296,cy(639),42,D.C.ver,{strokeWidth:2.2});
+D.tri(1296,cy(839),46,D.C.mus,{strokeWidth:2.2});
+/* Agent 迴圈圖示：小圓＋繞圈箭頭 */
+(()=>{const x=1296,y=cy(739);D.ci(x,y,20,D.C.ver,{strokeWidth:2});
+  D.curve([[x+24,y+2],[x+20,y-18],[x,y-24],[x-20,y-14],[x-24,y+8],[x-12,y+24]],{strokeWidth:3});
+  D.arrow(x-26,y+22,x-12,y+26,{strokeWidth:3});})();
+/* 連線：左→右 */
+const A={strokeWidth:2.6};
+D.arrow(lx+lw+4,339+44,rx-6,389+38,A);       /* RNN → LLM */
+D.arrow(lx+lw+4,439+44,rx-6,389+52,A);       /* softmax → LLM */
+D.arrow(lx+lw+4,539+44,rx-6,539+44,A);       /* embedding → RAG */
+D.arrow(lx+lw+4,639+44,rx-6,639+44,A);       /* 遷移學習 → 微調 */
+D.arrow(lx+lw+4,739+44,rx-6,739+44,A);       /* 訓練迴圈 → Agent 迴圈 */
+D.dash(lx+lw+4,839+44,rx-6,839+44,{strokeWidth:2.4,stroke:D.C.grey});
+</script></body></html>

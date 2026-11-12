@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Vibe Coding 之辨</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.bk{position:absolute;font-size:24px}
+.zn{position:absolute;top:412px;width:520px;text-align:center}
+.zn .t{font-size:32px;line-height:1.3}.zn .d{font-size:26px;line-height:1.45;color:var(--muted);margin-top:4px}
+.wl{position:absolute;top:818px;width:190px;text-align:center;font-size:24px}
+.rule{position:absolute;left:850px;top:700px;width:930px}
+.rule .big{font-size:42px;line-height:1.3}
+.rule .d{font-size:26px;line-height:1.5;margin-top:6px}
+</style></head><body><div class="slide">
+  <h1>Vibe Coding 不等於 AI 輔助工程</h1>
+  <p class="lead">Karpathy 2025-02 提出；2026 年他已改稱 agentic engineering。<span class="tag">本課轉述</span></p>
+
+  <div class="bk" style="left:110px;top:288px;color:var(--muted)">可以拿去 demo</div>
+  <div class="bk ver" style="left:660px;top:340px">可以 commit 進 repo</div>
+
+  <div class="zn" style="left:110px"><div class="t ver">Vibe coding</div><div class="d">不看程式碼，只看結果能不能跑</div></div>
+  <div class="zn" style="left:650px"><div class="t" style="color:#b98a12">AI 輔助工程</div><div class="d">AI 寫、人審、人測</div></div>
+  <div class="zn" style="left:1190px"><div class="t ind">傳統加補全</div><div class="d">人寫，AI 幫忙補全</div></div>
+
+  <div class="bridge inline" style="left:110px;top:552px;width:1700px"><span class="k">你已經會的</span>只看 loss 下降、不看預測結果一樣危險——程式能跑，不代表邏輯是對的。</div>
+
+  <div class="abs note" style="left:110px;top:666px">AI 輔助工程的工作流</div>
+  <div class="wl" style="left:95px">人：寫規格</div>
+  <div class="wl" style="left:315px">AI：生成程式</div>
+  <div class="wl" style="left:535px">人：審查、測試</div>
+
+  <div class="rule"><div class="big ver">能解釋，才 commit</div>
+    <div class="d">Simon Willison：不 commit 任何自己無法向別人解釋清楚的程式碼。<span class="tag">本課轉述</span></div>
+    <div class="d" style="color:var(--muted)">工具舉例：Cursor、Claude Code 這類程式碼 agent。</div></div>
+
+  <div class="read"><em>怎麼讀：</em>由左到右，人審得越多、離 repo 越近；中間那格才是這門課要你做到的位置。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* 括號線 */
+D.line(110,326,1810,326,{strokeWidth:2.4,stroke:D.C.grey});D.line(110,316,110,336,{strokeWidth:2.4,stroke:D.C.grey});D.line(1810,316,1810,336,{strokeWidth:2.4,stroke:D.C.grey});
+D.line(650,378,1810,378,{strokeWidth:2.8,stroke:D.C.ver});D.line(650,368,650,388,{strokeWidth:2.8,stroke:D.C.ver});D.line(1810,368,1810,388,{strokeWidth:2.8,stroke:D.C.ver});
+/* 光譜三格 */
+D.rect(110,400,520,128,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+D.rect(650,400,520,128,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:4});
+D.rect(1190,400,520,128,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.arrow(1716,464,1806,464,{strokeWidth:2.6});
+/* 工作流 */
+D.sq(145,710,90,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+D.arrow(245,755,335,755,{strokeWidth:2.6});
+D.ci(410,755,100,'ver',{fillStyle:'hachure',strokeWidth:2.5});
+D.arrow(470,755,560,755,{strokeWidth:2.6});
+D.tri(630,755,100,'mus',{strokeWidth:2.5});
+D.rect(820,680,990,205,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:3});
+</script></body></html>

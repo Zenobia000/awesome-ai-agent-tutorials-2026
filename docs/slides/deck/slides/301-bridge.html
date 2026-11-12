@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>搭橋：改輸入還是改權重</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.colh{position:absolute;top:290px;font-size:36px}
+.bridge.row{display:flex;align-items:center;height:140px;width:650px;left:110px}
+.card{position:absolute;left:1010px;width:800px;height:140px}
+.card .t{position:absolute;left:150px;top:18px;font-size:34px}
+.card .d{position:absolute;left:150px;top:64px;width:630px;font-size:26px;line-height:1.45;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>RAG：不改模型，改餵給它的輸入</h1>
+  <p class="lead">知識凍結在權重裡。要讓模型用上新資料，只有兩條路：改權重（微調），或改輸入（RAG）。</p>
+
+  <div class="colh ind" style="left:110px">你已經會的</div>
+  <div class="colh ver" style="left:1010px">本章新概念</div>
+
+  <div class="bridge row" style="top:350px">遷移學習：預訓練網路加新資料，微調權重。</div>
+  <div class="bridge row" style="top:530px">條件輸入：網路不變，換個條件輸出就變。</div>
+  <div class="bridge row" style="top:710px">特徵庫：整個資料集先過 backbone 存起來，之後只查表。</div>
+
+  <div class="card" style="top:350px"><div class="t">微調＝改權重</div><div class="d">知識寫進模型。資料一變就要重訓（模組六）。</div></div>
+  <div class="card" style="top:530px"><div class="t">RAG＝改輸入</div><div class="d">權重不動；提問時把查到的文字接在問題後面。</div></div>
+  <div class="card" style="top:710px"><div class="t">離線建庫＋在線查表</div><div class="d">文件先轉成向量存好；提問時查表，再前向傳播。</div></div>
+
+  <div class="read"><em>怎麼讀：</em>左邊是你用過的做法，右邊是它在 RAG 裡的對應；黃色那列是本章主線，圓是模型，方塊是文字片段。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const card=(y,fill,stroke)=>D.rect(1010,y,800,140,fill,{fillStyle:'solid',stroke,strokeWidth:3});
+card(350,'#d9e1ee',D.C.ind);card(530,'#f7e7c0','#b98a12');card(710,'#d9e1ee',D.C.ind);
+/* 連線：左 → 右 */
+[420,600,780].forEach(y=>D.arrow(765,y,1000,y,{strokeWidth:2.8}));
+/* 圖示 1：模型權重被改寫（排線＝被訓練過） */
+D.ci(1080,420,84,'ver',{fillStyle:'hachure',strokeWidth:2.5});
+/* 圖示 2：模型原封不動（淡色實心）＋ 接在輸入上的文字片段 */
+D.sq(1034,574,30,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.5});
+D.sq(1034,612,30,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.5});
+D.ci(1112,600,72,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.5});
+/* 圖示 3：預先算好的向量 */
+[0,1,2].forEach(i=>D.sq(1034+i*38,764,30,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.5}));
+</script></body></html>

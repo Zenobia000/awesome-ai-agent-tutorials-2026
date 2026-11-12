@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>評審校準</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:30px;line-height:1.2}
+.ch{position:absolute;width:200px;text-align:center;font-size:26px;line-height:1.3}
+.rh{position:absolute;left:110px;width:205px;text-align:right;font-size:26px;line-height:1.3}
+.cell{position:absolute;width:200px;height:140px;text-align:center}
+.cell .a{display:block;font-size:40px;line-height:1.2;margin-top:30px}
+.cell .b{display:block;font-size:24px;line-height:1.4;color:var(--muted)}
+.rate{position:absolute;left:745px;width:230px;font-size:24px;line-height:1.5;color:var(--muted)}
+.rate .k{font-size:30px;color:var(--ind);display:block}
+.step{position:absolute;left:1040px;width:770px;font-size:26px;line-height:1.5}
+.step .h{font-size:32px;line-height:1.3;margin-bottom:4px}
+.step .h i{font-style:normal;color:var(--ind);margin-right:18px}
+.bridge.inline{padding:18px 30px}
+</style></head><body><div class="slide">
+  <h1>評審校準：LLM 評審也要被驗證</h1>
+  <p class="lead">LLM 評審就是個分類器：拿人工標註當標準答案，對不上就改它的提示詞。</p>
+
+  <div class="hd ind" style="left:110px;top:296px">評審 vs 人工：混淆矩陣</div>
+  <div class="ch" style="left:330px;top:358px">評審說 pass</div>
+  <div class="ch" style="left:530px;top:358px">評審說 fail</div>
+  <div class="rh" style="top:455px">人工說 pass</div>
+  <div class="rh" style="top:595px">人工說 fail</div>
+  <div class="cell" style="left:330px;top:400px"><span class="a">TP</span><span class="b">都說 pass</span></div>
+  <div class="cell" style="left:530px;top:400px"><span class="a">FN</span><span class="b">好的被攔下</span></div>
+  <div class="cell" style="left:330px;top:540px"><span class="a">FP</span><span class="b">壞的被放行</span></div>
+  <div class="cell" style="left:530px;top:540px"><span class="a">TN</span><span class="b">都說 fail</span></div>
+  <div class="rate" style="top:445px"><span class="k">TPR</span>好的被判對的比例</div>
+  <div class="rate" style="top:585px"><span class="k">TNR</span>壞的被抓出的比例</div>
+
+  <div class="abs" style="left:330px;top:705px;width:640px;font-size:26px;line-height:1.5;color:var(--muted)">TPR＝TP ÷ (TP＋FN)　TNR＝TN ÷ (TN＋FP)</div>
+
+  <div class="step" style="top:322px"><div class="h"><i>01</i>人工標註當標準答案</div>專家逐條標 pass／fail，並寫下理由。</div>
+  <div class="step" style="top:472px"><div class="h"><i>02</i>對不上，就改評審的提示詞</div>把人工寫的理由當範例放進去，反覆改到兩邊一致。</div>
+  <div class="step" style="top:622px"><div class="h"><i>03</i>類別不平衡時，分開看 TPR、TNR</div>例如幾乎都是 pass：全猜 pass，整體一致率也很高。</div>
+
+  <div class="bridge inline" style="left:110px;top:800px;width:1700px"><span class="k">你已經會的</span>評審＝分類器，人工標註＝ground truth：看 precision、recall 和混淆矩陣，調提示詞像調超參數。</div>
+  <div class="read"><em>怎麼讀：</em>左邊方格對照評審和人工，藍色是對的、朱紅是錯的；右邊三步是怎麼把評審調準。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const C=(x,y,ok)=>D.rect(x,y,200,140,ok?'#d9e1ee':'#f7d6cf',{fillStyle:'solid',stroke:ok?D.C.ind:D.C.ver,strokeWidth:3});
+C(330,400,true);C(530,400,false);C(330,540,false);C(530,540,true);
+D.dash(1000,305,1000,720,{strokeWidth:2,stroke:D.C.grey});
+</script></body></html>

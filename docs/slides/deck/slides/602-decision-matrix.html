@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Prompt、RAG、微調怎麼選</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.q{position:absolute;width:425px;text-align:center}
+.q .t{font-size:34px;line-height:1.3}.q .d{font-size:26px;line-height:1.4;color:var(--muted)}
+.dim{position:absolute;left:1090px;width:720px;font-size:30px}
+.cell{position:absolute;width:350px;height:92px;padding:8px 16px;font-size:26px;line-height:1.35}
+.cell .h{font-size:24px;display:block}
+.off{color:var(--grey)}
+</style></head><body><div class="slide">
+  <h1>缺知識用 RAG，缺行為才微調</h1>
+  <p class="lead">先問：模型缺的是「知道什麼」，還是「怎麼回答」？兩個問題各有各的解法，也可以疊加。</p>
+
+  <div class="abs note" style="left:110px;top:276px">知識維度 ↑　缺失、過時、私有</div>
+  <div class="q" style="left:150px;top:414px"><div class="t ind">RAG</div><div class="d">改輸入的內容：補進知識</div></div>
+  <div class="q" style="left:575px;top:414px"><div class="t" style="color:#b98a12">RAG＋微調</div><div class="d">各補各的，可以疊加</div></div>
+  <div class="q" style="left:150px;top:604px"><div class="t">Prompt 工程</div><div class="d">只改寫法，最便宜，先試它</div></div>
+  <div class="q" style="left:575px;top:604px"><div class="t ver">微調</div><div class="d">改權重：學會風格與格式</div></div>
+  <div class="abs note" style="left:150px;top:722px;width:850px;text-align:right">行為維度 →　格式、語氣、術語</div>
+  <div class="abs note" style="left:150px;top:766px;width:850px"><span class="ind">空心圓</span>＝權重沒動　<span class="ver">朱紅圓</span>＝權重被改過　<span class="ind">藍方塊</span>＝外部文件</div>
+
+  <div class="dim" style="top:300px">知識更新頻率</div>
+  <div class="cell" style="left:1090px;top:348px"><span class="h ind">RAG 首選</span>常變的業務數據</div>
+  <div class="cell" style="left:1460px;top:348px"><span class="h ver">微調適用</span>靜態專有名詞、語言習慣</div>
+  <div class="dim" style="top:462px">輸出風格與格式對齊</div>
+  <div class="cell off" style="left:1090px;top:510px"><span class="h">RAG</span>—</div>
+  <div class="cell" style="left:1460px;top:510px"><span class="h ver">微調</span>決定性優勢</div>
+  <div class="dim" style="top:624px">幻覺抑制與準確度溯源</div>
+  <div class="cell" style="left:1090px;top:672px"><span class="h ind">RAG</span>明顯優於微調，可附出處</div>
+  <div class="cell off" style="left:1460px;top:672px"><span class="h">微調</span>—</div>
+
+  <div class="bridge inline" style="left:110px;top:836px;width:1700px"><span class="k">你已經會的</span>先找錯誤來源，再決定改輸入還是改權重——和判斷「欠擬合還是缺資料」是同一種診斷。</div>
+  <div class="read"><em>怎麼讀：</em>先在左圖找你的問題落在哪一格，再用右邊三個維度核對；行為問題硬加 RAG 沒用（OpenAI 指南實驗：BLEU 反而掉 4 分）。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S={strokeWidth:2.5};
+/* 座標軸 */
+D.arrow(130,715,1010,715,S);D.arrow(130,715,130,310,S);
+/* 右側三維度的格子：贏的一格上色 */
+const cell=(x,y,fill,stroke)=>D.rect(x,y,350,92,fill,{fillStyle:'solid',stroke,strokeWidth:2.5});
+cell(1090,348,'#d9e1ee',D.C.ind);cell(1460,348,'#f7d6cf',D.C.ver);
+cell(1090,510,'#f3efe6',D.C.grey);cell(1460,510,'#f7d6cf',D.C.ver);
+cell(1090,672,'#d9e1ee',D.C.ind);cell(1460,672,'#f3efe6',D.C.grey);
+/* 四象限底色 */
+const quad=(x,y,fill,o)=>D.rect(x,y,425,190,fill,Object.assign({fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5},o));
+quad(150,320,'#d9e1ee',{stroke:D.C.ind});quad(575,320,'#f7e7c0',{stroke:'#b98a12'});
+quad(150,510,'#ebe6da');quad(575,510,'#f7d6cf',{stroke:D.C.ver});
+/* 象限圖示：空心圓＝權重沒動；朱紅圓＝權重被改；方＝文件 */
+const W=(cx,cy)=>D.ci(cx,cy,76,'ver',{fillStyle:'hachure',strokeWidth:2.5});
+const O=(cx,cy)=>D.ci(cx,cy,76,null,{strokeWidth:2.8});
+const doc=(cx,cy)=>{D.sq(cx-25,cy-25,50,'ind',{strokeWidth:2.2});D.arrow(cx+34,cy,cx+62,cy,{strokeWidth:2.4});};
+/* TL RAG */  doc(150+212-108,320+52);O(150+212+30,320+52);
+/* TR 兩者 */ doc(575+212-108,320+52);W(575+212+30,320+52);
+/* BL Prompt */ D.arrow(150+212-100,510+52,150+212-52,510+52,{strokeWidth:2.4});O(150+212,510+52);
+/* BR 微調 */ W(575+212,510+52);
+</script></body></html>

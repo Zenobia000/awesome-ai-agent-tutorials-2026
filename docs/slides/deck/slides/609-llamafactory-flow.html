@@ -1,0 +1,32 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>LLaMA-Factory 流程</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.st{position:absolute;width:320px;text-align:center;font-size:26px;line-height:1.4}
+.st .t{font-size:34px;display:block;margin-bottom:4px}
+.st .mono{font-family:"JetBrains Mono",monospace;font-size:22px;background:var(--mus-l);padding:2px 8px;display:inline-block;margin-top:8px}
+</style></head><body><div class="slide">
+  <h1>LLaMA-Factory：一個 yaml 走完整個流程</h1>
+  <p class="lead">資料、設定、訓練、評估、合併匯出，各一步；評估看到過擬合就退回設定。</p>
+
+  <div class="st" style="left:90px;top:520px"><span class="t ind">資料</span>Alpaca 或 ShareGPT 的 JSON，在 dataset_info.json 登記</div>
+  <div class="st" style="left:430px;top:520px"><span class="t ind">設定</span>基座、template、lora_rank、學習率，全寫進一個 yaml</div>
+  <div class="st" style="left:770px;top:520px"><span class="t ver">訓練</span>只更新 A、B，定期存 adapter 檢查點<br><span class="mono">llamafactory-cli train</span></div>
+  <div class="st" style="left:1110px;top:520px"><span class="t" style="color:#b98a12">評估</span>看 loss 曲線，用檢查點抽測對話，挑最好的</div>
+  <div class="st" style="left:1450px;top:520px"><span class="t ver">合併匯出</span>把 adapter 併回基座，得到一個完整模型<br><span class="mono">llamafactory-cli export</span></div>
+  <div class="abs note" style="left:560px;top:762px;width:800px;text-align:center">過擬合：回到設定，減 epoch 或降學習率</div>
+
+  <div class="bridge inline" style="left:110px;top:836px;width:1700px"><span class="k">你已經會的</span>你寫過的訓練迴圈：資料 → 模型 → loss → 優化器 → 存 checkpoint，這裡整個收進一個 yaml。</div>
+  <div class="read"><em>怎麼讀：</em>從左到右是一次完整微調；每個形狀底下是那一步你要準備的東西，最下方的弧線是失敗時退回的路。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const cx=[250,590,930,1270,1610],cy=380,S={strokeWidth:2.6};
+D.sq(cx[0]-70,cy-70,140,'ind',{strokeWidth:2.6});
+D.sq(cx[1]-70,cy-70,140,'ind',{strokeWidth:2.6});
+D.ci(cx[2],cy,160,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+D.tri(cx[3],cy,170,'mus',{strokeWidth:2.6});
+D.ci(cx[4],cy,160,'#f7d6cf',{strokeWidth:3,stroke:D.C.ver});
+[[cx[0]+82,cx[1]-82],[cx[1]+82,cx[2]-92],[cx[2]+92,cx[3]-100],[cx[3]+100,cx[4]-92]].forEach(([a,b])=>D.arrow(a,cy,b,cy,S));
+/* 回退弧線：評估 → 設定 */
+D.curve([[cx[3],566+170],[cx[3]-60,800],[cx[2],818],[cx[1]+60,800],[cx[1],736]],{strokeWidth:2.6,stroke:D.C.ver,strokeLineDash:[10,9]});
+D.arrow(cx[1]+4,748,cx[1],716,{strokeWidth:2.6,stroke:D.C.ver});
+</script></body></html>

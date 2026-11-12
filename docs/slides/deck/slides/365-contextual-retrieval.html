@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>補背景讓檢索失敗率下降</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+#ch{position:absolute;left:110px;top:262px;width:1090px;height:600px}
+#ch text{font-family:"Huninn","Noto Sans CJK TC",sans-serif}
+.rc{position:absolute;left:1240px;width:570px}
+.rc .k{font-size:24px;color:var(--muted)}
+.rc .tx{font-size:28px;line-height:1.45}
+.src{left:110px;top:880px;width:1700px}
+</style></head><body><div class="slide">
+  <h1>補一句背景，檢索失敗率降 67%</h1>
+  <p class="lead">每個區塊前補一兩句「這段來自哪份文件哪一節」，再加 BM25 與重排，失敗率一路下降。</p>
+
+  <svg id="ch" viewBox="0 0 1090 600" width="1090" height="600"></svg>
+
+  <div class="rc" style="top:268px;font-size:30px;line-height:1.3">補的背景長這樣<span class="tag" style="margin-left:14px">示意</span></div>
+  <div class="rc" style="top:330px;padding:12px 22px;height:92px"><div class="k">原本的區塊</div><div class="tx">營收比上一季成長。</div></div>
+  <div class="rc note" style="top:432px;color:var(--ver)">只看這句，不知道是哪家公司、哪一季。</div>
+  <div class="abs lbl mut" style="left:1330px;top:494px">補背景</div>
+  <div class="rc" style="top:546px;padding:12px 22px;height:198px"><div class="k">補過背景的區塊</div><div class="tx"><div style="background:var(--mus-l);padding:0 6px;margin:2px 0 4px -6px">這段來自 ACME 公司 Q2 財報<br>的「營收」一節。</div>營收比上一季成長。</div></div>
+  <div class="rc note" style="top:762px">一次性成本：每百萬文件 token 約 $1.02<br>（假設 800 token 區塊、8k token 文件，<br>並使用 prompt caching）。</div>
+
+  <div class="src">來源：Anthropic（2024-09-19）〈Introducing Contextual Retrieval〉，依文中數字重繪；頁面無授權聲明，未放原圖。領域：程式碼庫、小說、arXiv 論文、科學論文。https://www.anthropic.com/news/contextual-retrieval</div>
+  <div class="read"><em>怎麼讀：</em>由左往右每加一步，柱子就更矮；朱紅箭頭量的是「比基線少掉多少」。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.rect(110,262,1090,600,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+/* 右側示意：原區塊 → 補背景 → 補過的區塊 */
+D.rect(1240,330,570,92,'#e6e1d4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.6});
+D.rect(1240,546,570,198,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+D.arrow(1290,462,1290,532,{strokeWidth:3});
+
+/* ── 圖表（直線與矩形，不抖動）：Anthropic 文中四個失敗率 ── */
+const NS='http://www.w3.org/2000/svg',ch=document.getElementById('ch');
+const mk=(tag,a,t)=>{const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);if(t!=null)e.textContent=t;ch.appendChild(e);return e;};
+const L=96,BASE=420,H=320,VMAX=7,Y=v=>BASE-v/VMAX*H;
+mk('text',{x:40,y:38,'font-size':26,fill:'#1b1b1b'},'檢索失敗率（%，越低越好）');
+mk('text',{x:40,y:72,'font-size':24,fill:'#5b574f'},'四個知識領域的平均；embedding 用 Gemini Text 004');
+[0,2,4,6].forEach(v=>{if(v>0)mk('line',{x1:L,y1:Y(v),x2:1050,y2:Y(v),stroke:'#ddd7c8','stroke-width':1.5});
+  mk('text',{x:L-14,y:Y(v)+8,'text-anchor':'end','font-size':24,fill:'#5b574f'},v);});
+mk('line',{x1:L,y1:BASE,x2:1050,y2:BASE,stroke:'#1b1b1b','stroke-width':2.5});
+mk('line',{x1:L,y1:Y(VMAX),x2:L,y2:BASE,stroke:'#1b1b1b','stroke-width':2.5});
+const bars=[
+ {v:5.7,n:['標準 embedding','（基線）'],d:['每個區塊直接','算向量'],fill:'#e6e1d4',st:'#a8a296'},
+ {v:3.7,n:['＋Contextual','Embeddings'],d:['區塊前先補背景，','再算向量'],fill:'#d9e1ee',st:'#2b4c7e',cut:'−35%'},
+ {v:2.9,n:['＋Contextual','BM25'],d:['補過背景的文字，','也建 BM25 索引'],fill:'#d9e1ee',st:'#2b4c7e',cut:'−49%'},
+ {v:1.9,n:['＋重排','reranking'],d:['撈回的結果再交','給重排模型'],fill:'#d9e1ee',st:'#2b4c7e',cut:'−67%'}];
+const BW=150,GAP=238,X0=L+60;
+/* 基線水位線 */
+mk('line',{x1:X0,y1:Y(5.7),x2:X0+3*GAP+BW,y2:Y(5.7),stroke:'#a8a296','stroke-width':2,'stroke-dasharray':'8 8'});
+bars.forEach((b,i)=>{const x=X0+i*GAP,cx=x+BW/2;
+  mk('rect',{x,y:Y(b.v),width:BW,height:BASE-Y(b.v),fill:b.fill,stroke:b.st,'stroke-width':3});
+  mk('text',{x:cx,y:Y(b.v)-14,'text-anchor':'middle','font-size':36,fill:'#1b1b1b'},b.v+'%');
+  if(b.cut){const y1=Y(5.7)+4,y2=Y(b.v)-56;
+    mk('line',{x1:cx,y1,x2:cx,y2,stroke:'#e0442b','stroke-width':3});
+    mk('polyline',{points:`${cx-9},${y2-14} ${cx},${y2} ${cx+9},${y2-14}`,fill:'none',stroke:'#e0442b','stroke-width':3});
+    mk('text',{x:cx+16,y:(y1+y2)/2+9,'font-size':28,fill:'#e0442b'},b.cut);}
+  mk('text',{x:cx,y:BASE+36,'text-anchor':'middle','font-size':26,fill:'#1b1b1b'},b.n[0]);
+  mk('text',{x:cx,y:BASE+66,'text-anchor':'middle','font-size':26,fill:'#1b1b1b'},b.n[1]);
+  mk('text',{x:cx,y:BASE+108,'text-anchor':'middle','font-size':24,fill:'#5b574f'},b.d[0]);
+  mk('text',{x:cx,y:BASE+138,'text-anchor':'middle','font-size':24,fill:'#5b574f'},b.d[1]);
+});
+</script></body></html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>LoRA：W 凍結，旁路 B·A</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.m{position:absolute;text-align:center;font-size:56px;line-height:1}
+.dim{position:absolute;text-align:center;font-size:24px;line-height:1.3;color:var(--muted)}
+.fx{position:absolute;left:1300px;top:300px;width:510px}
+.fx .eq{font-size:38px;line-height:1.4;margin-bottom:18px}
+.fx p{font-size:28px;line-height:1.5;margin:12px 0}
+</style></head><body><div class="slide">
+  <h1>LoRA：凍結 W，旁邊多一條窄路</h1>
+  <p class="lead">不碰原本的 W。旁邊接一條「先壓到 r 維、再展開回來」的旁路，只訓練旁路，兩條路的輸出相加。</p>
+
+  <div class="dim" style="left:100px;top:360px;width:100px;font-size:30px">x</div>
+  <div class="dim" style="left:100px;top:596px;width:100px">d_in</div>
+  <div class="m" style="left:420px;top:318px;width:180px">W</div>
+  <div class="dim" style="left:420px;top:410px;width:180px">d_out × d_in</div>
+  <div class="m" style="left:445px;top:584px;width:60px;font-size:50px">A</div>
+  <div class="m" style="left:795px;top:584px;width:60px;font-size:50px">B</div>
+  <div class="dim" style="left:410px;top:708px;width:200px">r × d_in</div>
+  <div class="dim" style="left:608px;top:630px;width:88px">r</div>
+  <div class="dim" style="left:690px;top:708px;width:200px">d_out × r</div>
+  <div class="abs lbl ind" style="left:640px;top:346px">主路：W 凍結，不更新</div>
+  <div class="abs lbl ver" style="left:930px;top:640px;width:330px">旁路：只訓練 A 和 B</div>
+  <div class="m" style="left:975px;top:470px;width:70px;font-size:64px">＋</div>
+  <div class="dim" style="left:1090px;top:360px;width:100px;font-size:30px">h</div>
+  <div class="dim" style="left:1090px;top:596px;width:100px">d_out</div>
+
+  <div class="fx">
+    <div class="eq">h = W·x ＋ (α/r)·B·A·x</div>
+    <p><span class="ver" style="white-space:nowrap">ΔW = B·A</span>：和 W 同形狀，秩 ≤ r。</p>
+    <p>起點：A 隨機、B 全為 0，所以一開始 <span style="white-space:nowrap">ΔW = 0</span>，模型和原本完全一樣。</p>
+    <p>r 是窄腰的寬度（Lab 用 8）；α/r 是旁路的放大倍率。</p>
+  </div>
+
+  <div class="bridge" style="left:110px;top:790px;width:1700px"><span class="k">你已經會的</span>A 壓成 r 維、B 再展開，就是 autoencoder 的瓶頸；W 就是你凍結 backbone 時的 requires_grad=False。</div>
+  <div class="read"><em>怎麼讀：</em>從左邊的 x 出發，上路過凍結的 W，下路過窄腰 A→B，在「＋」相加成 h；訓練時只有朱紅色的兩塊會動。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S={strokeWidth:2.6};
+/* x 與 h：向量 */
+D.rect(130,410,36,180,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.6});
+D.rect(1120,410,36,180,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.6});
+/* 分流 */
+D.line(170,500,300,500,S);D.line(300,390,300,610,S);
+D.arrow(300,390,412,390,S);D.arrow(300,610,412,610,S);
+/* W：凍結（靛，有字用淺色實心） */
+D.rect(420,300,180,180,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3.2});
+/* A、B：窄腰漏斗（朱紅＝要訓練） */
+D.poly([[420,520],[600,598],[600,622],[420,700]],'#f7d6cf',{stroke:D.C.ver,strokeWidth:3.2});
+D.rect(640,598,24,24,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.4});
+D.poly([[700,598],[880,520],[880,700],[700,622]],'#f7d6cf',{stroke:D.C.ver,strokeWidth:3.2});
+D.arrow(604,610,636,610,{strokeWidth:2.4});D.arrow(668,610,696,610,{strokeWidth:2.4});
+/* 合流 */
+D.line(600,390,1010,390,S);D.arrow(1010,390,1010,462,S);
+D.line(880,610,1010,610,S);D.arrow(1010,610,1010,540,S);
+D.arrow(1050,500,1112,500,S);
+/* 右側分隔線 */
+D.dash(1255,300,1255,740,{strokeWidth:2});
+</script></body></html>

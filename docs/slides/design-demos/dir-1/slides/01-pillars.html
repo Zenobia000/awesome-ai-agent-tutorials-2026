@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Agent 四大支柱</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="https://unpkg.com/roughjs@4.6.6/bundled/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.bridge{position:absolute;left:110px;top:560px;width:640px;padding:26px 30px;font-size:28px;line-height:1.55}
+.bridge .k{display:block;font-size:24px;color:var(--ind);margin-bottom:8px}
+.cap{position:absolute;width:300px}
+.cap .t{font-size:34px}.cap .d{font-size:26px;line-height:1.45;color:var(--muted);margin-top:4px}
+</style></head><body><div class="slide">
+  <h1>Agent＝模型＋迴圈</h1>
+  <p class="lead" style="width:660px">模型本身不會動手。把它放進「想 → 做 → 看」的迴圈，配上記憶和工具，才成為 Agent。</p>
+
+  <div class="bridge"><span class="k">你已經會的</span>訓練好的網路是 y = f(x)：呼叫一次就結束。Agent <b>不改模型</b>，而是把 f 放進迴圈——這一輪的輸出，決定下一輪要呼叫哪個工具。</div>
+
+  <div class="abs" style="left:1215px;top:500px;font-size:44px;width:170px;text-align:center">LLM</div>
+  <div class="cap" style="left:1150px;top:735px;width:300px;text-align:center"><div class="t ver">大腦</div><div class="d">理解問題、決定下一步、判斷何時停</div></div>
+  <div class="cap" style="left:845px;top:150px"><div class="t ind">記憶</div><div class="d">這次對話的狀態＋跨次的長期紀錄</div></div>
+  <div class="cap" style="left:1560px;top:250px;width:280px"><div class="t mus">工具</div><div class="d">查文件、跑 SQL、寄信——真正碰到外部世界</div></div>
+  <div class="cap" style="left:1540px;top:700px;width:300px"><div class="t">規劃</div><div class="d">Thought → Action → Observation，一圈一圈走到答案</div></div>
+  <div class="abs lbl mut" style="left:1450px;top:385px">動作</div>
+  <div class="abs lbl mut" style="left:1450px;top:665px">結果</div>
+
+  <div class="read"><em>怎麼讀：</em>從圓（模型）出發繞一圈：提出動作 → 工具回傳結果 → 寫進記憶 → 下一輪再決定。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.ci(1300,540,300,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+D.sq(880,320,170,'ind',{strokeWidth:2.5});
+D.tri(1700,545,230,'mus',{strokeWidth:2.5});
+/* 迴圈：模型 → 工具 → 模型 */
+D.curve([[1430,460],[1510,430],[1590,470]],{strokeWidth:3});D.arrow(1560,455,1600,478,{strokeWidth:3});
+D.curve([[1590,630],[1510,660],[1435,620]],{strokeWidth:3});D.arrow(1465,640,1430,616,{strokeWidth:3});
+/* 記憶 ↔ 模型 */
+D.dash(1050,440,1170,480,{strokeWidth:2.5});
+D.rect(110,550,660,250,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+</script></body></html>

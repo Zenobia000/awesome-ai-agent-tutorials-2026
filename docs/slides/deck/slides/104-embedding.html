@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>embedding 就是查表</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.25;font-size:26px}
+.hd{position:absolute;font-size:26px;color:var(--muted);line-height:1.3}
+</style></head><body><div class="slide">
+  <h1>embedding：id 變向量，就是查表</h1>
+  <p class="lead">token id 先變成 one-hot，再乘一張可學習的權重矩陣。乘出來的結果，剛好是矩陣的其中一列。</p>
+
+  <div class="hd" style="left:254px;top:272px;width:140px;text-align:center">one-hot</div>
+  <div class="hd" style="left:400px;top:272px;width:360px;text-align:center">E：V × d 權重矩陣</div>
+  <div class="hd" style="left:920px;top:272px;width:360px;text-align:center">輸出：d 維向量</div>
+  <div class="hd ind" style="left:405px;top:700px;width:350px;text-align:center">V ＝ 詞表大小</div>
+  <div class="hd" style="left:756px;top:500px;width:160px;text-align:center;font-size:24px">取出這一列</div>
+  <div id="g"></div>
+
+  <p class="abs" style="left:110px;top:772px;width:1150px;font-size:28px;line-height:1.55">V 很大（約 5 萬到 15 萬），所以實作不會真的做矩陣乘法，而是直接按 id 取列。意思相近的 token，學出來的向量也會相近。</p>
+
+  <div class="bridge" style="left:1340px;top:330px;width:470px"><span class="k">你已經會的</span><b>nn.Embedding(V, d)</b>：輸入整數 id，輸出 d 維向量。權重由反向傳播學出，和 CNN 學 filter 同理。</div>
+  <div class="read"><em>怎麼讀：</em>從左邊的 id 出發。one-hot 只有一格是 1，它挑出矩陣的一列，那一列就是這個 token 的向量。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+const tones=['#e9edf5','#d9e1ee','#9fb4d3','#2b4c7e','#f7d6cf','#e0442b'];
+const tone=(i,j)=>{const v=Math.abs(Math.sin(i*12.9898+j*78.233)*43758.5453)%1;return tones[Math.floor(v*6)]};
+const Y0=330,RH=44,SEL=3,ROWS=[0,1,2,3,4,5,'dots',7];
+ROWS.forEach((r,k)=>{const y=Y0+k*RH;
+  if(r==='dots'){el(300,y,48,RH,'⋮');el(400,y,352,RH,'⋮');return;}
+  D.rect(300,y,48,RH,k===SEL?'#f7e7c0':'#fbf9f4',{fillStyle:'solid',stroke:k===SEL?'#b98a12':D.C.grey,strokeWidth:2.2});
+  el(300,y,48,RH,k===SEL?'1':'0','font-size:24px;color:'+(k===SEL?'#1b1b1b':'#a8a296'));
+  for(let j=0;j<8;j++)D.rect(400+j*44,y,44,RH,tone(k,j),{fillStyle:'solid',stroke:'#f3efe6',strokeWidth:1.5,roughness:0.6});
+});
+D.rect(396,Y0+SEL*RH-3,360,RH+6,null,{stroke:'#b98a12',strokeWidth:4});
+D.rect(398,Y0-2,356,7*RH+RH+4,null,{stroke:D.C.grey,strokeWidth:2});
+D.line(300-6,Y0+SEL*RH+RH/2,260,Y0+SEL*RH+RH/2,{strokeWidth:2.5});
+/* token 方塊 */
+D.rect(110,Y0+SEL*RH-22,150,88,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.6});
+el(110,Y0+SEL*RH-22,150,50,'好','font-size:34px');
+el(110,Y0+SEL*RH+24,150,34,'id 52801','font-family:"JetBrains Mono",monospace;font-size:22px;color:#5b574f');
+/* 輸出向量 */
+D.arrow(762,Y0+SEL*RH+RH/2,912,Y0+SEL*RH+RH/2,{strokeWidth:2.8});
+for(let j=0;j<8;j++)D.rect(920+j*44,Y0+SEL*RH,44,RH,tone(SEL,j),{fillStyle:'solid',stroke:'#f3efe6',strokeWidth:1.5,roughness:0.6});
+D.rect(916,Y0+SEL*RH-4,360,RH+8,null,{stroke:'#b98a12',strokeWidth:4});
+el(916,Y0+SEL*RH+62,360,70,'＝這個 token 的 embedding<br>（模型真正看到的東西）','font-size:24px;color:#5b574f');
+</script></body></html>

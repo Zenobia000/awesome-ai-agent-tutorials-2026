@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組四 小結</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+ul.dots li{font-size:32px;line-height:1.5;margin:22px 0}
+.lane{position:absolute;font-size:24px;line-height:1.35;width:180px}
+.cp{position:absolute;font-size:24px;line-height:1.35;color:var(--muted);text-align:center}
+</style></head><body><div class="slide">
+  <h1>模組 4 小結</h1>
+  <ul class="dots abs" style="left:110px;top:220px;width:900px">
+    <li>向量 RAG 答不了兩種題：<b>多跳</b>（串多個事實）、<b>全局</b>（看完整份語料）</li>
+    <li>圖＝節點＋有型別的邊＋屬性；Neo4j 的邊能掛屬性，Cypher 把要找的形狀畫出來</li>
+    <li>LLM 把文字抽成三元組寫進圖；同一實體的別名要先消歧</li>
+    <li>兩派分清：Microsoft GraphRAG 讀社群報告，Neo4j 系用 Cypher 多跳</li>
+    <li>成本與現況：建索引貴、全局查詢耗 token；GraphRAG 已大致進入維護模式</li>
+  </ul>
+
+  <div class="lane ind" style="left:1060px;top:332px">社群報告派</div>
+  <div class="lane" style="left:1060px;top:632px;color:#b98a12">Cypher 多跳派</div>
+  <div class="cp" style="left:1230px;top:415px;width:210px">Leiden 分社群</div>
+  <div class="cp" style="left:1460px;top:415px;width:330px">預寫報告 → 讀報告</div>
+  <div class="cp" style="left:1230px;top:712px;width:210px">抽三元組入圖</div>
+  <div class="cp" style="left:1460px;top:712px;width:330px">Cypher 沿關係走</div>
+
+  <div class="next">下一章：AI Agent 與 LangGraph</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IND=['#d9e1ee',D.C.ind],MUS=['#f7e7c0','#b98a12'],VER=['#f7d6cf',D.C.ver];
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:3},o||{}));
+const sq=(x,y,s,f)=>R(x,y,s,s,f,{strokeWidth:2.5});
+const blob=(x,y,w,h,col)=>D.poly([[x,y+10],[x+w*0.3,y-4],[x+w,y+8],[x+w+4,y+h*0.6],[x+w*0.6,y+h+6],[x+6,y+h]],null,{stroke:col,strokeWidth:2.5,strokeLineDash:[8,7]});
+const ar=(x1,y1,x2,y2)=>D.arrow(x1,y1,x2,y2,{strokeWidth:3});
+/* 縮小版主視覺：兩派 */
+R(1030,270,780,230,['#fbf9f4',D.C.grey],{strokeWidth:2.5});
+R(1030,560,780,230,['#fbf9f4',D.C.grey],{strokeWidth:2.5});
+const y1=345,y2=640;
+D.ci(1280,y1,80,'ver',{fillStyle:'hachure',strokeWidth:2.4});ar(1330,y1,1390,y1);
+blob(1415,y1-32,60,60,D.C.ind);sq(1428,y1-20,16,IND);sq(1449,y1,16,IND);
+blob(1500,y1-32,60,60,'#b98a12');sq(1513,y1-20,16,MUS);sq(1534,y1,16,MUS);
+blob(1585,y1-32,60,60,D.C.ver);sq(1598,y1-20,16,VER);sq(1619,y1,16,VER);
+ar(1660,y1,1700,y1);R(1708,y1-25,70,50,IND,{strokeWidth:2.5});
+D.ci(1280,y2,80,'ver',{fillStyle:'hachure',strokeWidth:2.4});ar(1330,y2,1390,y2);
+const g=[[1420,y2+10],[1480,y2-25],[1545,y2+15],[1600,y2-20]];
+D.line(1428,y2+18,1488,y2-17,{strokeWidth:2.5});D.line(1488,y2-17,1553,y2+23,{strokeWidth:2.5});D.line(1553,y2+23,1608,y2-12,{strokeWidth:2.5});
+g.forEach(([x,y])=>sq(x-8,y-8,30,IND));
+D.tri(1740,y2+2,74,'mus',{strokeWidth:2.6});ar(1696,y2+5,1652,y2-2);
+</script></body></html>

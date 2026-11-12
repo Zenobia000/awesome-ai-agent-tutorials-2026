@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab5-B interrupt 程式</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cd{position:absolute;width:320px;font-size:26px;line-height:1.5}
+</style></head><body><div class="slide">
+  <h1>Lab 5-B：interrupt 暫停，resume 恢復</h1>
+  <p class="lead">同一個 thread_id：第一次 invoke 停在閘門，第二次送 Command(resume=…) 接著跑。</p>
+
+<div class="code" style="left:110px;top:285px"><span class="k">from</span> langgraph.types <span class="k">import</span> interrupt, Command
+
+<span class="k">def</span> approval_gate(state: State) -> Command:
+    call = state[<span class="s">"messages"</span>][-1].tool_calls[0]
+<span class="hl">    ok = interrupt({<span class="s">"sql"</span>: call[<span class="s">"args"</span>][<span class="s">"query"</span>]})</span>
+    <span class="k">if</span> ok:
+        <span class="k">return</span> Command(goto=<span class="s">"execute_sql"</span>)
+    deny = ToolMessage(
+        <span class="s">"管理員拒絕"</span>, tool_call_id=call[<span class="s">"id"</span>])
+    <span class="k">return</span> Command(goto=<span class="s">"agent"</span>,
+                   update={<span class="s">"messages"</span>: [deny]})</div>
+
+<div class="code" style="left:970px;top:285px"><span class="k">with</span> PostgresSaver.from_conn_string(DB_URI) <span class="k">as</span> saver:
+    saver.setup()                    <span class="c"># 第一次建表</span>
+    graph = builder.compile(checkpointer=saver)
+    cfg = {<span class="s">"configurable"</span>: {<span class="s">"thread_id"</span>: <span class="s">"ticket-42"</span>}}
+
+    out = graph.invoke(inputs, cfg)
+    out[<span class="s">"__interrupt__"</span>]     <span class="c"># 停在閘門</span>
+
+<span class="hl">    graph.invoke(Command(resume=True), cfg)</span></div>
+
+<div class="code" style="left:970px;top:689px;width:840px"><span class="c"># 高階版：middleware 替你 interrupt</span>
+middleware=[HumanInTheLoopMiddleware(
+    interrupt_on={<span class="s">"execute_sql"</span>: <span class="k">True</span>})]
+<span class="c"># 恢復：decisions 有 approve／edit／reject／respond</span>
+<span class="hl">Command(resume={<span class="s">"decisions"</span>: [{<span class="s">"type"</span>: <span class="s">"approve"</span>}]})</span></div>
+
+  <div class="cd" style="left:180px;top:776px">恢復時 node 從頭重跑：<br>interrupt() 前的副作用<br>會再發生一次</div>
+  <div class="cd" style="left:610px;top:776px">不能用裸 try/except<br>包住 interrupt()，<br>它靠拋例外運作</div>
+
+  <div class="read"><em>怎麼讀：</em>上方左邊是閘門 node，右邊是兩次呼叫；右下是 middleware 高階寫法；左下兩張卡是最常踩的兩件事。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C;
+D.rect(110,765,410,148,'#f7d6cf',{fillStyle:'solid',stroke:S.ver,strokeWidth:3});
+D.rect(540,765,410,148,'#f7d6cf',{fillStyle:'solid',stroke:S.ver,strokeWidth:3});
+D.tri(145,810,44,S.ver,{strokeWidth:2.2});
+D.tri(575,810,44,S.ver,{strokeWidth:2.2});
+</script></body></html>

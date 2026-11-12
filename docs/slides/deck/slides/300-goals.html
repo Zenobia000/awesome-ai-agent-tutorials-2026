@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組三 企業級 RAG</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.goals{position:absolute;left:960px;top:108px;width:850px}
+.goals h2{margin-bottom:14px}
+.goals ul.dots li{font-size:32px;margin:44px 0}
+.lab{position:absolute;left:150px;top:876px;width:1620px;font-size:30px;line-height:1.55}
+.lab .k{color:var(--ind);margin-right:18px}
+</style></head><body><div class="slide">
+  <h1 class="xl">模組 3</h1>
+  <h1>企業級 RAG</h1>
+  <p class="lead" style="width:800px">心法：先切對，再兩路撈，最後精排——只讓最相關的三段進模型。</p>
+
+  <div class="goals"><h2>學習目標</h2>
+    <ul class="dots">
+      <li>說出傳統 RAG 的三個痛點，各自該用什麼修</li>
+      <li>畫出離線建庫、在線問答兩條鏈路</li>
+      <li>選對切分方式：依標題、父子片段、表格</li>
+      <li>用 BM25＋向量雙路召回，以 RRF 依名次融合</li>
+      <li>用 Cross-Encoder 重排，只放 3–5 段進提示詞</li>
+    </ul>
+  </div>
+
+  <div class="lab"><span class="k">本章實戰</span>Lab 3　私有技術文檔多路召回問答<br>依標題切分 → 本地 Chroma → BM25＋向量雙路 → RRF 融合 → bge-reranker-v2-m3 重排 → 前 3 段進提示詞</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.rect(110,850,1700,150,'#f7e7c0',{fillStyle:'solid',stroke:D.C.mus,strokeWidth:3});
+D.tri(340,690,330,'ind',{fillStyle:'hachure',strokeWidth:2.6});
+/* 三角旁散落的文件片段 */
+[[560,640,'#d9e1ee',D.C.ind],[620,720,'#f7e7c0','#b98a12'],[520,760,'#d9e1ee',D.C.ind]].forEach(([x,y,f,s])=>D.sq(x,y,54,f,{fillStyle:'solid',stroke:s,strokeWidth:2.5}));
+D.sq(120,560,54,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.5});
+D.sq(150,790,54,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.5});
+</script></body></html>

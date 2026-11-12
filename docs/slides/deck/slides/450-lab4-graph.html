@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab 4 圖譜長相</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:40px;line-height:1.2}
+.sub{position:absolute;font-size:26px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>Lab 4 的圖譜長什麼樣</h1>
+  <p class="lead">三種實體、兩種主關係，再加虛線的類別節點：文字抽完、消歧、寫進 Neo4j，圖就長這樣。</p>
+
+  <div class="hd ind" style="left:1290px;top:285px">圖譜模型</div>
+  <div class="sub" style="left:1290px;top:345px;width:520px">節點標籤 3 種、主關係 2 種；虛線框是類別節點，用 IS_A 把宗門、法寶歸類。</div>
+  <div class="code" style="left:1290px;top:480px">(:Person)-[:MEMBER_OF]-&gt;(:Sect)
+(:Person)-[:OWNS]-&gt;(:Treasure)
+(宗門／法寶)-[:IS_A]-&gt;(類別)</div>
+  <div class="sub" style="left:1290px;top:665px;width:520px">寫入前先做實體消歧：同一個人的不同稱呼要合併成一個節點，否則圖會裂成孤島。</div>
+
+  <div class="hd ind" style="left:1290px;top:790px;font-size:34px">讀法示例</div>
+  <div class="sub" style="left:1290px;top:845px;width:520px">韓立 → 七玄門 ← 厲飛雨：兩條邊就連到同門，這就是多跳。</div>
+
+  <div class="read"><em>怎麼讀：</em>先看形狀與顏色：藍方＝人物、黃六角＝宗門、紅菱形＝法寶，虛線框是類別；再沿箭頭讀成「誰 屬於／持有 什麼」。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=document.querySelector('.slide');
+const T=(x,y,w,h,html,sty,cls)=>{const d=document.createElement('div');d.className='abs '+(cls||'');d.style.cssText=`left:${x}px;top:${y}px;`+(w?`width:${w}px;`:'')+(h?`height:${h}px;`:'')+(sty||'');d.innerHTML=html;S.appendChild(d);return d;};
+const FILL={p:['#d9e1ee',D.C.ind],s:['#f7e7c0','#b98a12'],w:['#f7d6cf',D.C.ver]};
+const GREY='#8d877a';
+/* 形狀語意：人物＝方塊（資料）、宗門＝六角、法寶＝菱形；虛線外框＝類別節點（IS_A 的終點） */
+const hexPts=(cx,cy,w,h,k)=>[[cx-w/2+k,cy-h/2],[cx+w/2-k,cy-h/2],[cx+w/2,cy],[cx+w/2-k,cy+h/2],[cx-w/2+k,cy+h/2],[cx-w/2,cy]];
+const diaPts=(cx,cy,w,h)=>[[cx,cy-h/2],[cx+w/2,cy],[cx,cy+h/2],[cx-w/2,cy]];
+const shape=(sh,cx,cy,w,h,kind,cat)=>{const f=FILL[kind];
+  const o=cat?{fillStyle:'solid',stroke:f[1],strokeWidth:2.6,strokeLineDash:[9,8]}:{fillStyle:'solid',stroke:f[1],strokeWidth:3};
+  const fill=cat?'#fbf9f4':f[0];
+  if(sh==='p')D.rect(cx-w/2,cy-h/2,w,h,fill,o);
+  else if(sh==='s')D.poly(hexPts(cx,cy,w,h,Math.min(24,h*0.32)),fill,o);
+  else D.poly(diaPts(cx,cy,w,h),fill,o);};
+const nd=(sh,cx,cy,w,h,t,kind,cat,fs)=>{shape(sh,cx,cy,w,h,kind,cat);
+  T(cx-w/2,cy-h/2,w,h,t,`display:flex;align-items:center;justify-content:center;font-size:${fs||(cat?26:28)}px;`+(cat?'color:var(--muted);':''));return {cx,cy,w,h,sh};};
+const edgePt=(n,tx,ty,pad)=>{const dx=tx-n.cx,dy=ty-n.cy;let k;
+  if(n.sh==='w')k=1/(Math.abs(dx)/(n.w/2+pad)+Math.abs(dy)/(n.h/2+pad));
+  else k=Math.min((n.w/2+pad)/Math.abs(dx||1e-9),(n.h/2+pad)/Math.abs(dy||1e-9));
+  return [n.cx+dx*k,n.cy+dy*k];};
+/* 關係：m＝MEMBER_OF 實線、o＝OWNS 虛線、i＝IS_A 灰細線 */
+const link=(a,b,type)=>{const [x1,y1]=edgePt(a,b.cx,b.cy,6),[x2,y2]=edgePt(b,a.cx,a.cy,8);
+  const o=type==='i'?{stroke:GREY,strokeWidth:2.4}:{strokeWidth:3};
+  if(type!=='o'){D.arrow(x1,y1,x2,y2,o);return;}
+  const an=Math.atan2(y2-y1,x2-x1),L=22;D.dash(x1,y1,x2,y2,o);
+  D.line(x2,y2,x2-L*Math.cos(an-0.45),y2-L*Math.sin(an-0.45),o);D.line(x2,y2,x2-L*Math.cos(an+0.45),y2-L*Math.sin(an+0.45),o);};
+
+/* 圖例第一列：節點形狀（藍方＝人物、黃六角＝宗門、紅菱形＝法寶、虛線框＝類別） */
+const LY=299,LT=LY-17;
+shape('p',126,LY,32,26,'p');T(152,LT,300,34,'Person 人物（方）','font-size:24px;line-height:34px');
+shape('s',386,LY,40,28,'s');T(414,LT,300,34,'Sect 宗門（六角）','font-size:24px;line-height:34px');
+shape('w',650,LY,44,30,'w');T(680,LT,300,34,'Treasure 法寶（菱形）','font-size:24px;line-height:34px');
+shape('s',946,LY,40,28,'s',true);T(974,LT,260,34,'類別（虛線框）','font-size:24px;line-height:34px');
+T(1160,LT,100,34,'<span class="tag">示意</span>');
+/* 圖例第二列：三種關係 */
+const L2=345,L2T=L2-17;
+D.arrow(110,L2,170,L2,{strokeWidth:3});T(182,L2T,260,34,'MEMBER_OF 屬於','font-size:24px;line-height:34px');
+(()=>{D.dash(430,L2,490,L2,{strokeWidth:3});D.line(490,L2,470,L2-10,{strokeWidth:3});D.line(490,L2,470,L2+10,{strokeWidth:3});T(502,L2T,200,34,'OWNS 持有','font-size:24px;line-height:34px');})();
+D.arrow(700,L2,760,L2,{stroke:GREY,strokeWidth:2.4});T(772,L2T,240,34,'IS_A 歸類','font-size:24px;line-height:34px');
+
+/* 節點：中心＝韓立；內圈＝他所屬的宗門、持有的法寶；外圈＝其他人物、類別 */
+const hl=nd('p',690,640,190,84,'韓立','p',false,36);
+const qx=nd('s',430,640,190,80,'七玄門','s'), hf=nd('s',950,640,190,80,'黃楓谷','s');
+const zt=nd('w',470,805,200,90,'掌天瓶','w'), qz=nd('w',900,805,270,100,'青竹蜂雲劍','w');
+const lf=nd('p',195,520,150,66,'厲飛雨','p'), mo=nd('p',195,765,150,66,'墨大夫','p');
+const nw=nd('p',1160,765,150,66,'南宮婉','p'), ym=nd('s',1160,540,160,80,'掩月宗','s');
+const wl=nd('s',430,495,190,66,'武林門派','s',true), xx=nd('s',950,495,190,66,'修仙門派','s',true);
+const mp=nd('s',690,405,160,64,'門派','s',true);
+const fj=nd('w',1110,885,170,74,'飛劍','w',true), fb=nd('w',690,893,170,74,'法寶','w',true);
+link(hl,qx,'m');link(hl,hf,'m');link(lf,qx,'m');link(mo,qx,'m');link(nw,ym,'m');
+link(hl,zt,'o');link(hl,qz,'o');
+link(qx,wl,'i');link(hf,xx,'i');link(ym,xx,'i');link(wl,mp,'i');link(xx,mp,'i');
+link(qz,fj,'i');link(zt,fb,'i');link(fj,fb,'i');
+</script></body></html>

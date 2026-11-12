@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Workflow 還是 Agent</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:44px;line-height:1.2}
+.hd2{position:absolute;font-size:26px;line-height:1.45;color:var(--muted);width:330px}
+.lb{position:absolute;font-size:26px;line-height:1.3;text-align:center}
+.lb.l{text-align:left}
+.card{position:absolute;left:1290px;top:300px;width:520px}
+.card .t{font-size:38px;margin-bottom:6px}
+.card .q{font-size:30px;line-height:1.4;margin-top:18px}
+.card .d{font-size:26px;line-height:1.45;color:var(--muted);margin-top:2px}
+</style></head><body><div class="slide">
+  <h1>Workflow 還是 Agent？</h1>
+  <p class="lead">步驟寫得出來，就寫成固定流程；答不出來，才讓模型自己決定。</p>
+
+  <div class="hd ind" style="left:110px;top:345px">Workflow</div>
+  <div class="hd2" style="left:110px;top:405px">路徑寫死在程式裡：<br>好測、成本固定</div>
+  <div class="lb" style="left:465px;top:472px;width:150px">分類</div>
+  <div class="lb" style="left:685px;top:472px;width:150px">查資料</div>
+  <div class="lb" style="left:905px;top:472px;width:150px">寫回答</div>
+  <div class="lb" style="left:1075px;top:472px;width:150px">答案</div>
+
+  <div class="hd ver" style="left:110px;top:600px">Agent</div>
+  <div class="hd2" style="left:110px;top:660px">每輪由模型選工具，<br>或交出答案；<br>走幾輪不固定</div>
+  <div class="lb l" style="left:905px;top:632px;width:200px">查價</div>
+  <div class="lb l" style="left:905px;top:722px;width:200px">運算</div>
+  <div class="lb l" style="left:905px;top:802px;width:200px">交出答案</div>
+  <div class="abs lbl mut" style="left:915px;top:566px">結果回來，再選一次</div>
+
+  <div class="card"><div class="t">怎麼選</div>
+    <div class="q ind">步驟事先寫得出來</div><div class="d">→ workflow：便宜、快、好測</div>
+    <div class="q ver">步驟數答不出來</div><div class="d">→ agent：彈性大，但更貴、更慢、更難預測</div>
+    <div class="abs note" style="left:0;top:290px;width:520px">原則：先用最簡單的，不夠再加複雜度。出自 Anthropic《Building effective agents》</div>
+  </div>
+  <div class="bridge" style="left:1290px;top:690px;width:520px"><span class="k">你已經會的</span>workflow 像靜態計算圖，每次走同一條路；agent 像 eager 模式，由資料決定 if／while 往哪走。</div>
+  <div class="read"><em>怎麼讀：</em>上排箭頭是寫死的；下排圓（模型）每輪自己從出口挑一個——差別就在「誰決定下一步」。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee',VL='#f7d6cf';
+/* Lane A：固定鏈 */
+D.ci(540,410,110,VL,{stroke:D.C.ver,strokeWidth:3});
+D.arrow(600,410,672,410,{strokeWidth:3});
+D.tri(760,412,110,'mus',{strokeWidth:2.6});
+D.arrow(825,410,892,410,{strokeWidth:3});
+D.ci(980,410,110,VL,{stroke:D.C.ver,strokeWidth:3});
+D.arrow(1040,410,1100,410,{strokeWidth:3});
+D.rect(1110,380,90,60,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+/* 分隔線 */
+D.line(110,540,1200,540,{strokeWidth:1.8,stroke:D.C.grey});
+D.dash(1250,300,1250,900,{strokeWidth:1.8,stroke:D.C.grey});
+/* Lane B：模型扇出 */
+D.ci(560,720,140,VL,{stroke:D.C.ver,strokeWidth:3});
+D.arrow(635,700,815,650,{strokeWidth:3});D.arrow(640,722,815,735,{strokeWidth:3});D.arrow(630,752,815,812,{strokeWidth:3});
+D.tri(860,652,80,'mus',{strokeWidth:2.4});
+D.tri(860,742,80,'mus',{strokeWidth:2.4});
+D.rect(832,792,56,40,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.curve([[868,600],[745,555],[612,642]],{strokeWidth:2.6,strokeLineDash:[10,10]});D.arrow(634,612,610,646,{strokeWidth:2.6});
+</script></body></html>

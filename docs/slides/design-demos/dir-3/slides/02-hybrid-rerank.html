@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>混合檢索與重排</title>
+<link rel="stylesheet" href="_base.css">
+<style>.k{position:absolute;font-size:26px;font-weight:500;width:30px}</style>
+</head><body><div class="slide">
+  <h1>混合檢索：兩路粗篩，一次精排</h1>
+  <p class="lead">關鍵詞抓得到型號和錯誤碼，向量抓得到換句話說；兩路都撈，再交給重排模型挑最相關的三段。</p>
+
+  <div class="abs" style="left:110px;top:330px;width:300px"><div class="lbl blu" style="font-weight:500">問題</div><div style="font-size:28px;line-height:1.45;margin-top:4px">「ERR-4012<br>要怎麼排除？」</div></div>
+  <div class="abs lbl" style="left:480px;top:300px"><span class="n">1</span><span class="grn" style="font-weight:500">BM25</span> 比對字面</div>
+  <div class="abs lbl" style="left:800px;top:300px"><span class="n">1</span><span class="grn" style="font-weight:500">向量</span> 比對意思</div>
+  <div class="abs lbl" style="left:1160px;top:300px"><span class="n">2</span><span class="org" style="font-weight:500">重排</span> 一起讀再打分</div>
+  <div class="abs lbl" style="left:1540px;top:300px"><span class="n">3</span>Top-3 進 Prompt</div>
+  <div class="abs d" style="left:480px;top:600px;width:600px;font-size:24px">深綠格＝命中關鍵詞「ERR-4012」；A–H 是文件片段（示意）</div>
+  <div class="abs d" style="left:1160px;top:560px;width:300px;font-size:24px">問題和片段<b>串在一起</b>進模型，比各自算向量再比相似度更準、也更慢</div>
+  <div class="abs d" style="left:1540px;top:560px;width:270px;font-size:24px">長條＝重排分數（示意）</div>
+  <div id="k"></div>
+
+  <div class="bridge" style="left:110px;top:720px;width:1700px"><span class="k" style="position:static;display:inline;margin-right:18px;font-weight:700">你已經會的</span>兩階段物件偵測：先大量產生候選框（便宜、求全），再用分類器精判（貴、求準）。檢索同理。</div>
+  <div class="read"><em>怎麼讀：</em>每一列小方格是一段文件的向量。往右走，片段從 10 段縮到 3 段——前面求全，後面求準。</div>
+</div>
+<svg class="fig" id="s" width="1920" height="1080"></svg>
+<script>
+const s=document.getElementById('s'),kb=document.getElementById('k'),NS='http://www.w3.org/2000/svg';
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);s.appendChild(e);return e};
+const lab=(x,y,t)=>{const d=document.createElement('div');d.className='k';d.style.left=x+'px';d.style.top=y+'px';d.textContent=t;kb.appendChild(d)};
+const vec=(x,y,cols,sz=20,g=4)=>cols.forEach((c,i)=>el('rect',{x:x+i*(sz+g),y,width:sz,height:sz,rx:3,fill:c}));
+const G='#9fd6bb',GG='#2f9e6e',B='#3f7fd1',BL='#a9c6ec';
+el('defs',{}).innerHTML='<marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0L10,5L0,10z" fill="#22252b"/></marker>';
+/* 問題向量 */
+vec(110,450,[B,BL,B,B,BL,B,BL,B]);
+const pat=i=>Array.from({length:8},(_,j)=>(j*3+i)%4===0?GG:G);
+'ABCDE'.split('').forEach((t,i)=>{const y=360+i*44;lab(480,y-6,t);vec(515,y,Array.from({length:8},(_,j)=>j===i%8?GG:G))});
+'CFAGH'.split('').forEach((t,i)=>{const y=360+i*44;lab(800,y-6,t);vec(835,y,[GG,G,GG,GG,G,GG,G,GG].map((c,j)=>j===(i+5)%8?G:c))});
+/* 重排：問題＋片段一起進模型 */
+el('rect',{x:1160,y:370,width:300,height:160,rx:12,fill:'#fde3cc',stroke:'#f08c3a','stroke-width':3});
+vec(1180,410,[B,BL,B,B]);el('rect',{x:1278,y:405,width:4,height:30,fill:'#22252b'});vec(1290,410,[G,GG,G,GG,G,GG]);
+el('text',{x:1310,y:490,'text-anchor':'middle','font-size':24,fill:'#c9661a','font-family':'Noto Sans TC','font-weight':500}).textContent='Cross-Encoder';
+/* Top-3 */
+[['C',230],['A',190],['F',140]].forEach(([t,w],i)=>{const y=380+i*60;lab(1540,y-4,t);vec(1575,y,pat(i),18,3);el('rect',{x:1575,y:y+26,width:w,height:10,rx:5,fill:'#f08c3a'})});
+/* 箭頭 */
+[[410,465,470,420],[1040,470,1150,450],[1465,450,1530,440]].forEach(([a,b,c,d])=>el('path',{d:`M${a} ${b} L${c} ${d}`,stroke:'#22252b','stroke-width':3,fill:'none','marker-end':'url(#a)'}));
+</script></body></html>

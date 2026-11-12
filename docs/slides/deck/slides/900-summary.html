@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>大總結：四支柱八模組</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ln{position:absolute;left:215px;width:120px;font-size:40px;line-height:1.2}
+.cd{position:absolute;width:470px}
+.cd .m{font-size:24px;line-height:1.3;color:var(--ind)}
+.cd .s{font-size:28px;line-height:1.4}
+.gh .s{color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>大總結：四根支柱，八個模組</h1>
+  <div id="host"></div>
+  <div class="ln ver" style="top:250px">大腦</div>
+  <div class="ln ind" style="top:400px">記憶</div>
+  <div class="ln" style="top:550px">規劃</div>
+  <div class="ln" style="top:700px;color:#b98a12">工具</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const C=D.C,host=document.getElementById('host');
+const LY=[200,350,500,650],LH=150;            /* 四條支柱泳道 */
+const CX=[345,845,1345],CW=470;
+const el=(cls,x,y,html,w)=>{const d=document.createElement('div');d.className=cls;d.style.left=x+'px';d.style.top=y+'px';if(w)d.style.width=w+'px';d.innerHTML=html;host.appendChild(d);};
+const card=(lane,col,no,txt,fill,stroke,ghost,span)=>{
+  const x=CX[col],y=LY[lane],w=span?CX[col+span-1]+CW-x:CW;
+  if(ghost) D.rect(x,y+8,w,LH-16,'#f3efe6',{fillStyle:'solid',stroke:C.grey,strokeWidth:2.2,strokeLineDash:[9,8]});
+  else D.rect(x,y+8,w,LH-16,fill,{fillStyle:'solid',stroke,strokeWidth:3});
+  el('cd'+(ghost?' gh':''),x+22,y+22,'<div class="m">'+no+'</div><div class="s">'+txt+'</div>',w-44);
+};
+/* 泳道底符號：圓＝大腦、方＝記憶、迴圈＝規劃、三角＝工具 */
+D.ci(165,LY[0]+LH/2,70,C.ver,{fillStyle:'hachure',strokeWidth:2.4});
+D.sq(132,LY[1]+LH/2-33,66,'ind',{strokeWidth:2.4});
+(()=>{const x=165,y=LY[2]+LH/2;D.curve([[x+30,y+4],[x+26,y-24],[x,y-32],[x-28,y-18],[x-32,y+14],[x-8,y+32]],{strokeWidth:3.5});D.arrow(x-30,y+28,x-8,y+33,{strokeWidth:3.5});})();
+D.tri(165,LY[3]+LH/2+2,84,C.mus,{strokeWidth:2.4});
+[0,1,2].forEach(i=>D.line(110,LY[i]+LH,1810,LY[i]+LH,{stroke:'#d3cdbf',strokeWidth:1.8,roughness:1.6}));
+
+const V='#f7d6cf',I='#d9e1ee',Y='#f7e7c0',P='#fbf9f4';
+card(0,0,'模組一','LLM＝詞表上的分類器，<br>逐字生成，記不住上一輪',V,C.ver);
+card(0,1,'模組二','提示詞當規格寫，<br>輸出用 schema 把關',V,C.ver);
+card(0,2,'模組六','LoRA 只改旁路小矩陣，<br>換風格不換底模',V,C.ver);
+card(1,0,'模組三','混合檢索加重排，<br>讓模型引用你的文件',I,C.ind);
+card(1,1,'模組四','知識圖譜補上多跳關係，<br>也能做全局總結',I,C.ind);
+card(1,2,'模組五的另一半','checkpointer 把對話狀態存起來',0,0,true);
+card(2,0,'模組五','LangGraph 狀態圖把「想 → 做 → 看」串成可暫停、可恢復的迴圈；高風險處停下來問人',P,C.ink,false,3);
+card(3,0,'模組七','MCP 讓工具接口一次寫好，<br>各模型都能接',Y,'#b98a12');
+card(3,1,'模組五的另一半','tool calling：模型提出呼叫，<br>由程式執行',0,0,true);
+/* 模組八：橫跨四根支柱 */
+D.rect(110,820,1700,108,Y,{fillStyle:'solid',stroke:C.ink,strokeWidth:3.2});
+el("cd",140,834,'<div class="m" style="color:var(--ink)">模組八　四根支柱都要看得見、測得到</div><div class="s">trace 與評測讓系統可除錯、可回歸；旗艦專案把四根支柱接起來，成果寫進履歷。</div>',1640);
+</script></body></html>

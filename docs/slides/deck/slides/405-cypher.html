@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Cypher 基本句型</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.el{position:absolute;white-space:nowrap;background:#f3efe6;padding:0 8px;font-size:24px;line-height:34px;color:var(--muted);transform:translate(-50%,-50%)}
+.code .pn{color:var(--ind)}.code .sn{color:#b98a12}.code .rl{color:var(--ink)}
+.cap{position:absolute;font-size:24px;line-height:1.4;text-align:center;transform:translateX(-50%);white-space:nowrap}
+.sub{position:absolute;font-size:26px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>Cypher：把要找的形狀畫出來</h1>
+  <p class="lead">查詢就是一張 ASCII 小圖：圓括號是節點，方括號加箭頭是關係。</p>
+
+  <div class="abs lbl ind" style="left:110px;top:278px">查詢（讀）：找出和韓立同門的人</div>
+  <div class="code" style="left:110px;top:325px"><span class="k">MATCH</span> <span class="pn">(h:Person {name: '韓立'})</span>
+      <span class="rl">-[:MEMBER_OF]-&gt;</span><span class="sn">(s:Sect)</span>
+      <span class="rl">&lt;-[:MEMBER_OF]-</span><span class="pn">(p:Person)</span>
+<span class="k">RETURN</span> s.name, p.name</div>
+
+  <div class="abs lbl ind" style="left:110px;top:560px">寫入：沒有才建，有就重用</div>
+  <div class="code" style="left:110px;top:605px"><span class="k">MERGE</span> (a:Person {name: '韓立'})
+<span class="k">MERGE</span> (b:Sect   {name: '七玄門'})
+<span class="k">MERGE</span> (a)-[:MEMBER_OF]-&gt;(b)</div>
+
+  <div class="abs lbl mut" style="left:800px;top:278px">同一個形狀，畫成圖</div>
+  <div class="cap pn" style="left:940px;top:432px">h：韓立</div>
+  <div class="cap sn" style="left:1300px;top:432px">s：某個宗門</div>
+  <div class="cap pn" style="left:1660px;top:432px">p：要找的人</div>
+  <div class="abs lbl" style="left:1385px;top:488px;width:425px;text-align:right">回傳：厲飛雨、墨大夫 <span class="tag">示意</span></div>
+
+  <div class="sub" style="left:800px;top:625px;width:1000px"><span class="ind">MERGE</span> 重跑也不會生出重複節點；批次寫入三元組一律用它，不用 CREATE。</div>
+  <div class="sub" style="left:800px;top:715px;width:1000px">Neo4j 2026.02 起，新資料庫預設 Cypher 25；模型學到的舊語法可能失效。</div>
+
+  <div class="bridge" style="left:110px;top:795px;width:1700px"><span class="k">你已經會的</span>Cypher 描述的是「要找的子圖形狀」，像 CNN 拿固定的 kernel 去比對——只是這裡比對的是結構，不是像素。</div>
+  <div class="read"><em>怎麼讀：</em>先看左上的文字，再對照右邊的圖：同顏色的括號對應同顏色的方塊。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=document.querySelector('.slide');
+const T=(x,y,w,h,html,sty,cls)=>{const d=document.createElement('div');d.className='abs '+(cls||'');d.style.cssText=`left:${x}px;top:${y}px;`+(w?`width:${w}px;`:'')+(h?`height:${h}px;`:'')+(sty||'');d.innerHTML=html;S.appendChild(d);return d;};
+const FILL={p:['#d9e1ee',D.C.ind],s:['#f7e7c0','#b98a12']};
+const nd=(cx,cy,w,h,t,k,fs,o)=>{const f=FILL[k];D.rect(cx-w/2,cy-h/2,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:3},o||{}));T(cx-w/2,cy-h/2,w,h,t,`display:flex;align-items:center;justify-content:center;font-size:${fs||28}px;`);return {cx,cy,w,h};};
+const arrowUp=(a,b,lbl)=>{const x1=a.cx+(a.cx<b.cx?1:-1)*(a.w/2+8),x2=b.cx+(a.cx<b.cx?-1:1)*(b.w/2+10);D.arrow(x1,a.cy,x2,b.cy,{strokeWidth:3});T((x1+x2)/2,a.cy-34,0,0,lbl,'','el');};
+const h=nd(940,380,150,72,'韓立','p'), s=nd(1300,380,170,72,'？','s'), p=nd(1660,380,150,72,'？','p');
+arrowUp(h,s,'MEMBER_OF');arrowUp(p,s,'MEMBER_OF');
+</script></body></html>

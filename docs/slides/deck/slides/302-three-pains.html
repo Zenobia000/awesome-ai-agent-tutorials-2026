@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>傳統 RAG 三痛點</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.col{position:absolute;top:290px;width:520px}
+.col .t{font-size:44px;line-height:1.2}
+.d{position:absolute;top:650px;width:520px;font-size:26px;line-height:1.5;color:var(--muted)}
+.fix{position:absolute;top:812px;width:520px;height:84px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:28px;line-height:1.35}
+.fix .k{color:var(--ind);margin-right:10px}
+.cl{position:absolute;font-size:24px;line-height:1.35;text-align:center}
+</style></head><body><div class="slide">
+  <h1>傳統 RAG 在生產環境的三個痛點</h1>
+  <p class="lead">只做「切片＋向量相似度」，上線後常見三種失敗。每一種對應一個修法，本章逐個補上。</p>
+
+  <div class="col" style="left:110px"><div class="t ver">精度不足</div></div>
+  <div class="col" style="left:700px"><div class="t ver">缺乏大局觀</div></div>
+  <div class="col" style="left:1290px"><div class="t ver">上下文斷裂</div></div>
+
+  <!-- 痛點 1 -->
+  <div class="cl mut" style="left:110px;top:372px;width:520px">撈回 Top-5</div>
+  <div class="cl" style="left:110px;top:540px;width:520px">只有這 1 塊真正有用</div>
+  <div class="d" style="left:110px">撈回來的片段多半只是邊緣相關。雜訊混進提示詞，模型就容易被帶偏。</div>
+  <div class="fix" style="left:110px"><span class="k">修法</span>混合檢索＋重排</div>
+
+  <!-- 痛點 2 -->
+  <div class="cl mut" style="left:700px;top:352px;width:520px">一份文件被切成很多小塊</div>
+  <div class="cl" style="left:700px;top:600px;width:520px">只撈得到這 3 塊</div>
+  <div class="d" style="left:700px">「總結這個團隊去年的五大貢獻」要看整份文件，切片檢索只給得出零散幾塊。</div>
+  <div class="fix" style="left:700px"><span class="k">修法</span>知識圖譜（模組四）</div>
+
+  <!-- 痛點 3 -->
+  <div class="cl mut" style="left:1290px;top:372px;width:520px">一段話被攔腰切成兩塊</div>
+  <div class="cl" style="left:1290px;top:430px;width:250px;line-height:140px;height:140px;font-size:26px;padding:0 14px;line-height:1.4;display:flex;align-items:center;justify-content:center">…偵測到過熱時，</div>
+  <div class="cl" style="left:1560px;top:430px;width:250px;height:140px;font-size:26px;padding:0 14px;line-height:1.4;display:flex;align-items:center;justify-content:center">它會自動降頻。</div>
+  <div class="cl" style="left:1290px;top:600px;width:520px">只撈到右邊那塊：「它」是誰？<span class="tag">示意</span></div>
+  <div class="d" style="left:1290px">條件和結論被切開，片段單獨看時指代不明、語意不完整。</div>
+  <div class="fix" style="left:1290px"><span class="k">修法</span>依結構切分＋父子片段</div>
+
+  <div class="read"><em>怎麼讀：</em>由上而下：痛點名稱 → 它在檢索結果裡長什麼樣 → 對應的修法。黃色方塊是被撈到的，淡紅方塊是雜訊。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const Y=['#f7e7c0','#b98a12'],R=['#f7d6cf',D.C.ver],L=['#d9e1ee',D.C.ind],G=['#ece7db',D.C.grey];
+const sq=(x,y,s,[f,st],w)=>D.sq(x,y,s,f,{fillStyle:'solid',stroke:st,strokeWidth:w||2.5});
+/* 痛點 1：Top-5，只有第 3 塊有用 */
+for(let i=0;i<5;i++)sq(143+i*94,430,78,i===2?Y:R);
+/* 痛點 2：整份文件的小方格，只撈到 3 塊 */
+const hit={'1,0':1,'5,1':1,'2,3':1};
+for(let r=0;r<4;r++)for(let c=0;c<8;c++)sq(756+c*52,392+r*52,44,hit[c+','+r]?Y:G,hit[c+','+r]?2.8:1.8);
+/* 痛點 3：兩塊被切開 */
+D.rect(1290,430,250,140,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.rect(1560,430,250,140,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+D.dash(1550,408,1550,592,{stroke:D.C.ver,strokeWidth:3});
+/* 修法框 */
+[110,700,1290].forEach(x=>D.rect(x,812,520,84,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3}));
+[110,700,1290].forEach(x=>D.arrow(x+260,780,x+260,806,{strokeWidth:2.5}));
+</script></body></html>

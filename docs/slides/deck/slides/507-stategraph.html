@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>StateGraph 三要素</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.mono{font-family:"JetBrains Mono","Noto Sans Mono CJK TC",monospace}
+.t{position:absolute;text-align:center;line-height:1.2}
+.key{position:absolute;font-size:32px;line-height:1.2}
+.u{position:absolute;font-size:24px;line-height:1.3;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>StateGraph：State、Node、Edge</h1>
+  <p class="lead">共享的白板、讀寫白板的函式、決定下一步去哪的箭頭——整張圖就這三樣。</p>
+
+  <!-- State：白板 -->
+  <div class="key ind" style="left:140px;top:290px;font-size:36px">State</div>
+  <div class="abs note" style="left:290px;top:300px">所有節點共用的白板</div>
+  <div class="abs mono" style="left:140px;top:336px;font-size:26px">messages: [user, assistant, tool, …]</div>
+
+  <!-- 讀寫標註 -->
+  <div class="u" style="left:205px;top:408px;width:140px;text-align:right">讀</div>
+  <div class="u ver" style="left:437px;top:408px;width:110px">寫回</div>
+  <div class="u" style="left:646px;top:408px;width:90px">只讀</div>
+
+  <!-- 圖上的字 -->
+  <div class="t" style="left:110px;top:529px;width:100px;font-size:24px">START</div>
+  <div class="t" style="left:310px;top:526px;width:180px;font-size:26px">call_model</div>
+  <div class="t" style="left:580px;top:526px;width:100px;font-size:26px">條件</div>
+  <div class="t" style="left:820px;top:552px;width:140px;font-size:26px">run_tool</div>
+  <div class="t" style="left:575px;top:714px;width:110px;font-size:24px">END</div>
+  <div class="key mus" style="left:213px;top:562px;color:#b98a12">Edge</div>
+  <div class="key ver" style="left:424px;top:640px">Node</div>
+  <div class="key ver" style="left:960px;top:515px">Node</div>
+  <div class="u" style="left:708px;top:494px;width:120px;text-align:center">要用工具</div>
+  <div class="key mus" style="left:690px;top:558px;width:120px;text-align:center;font-size:28px;color:#b98a12">條件邊</div>
+  <div class="u" style="left:540px;top:642px;width:76px;text-align:right">答完了</div>
+  <div class="u" style="left:716px;top:650px;width:170px;line-height:1.5">工具跑完<br>結果寫回 state<br>再問模型</div>
+
+  <div class="code" style="left:1060px;top:285px;width:750px">g = StateGraph(MessagesState)  <span class="c"># State：白板</span>
+<span class="k">def</span> call_model(state):  <span class="c"># Node：讀 state、回更新</span>
+    reply = model.invoke(state[<span class="s">"messages"</span>])
+    <span class="k">return</span> {<span class="s">"messages"</span>: [reply]}
+
+g.add_node(<span class="s">"call_model"</span>, call_model)
+g.add_node(<span class="s">"run_tool"</span>, run_tool)
+g.add_edge(START, <span class="s">"call_model"</span>)  <span class="c"># Edge：固定邊</span>
+<span class="c"># 條件邊：route 決定去哪，下一頁</span>
+g.add_conditional_edges(<span class="s">"call_model"</span>, route)
+g.add_edge(<span class="s">"run_tool"</span>, <span class="s">"call_model"</span>)</div>
+  <div class="abs note" style="left:1060px;top:746px;width:750px">from langgraph.graph import StateGraph, MessagesState, START</div>
+
+  <div class="bridge inline" style="left:110px;top:858px;width:1700px"><span class="k">你已經會的</span>State ≈ 在網路裡流動的 tensor；Node ≈ layer（輸入 state、輸出更新）；Edge ≈ 層與層的連線。</div>
+  <div class="read"><em>怎麼讀：</em>藍色方塊是白板；圓（模型）和三角（工具）是節點，從白板讀、再寫回；箭頭是邊，實線固定、虛線依條件走。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee',VL='#f7d6cf',ln={strokeWidth:3.2},rd={strokeWidth:2.6},wr={strokeWidth:2.6,stroke:D.C.ver};
+/* State 白板（方） */
+D.rect(110,280,880,100,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3.4});
+/* 主線：START → call_model → 條件 → run_tool／END */
+D.rect(110,515,100,50,'#ebe6da',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.6});
+D.arrow(216,540,304,540,ln);
+D.ci(400,540,180,VL,{stroke:D.C.ver,strokeWidth:3.2});
+D.arrow(494,540,552,540,ln);
+D.dia(630,540,140,VL,{stroke:D.C.ver,strokeWidth:3.2});
+D.tri(890,525,170,'mus',{strokeWidth:2.6});
+D.dash(706,540,812,540,{strokeWidth:3.2});D.arrow(792,540,826,540,{strokeWidth:3.2});
+D.rect(575,700,110,50,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+D.dash(630,614,630,676,{strokeWidth:3.2});D.arrow(630,656,630,696,{strokeWidth:3.2});
+/* 工具跑完：回到 call_model */
+D.curve([[890,606],[896,785],[640,816],[400,790],[400,690]],ln);D.arrow(400,696,400,636,ln);
+/* 每個節點讀寫白板 */
+D.dash(372,386,372,444,rd);D.arrow(372,424,372,448,rd);
+D.dash(428,448,428,386,wr);D.arrow(428,410,428,384,wr);
+D.dash(630,386,630,462,rd);D.arrow(630,440,630,466,rd);
+D.dash(874,386,874,452,rd);D.arrow(874,430,874,456,rd);
+D.dash(908,452,908,386,wr);D.arrow(908,410,908,384,wr);
+</script></body></html>

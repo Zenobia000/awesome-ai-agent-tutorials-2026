@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>向量空間與 metadata 過濾</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cl{position:absolute;font-size:24px;line-height:1.35}
+.nt{position:absolute;left:960px;width:850px;font-size:28px;line-height:1.5}
+.nt .k{color:var(--ind)}
+.bridge.inline{padding:14px 30px}
+</style></head><body><div class="slide">
+  <h1>向量檢索：先過濾，再比距離</h1>
+  <p class="lead">embedding 把每個片段變成空間裡的一個點，問題也變成一個點；意思越近，距離越近。ChromaDB 還能先用 metadata 篩掉不要的版本。</p>
+
+  <div class="cl mut" style="left:110px;top:784px;width:770px">向量空間<span class="tag" style="margin:0 8px 0 12px">示意</span>實際有上千維，這裡壓成 2 維畫</div>
+  <div id="txt"></div>
+
+  <div class="nt" style="top:608px"><span class="k">metadata</span>：附在每個片段上的標籤，例如版本、模組名稱、章節。</div>
+  <div class="nt" style="top:700px"><span class="k">維度</span>由 embedding 模型決定；<code style="font-family:'JetBrains Mono',monospace;font-size:26px">bge-m3</code> 是 1024 維。</div>
+
+  <div class="bridge inline" style="left:110px;top:858px;width:1700px"><span class="k">你已經會的</span>embedding＝預訓練 encoder 抽出的特徵向量；先過濾再比距離＝先套 mask，再做最近鄰搜尋。</div>
+<div class="code" style="left:960px;top:340px"><span class="c"># 先用 where 過濾，再比距離取前 5</span>
+col.query(
+    query_embeddings=q_vec,
+    n_results=5,
+    <span class="hl">where={"version": "v2"},</span>
+)</div>
+
+  <div class="read"><em>怎麼讀：</em>灰色打叉的點被 where 條件擋掉，不參加比距離；紅色虛線圈是剩下的點裡離問題最近的 5 個。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const T=document.getElementById('txt');
+const tx=(x,y,w,t,c,st)=>{const d=document.createElement('div');d.className='cl '+(c||'');d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;${st||''}`;d.innerHTML=t;T.appendChild(d);};
+/* 向量平面 */
+D.rect(110,340,770,430,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+const NEW=['#d9e1ee',D.C.ind],OLD=['#ece7db',D.C.grey];
+const pt=(x,y,[f,st],s)=>D.sq(x-(s||34)/2,y-(s||34)/2,s||34,f,{fillStyle:'solid',stroke:st,strokeWidth:2.5});
+const q=[500,560];
+/* 虛線圈：剩下的點裡最近的 5 個 */
+D.ci(q[0],q[1],330,null,{stroke:D.C.ver,strokeWidth:3,strokeLineDash:[12,10]});
+/* 新版（留下） */
+[[400,470],[580,455],[395,650],[610,640],[350,560],[210,420],[760,430],[770,690],[230,690],[730,520]].forEach(([x,y])=>pt(x,y,NEW));
+/* 舊版（被過濾） */
+[[540,520],[445,590],[620,560],[150,540],[800,600]].forEach(([x,y])=>{pt(x,y,OLD);D.cross(x,y,14,{strokeWidth:3.5});});
+/* 問題 */
+pt(q[0],q[1],['#f7d6cf',D.C.ver],44);
+tx(q[0]-45,q[1]+26,90,'問題','ver','text-align:center');
+/* 圖例 */
+pt(150,745,NEW,26);tx(172,731,80,'新版','');
+pt(272,745,OLD,26);D.cross(272,745,10,{strokeWidth:3});tx(294,731,260,'舊版（被 where 排除）','','white-space:nowrap');
+/* 程式碼 */
+</script>
+</body></html>

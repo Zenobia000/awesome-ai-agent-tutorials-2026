@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Self-RAG 與 CRAG：檢索後自評</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cl{position:absolute;font-size:24px;line-height:1.4;text-align:center}
+.nm{position:absolute;font-size:30px;line-height:1.25;text-align:center}
+.in{position:absolute;font-size:38px;text-align:center;line-height:1}
+.bridge.inline{padding:14px 30px}
+</style></head><body><div class="slide">
+  <h1>檢索完先自評：不夠就重來</h1>
+  <p class="lead">固定流水線檢索完就生成。Self-RAG 與 CRAG 多加一個評分節點，不夠好就重查。</p>
+  <div id="t"></div>
+
+  <div class="bridge inline" style="left:110px;top:858px;width:1700px"><span class="k">你已經會的</span>評分節點＝小分類器（相關／不相關）；重查的回圈像訓練迴圈裡 early stopping 的判斷。</div>
+  <div class="read"><em>怎麼讀：</em>主線由左往右；朱紅圓是評分節點，夠用就往右生成，不夠就走上方回圈改寫重查，或走下方上網搜尋。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const T=document.getElementById('t');
+const put=(cls,x,y,w,t,st)=>{const d=document.createElement('div');d.className=cls;d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;${st||''}`;d.innerHTML=t;T.appendChild(d);};
+const BL=['#d9e1ee',D.C.ind],YL=['#f7e7c0','#b98a12'];
+const sq=(cx,cy,s,[f,st],w)=>D.sq(cx-s/2,cy-s/2,s,f,{fillStyle:'solid',stroke:st,strokeWidth:w||2.8});
+const mdl=(cx,cy,d)=>D.ci(cx,cy,d,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+const Y=560;
+/* 主線 */
+sq(170,Y,76,BL);put('nm',70,Y+50,200,'問題');
+D.arrow(220,Y,350,Y,{strokeWidth:2.8});
+D.tri(410,Y,104,'mus',{strokeWidth:2.6});put('nm',310,Y+50,200,'檢索');
+D.arrow(472,Y,560,Y,{strokeWidth:2.8});
+[-1,0,1].forEach(k=>sq(640+k*58,Y,46,YL));put('nm',540,Y+50,200,'撈回的片段');
+D.arrow(715,Y,790,Y,{strokeWidth:2.8});
+mdl(900,Y,180);put('in',815,Y-34,170,'評分');put('cl',815,Y+16,170,'夠不夠用？','font-size:24px');
+D.arrow(990,Y,1190,Y,{strokeWidth:2.8});put('cl',1015,Y-44,170,'夠用','font-size:26px');
+mdl(1260,Y,120);put('in',1200,Y-18,120,'LLM');put('nm',1190,Y-112,140,'生成');
+D.arrow(1325,Y,1500,Y,{strokeWidth:2.8});
+sq(1560,Y,76,BL);put('nm',1460,Y+50,200,'回答');
+/* 上方回圈：不夠、問法不好 → 改寫 → 回到檢索 */
+D.curve([[870,Y-92],[800,420],[700,385]],{strokeWidth:2.8});D.arrow(740,396,690,385,{strokeWidth:2.8});
+mdl(600,385,100);put('nm',525,Y-264,150,'改寫');
+put('cl',690,Y-210,300,'不夠：問法有問題','font-size:26px');
+D.curve([[555,395],[480,410],[430,Y-70]],{strokeWidth:2.8});D.arrow(445,Y-100,430,Y-76,{strokeWidth:2.8});
+/* 下方：不夠、庫裡沒有 → 上網搜尋 → 生成 */
+D.curve([[950,Y+85],[1000,690],[1052,712]],{strokeWidth:2.8});D.arrow(1022,702,1058,714,{strokeWidth:2.8});
+D.tri(1120,715,100,'mus',{strokeWidth:2.6});put('nm',1000,Y+226,240,'上網搜尋');
+put('cl',800,Y+186,230,'不夠：庫裡沒有','font-size:26px');
+D.curve([[1170,690],[1230,650],[1260,Y+70]],{strokeWidth:2.8});D.arrow(1245,Y+95,1260,Y+68,{strokeWidth:2.8});
+/* 附註 */
+put('cl',1400,690,410,'CRAG 的評分分三種：正確、不正確、模糊，各走不同的路。Self-RAG 把評估訓練進模型輸出；工程上常改用獨立評分節點。','text-align:left;font-size:24px;line-height:1.5');
+</script></body></html>

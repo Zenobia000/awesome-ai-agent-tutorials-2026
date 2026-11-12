@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組六：章首與學習目標</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.goals{position:absolute;left:1090px;top:196px;width:720px}
+.goals li{font-size:32px;line-height:1.5;margin:18px 0}
+.prac{position:absolute;left:110px;top:846px;width:1700px;padding:24px 34px;font-size:30px;line-height:1.55}
+.prac .k{color:#b98a12;margin-right:18px}
+</style></head><body><div class="slide">
+  <h1 class="xl" style="position:absolute;left:110px;top:78px">模組 6</h1>
+  <h1 style="position:absolute;left:110px;top:214px;font-size:76px">LoRA 微調與私有化部署</h1>
+  <p class="lead" style="position:absolute;left:110px;top:326px;width:880px">缺知識用 RAG，缺行為才微調。LoRA 凍結原本的權重，只訓練旁邊一條很窄的路。</p>
+
+  <h2 class="abs ind" style="left:1090px;top:110px">學習目標</h2>
+  <ul class="dots goals">
+    <li>判斷該用 Prompt、RAG 還是微調</li>
+    <li>說清 LoRA：凍結 W，只訓練旁路 B·A</li>
+    <li>估算 QLoRA 顯存，判斷 24GB 夠不夠</li>
+    <li>備好資料格式，對齊 chat template</li>
+    <li>用 LLaMA-Factory 訓練、看 loss、合併匯出</li>
+    <li>在本地跑能看圖的多模態模型</li>
+  </ul>
+
+  <div class="prac"><span class="k">本章實戰</span>Lab 6：在雲端 RTX 4090 上用 LLaMA-Factory 為 Qwen3 做問診／客服風格 LoRA 微調<span style="white-space:nowrap">（r = 8、alpha = 16）</span>，對比微調前後，再合併匯出。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.tri(440,668,360,'mus',{fillStyle:'hachure',strokeWidth:2.8});
+D.rect(110,846,1700,128,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+</script></body></html>

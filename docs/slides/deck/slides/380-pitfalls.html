@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>RAG 常見踩坑</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ch{position:absolute;top:288px;font-size:34px;line-height:1.2}
+.c{position:absolute;display:flex;align-items:center;font-size:26px;line-height:1.45;padding:0 24px}
+.c code{font-family:"JetBrains Mono",monospace;font-size:22px;white-space:nowrap}
+</style></head><body><div class="slide">
+  <h1>RAG 常見踩坑：四種症狀，四個修法</h1>
+  <p class="lead">檢索不準時，先看是哪一種症狀，再回頭改對應的環節。</p>
+
+  <div class="ch ver" style="left:190px">症狀</div>
+  <div class="ch ind" style="left:700px">原因</div>
+  <div class="ch" style="left:1270px">修法</div>
+  <div id="g"></div>
+
+  <div class="read"><em>怎麼讀：</em>每一列由左往右：看到什麼 → 為什麼 → 怎麼改。三角是提醒，這四種都是上線後才容易發現的問題。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const G=document.getElementById('g');
+const cell=(x,y,w,h,html,fill,stroke)=>{D.rect(x,y,w,h,fill,{fillStyle:'solid',stroke,strokeWidth:3});
+  const d=document.createElement('div');d.className='c';d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px`;d.innerHTML='<div>'+html+'</div>';G.appendChild(d);};
+const rows=[
+ ['答案夾雜不相干的內容，甚至一本正經亂編',
+  '召回太多邊緣相關的片段，塞滿上下文，模型的注意力被分散',
+  '嚴格限制進提示詞的 Top-N（3–5 段），並設重排分數的截斷門檻'],
+ ['用中文問英文文件，撈不到或撈到不相干的',
+  '單語言的 embedding 模型，把不同語言放在向量空間的不同角落',
+  '改用多語言模型：<code>bge-m3</code> 或 <code>text-embedding-3</code>，重排用 <code>bge-reranker-v2-m3</code>'],
+ ['中文文件問中文，關鍵詞那一路幾乎撈不到',
+  '中文沒有空格，<code>split()</code> 後整句變成一個詞，和問題對不上',
+  '先斷詞再建索引：取相鄰兩字（bigram）或用 jieba 類套件；分數 0 不入榜'],
+ ['切好的片段裡沒有標題，查不出它屬於哪一章',
+  '<code>MarkdownHeaderTextSplitter</code> 的 <code>strip_headers</code> 預設是 True，標題只留在 metadata',
+  '設成 <code>False</code>，或自己把標題拼回內文再做 embedding']];
+rows.forEach((r,i)=>{const y=345+i*146;
+  D.tri(138,y+64,40,'mus',{strokeWidth:2.4});
+  cell(190,y,440,128,r[0],'#f7d6cf',D.C.ver);
+  cell(700,y,500,128,r[1],'#d9e1ee',D.C.ind);
+  cell(1270,y,540,128,r[2],'#f7e7c0','#b98a12');
+  D.arrow(636,y+64,694,y+64,{strokeWidth:2.8});D.arrow(1206,y+64,1264,y+64,{strokeWidth:2.8});
+});
+</script></body></html>

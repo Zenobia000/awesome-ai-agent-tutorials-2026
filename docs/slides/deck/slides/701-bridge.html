@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>MCP 搭橋</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.row{height:172px}
+.bridge.row{width:790px;left:110px}
+.nw{position:absolute;left:1040px;width:770px;height:172px;padding:22px 30px;font-size:28px;line-height:1.55}
+.nw .k{display:block;font-size:24px;color:var(--ver);margin-bottom:6px}
+</style></head><body><div class="slide">
+  <h1>MCP：三個老想法，換了舞台</h1>
+  <p class="lead">你學過的交換格式、裝置抽象、計算圖，幾乎能直接接過來。</p>
+
+  <div class="bridge row" style="top:300px"><span class="k">你已經會的</span>ONNX：框架 × 推論引擎若各寫轉換器就寫不完，所以共用一種交換格式。</div>
+  <div class="nw" style="top:300px"><span class="k">本章的新概念</span>MCP：AI 應用 × 工具若各寫接頭就寫不完，所以共用一個協定。</div>
+
+  <div class="bridge row" style="top:500px"><span class="k">你已經會的</span>PyTorch 把模型定義和 device 分開：同一張計算圖，放 CPU 或 GPU 都行。</div>
+  <div class="nw" style="top:500px"><span class="k">本章的新概念</span>MCP 把資料層（JSON-RPC 訊息）和傳輸層（stdio、HTTP）分開：同一份訊息，走不同管道。</div>
+
+  <div class="bridge row" style="top:700px"><span class="k">你已經會的</span>靜態圖路徑固定、好部署；動態圖（eager）每次依輸入決定走哪個分支。</div>
+  <div class="nw" style="top:700px"><span class="k">本章的新概念</span>Dify／n8n 的畫布是固定流程；LangGraph 的 agent 依狀態決定下一步。</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊是你已經熟的，右邊是本章對應的新東西；三條線就是本章三個重點。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+[300,500,700].forEach(t=>{
+  D.rect(1040,t,770,172,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+  D.arrow(910,t+86,1025,t+86,{strokeWidth:3,stroke:D.C.ink});
+});
+</script></body></html>

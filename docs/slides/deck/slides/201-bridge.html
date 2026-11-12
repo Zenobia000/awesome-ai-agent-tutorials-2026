@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>本章從你會的出發</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:30px}
+.bx{position:absolute;width:480px;height:96px;font-size:30px;line-height:96px;text-align:center}
+.mid{position:absolute;left:655px;width:600px;font-size:26px;line-height:1.35;text-align:center;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>本章的新詞，你都見過原型</h1>
+  <p class="lead">固定模型、只改輸入：下面每個技巧，都能接回一個你已經學過的東西。</p>
+
+  <div class="hd ind" style="left:110px;top:292px">你已經會的</div>
+  <div class="hd mus" style="left:1330px;top:292px">本章的新東西</div>
+  <div class="hd mut" style="left:655px;width:600px;text-align:center;top:292px;font-size:26px">相同的地方</div>
+  <div id="rows"></div>
+
+  <div class="read"><em>怎麼讀：</em>左欄是深度學習裡的老朋友，右欄是它在提示詞工程裡的對應；中間一句話說兩者哪裡相同。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const rows=[
+ ['訓練資料＋梯度更新','few-shot 示例','示範資料放進輸入，不經反向傳播'],
+ ['先定義 loss 再訓練','推理模型的提示詞','先寫清成功條件，讓模型自己找路徑'],
+ ['beam search','思維樹（ToT）','同一招，從 token 搬到「想法」層級'],
+ ['attention mask 設 −∞','約束解碼','不合法的 token 機率歸零再 softmax'],
+ ['二元分類器','內容審核','前置過濾，輸出能讓程式分支判斷']];
+const host=document.getElementById('rows');
+rows.forEach((r,i)=>{const y=345+i*108;
+  D.rect(110,y,480,92,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+  D.rect(1330,y,480,92,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+  D.arrow(600,y+46,1318,y+46,{strokeWidth:2.5});
+  const mk=(x,t)=>{const d=document.createElement('div');d.className='bx';d.style.left=x+'px';d.style.top=(y-2)+'px';d.textContent=t;host.appendChild(d);};
+  mk(110,r[0]);mk(1330,r[1]);
+  const m=document.createElement('div');m.className='mid';m.style.top=(y+4)+'px';m.textContent=r[2];host.appendChild(m);
+});
+</script></body></html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>遷移學習到 LLM 微調</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.col{position:absolute;font-size:24px;line-height:1.3}
+.row{position:absolute;font-size:26px;line-height:1.4}
+.row .t{font-size:30px;line-height:1.3;display:block}
+</style></head><body><div class="slide">
+  <h1>遷移學習你做過，微調是同一件事</h1>
+  <p class="lead">預訓練模型是現成的特徵提取器。幾種做法的差別，只在「動哪些權重」。</p>
+
+  <div class="col ind" style="left:110px;top:286px">你在視覺任務做過的</div>
+  <div class="col mut" style="left:650px;top:286px">權重怎麼動（<span class="ind">藍</span>凍結、<span class="ver">朱紅</span>更新）</div>
+  <div class="col ver" style="left:1130px;top:286px">對應到 LLM（本章）</div>
+
+  <div class="row" style="left:110px;top:332px;width:490px"><span class="t">特徵提取</span>凍結 backbone，只拿特徵給外接分類器</div>
+  <div class="row" style="left:1130px;top:332px;width:680px"><span class="t">Prompt、RAG</span>模型一個參數都不動，只改輸入</div>
+
+  <div class="row" style="left:110px;top:452px;width:490px"><span class="t">只換 FC 頭</span>凍結 backbone，訓練新的輸出層</div>
+  <div class="row" style="left:1130px;top:452px;width:680px"><span class="t">只訓練輸出層</span>其餘凍結（LLM 的輸出頭就是詞表 softmax）</div>
+
+  <div class="row" style="left:110px;top:572px;width:490px"><span class="t">解凍全部層</span>所有層一起微調</div>
+  <div class="row" style="left:1130px;top:572px;width:680px"><span class="t">全量微調</span>所有權重都更新，顯存和資料要求最高</div>
+
+  <div class="row" style="left:110px;top:692px;width:490px"><span class="t ver">視覺裡沒有的第四種</span>這就是本章要學的</div>
+  <div class="row" style="left:1130px;top:692px;width:680px"><span class="t ver">LoRA</span>全部層都動，但每層只動一點點</div>
+
+  <div class="bridge inline" style="left:110px;top:826px;width:1700px"><span class="k">你已經會的</span>遷移學習的核心動作是「決定凍結誰、更新誰」。LLM 沒有換頭這回事，選擇題變成：動哪些層、每層動多少。</div>
+  <div class="read"><em>怎麼讀：</em>每一列是一種做法：左邊是你熟悉的名字，中間是權重的狀態，右邊是它在 LLM 裡的樣子；最後一列是新的。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const Y=[345,465,585,705];            /* 每列的卡通起點 y */
+/* LoRA 那列的強調底色 */
+D.rect(1112,682,700,106,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.5});
+D.rect(94,682,518,106,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.5});
+/* 圖層積木：4 個 backbone 層 + 1 個輸出頭 */
+const X0=650,PITCH=74;
+const frozen=(x,y,w,h)=>D.rect(x,y,w,h,'ind',{fillStyle:'hachure',strokeWidth:2.2});
+const train=(x,y,w,h)=>D.rect(x,y,w,h,'ver',{fillStyle:'hachure',strokeWidth:2.2});
+Y.forEach((y,i)=>{
+  const cy=y+40;
+  D.arrow(612,cy,640,cy,{strokeWidth:2.4});             /* 左 → 圖 */
+  D.arrow(1040,cy,1100,cy,{strokeWidth:2.4});           /* 圖 → 右 */
+  for(let k=0;k<4;k++){
+    const x=X0+k*PITCH;
+    if(i===2) train(x,y+10,60,60); else frozen(x,y+10,60,60);
+    if(i===3){D.rect(x,y+74,60,12,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.2});}   /* LoRA：每層旁邊一條窄路 */
+  }
+  /* 輸出頭 */
+  const hx=X0+4*PITCH+4;
+  if(i===1||i===2) train(hx,y+20,40,40); else frozen(hx,y+20,40,40);
+  D.arrow(X0-12,cy,X0-4,cy,{strokeWidth:2});
+});
+</script></body></html>

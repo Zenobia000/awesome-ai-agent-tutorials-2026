@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>父子片段：小的找、大的回</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cl{position:absolute;font-size:24px;line-height:1.35}
+.bridge.inline{padding:14px 30px}
+</style></head><body><div class="slide">
+  <h1>父子片段：用小的找，回傳大的</h1>
+  <p class="lead">小片段意思集中，比對得準；命中後回傳它所屬的大段落，讓模型看到完整上下文。</p>
+  <div id="t"></div>
+
+  <div class="bridge inline" style="left:110px;top:858px;width:1700px"><span class="k">你已經會的</span>偵測模型用小 anchor 精準定位，再裁出較大的 ROI 做後續處理。</div>
+  <div class="read"><em>怎麼讀：</em>左邊是文件的兩層結構；右邊紅色方塊是問題，箭頭 1 比對小片段，箭頭 2 把整個父段落送進提示詞。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const T=document.getElementById('t');
+const tx=(x,y,w,t,c,st)=>{const d=document.createElement('div');d.className='cl '+(c||'');d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;${st||''}`;d.innerHTML=t;T.appendChild(d);};
+const BL=['#d9e1ee',D.C.ind],YL=['#f7e7c0','#b98a12'];
+const sq=(x,y,s,[f,st],w)=>D.sq(x,y,s,f,{fillStyle:'solid',stroke:st,strokeWidth:w||2.8});
+/* 左：兩個父段落，各含四個子片段 */
+const parent=(y,hit)=>{
+  D.rect(130,y,470,170,hit?'#fbf1d6':'#fbf9f4',{fillStyle:'solid',stroke:hit?'#b98a12':D.C.grey,strokeWidth:hit?3.5:2.5,strokeLineDash:hit?undefined:[10,8]});
+  tx(150,y+12,500,'父段落：約 1–2k token','mut');
+  for(let i=0;i<4;i++)sq(160+i*96,y+70,72,(hit&&i===3)?YL:BL,(hit&&i===3)?3.4:2.8);
+};
+parent(330,false);parent(540,true);
+/* 子片段說明 */
+tx(130,722,800,'<span class="ind">子片段</span>：約 100–400 token，只有它們進向量庫','',"font-size:24px");
+tx(130,756,800,'父段落：不進向量庫，命中後才被取回','mut');
+/* 右：問題、提示詞 */
+sq(1010,628,56,['#f7d6cf',D.C.ver],3);
+tx(960,690,160,'問題','ver','text-align:center;font-size:26px');
+D.arrow(998,656,540,656,{strokeWidth:3,stroke:D.C.ver});
+tx(660,610,300,'1　比對子片段','ver','font-size:26px');
+/* 回傳 */
+D.curve([[604,585],[700,520],[860,470],[1030,440]],{strokeWidth:3.2});D.arrow(980,448,1032,438,{strokeWidth:3.2});
+tx(700,545,300,'2　回傳父段落','','font-size:26px');
+D.rect(1040,340,770,200,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+tx(1070,360,720,'進提示詞的是整個父段落','','font-size:32px');
+tx(1070,414,720,'上下文完整，模型不會只看到半句話。同一個父段落被命中好幾次，只回傳一次。','mut','font-size:26px;line-height:1.5');
+/* 附註 */
+tx(1010,770,800,'實作不綁舊元件：自己存一張「子 → 父」對照表就行。LangChain 的 <code style="font-family:\'JetBrains Mono\',monospace;font-size:22px">ParentDocumentRetriever</code> 已移到 <code style="font-family:\'JetBrains Mono\',monospace;font-size:22px">langchain_classic</code>。','','font-size:24px;line-height:1.5');
+</script></body></html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>人在回路 HITL 流程</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.mono{font-family:"JetBrains Mono","Noto Sans Mono CJK TC",monospace}
+.t{position:absolute;text-align:center;line-height:1.2}
+.row{position:absolute;left:1125px;width:300px;font-size:26px;line-height:1.2;white-space:nowrap}
+.row .kw{display:inline-block;width:114px;font-family:"JetBrains Mono","Noto Sans Mono CJK TC",monospace;font-size:24px;color:var(--ind)}
+.st{position:absolute;line-height:1.25}
+.st .h{display:block;font-size:28px}
+.st .s{display:block;font-size:22px}
+</style></head><body><div class="slide">
+  <h1>HITL：危險操作先停下來</h1>
+  <p class="lead">interrupt() 暫停並存檔；人決定之後，用 Command(resume=…) 從存檔接著跑。</p>
+
+  <!-- 主圖：左到右就是時間 -->
+  <div class="t" style="left:115px;top:526px;width:150px;font-size:28px">agent</div>
+  <div class="t mono" style="left:272px;top:476px;width:215px;font-size:24px">execute_sql(…)</div>
+  <div class="t mut" style="left:262px;top:558px;width:225px;font-size:24px">只攔寫入／刪除</div>
+  <div class="t ver" style="left:540px;top:548px;width:200px;font-size:32px">審批閘門</div>
+
+  <div class="t" style="left:870px;top:497px;width:160px;font-size:34px">存檔</div>
+  <div class="t mono mut" style="left:870px;top:550px;width:160px;font-size:22px">checkpoint</div>
+  <div class="t mut" style="left:830px;top:634px;width:240px;font-size:24px">同一個 thread_id<br>才讀得回來</div>
+
+  <div class="t" style="left:1125px;top:412px;width:290px;font-size:28px;text-align:left">管理員決定</div>
+  <div class="row" style="top:473px"><span class="kw">approve</span>放行</div>
+  <div class="row" style="top:531px"><span class="kw">edit</span>改參數再放行</div>
+  <div class="row" style="top:589px"><span class="kw">reject</span>拒絕</div>
+
+  <div class="t" style="left:1605px;top:326px;width:220px"><span class="mono mus" style="font-size:24px">execute_sql</span><br><span style="font-size:26px">真正執行</span></div>
+  <div class="t mut" style="left:1470px;top:640px;width:330px;font-size:24px;text-align:left;padding-left:20px">不執行<br>理由回給 agent，換個做法</div>
+
+  <!-- 時間軸：三段箭頭，與上方圖形的左右位置對齊 -->
+  <div class="st" style="left:505px;top:750px;width:500px"><span class="h">1　暫停並存檔</span><span class="s mono ver">interrupt(payload)</span></div>
+  <div class="st" style="left:1106px;top:750px;width:330px"><span class="h">2　人決定</span><span class="s mut">管理員看到待審的 SQL</span></div>
+  <div class="st" style="left:1494px;top:750px;width:310px"><span class="h">3　從存檔恢復</span><span class="s mono ver">Command(resume=…)</span></div>
+  <div class="abs note" style="left:110px;top:756px;width:340px">恢復時 node 從頭重跑，<br>Lab 5-B 程式頁詳述</div>
+
+  <div class="bridge inline" style="left:110px;top:858px;width:1700px"><span class="k">你已經會的</span>像 pdb 的 breakpoint 加上「從 checkpoint 重啟」；或 generator 的 yield／send。</div>
+  <div class="read"><em>怎麼讀：</em>左到右就是時間：agent 撞上三角閘門 → 狀態存進方塊 → 管理員選一條路 → 從存檔接著跑。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee',VL='#f7d6cf',ln={strokeWidth:3.2};
+/* agent → 閘門（被擋下） */
+D.ci(190,540,150,VL,{stroke:D.C.ver,strokeWidth:3.2});
+D.arrow(275,540,484,540,ln);
+D.line(497,506,497,574,{strokeWidth:7,stroke:D.C.ver});
+/* 視覺中心：大三角閘門 */
+D.tri(640,480,320,VL,{stroke:D.C.ver,strokeWidth:6});
+/* ① 暫停：閘門 → 存檔（方） */
+D.dash(772,540,840,540,{strokeWidth:3.4,stroke:D.C.ver});D.arrow(822,540,864,540,{strokeWidth:3.4,stroke:D.C.ver});
+D.rect(870,460,160,160,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3.4});
+/* 存檔 → 人 */
+D.arrow(1036,540,1094,540,ln);
+/* ② 人決定：三條路 */
+D.rect(1100,400,340,250,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:3});
+D.line(1114,462,1426,462,{strokeWidth:1.6,stroke:D.C.grey});
+D.line(1114,520,1426,520,{strokeWidth:1.6,stroke:D.C.grey});
+D.line(1114,578,1426,578,{strokeWidth:1.6,stroke:D.C.grey});
+/* ③ 恢復：approve / edit 走到執行，reject 走叉 */
+D.tri(1715,510,190,'mus',{strokeWidth:2.6});
+D.arrow(1446,489,1660,489,ln);
+D.arrow(1446,547,1632,547,ln);
+D.arrow(1446,605,1520,605,{strokeWidth:3.2,stroke:D.C.ver});
+D.cross(1558,605,20,{strokeWidth:5});
+/* 時間軸：三段箭頭 */
+const chev=(x0,x1,fill,stroke,notch)=>D.poly(notch?[[x0,742],[x1-30,742],[x1,785],[x1-30,828],[x0,828],[x0+30,785]]:[[x0,742],[x1-30,742],[x1,785],[x1-30,828],[x0,828]],fill,{fillStyle:'solid',stroke,strokeWidth:3});
+chev(472,1066,VL,D.C.ver,false);
+chev(1072,1452,'#fbf9f4',D.C.ink,true);
+chev(1458,1812,VL,D.C.ver,true);
+</script></body></html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>旗艦專案預告</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.q{position:absolute;left:134px;top:448px;width:270px;font-size:28px;line-height:1.45}
+.q .l{font-size:24px;color:var(--muted)}
+.ag{position:absolute;left:935px;width:150px;text-align:center;font-size:26px;line-height:1.2}
+.sup{position:absolute;left:560px;top:690px;width:280px;text-align:center}
+.sup .t{font-size:36px;line-height:1.2}
+.sup .d{font-size:26px;line-height:1.4;color:var(--muted)}
+.lb{position:absolute;text-align:center;font-size:24px;line-height:1.3}
+.ds{position:absolute;left:1545px;width:270px;font-size:26px;line-height:1.45;color:var(--muted)}
+.ds b{font-size:30px;display:block;color:var(--ink);font-weight:400}
+</style></head><body><div class="slide">
+  <h1>旗艦專案：值班助理</h1>
+  <p class="lead">一個主管拆任務，三個專長 agent 執行；會動到線上服務的指令要人點頭。</p>
+
+  <div class="q"><span class="l">使用者提問</span> <span class="tag">示意</span><br>訂單服務一直報 502，幫我查原因，必要時重啟。</div>
+  <div class="sup"><div class="t ver">Supervisor</div><div class="d">拆任務、派工、彙整</div></div>
+
+  <div class="ag" style="top:322px">DocAgent</div>
+  <div class="ag" style="top:522px">DBAgent</div>
+  <div class="ag" style="top:722px">OpsAgent</div>
+
+  <div class="lb" style="left:1145px;top:386px;width:140px">ChromaDB</div>
+  <div class="lb" style="left:1305px;top:386px;width:140px">Neo4j</div>
+  <div class="lb" style="left:1145px;top:586px;width:140px">資料庫</div>
+  <div class="lb ver" style="left:1130px;top:824px;width:200px;font-size:28px">HITL 閘門</div>
+  <div class="lb" style="left:1130px;top:858px;width:200px">值班主管審批</div>
+  <div class="lb" style="left:1350px;top:806px;width:200px">高風險指令<br>（重啟等）</div>
+
+  <div class="ds" style="top:308px"><b>文檔檢索</b>語意問答、依賴鏈查詢</div>
+  <div class="ds" style="top:508px"><b>資料庫查詢</b>自然語言轉 SQL，<br>再驗證結構</div>
+  <div class="ds" style="top:708px"><b>運維操作</b>健康檢查、日誌<br>高風險要審批</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊提問，Supervisor 把任務派給三個專長 agent；朱紅邊的三角是人工審批閘門。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const C=D.C;
+/* 使用者提問（資料＝方塊） */
+D.rect(110,425,310,230,'#fbf9f4',{fillStyle:'solid',strokeWidth:3});
+D.arrow(428,540,566,540,{strokeWidth:3});
+/* Supervisor＝大圓 */
+D.ci(700,540,250,'ver',{fillStyle:'hachure',strokeWidth:2.8});
+/* 三個 agent＝圓 */
+[340,540,740].forEach(y=>D.ci(1010,y,150,'#f7d6cf',{fillStyle:'solid',stroke:C.ver,strokeWidth:3}));
+D.arrow(806,474,944,382,{strokeWidth:3});
+D.arrow(828,540,932,540,{strokeWidth:3});
+D.arrow(806,606,944,698,{strokeWidth:3});
+/* DocAgent → 向量庫與圖資料庫（方塊） */
+D.arrow(1092,340,1170,340,{strokeWidth:2.6});
+D.sq(1180,305,70,'ind',{strokeWidth:2.4});D.sq(1340,305,70,'ind',{strokeWidth:2.4});
+D.dash(1255,340,1335,340,{strokeWidth:2.2});
+/* DBAgent → 資料庫 */
+D.arrow(1092,540,1170,540,{strokeWidth:2.6});
+D.sq(1180,505,70,'ind',{strokeWidth:2.4});
+/* OpsAgent → HITL 閘門 → 高風險指令 */
+D.arrow(1092,740,1146,740,{strokeWidth:2.6});
+D.tri(1230,738,150,C.mus,{stroke:C.ver,strokeWidth:4.5});
+D.arrow(1312,748,1366,748,{strokeWidth:2.6});
+D.tri(1440,744,100,'#f7d6cf',{stroke:C.ver,strokeWidth:3});
+</script></body></html>

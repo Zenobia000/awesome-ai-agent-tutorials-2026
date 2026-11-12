@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>合併權重與 QLoRA 匯出</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.m{position:absolute;text-align:center;font-size:40px;line-height:1}
+.dm{position:absolute;text-align:center;font-size:24px;line-height:1.3;color:var(--muted)}
+.bx{position:absolute;text-align:center;font-size:26px;line-height:1.3}
+.rt{position:absolute;font-size:26px;line-height:1.4}
+</style></head><body><div class="slide">
+  <h1>合併：把旁路加回 W，推理零延遲</h1>
+  <p class="lead">(W ＋ B·A)x ＝ Wx ＋ B(Ax)：訓練時分開算，部署時先加好，結果一樣。</p>
+
+  <div class="m" style="left:130px;top:350px;width:150px">W</div>
+  <div class="m" style="left:300px;top:366px;width:50px;font-size:46px">＋</div>
+  <div class="m" style="left:360px;top:350px;width:60px;font-size:36px">B</div>
+  <div class="m" style="left:426px;top:366px;width:30px;font-size:46px">·</div>
+  <div class="m" style="left:470px;top:322px;width:150px;font-size:36px">A</div>
+  <div class="m" style="left:640px;top:366px;width:50px;font-size:46px">＝</div>
+  <div class="m" style="left:700px;top:350px;width:150px;color:#b98a12">W′</div>
+  <div class="dm" style="left:110px;top:488px;width:190px">d_out × d_in</div>
+  <div class="dm" style="left:340px;top:488px;width:100px">d_out×r</div>
+  <div class="dm" style="left:455px;top:488px;width:190px">r × d_in</div>
+  <div class="dm" style="left:680px;top:488px;width:190px">d_out × d_in</div>
+
+  <div class="rt" style="left:960px;top:316px;width:850px"><span class="ver">W′ ＝ W ＋ (α/r)·B·A</span><br>合併後和原模型同形狀、同大小，推理時不再有旁路，沒有額外延遲。<br>adapter 只含 A、B，很小。同一個基座可以掛不同的 adapter，<br>例如客服版、問診版。</div>
+
+  <div class="abs lbl ind" style="left:110px;top:566px">QLoRA 合併：必須回到原精度基座</div>
+  <div class="abs lbl ind" style="left:110px;top:628px;width:120px">正確</div>
+  <div class="bx" style="left:230px;top:632px;width:300px">原精度基座（16-bit）</div>
+  <div class="bx" style="left:590px;top:634px;width:190px">adapter<br>A、B</div>
+  <div class="abs lbl mut" style="left:790px;top:584px;width:400px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:22px">llamafactory-cli export</div>
+  <div class="bx" style="left:1210px;top:648px;width:150px">合併模型</div>
+
+  <div class="abs lbl ver" style="left:110px;top:770px;width:120px">不行</div>
+  <div class="bx" style="left:230px;top:774px;width:300px">4-bit 量化基座</div>
+  <div class="bx" style="left:590px;top:776px;width:190px">adapter<br>A、B</div>
+  <div class="rt" style="left:1050px;top:748px;width:760px;font-size:26px">合併是矩陣加法；量化基座已是壓縮過的近似值。LLaMA-Factory 文件明確警告不可合併到量化基座。</div>
+
+  <div class="read"><em>怎麼讀：</em>上方是合併的算式（方塊大小就是矩陣形狀），下方兩列是 QLoRA 匯出的對與錯：基座一定要換回原精度那份。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S={strokeWidth:2.6};
+D.rect(130,310,150,150,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+D.rect(360,310,60,150,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.8});
+D.rect(470,310,150,60,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.8});
+D.rect(700,310,150,150,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.8});
+/* 正確路徑 */
+D.rect(230,612,300,86,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+D.rect(590,612,190,86,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.8});
+D.line(540,655,575,655,S);D.line(557,638,557,672,S);
+D.arrow(790,655,1100,655,S);
+D.tri(990,668,50,'mus',{strokeWidth:2.2});
+D.ci(1285,655,140,'#f7e7c0',{stroke:'#b98a12',strokeWidth:2.8});
+/* 錯誤路徑 */
+D.rect(230,754,300,86,'#ebe6da',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.8});
+D.rect(590,754,190,86,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.8});
+D.line(540,797,575,797,S);D.line(557,780,557,814,S);
+D.arrow(790,797,1000,797,{strokeWidth:2.6,stroke:D.C.ver});
+D.cross(900,797,24);
+</script></body></html>

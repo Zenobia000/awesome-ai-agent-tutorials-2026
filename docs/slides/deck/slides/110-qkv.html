@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Q、K、V 小矩陣圖</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.25;font-size:24px}
+.lg{position:absolute;top:826px;width:500px;height:64px;display:flex;align-items:center;justify-content:center;font-size:28px}
+</style></head><body><div class="slide">
+  <h1>Q、K、V：同一組向量算出三種角色</h1>
+  <p class="lead">每個 token 的向量乘三個矩陣，得到 Q、K、V，再算出「誰該看誰」。<span class="tag">示意</span></p>
+  <div id="g"></div>
+  <div class="lg" style="left:110px"><span><b style="color:#2b4c7e">Q</b>：我在找什麼</span></div>
+  <div class="lg" style="left:650px"><span><b style="color:#b98a12">K</b>：我有什麼標籤</span></div>
+  <div class="lg" style="left:1190px"><span><b>V</b>：被選中時交出的內容</span></div>
+  <div class="read"><em>怎麼讀：</em>由左往右：X 乘三個 Linear 得 Q、K、V；Q 和 K 算出 4×4 分數，softmax 成權重，再拿權重去加總 V。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+const HUE={x:['#fbf9f4','#e6e1d4','#cfc9ba'],q:['#e9edf5','#d9e1ee','#9fb4d3'],k:['#fbf1d9','#f7e7c0','#e8b53a'],v:['#fbe6e1','#f7d6cf','#e89a8a'],
+  sc:['#e9edf5','#d9e1ee','#9fb4d3','#2b4c7e'],wt:['#fbf1d9','#f7e7c0','#e8b53a','#b98a12']};
+const rnd=(i,j,s)=>Math.abs(Math.sin(i*12.9898+j*78.233+s)*43758.5453)%1;
+const mat=(x,y,r,c,cell,fn,stroke)=>{for(let i=0;i<r;i++)for(let j=0;j<c;j++)D.rect(x+j*cell,y+i*cell,cell,cell,fn(i,j),{fillStyle:'solid',stroke:stroke||'#f3efe6',strokeWidth:1.5,roughness:0.5});
+  D.rect(x-2,y-2,c*cell+4,r*cell+4,null,{stroke:D.C.ink,strokeWidth:2});};
+const rand=(h,s)=>(i,j)=>HUE[h][Math.floor(rnd(i,j,s)*3)];
+const CELL=32,CY=[380,550,720],M=4*CELL;
+/* X */
+mat(110,CY[1]-M/2,4,4,CELL,rand('x',1));
+el(80,CY[1]+M/2+8,190,64,'X<br>4 個 token 的向量','font-size:22px;color:#5b574f');
+const names=['Q','K','V'],hues=['q','k','v'],cols=['#2b4c7e','#b98a12','#e0442b'];
+CY.forEach((cy,k)=>{const top=cy-M/2;
+  D.arrow(246,CY[1],332,cy,{strokeWidth:2.4});
+  el(330,top-34,110,30,'× W_'+names[k],'font-size:24px;color:#1b1b1b');
+  mat(340,top,4,3,CELL,rand(hues[k],10+k));
+  D.arrow(446,cy,512,cy,{strokeWidth:2.4});
+  el(512,top-34,110,30,names[k],'font-size:30px;color:'+cols[k]);
+  mat(520,top,4,3,CELL,rand(hues[k],20+k));
+});
+/* 分數與權重 */
+const S=[[3,1,0,1],[1,3,2,0],[0,2,3,1],[1,0,1,3]],Wt=[[3,1,0,1],[2,3,1,0],[0,2,3,1],[1,0,2,3]];
+const SY=376,SC=52;
+D.arrow(624,CY[0]+10,850,SY+60,{strokeWidth:2.4});D.arrow(624,CY[1]-10,850,SY+SC*3-10,{strokeWidth:2.4});
+mat(860,SY,4,4,SC,(i,j)=>HUE.sc[S[i][j]]);
+el(820,SY-50,290,40,'Q · Kᵀ：4×4 分數','font-size:24px');
+D.arrow(1076,SY+SC*2,1222,SY+SC*2,{strokeWidth:2.4});
+el(1076,SY+SC*2-72,150,60,'÷√d_k<br>每列 softmax','font-size:22px;color:#5b574f');
+mat(1230,SY,4,4,SC,(i,j)=>HUE.wt[Wt[i][j]]);
+el(1190,SY-50,290,40,'權重（每列合計 1）','font-size:24px');
+/* 輸出 */
+D.arrow(1446,SY+SC*2,1604,CY[1]-6,{strokeWidth:2.4});
+el(1440,SY+SC*2+56,120,50,'× V','font-size:28px;color:#e0442b');
+mat(1620,CY[1]-M/2,4,3,CELL,rand('v',30));
+el(1560,CY[1]-M/2-44,230,36,'輸出 Z：V 的加權和','font-size:24px');
+/* 圖例底色 */
+D.rect(110,826,500,64,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.5});D.rect(650,826,500,64,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.5});D.rect(1190,826,500,64,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.5});
+/* V 的路徑 */
+D.line(624,CY[2],1668,CY[2],{strokeWidth:2.4});D.arrow(1668,CY[2],1668,CY[1]+M/2+12,{strokeWidth:2.4});
+</script></body></html>

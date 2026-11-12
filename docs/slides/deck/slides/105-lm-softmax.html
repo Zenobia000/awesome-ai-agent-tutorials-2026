@@ -1,0 +1,36 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>語言模型是詞表分類器</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;font-size:28px;line-height:1.25}
+.c{justify-content:center;text-align:center}
+</style></head><body><div class="slide">
+  <h1>語言模型 ＝ 詞表上的 softmax 分類器</h1>
+  <p class="lead">輸入一串 token，輸出「下一個 token 是詞表裡每一個的機率」。類別數不是 1000，而是整個詞表。</p>
+
+  <div class="a" style="left:110px;top:452px;font-size:26px;color:#5b574f">輸入：已經有的 token</div>
+  <div class="a c" style="left:640px;top:700px;width:280px;font-size:24px;color:#5b574f">每個 token 一個分數<br>→ softmax → 機率</div>
+  <div class="a" style="left:1030px;top:282px;font-size:28px">下一個 token 的機率（合計 1）<span class="tag" style="margin-left:14px">示意</span></div>
+  <div id="g"></div>
+
+  <div class="bridge inline" style="left:110px;top:806px;width:1700px"><span class="k">你已經會的</span>影像分類器最後一層是 Linear → softmax，輸出 1000 類的機率；語言模型一樣，類別換成詞表。</div>
+  <div class="read"><em>怎麼讀：</em>左邊是已讀到的 token，中間的圓是模型，右邊長條是它對「下一個 token」的打分，最長的那根最可能被選中。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(c,x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a '+c;e.style.cssText=`left:${x}px;top:${y}px;`+(w?`width:${w}px;`:'')+(h?`height:${h}px;`:'')+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+['今天','天','氣','真'].forEach((t,i)=>{const x=110+i*92;
+  D.rect(x,500,84,70,['#d9e1ee','#f7e7c0','#f7d6cf','#d9e1ee'][i],{fillStyle:'solid',stroke:[D.C.ind,'#b98a12',D.C.ver,D.C.ind][i],strokeWidth:2.5});
+  el('c',x,500,84,70,t);});
+D.arrow(488,535,630,535,{strokeWidth:2.8});
+D.ci(780,540,280,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+el('c',680,500,200,80,'LLM','font-size:44px');
+D.arrow(932,540,1020,540,{strokeWidth:2.8});
+const P=[['好',.52],['熱',.18],['冷',.12],['糟',.07],['的',.04]];
+P.forEach(([t,p],i)=>{const y=340+i*62,w=p*700;
+  el('c',1030,y,120,44,t);
+  D.rect(1170,y,w,44,i===0?'#f7d6cf':'#d9e1ee',{fillStyle:'solid',stroke:i===0?D.C.ver:D.C.ind,strokeWidth:2.5});
+  el('',1170+w+14,y,100,44,p.toFixed(2),'font-size:26px;color:#5b574f');});
+el('c',1030,650,120,44,'…其餘');
+D.rect(1170,650,0.07*700,44,'#a8a296',{fillStyle:'hachure',stroke:D.C.grey,strokeWidth:2.2});
+el('',1170+0.07*700+14,650,400,44,'0.07（約數萬個 token 分掉）','font-size:24px;color:#5b574f');
+</script></body></html>

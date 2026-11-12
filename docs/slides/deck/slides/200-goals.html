@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組二：目標</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.goals{position:absolute;left:1010px;top:215px;width:800px}
+.goals li{font-size:30px;line-height:1.5;margin:24px 0}
+.prac{position:absolute;left:150px;top:866px;width:1620px}
+.prac .k{display:block;font-size:24px;color:#b98a12;margin-bottom:4px}
+.prac .t{font-size:30px;line-height:1.5}
+</style></head><body><div class="slide">
+  <h1 class="xl">模組 2</h1>
+  <h1 style="font-size:72px;margin-top:8px">提示詞工程與結構化輸出</h1>
+  <p class="lead" style="width:820px">提示詞是模型的輸入規格；輸出要能被程式直接收下。</p>
+
+  <h2 class="abs ind" style="left:1010px;top:120px">學習目標</h2>
+  <ul class="dots goals">
+    <li>寫出四段式提示詞：角色、背景、約束、示例</li>
+    <li>分清 few-shot、思維鏈、思維樹各做什麼</li>
+    <li>知道推理模型讓提示詞的重心改變了什麼</li>
+    <li>說出提示詞注入的根源，知道防禦要分層</li>
+    <li>用結構化輸出加 Pydantic，讓程式直接收下回答</li>
+    <li>知道內容審核該放在管線的哪一層</li>
+  </ul>
+
+  <div class="prac"><span class="k">本章實戰</span><div class="t">Lab 2　Text2SQL 解析引擎：把口語問題轉成嚴格的 SELECT，用 Pydantic 收下結果，擋掉破壞性指令。</div></div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.sq(215,455,310,'ind',{strokeWidth:2.8});
+D.rect(110,836,1700,150,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+</script></body></html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>三角色架構</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cl{position:absolute;left:560px;width:150px;height:64px;line-height:64px;text-align:center;font-size:26px}
+.sv{position:absolute;left:1370px;font-size:28px}
+.tp{position:absolute;left:1030px;font-size:24px;color:var(--muted)}
+.cap{position:absolute;font-size:24px;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>Host、Client、Server 各管什麼</h1>
+  <p class="lead">一個 Host 可以同時接好幾個 Server；每接一個，就開一個專屬的 Client 負責講話。</p>
+
+  <div class="abs" style="left:136px;top:306px;font-size:28px">Host：使用者面對的 AI 應用<span class="note">　Claude Desktop、Cursor、VS Code</span></div>
+  <div class="abs" style="left:225px;top:480px;width:150px;text-align:center;font-size:36px">LLM</div>
+  <div class="cl" style="top:368px">Client 1</div>
+  <div class="cl" style="top:468px">Client 2</div>
+  <div class="cl" style="top:568px">Client 3</div>
+
+  <div class="tp" style="top:358px">stdio</div>
+  <div class="tp" style="top:458px">stdio</div>
+  <div class="tp" style="top:558px">Streamable HTTP</div>
+  <div class="sv" style="top:382px"><span class="mus">Server A</span>　本機檔案系統</div>
+  <div class="sv" style="top:482px"><span class="mus">Server B</span>　本機資料庫</div>
+  <div class="sv" style="top:582px"><span class="mus">Server C</span>　遠端服務</div>
+
+  <div class="cap" style="left:110px;top:678px">Client → Server：請求</div>
+  <div class="cap" style="left:980px;top:678px">Server → Client：回覆</div>
+  <div class="code" style="left:110px;top:718px">{"jsonrpc":"2.0","id":2,"method":<span class="hl">"tools/call"</span>,
+ "params":{"name":"describe_excel",
+  "arguments":{"path":"sales.xlsx"}}}</div>
+  <div class="code" style="left:980px;top:718px">{"jsonrpc":"2.0","id":2,"result":{"content":[
+  {"type":"text","text":"month, region, sales"}]}}</div>
+  <div class="abs note" style="left:110px;top:890px;width:1700px">JSON-RPC：用 JSON 寫成「呼叫某個方法、帶參數、回結果」的訊息格式，每條線上傳的都是它。</div>
+
+  <div class="read"><em>怎麼讀：</em>模型在 Host 裡；Host 為每個 Server 開一個 Client；下面兩段 JSON 是它們之間真正傳的訊息。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.rect(110,295,890,370,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:3});
+D.ci(300,500,150,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+[400,500,600].forEach(y=>{
+  D.rect(560,y-32,150,64,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+  D.line(378,500,556,y,{strokeWidth:2,stroke:D.C.grey});
+  D.arrow(714,y,1240,y,{strokeWidth:2.5});
+  D.tri(1300,y,90,'mus',{strokeWidth:2.5});
+});
+</script></body></html>

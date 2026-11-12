@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組五小結</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+ul.dots{position:absolute;left:110px;top:270px;width:965px}
+ul.dots li{margin:0 0 20px 0;line-height:1.55}
+.u{position:absolute;font-size:24px;line-height:1.45;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>模組 5 小結</h1>
+
+  <ul class="dots">
+    <li><b>Agent＝模型＋工具＋記憶＋迴圈</b>。tool calling 是模型產生 JSON，真正執行的是你的程式。</li>
+    <li><b>LangGraph 把迴圈畫成狀態圖</b>：State、Node、Edge；多個節點寫同一欄位要靠 reducer。</li>
+    <li><b>Checkpointer 每步存檔</b>：記憶、時光旅行、人在回路（interrupt → resume）都靠它。</li>
+    <li><b>多智能體</b>：子 agent 包成工具，只傳請求、只回摘要；代價是 token。</li>
+    <li><b>recursion_limit 預設 10,007 不是保險</b>：明確設小，再加次數上限。</li>
+  </ul>
+
+  <div class="abs lbl" style="left:1215px;top:628px;width:96px;text-align:center;white-space:nowrap;margin-left:-6px">Supervisor</div>
+  <div class="abs lbl" style="left:1385px;top:538px;width:76px;text-align:center">工具</div>
+  <div class="abs lbl" style="left:1552px;top:550px;width:84px;text-align:center;white-space:nowrap">子 agent</div>
+  <div class="u" style="left:1090px;top:730px;width:720px">Supervisor 只看得到工具；子 agent 在乾淨的 context 裡做完，只回摘要。</div>
+
+  <div class="next">下一章：LoRA 微調</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C;
+/* 520-supervisor 的縮小版：座標沿用原頁，再縮放 */
+const s=0.42, X=x=>1090+(x-110)*s, Y=y=>450+(y-290)*s, W=2.2;
+D.rect(X(110),Y(490),150*s,130*s,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.4});
+D.arrow(X(268),Y(555),X(382),Y(575),{strokeWidth:2.2});
+D.ci(X(520),Y(580),260*s,'ver',{fillStyle:'hachure',hachureGap:6,strokeWidth:2.2});
+D.arrow(X(618),Y(492),X(822),Y(442),{strokeWidth:2.2});
+D.arrow(X(828),Y(478),X(640),Y(526),{strokeWidth:2.2,stroke:S.ind});
+D.arrow(X(618),Y(668),X(822),Y(718),{strokeWidth:2.2});
+D.arrow(X(828),Y(742),X(640),Y(694),{strokeWidth:2.2,stroke:S.ind});
+D.tri(X(900),Y(432),120*s,S.mus,{strokeWidth:2});
+D.tri(X(900),Y(737),120*s,S.mus,{strokeWidth:2});
+D.arrow(X(970),Y(445),X(1122),Y(430),{strokeWidth:2});
+D.arrow(X(970),Y(750),X(1122),Y(735),{strokeWidth:2});
+D.ci(X(1220),Y(425),170*s,'#f7d6cf',{stroke:S.ver,strokeWidth:2.2});
+D.ci(X(1220),Y(730),170*s,'#f7d6cf',{stroke:S.ver,strokeWidth:2.2});
+D.arrow(X(1310),Y(408),X(1500),Y(385),{strokeWidth:2});
+D.arrow(X(1310),Y(440),X(1500),Y(470),{strokeWidth:2});
+D.arrow(X(1310),Y(730),X(1500),Y(735),{strokeWidth:2});
+D.tri(X(1550),Y(378),80*s,S.mus,{strokeWidth:2});
+D.tri(X(1550),Y(468),80*s,S.mus,{strokeWidth:2});
+D.tri(X(1550),Y(733),80*s,S.mus,{strokeWidth:2});
+</script></body></html>

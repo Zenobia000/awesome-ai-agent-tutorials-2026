@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>先備自我檢核</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.term{position:absolute;left:200px;width:360px;font-size:44px;line-height:1.2}
+.lv{position:absolute;left:590px;width:940px;font-size:28px;line-height:1.5}
+.lv .k{color:var(--muted);font-size:24px;display:block}
+.gl{position:absolute;font-size:28px;line-height:1}
+.nonote{position:absolute;left:150px;top:857px;width:1620px;font-size:28px;line-height:1.5}
+</style></head><body><div class="slide">
+  <h1>先備自我檢核：五項會了就上車</h1>
+  <p class="lead">每一項只要求到右邊這個程度，不用更深。</p>
+
+  <div class="term" style="top:292px">softmax</div>
+  <div class="lv" style="top:293px">說得出它把分數變成加總為 1 的機率，除以溫度 T 會讓分佈變尖或變平。</div>
+  <div class="term" style="top:400px">embedding 層</div>
+  <div class="lv" style="top:398px">知道 <span class="ind">nn.Embedding</span> 就是查表：整數 id 換成一列可以訓練的向量。</div>
+  <div class="term" style="top:508px">反向傳播</div>
+  <div class="lv" style="top:506px">不用手推，但看得懂訓練迴圈：算 loss、梯度往回傳、更新權重。</div>
+  <div class="term" style="top:616px">遷移學習</div>
+  <div class="lv" style="top:614px">做過或聽過：拿預訓練骨幹，凍結一部分，用少量資料微調。</div>
+  <div class="term" style="top:724px">Python</div>
+  <div class="lv" style="top:722px">能讀寫函式、類別、dict 與 JSON，會用 pip 裝套件、跑腳本。</div>
+
+  <div class="code" style="left:1546px;top:722px;padding:10px 18px">for x in xs:</div>
+  <div class="nonote"><span class="ver">不需要先會：</span>NLP、Transformer、任何 LLM 框架。這些從模組一開始，一步一步從零講。</div>
+
+  <div class="read"><em>怎麼讀：</em>五項都能打勾就直接開始；沒打勾的那一項，先補它，其他不用動。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const ys=[278,386,494,602,710];
+/* 勾選框＋勾 */
+ys.forEach(y=>{D.rect(110,y+8,60,60,'#fbf9f4',{fillStyle:'solid',strokeWidth:3});
+  D.line(124,y+40,141,y+56,{stroke:D.C.ind,strokeWidth:6});D.line(141,y+56,166,y+14,{stroke:D.C.ind,strokeWidth:6});});
+/* 列與列之間的細線 */
+[368,476,584,692].forEach(y=>D.line(110,y,1810,y,{stroke:'#d3cdbf',strokeWidth:1.8,roughness:1.6}));
+/* 小圖 1：softmax 長條 */
+D.bars(1560,ys[0]+4,170,66,[28,100,52,18],['#d9e1ee','#f7e7c0','#d9e1ee','#d9e1ee'],100,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.2});
+/* 小圖 2：id → 向量 */
+D.rect(1546,ys[1]+16,52,52,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.5});
+D.arrow(1604,ys[1]+42,1650,ys[1]+42,{strokeWidth:2.5});
+[0,1,2,3].forEach(i=>D.rect(1658+i*38,ys[1]+20,34,44,i%2?'#d9e1ee':'#f7d6cf',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2}));
+/* 小圖 3：三層網路＋往回的箭頭 */
+[0,1,2].forEach(i=>D.ci(1566+i*76,ys[2]+22,44,'#d9e1ee',{stroke:D.C.ind,strokeWidth:2.5}));
+D.line(1590,ys[2]+22,1620,ys[2]+22,{strokeWidth:2});D.line(1666,ys[2]+22,1696,ys[2]+22,{strokeWidth:2});
+D.arrow(1722,ys[2]+60,1560,ys[2]+60,{stroke:D.C.ver,strokeWidth:3.5});
+/* 小圖 4：凍結骨幹＋新接上的頭 */
+D.rect(1546,ys[3]+14,126,58,'#a8a296',{fillStyle:'hachure',strokeWidth:2.5});
+D.rect(1690,ys[3]+14,64,58,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.5});
+D.arrow(1762,ys[3]+43,1800,ys[3]+43,{strokeWidth:2.5});
+/* 小圖 5 在 DOM：.code 自動畫框 */
+/* 底部提示框 */
+D.rect(110,835,1700,96,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+</script>
+</body></html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab7 架構</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hb{position:absolute;left:545px;width:300px}
+.hb .t{font-size:32px;line-height:1.3}.hb .d{font-size:24px;line-height:1.4;color:var(--muted);margin-top:4px}
+.tl{position:absolute;width:150px;text-align:center;font-size:26px}
+.ln{position:absolute;font-size:24px;color:var(--muted);width:280px;text-align:center}
+.strip{position:absolute;left:110px;top:812px;width:1700px;height:100px;padding:20px 36px;font-size:30px;line-height:1.5}
+</style></head><body><div class="slide">
+  <h1>Lab7：Excel 自動分析智能體</h1>
+  <p class="lead">使用者丟進 Excel，模型經 MCP 呼叫本地工具，完成清洗、統計、畫圖與結論。</p>
+
+  <div class="abs lbl" style="left:110px;top:640px;width:230px;text-align:center">使用者上傳<br>Excel 報表</div>
+
+  <div class="hb" style="top:390px"><div class="t">Cherry Studio</div><div class="d">桌面客戶端，接開源模型</div></div>
+  <div class="abs note" style="left:440px;top:548px">Docker 容器</div>
+  <div class="hb" style="top:634px"><div class="t">Dify 工作流</div><div class="d">只接 HTTP 傳輸的 MCP</div></div>
+
+  <div class="ln" style="left:880px;top:366px">stdio</div>
+  <div class="ln" style="left:880px;top:626px">Streamable HTTP</div>
+  <div class="ln" style="left:880px;top:690px">host.docker.internal</div>
+
+  <div class="abs" style="left:1190px;top:345px;font-size:34px">MCP Server</div>
+  <div class="abs note" style="left:1190px;top:392px">Python，官方 SDK 的 MCPServer</div>
+  <div class="tl" style="left:1190px;top:560px">讀欄位</div>
+  <div class="tl" style="left:1340px;top:560px">清洗</div>
+  <div class="tl" style="left:1490px;top:560px">統計</div>
+  <div class="tl" style="left:1640px;top:560px">畫圖</div>
+  <div class="abs lbl" style="left:1300px;top:668px">本機檔案：Excel、輸出圖檔</div>
+
+  <div class="strip">做法：先用 Cherry Studio（stdio）跑通，再把<b>同一支</b> Server 改成 HTTP 接 Dify——資料層不變，只換傳輸層。</div>
+  <div class="read"><em>怎麼讀：</em>圓是客戶端裡的模型，三角是 Server 提供的工具；兩條線是同一個 Server 的兩種傳輸。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* 使用者與 Excel */
+D.sq(165,520,100,'ind',{strokeWidth:2.5});
+D.line(270,570,380,570,{strokeWidth:2.5});
+D.line(380,432,380,712,{strokeWidth:2.5});
+D.arrow(380,432,432,432,{strokeWidth:2.5});
+D.arrow(380,712,432,712,{strokeWidth:2.5});
+/* Hosts */
+D.rect(440,330,430,200,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.ci(500,432,64,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+D.rect(430,538,450,250,'#f3efe6',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5,strokeLineDash:[12,10]});
+D.rect(440,592,430,170,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.ci(500,677,64,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+/* 連線 */
+D.arrow(876,432,1150,432,{strokeWidth:3});
+D.arrow(876,677,1150,677,{strokeWidth:3,stroke:D.C.ver});
+/* Server */
+D.rect(1160,330,650,458,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3.2});
+[1265,1415,1565,1715].forEach(x=>D.tri(x,510,76,'mus',{strokeWidth:2.4}));
+D.sq(1222,650,56,'ind',{strokeWidth:2.4});
+</script></body></html>

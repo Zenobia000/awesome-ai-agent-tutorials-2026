@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組二：小結</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.pts{position:absolute;left:110px;top:222px;width:990px}
+.pts li{font-size:32px;line-height:1.45;margin:34px 0}
+.pts .d{display:block;font-size:27px;color:var(--muted);line-height:1.5}
+.bn{position:absolute;left:1170px;width:580px;height:92px;display:flex;align-items:center;padding-left:30px;font-size:30px}
+</style></head><body><div class="slide">
+  <h1>模組 2 小結</h1>
+  <ul class="dots pts">
+    <li>提示詞是輸入規格<span class="d">四段：角色、背景與任務、約束、示例；外部輸入用標籤隔開</span></li>
+    <li>few-shot 不改權重；思維鏈多算幾步<span class="d">推理模型已內建，提示詞改寫成功條件</span></li>
+    <li>注入的根源：指令與資料同在一條序列<span class="d">標籤只降機率，最後一道靠最小權限</span></li>
+    <li>結構化輸出三層：提示 → 原生 → Pydantic<span class="d">格式有保證，內容沒有</span></li>
+    <li>Text2SQL 的閘門是程式，不是模型自評<span class="d">解析語句類型＋資料庫唯讀帳號</span></li>
+  </ul>
+  <div class="bn" style="top:250px">角色</div>
+  <div class="bn" style="top:342px">背景與任務</div>
+  <div class="bn" style="top:434px">約束</div>
+  <div class="bn" style="top:526px">示例</div>
+  <div class="bn" style="top:636px;color:var(--muted)">使用者輸入</div>
+  <div class="abs lbl mut" style="left:1170px;top:752px;width:560px">一則提示詞的四段結構</div>
+  <div class="next">下一章：企業級 RAG</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const band=(y,fill,stroke,dash)=>D.rect(1170,y,580,92,fill,{fillStyle:'solid',stroke,strokeWidth:3,strokeLineDash:dash});
+band(250,'#d9e1ee',D.C.ind);band(342,'#f7e7c0','#b98a12');band(434,'#f7d6cf',D.C.ver);band(526,'#e4e0d3',D.C.ink);
+band(636,'#fff',D.C.grey,[10,8]);
+</script></body></html>

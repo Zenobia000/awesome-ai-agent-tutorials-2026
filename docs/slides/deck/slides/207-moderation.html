@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>內容審核放在哪一層</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.bx{position:absolute;text-align:center;display:flex;align-items:center;justify-content:center;line-height:1.2}
+.ly{position:absolute;width:290px;text-align:center;font-size:24px;color:var(--muted)}
+.cp{position:absolute;width:290px;text-align:center}
+.cp .t{font-size:30px;line-height:1.3}.cp .d{font-size:26px;line-height:1.4;color:var(--muted);margin-top:4px}
+</style></head><body><div class="slide">
+  <h1>內容審核：放在管線最前面</h1>
+  <p class="lead">審核是便宜的前置分類器，只回答「內容有害嗎」；擋不掉所有注入，所以後面還有三層。</p>
+
+  <div id="bx"></div>
+  <div class="ly" style="left:355px;top:274px">第 1 層</div>
+  <div class="ly" style="left:685px;top:274px">第 2 層</div>
+  <div class="ly" style="left:1025px;top:274px">第 3 層</div>
+  <div class="ly" style="left:1335px;top:274px">第 4 層</div>
+  <div class="cp" style="left:355px;top:520px"><div class="t ind">審核</div><div class="d">擋有害內容類別<br>免費，文字和圖片都能審</div></div>
+  <div class="cp" style="left:685px;top:520px"><div class="t ver">主模型</div><div class="d">用標籤隔開外部輸入<br>降低被帶偏的機率</div></div>
+  <div class="cp" style="left:1025px;top:520px"><div class="t mus">輸出驗證</div><div class="d">Pydantic 驗結構<br>只放行 SELECT 語句</div></div>
+  <div class="cp" style="left:1335px;top:520px"><div class="t mus">唯讀帳號</div><div class="d">最後一道<br>被騙了也寫不進去</div></div>
+
+  <div class="code" style="left:110px;top:716px;width:860px">r = client.moderations.create(
+    model="omni-moderation-latest", input=user_text)
+<span class="hl">if r.results[0].flagged:</span>   <span class="c"># 任一類別命中</span>
+    return reject()</div>
+  <div class="bridge" style="left:1010px;top:716px;width:800px"><span class="k">你已經會的</span>二元分類器：輸入一段文字，輸出 flagged 與各類別分數。審核就是現成的一個。</div>
+  <div class="read"><em>怎麼讀：</em>由左往右，每一層都假設前一層會失手；越往右越不靠模型的判斷，越靠程式與權限。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const host=document.getElementById('bx');
+const lab=(x,y,w,h,t,fs)=>{const d=document.createElement('div');d.className='bx';Object.assign(d.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px',fontSize:(fs||26)+'px'});d.textContent=t;host.appendChild(d);};
+const Y=415, A={strokeWidth:2.6};
+D.rect(110,360,170,110,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});lab(110,360,170,110,'使用者輸入');
+D.arrow(290,Y,425,Y,A);
+D.ci(500,Y,130,'#f7d6cf',{strokeWidth:2.8});lab(435,Y-65,130,130,'審核',28);
+D.arrow(570,Y,725,Y,A);
+D.ci(830,Y,190,'#f7d6cf',{strokeWidth:3});lab(735,Y-95,190,190,'主模型',32);
+D.arrow(935,Y,1080,Y,A);
+D.tri(1170,Y,170,'#f7e7c0',{stroke:'#b98a12',strokeWidth:3});lab(1100,Y+10,140,50,'驗證',26);
+D.arrow(1265,Y,1390,Y,A);
+D.tri(1480,Y,170,'#f7e7c0',{stroke:'#b98a12',strokeWidth:3});lab(1410,Y+10,140,50,'權限',26);
+D.arrow(1575,Y,1650,Y,A);
+D.rect(1655,360,155,110,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});lab(1655,360,155,110,'資料庫');
+</script></body></html>

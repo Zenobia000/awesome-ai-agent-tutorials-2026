@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>文件轉問答：多開搜尋入口</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cl{position:absolute;font-size:24px;line-height:1.4}
+.q{position:absolute;left:900px;width:520px;height:70px;font-size:28px;line-height:70px;padding-left:24px}
+.bridge.inline{padding:14px 30px}
+</style></head><body><div class="slide">
+  <h1>文件轉問答：替每段文件多開幾個入口</h1>
+  <p class="lead">使用者的問句，和另一個問句比，通常比和說明文字更像。離線先讓 LLM 替每個片段寫出可能被問的問題，當作額外的搜尋入口。</p>
+
+  <div class="cl mut" style="left:110px;top:340px">離線：每個片段只做一次</div>
+  <div class="abs" style="left:110px;top:400px;width:340px;font-size:24px;line-height:1.5;padding:18px 20px">ERR-4012 表示認證逾時。請先確認系統時間是否同步，再重新簽發憑證。</div>
+  <div class="abs" style="left:570px;top:420px;width:140px;text-align:center;font-size:40px;line-height:150px;height:150px;top:420px">LLM</div>
+  <div class="cl" style="left:540px;top:596px;width:200px;text-align:center">預先生成</div>
+  <div class="q" style="top:380px">ERR-4012 是什麼錯誤？</div>
+  <div class="q" style="top:470px">憑證要怎麼重新簽發？</div>
+  <div class="q" style="top:560px">認證逾時要怎麼處理？</div>
+  <div class="cl" style="left:1560px;top:610px;width:250px;text-align:center">入口都指回這個片段</div>
+  <div class="abs" style="left:1550px;top:440px;width:250px;text-align:center;font-size:30px;line-height:1.35">原片段<br><span class="mut" style="font-size:24px">回傳給模型</span></div>
+
+  <div class="cl mut" style="left:110px;top:690px">在線：問題去比對這些問題</div>
+  <div class="cl" style="left:110px;top:730px;width:780px;font-size:26px;line-height:1.5">問句對說明文字，用詞差很多；問句對問句，更容易對上。<span class="tag">示意</span></div>
+  <div class="q" style="top:710px;left:900px">使用者問：登入一直失敗怎麼辦？</div>
+  <div class="cl ver" style="left:1180px;top:652px;width:300px">問題比對問題</div>
+
+  <div class="bridge inline" style="left:110px;top:858px;width:1700px"><span class="k">你已經會的</span>資料增強：不改模型，替每份資料多造幾個「視角」，讓它更容易被找到。</div>
+  <div class="read"><em>怎麼讀：</em>上排離線，圓（LLM）替片段想出三個問題；下排在線，使用者的問題命中黃色那個，沿著指向取回原片段。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const BL=['#d9e1ee',D.C.ind],YL=['#f7e7c0','#b98a12'];
+const box=(x,y,w,h,[f,st],lw,o)=>D.rect(x,y,w,h,f,Object.assign({fillStyle:'solid',stroke:st,strokeWidth:lw||3},o||{}));
+/* 原片段 */
+box(110,400,340,190,['#d9e1ee',D.C.ind]);
+/* LLM */
+D.ci(640,495,150,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+D.arrow(458,495,550,495,{strokeWidth:2.8});D.arrow(722,495,890,495,{strokeWidth:2.8});
+/* 三個問題 */
+box(900,380,520,70,BL,2.8);box(900,470,520,70,BL,2.8);box(900,560,520,70,YL,3.4);
+/* 指回原片段 */
+[415,505,595].forEach(y=>D.dash(1424,y,1480,y,{strokeWidth:2.6}));
+D.dash(1480,415,1480,595,{strokeWidth:2.6});
+D.arrow(1480,505,1540,505,{strokeWidth:2.8});
+box(1550,420,250,170,YL,3);
+/* 使用者問題 → 命中的問題 */
+box(900,710,520,70,['#f7d6cf',D.C.ver],3);
+D.arrow(1160,704,1160,640,{strokeWidth:3,stroke:D.C.ver});
+</script></body></html>

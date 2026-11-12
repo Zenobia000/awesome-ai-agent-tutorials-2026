@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>GraphRAG 四種查詢模式</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.nm{position:absolute;width:400px;text-align:center;font-size:40px;line-height:1.2}
+.sb{position:absolute;width:400px;text-align:center;font-size:24px;line-height:1.3;color:var(--muted)}
+.ds{position:absolute;width:350px;font-size:26px;line-height:1.5}
+.warn{position:absolute;left:150px;top:765px;width:1620px;font-size:28px;line-height:1.55}
+</style></head><body><div class="slide">
+  <h1>GraphRAG 的四種查詢模式</h1>
+  <p class="lead">官方文件目前列出四種；Basic 就是傳統向量 RAG，用來當對照組。</p>
+
+  <div class="nm" style="left:110px;top:458px">Basic</div><div class="sb" style="left:110px;top:508px">傳統向量 RAG（對照組）</div>
+  <div class="ds" style="left:135px;top:550px">問題找最像的 top-k 片段。<br>單點事實就夠用。</div>
+
+  <div class="nm ind" style="left:543px;top:458px">Local</div><div class="sb" style="left:543px;top:508px">從問題裡的實體切入</div>
+  <div class="ds" style="left:568px;top:550px">問具體對象的題：某個人、某件法寶的來龍去脈。</div>
+
+  <div class="nm mus" style="left:976px;top:458px">Global</div><div class="sb" style="left:976px;top:508px">讀社群報告，做 map-reduce</div>
+  <div class="ds" style="left:1001px;top:550px">問全貌的題：主要的勢力、主題有哪些。</div>
+
+  <div class="nm" style="left:1409px;top:458px">DRIFT</div><div class="sb" style="left:1409px;top:508px">先看報告，再追問深挖</div>
+  <div class="ds" style="left:1434px;top:550px">用社群報告得出初步答案與追問，再對追問做 Local 搜尋。</div>
+
+  <div class="warn"><b style="color:var(--ink)">維護狀態：</b>GraphRAG v3.3.0（2026-10-08）；README 寫明已「largely in maintenance mode」，只修 bug、不加新功能。面試講概念與取捨，比背套件 API 穩。</div>
+  <div class="read"><em>怎麼讀：</em>由左往右，從最簡單的 Basic 到最複雜的 DRIFT；先判斷問題是「點」還是「全貌」，再選模式。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IND=['#d9e1ee',D.C.ind],MUS=['#f7e7c0','#b98a12'],VER=['#f7d6cf',D.C.ver];
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:3},o||{}));
+const sq=(x,y,s,f)=>R(x,y,s,s,f,{strokeWidth:2.5});
+const blob=(x,y,w,h,col)=>D.poly([[x,y+10],[x+w*0.3,y-4],[x+w,y+8],[x+w+4,y+h*0.6],[x+w*0.6,y+h+6],[x+6,y+h]],null,{stroke:col,strokeWidth:2.5,strokeLineDash:[8,7]});
+const ar=(x1,y1,x2,y2)=>D.arrow(x1,y1,x2,y2,{strokeWidth:2.8});
+const CARD=['#fbf9f4',D.C.grey];
+const xs=[110,543,976,1409];
+xs.forEach((x,i)=>R(x,290,400,420,i===0?['#fbf9f4',D.C.grey]:i===1?IND:i===2?MUS:['#fbf9f4',D.C.ink],{strokeWidth:3}));
+/* Basic：top-k 片段 */
+[0,1,2,3,4].forEach(i=>sq(110+56+i*62-0,350,42,i<2?MUS:IND));
+/* Local：以實體為中心的星形 */
+(()=>{const cx=543+200,cy=385;[[cx-110,cy-30],[cx+110,cy-30],[cx-95,cy+45],[cx+95,cy+45]].forEach(([x,y])=>{D.line(cx,cy,x,y,{strokeWidth:2.5});sq(x-17,y-17,34,IND);});sq(cx-24,cy-24,48,MUS);})();
+/* Global：三個社群 → 圓 */
+(()=>{const bx=976+40;[[0,D.C.ind,IND],[85,'#b98a12',MUS],[170,D.C.ver,VER]].forEach(([dx,c,f])=>{blob(bx+dx,345,62,62,c);sq(bx+dx+12,358,18,f);sq(bx+dx+34,376,18,f);});ar(976+40+245,375,976+40+280,375);D.ci(976+40+312,375,52,'ver',{fillStyle:'hachure',strokeWidth:2.2});})();
+/* DRIFT：報告 → 追問 → 局部 */
+(()=>{const x0=1409+55;blob(x0,345,62,62,D.C.ind);sq(x0+12,358,18,IND);sq(x0+34,376,18,IND);ar(x0+80,375,x0+120,375);const cx=x0+205;[[cx+70,345],[cx+70,405],[cx-6,408]].forEach(([x,y])=>{D.line(cx+14,376,x,y,{strokeWidth:2.5});sq(x-12,y-12,24,IND);});sq(cx-6,361,30,MUS);})();
+/* 維護狀態框 */
+R(110,745,1700,120,MUS);
+</script></body></html>

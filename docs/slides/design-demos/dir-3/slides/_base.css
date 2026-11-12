@@ -1,0 +1,20 @@
+/* 方向 3 · 圖解手冊：白底，概念固定一色，向量/片段畫成小方格條。
+   橘＝模型（會「想」的東西）  藍＝輸入與狀態（query、訊息、記憶）  綠＝外部資料與工具  紅＝警示 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap');
+:root{--ink:#22252b;--mut:#5f6670;--rule:#e3e1dc;--org:#f08c3a;--org-l:#fde3cc;--blu:#3f7fd1;--blu-l:#dbe7f7;--grn:#2f9e6e;--grn-l:#d6efe3;--red:#d9485f}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden}
+body{font-family:"Noto Sans TC",sans-serif;color:var(--ink);background:#fff}
+.slide{position:relative;z-index:1;width:1920px;height:1080px;padding:90px 110px}
+h1{font-family:"Noto Serif TC",serif;font-size:78px;font-weight:700;line-height:1.15}
+.lead{font-size:32px;line-height:1.55;color:var(--mut);margin-top:18px}
+.abs{position:absolute}
+.lbl{font-size:24px;line-height:1.35}.d{font-size:26px;line-height:1.45;color:var(--mut)}
+.org{color:#c9661a}.blu{color:var(--blu)}.grn{color:var(--grn)}.red{color:var(--red)}
+b{font-weight:500;color:#c9661a}
+.n{display:inline-block;width:40px;height:40px;line-height:40px;border-radius:50%;background:var(--ink);color:#fff;text-align:center;font-size:24px;font-weight:500;margin-right:10px;vertical-align:middle}
+.bridge{position:absolute;padding:24px 30px;font-size:28px;line-height:1.55;background:#f6f4ef;border-top:4px solid var(--ink)}
+.bridge .k{display:block;font-size:24px;font-weight:700;margin-bottom:8px}
+.read{position:absolute;left:110px;bottom:64px;width:1700px;font-size:26px;line-height:1.55;color:var(--mut);border-top:2px solid var(--rule);padding-top:16px}
+.read em{font-style:normal;color:var(--ink);font-weight:500}
+svg.fig{position:absolute;inset:0;z-index:0;pointer-events:none}

@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>向量 RAG 答不了的兩種題</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:44px;line-height:1.2}
+.q{position:absolute;height:70px;line-height:70px;padding-left:26px;font-size:28px}
+.ck{position:absolute;font-size:26px;line-height:1.45;padding:0 22px;display:flex;align-items:center}
+.nd{position:absolute;text-align:center;font-size:28px;height:64px;line-height:64px;width:140px}
+</style></head><body><div class="slide">
+  <h1>向量 RAG 答不了的兩種題</h1>
+  <p class="lead">chunk 是彼此獨立的碎片：撈得到「像問題」的片段，撈不到「關係」，也撈不到「全貌」。</p>
+
+  <div class="hd ind" style="left:110px;top:268px">多跳關係</div>
+  <div class="q" style="left:110px;top:340px;width:810px">「和韓立同門派的人，還有誰？」</div>
+  <div class="ck" style="left:110px;top:450px;width:380px;height:130px">…韓立進了七玄門，後來加入黃楓谷…</div>
+  <div class="ck" style="left:540px;top:450px;width:380px;height:130px">…厲飛雨也是七玄門弟子…</div>
+  <div class="abs lbl ind" style="left:110px;top:588px;width:380px">撈到：提到「韓立」</div>
+  <div class="abs lbl ver" style="left:540px;top:588px;width:380px">撈不到：沒提到「韓立」</div>
+
+  <div class="abs lbl ind" style="left:110px;top:635px">圖：沿著邊走兩步就到</div>
+  <div class="nd" style="left:110px;top:675px">韓立</div>
+  <div class="nd" style="left:445px;top:675px">七玄門</div>
+  <div class="nd" style="left:780px;top:675px">厲飛雨</div>
+  <div class="abs lbl mut" style="left:255px;top:716px;width:190px;text-align:center">MEMBER_OF</div>
+  <div class="abs lbl mut" style="left:590px;top:716px;width:190px;text-align:center">MEMBER_OF</div>
+
+  <div class="hd ind" style="left:1000px;top:268px">全局總結</div>
+  <div class="q" style="left:1000px;top:340px;width:810px">「這個故事裡，有哪幾股主要勢力？」</div>
+  <div class="abs lbl" style="left:1138px;top:716px">Top-5 撈到的</div>
+  <div class="abs lbl" style="left:1388px;top:716px">沒撈到的</div>
+  <div class="abs" style="left:1650px;top:714px"><span class="tag">示意</span></div>
+
+  <div class="bridge" style="left:110px;top:775px;width:1700px"><span class="k">你已經會的</span>向量檢索＝k-NN：只找「長得像問題」的點。「有哪幾股勢力」不像任何單一片段，更像對整份資料先分群、再摘要。</div>
+  <div class="read"><em>怎麼讀：</em>左邊的答案要串起兩個片段，右邊的答案要看完全部片段——都不是「找最像的幾段」。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IND=['#d9e1ee',D.C.ind],MUS=['#f7e7c0','#b98a12'],VER=['#f7d6cf',D.C.ver];
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:3},o||{}));
+D.dash(960,300,960,760,{stroke:D.C.grey,strokeWidth:2.5});
+/* 左：問題 → 片段 */
+D.rect(110,340,810,70,'#f3efe6',{fillStyle:'solid',strokeWidth:2.5});
+R(110,450,380,130,MUS);R(540,450,380,130,VER);
+D.arrow(300,414,300,446,{strokeWidth:3});
+D.dash(730,414,730,446,{strokeWidth:2.5,stroke:D.C.ver});D.cross(730,430,9,{strokeWidth:3.5});
+/* 左：圖 */
+R(110,675,140,64,IND);R(445,675,140,64,MUS);R(780,675,140,64,IND);
+D.arrow(254,707,441,707,{strokeWidth:3});D.arrow(776,707,589,707,{strokeWidth:3});
+/* 右：問題 → 格子 */
+D.rect(1000,340,810,70,'#f3efe6',{fillStyle:'solid',strokeWidth:2.5});
+D.arrow(1405,414,1405,444,{strokeWidth:3});
+const hit=[2,10,13,17,22];
+for(let r=0;r<3;r++)for(let c=0;c<8;c++){const i=r*8+c;D.rect(1079+c*84,455+r*76,60,56,...(hit.includes(i)?[MUS[0]]:[IND[0]]),{fillStyle:'solid',stroke:hit.includes(i)?MUS[1]:D.C.ind,strokeWidth:2.5});}
+D.rect(1058,437,696,236,null,{stroke:D.C.grey,strokeWidth:2.5,strokeLineDash:[10,10]});
+/* 圖例 */
+D.rect(1100,722,26,26,MUS[0],{fillStyle:'solid',stroke:MUS[1],strokeWidth:2.5});
+D.rect(1350,722,26,26,IND[0],{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.5});
+</script></body></html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab2：結構定義</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.code .bad{background:#f7d6cf}
+.cap{position:absolute;left:1075px;width:735px}
+.cap .t{font-size:30px;line-height:1.3}.cap .d{font-size:26px;line-height:1.45;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>一個 Pydantic 類別，兩頭都用</h1>
+  <p class="lead">一頭產生 schema 約束模型，另一頭驗證模型交回的文字。</p>
+
+  <div class="code" style="left:110px;top:290px;width:900px">class SQLGenerationResult(BaseModel):
+    sql: str                       <span class="c"># 單一 SELECT</span>
+    tables: list[str]              <span class="c"># 用到的資料表</span>
+    <span class="bad">risk: Literal["low", "medium", "high"]</span>
+    explanation: str               <span class="c"># 邏輯解釋</span>
+
+resp = chat(
+    model="qwen3:14b",
+    messages=messages,
+    <span class="hl">format=SQLGenerationResult.model_json_schema(),</span>
+)
+<span class="hl">result = SQLGenerationResult.model_validate_json(</span>
+    resp.message.content)</div>
+
+  <div class="cap" style="top:392px"><div class="t ver">risk 是模型自評</div><div class="d">拿來參考可以，不能當安全閘門</div></div>
+  <div class="cap" style="top:606px"><div class="t ind">出：schema 交給模型</div><div class="d">解碼時被約束，輸出必須長這樣</div></div>
+  <div class="cap" style="top:716px"><div class="t ind">入：文字變成物件</div><div class="d">不合格就丟 ValidationError</div></div>
+
+  <div class="abs note" style="left:110px;top:818px;width:1700px">這裡用本地 Ollama 的寫法（<span style="font-family:'JetBrains Mono',monospace;font-size:22px">format</span> 參數傳 JSON Schema）；OpenAI、Anthropic 的 SDK 可以直接吃 Pydantic 類別。</div>
+  <div class="read"><em>怎麼讀：</em>由上往下。黃底兩行是 Pydantic 的兩頭：先產出 schema 約束模型，再驗證模型交回的文字；朱紅底是不能信的欄位。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* 連到各行的導線：code top 290 + 22 padding，每行 36px */
+const ly=i=>312+36*i+18;
+D.line(1018,ly(3),1062,ly(3),{stroke:D.C.ver,strokeWidth:3});
+D.line(1018,ly(9),1062,ly(9),{stroke:D.C.ind,strokeWidth:3});
+D.line(1018,ly(11),1062,ly(11),{stroke:D.C.ind,strokeWidth:3});
+</script></body></html>

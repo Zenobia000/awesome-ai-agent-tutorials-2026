@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組五 章首</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.big{position:absolute;left:110px;top:70px;font-size:150px;line-height:1.1}
+.goal{position:absolute;left:1070px;top:100px;width:740px}
+.goal h2{margin-bottom:14px}
+.goal li{font-size:32px;line-height:1.5;margin:14px 0}
+.lab{position:absolute;top:812px;width:430px}
+.lab .t{font-size:30px;line-height:1.3}
+.lab .d{font-size:26px;line-height:1.45;color:var(--muted);margin-top:4px}
+</style></head><body><div class="slide">
+  <div class="big">模組 <span class="ind">5</span></div>
+  <h1 class="abs" style="left:110px;top:250px;font-size:76px">Agent 核心與 LangGraph</h1>
+  <p class="lead abs" style="left:110px;top:360px;width:860px;margin-top:0">Agent＝把模型放進迴圈。LangGraph＝把這個迴圈畫成可存檔、可暫停、可分支的狀態圖。</p>
+
+  <div class="abs" style="left:470px;top:580px;font-size:44px">5 小時</div>
+  <div class="abs note" style="left:470px;top:640px;width:420px">全課重點章之一。<br>先手寫，再上框架。</div>
+
+  <div class="goal"><h2>學習目標</h2>
+    <ul class="dots">
+      <li>看懂 tool calling：模型只「寫」JSON</li>
+      <li>手寫 50 行 ReAct agent</li>
+      <li>用 StateGraph 把迴圈畫成圖</li>
+      <li>存檔、倒帶、分支：checkpointer</li>
+      <li>高風險操作前，讓人類把關</li>
+      <li>子 agent 包成工具，交給 Supervisor</li>
+      <li>Deep Agents 與可插拔 Skills</li>
+    </ul></div>
+
+  <div class="abs" style="left:140px;top:836px;font-size:34px;color:var(--ink)">本章實戰</div>
+  <div class="lab" style="left:380px"><div class="t">Lab5-A　手寫 ReAct</div><div class="d">純 Python 迴圈，查價＋運算</div></div>
+  <div class="lab" style="left:880px"><div class="t">Lab5-B　審批級 SQL agent</div><div class="d">StateGraph＋存檔＋人工審批</div></div>
+  <div class="lab" style="left:1380px"><div class="t">Lab5-C　多智能體</div><div class="d">日曆＋郵件子 agent 當工具</div></div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.sq(130,520,240,'ind',{strokeWidth:2.8});
+D.rect(110,790,1700,150,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+D.line(340,815,340,915,{strokeWidth:2,stroke:'#b98a12'});D.line(840,815,840,915,{strokeWidth:2,stroke:'#b98a12'});D.line(1340,815,1340,915,{strokeWidth:2,stroke:'#b98a12'});
+</script></body></html>

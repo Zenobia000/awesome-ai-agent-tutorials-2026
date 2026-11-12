@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>為什麼需要狀態圖</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.tg{position:absolute;font-size:32px;line-height:1.2}
+.it{position:absolute;left:1230px;width:580px}
+.it .h{font-size:34px;line-height:1.3}
+.it .d{font-size:26px;line-height:1.45;color:var(--muted);margin-top:2px}
+.sm{position:absolute;font-size:26px;line-height:1;text-align:center}
+</style></head><body><div class="slide">
+  <h1>為什麼 agent 需要狀態圖</h1>
+  <p class="lead">while 迴圈撐得住第一版；要分支、重試、暫停、恢復，就得把流程變成存得下來的圖。</p>
+
+  <div class="sm" style="left:205px;top:318px;width:110px">答案</div>
+  <div class="sm" style="left:160px;top:482px;width:200px;font-size:28px">模型</div>
+  <div class="tg ind" style="left:345px;top:352px">分支</div>
+  <div class="tg ver" style="left:500px;top:372px">暫停</div>
+  <div class="tg mus" style="left:960px;top:355px">重試</div>
+  <div class="abs lbl mut" style="left:770px;top:585px;width:160px;text-align:center">工具</div>
+  <div class="tg ind" style="left:330px;top:760px">恢復</div>
+  <div class="abs note" style="left:430px;top:766px;width:620px">每走一步，就存一份 state</div>
+
+  <div class="it" style="top:300px"><div class="h ind">分支</div><div class="d">結果不同，走不同的路。<br>手寫：if／elif 越寫越亂</div></div>
+  <div class="it" style="top:430px"><div class="h ver">暫停</div><div class="d">危險操作先等人批准。<br>手寫：迴圈卡在記憶體，一停就沒</div></div>
+  <div class="it" style="top:560px"><div class="h mus">重試</div><div class="d">工具失敗，回頭再試。<br>手寫：計數器散落，易無限重試</div></div>
+  <div class="it" style="top:690px"><div class="h ind">恢復</div><div class="d">重啟後從中斷處接著跑。<br>手寫：狀態沒存，只能重來</div></div>
+
+  <div class="bridge inline" style="left:110px;top:830px;width:1700px"><span class="k">你已經會的</span>訓練迴圈寫久了會換成 Lightning／Trainer：框架只是把你本來就在寫的迴圈結構化。</div>
+  <div class="read"><em>怎麼讀：</em>一張圖同時裝下四件事：模型出口分岔、閘門暫停、工具自我重試、每步存檔讓你能恢復。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee',VL='#f7d6cf';
+D.rect(205,310,110,56,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.arrow(260,402,260,372,{strokeWidth:3});
+D.ci(260,490,170,VL,{stroke:D.C.ver,strokeWidth:3});
+D.arrow(350,490,488,498,{strokeWidth:3});
+D.tri(560,500,130,VL,{stroke:D.C.ver,strokeWidth:4});
+D.arrow(630,500,770,505,{strokeWidth:3});
+D.tri(860,505,150,'mus',{strokeWidth:2.6});
+D.curve([[905,525],[990,470],[960,400],[895,440]],{strokeWidth:3});D.arrow(915,418,893,442,{strokeWidth:3});
+D.curve([[815,580],[720,655],[580,695],[440,660],[300,562]],{strokeWidth:3});D.arrow(335,592,298,561,{strokeWidth:3});
+[[720,655],[580,695],[440,660]].forEach(p=>D.rect(p[0]-30,p[1]-22,60,44,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.6}));
+D.dash(1195,300,1195,800,{strokeWidth:1.8,stroke:D.C.grey});
+</script></body></html>

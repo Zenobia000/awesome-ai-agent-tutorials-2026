@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>混合檢索與重排</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.chip{position:absolute;width:64px;height:64px;line-height:64px;text-align:center;font-size:30px}
+.q{position:absolute;left:130px;top:410px;width:300px;font-size:28px;line-height:1.45}
+</style></head><body><div class="slide">
+  <h1>混合檢索：兩路粗篩，一次精排</h1>
+  <p class="lead">關鍵詞抓得到型號和錯誤碼，向量抓得到換句話說；兩路結果用 RRF 融合，再交給重排模型挑最相關的三段。</p>
+
+  <div class="q"><span class="mut" style="font-size:24px">使用者問題</span><br>「ERR-4012<br>要怎麼排除？」</div>
+  <div class="abs lbl ind" style="left:500px;top:300px">BM25 關鍵詞 · Top-5</div>
+  <div class="abs lbl ind" style="left:500px;top:520px">向量語意 · Top-5</div>
+  <div class="abs lbl" style="left:1000px;top:345px">RRF 融合：依名次加分</div>
+  <div class="abs lbl ver" style="left:1395px;top:335px;width:220px;text-align:center">Cross-Encoder<br>重排</div>
+  <div class="abs lbl" style="left:1660px;top:300px">Top-3 進 Prompt</div>
+  <div class="abs note" style="left:1000px;top:600px;width:380px">A–H 是文件片段（示意）；C、A 兩路都排前面，融合後名次最高</div>
+  <div id="chips"></div>
+
+  <div class="bridge inline" style="left:110px;top:780px;width:1700px"><span class="k">你已經會的</span>兩階段物件偵測：先大量產生候選框（便宜、求全），再用分類器精判（貴、求準）。檢索同理。</div>
+  <div class="read"><em>怎麼讀：</em>由左往右。兩排方塊是兩種檢索各自撈到的片段，中間融合排序，朱紅圓是重排模型，右邊三塊才會被送進模型。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const box=document.getElementById('chips');
+const chip=(x,y,t,fill,stroke)=>{D.rect(x,y,64,64,fill,{fillStyle:'solid',stroke,strokeWidth:2.5});const d=document.createElement('div');d.className='chip';d.style.left=x+'px';d.style.top=y+'px';d.textContent=t;box.appendChild(d);};
+const L=['#d9e1ee',D.C.ind],Y=['#f7e7c0','#b98a12'],R=['#f7d6cf',D.C.ver];
+'ABCDE'.split('').forEach((t,i)=>chip(500+i*84,345,t,...(t==='A'||t==='C'?Y:L)));
+'CFAGH'.split('').forEach((t,i)=>chip(500+i*84,565,t,...(t==='A'||t==='C'?Y:L)));
+'CABF'.split('').forEach((t,i)=>chip(1000+i*84,410,t,...(t==='A'||t==='C'?Y:L)));
+'DGEH'.split('').forEach((t,i)=>chip(1000+i*84,500,t,...L));
+'CAF'.split('').forEach((t,i)=>chip(1690,350+i*92,t,...R));
+D.rect(110,390,340,150,'#f3efe6',{fillStyle:'solid',strokeWidth:2.5});
+D.arrow(455,440,490,385,{strokeWidth:2.5});D.arrow(455,500,490,590,{strokeWidth:2.5});
+D.arrow(930,377,985,430,{strokeWidth:2.5});D.arrow(930,597,985,540,{strokeWidth:2.5});
+D.arrow(1345,480,1420,480,{strokeWidth:2.5});
+D.ci(1505,480,150,'ver',{fillStyle:'hachure',strokeWidth:2.5});
+D.arrow(1590,480,1670,480,{strokeWidth:2.5});
+</script></body></html>

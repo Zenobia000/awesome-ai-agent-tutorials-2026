@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>逐字生成是個迴圈</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;font-size:28px;line-height:1.25}
+.lg{position:absolute;top:278px;font-size:24px;color:var(--muted);display:flex;align-items:center;gap:12px}
+.lg i{display:inline-block;width:34px;height:26px;border:2.5px solid}
+.pm{position:absolute;top:786px;width:540px;height:100px;display:flex;align-items:center;padding:0 22px;font-size:26px;line-height:1.35}
+</style></head><body><div class="slide">
+  <h1>生成 ＝ 把分類器跑成迴圈</h1>
+  <p class="lead">每一輪只預測一個 token，抽出來後接到輸入的尾巴，再跑下一輪。直到抽到結束符號，或碰到長度上限。</p>
+
+  <div class="lg" style="left:250px"><i style="background:#d9e1ee;border-color:#2b4c7e"></i>你給的 prompt</div>
+  <div class="lg" style="left:540px"><i style="background:#f7d6cf;border-color:#e0442b"></i>模型已生成的 token</div>
+  <div class="lg" style="left:890px"><i style="background:#f7e7c0;border-color:#b98a12"></i>這一輪新抽到的</div>
+  <div id="g"></div>
+  <div class="a" style="left:110px;top:726px;width:700px;justify-content:flex-start;font-size:28px">抽的方式由三個參數控制：</div>
+  <div class="pm" style="left:110px"><span><b>Temperature</b>：分佈變尖或變平（下一頁）</span></div>
+  <div class="pm" style="left:680px"><span><b>Top-p</b>：只在累積機率達 p 的幾個候選裡抽</span></div>
+  <div class="pm" style="left:1250px"><span><b>Max Tokens</b>：最多生成幾個 token</span></div>
+  <div class="read"><em>怎麼讀：</em>由上往下一輪一輪看：圓是模型，右邊黃色是這輪抽到的 token，下一輪它就變成輸入的一部分（朱紅色）。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+const T=['今天','天','氣','真','好','，','適合','出','門','散步','。'];
+const ROWS=[{y:330,n:4,out:'好',lab:'第 1 輪'},{y:415,n:5,out:'，',lab:'第 2 輪'},{y:500,n:6,out:'適合',lab:'第 3 輪'},{y:628,n:11,out:'結束',lab:'最後一輪',end:true}];
+ROWS.forEach(r=>{
+  el(110,r.y,130,64,r.lab,'font-size:26px;color:#5b574f;justify-content:flex-start');
+  for(let i=0;i<r.n;i++){const x=250+i*82,gen=i>=4;
+    D.rect(x,r.y,76,64,gen?'#f7d6cf':'#d9e1ee',{fillStyle:'solid',stroke:gen?D.C.ver:D.C.ind,strokeWidth:2.4});
+    el(x,r.y,76,64,T[i],'font-size:26px');}
+  const ex=250+r.n*82;
+  D.arrow(ex+2,r.y+32,ex+34,r.y+32,{strokeWidth:2.5});
+  D.ci(ex+76,r.y+32,64,'ver',{fillStyle:'hachure',strokeWidth:2.2});
+  D.arrow(ex+114,r.y+32,ex+150,r.y+32,{strokeWidth:2.5});
+  const w=r.end?130:76;
+  D.rect(ex+158,r.y,w,64,r.end?'#f3efe6':'#f7e7c0',{fillStyle:'solid',stroke:r.end?D.C.ink:'#b98a12',strokeWidth:3});
+  el(ex+158,r.y,w,64,r.end?'&lt;結束&gt;':r.out,'font-size:26px');
+});
+D.rect(110,786,540,100,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});D.rect(680,786,540,100,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});D.rect(1250,786,540,100,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5});
+el(250,562,500,54,'⋮　一輪一輪重複　⋮','font-size:26px;color:#5b574f;justify-content:flex-start');
+</script></body></html>

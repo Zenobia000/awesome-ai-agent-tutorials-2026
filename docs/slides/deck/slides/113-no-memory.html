@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>為什麼記不住對話</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;font-size:28px}
+</style></head><body><div class="slide">
+  <h1>為什麼記不住對話：每次都重送</h1>
+  <p class="lead">模型是無狀態的函數。「記得上一輪」，是因為客戶端把整段歷史再送一次；超過窗口的部分，模型看不到。</p>
+  <div id="g"></div>
+  <div class="bridge inline" style="left:110px;top:800px;width:1700px"><span class="k">你已經會的</span>推論時沒有梯度更新，權重不會變。對話不會被「學進」模型，記憶全在輸入端。</div>
+  <div class="read"><em>怎麼讀：</em>三列是三次請求，每次送出的內容比上次長；紅色虛線以左超出窗口，第 3 次請求裡「問 1」就被截掉了。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+const END=1380,LIM=480;
+el(110,284,900,40,'每次請求送出的全部內容<span class="tag" style="margin-left:14px">示意</span>','font-size:28px;justify-content:flex-start');
+el(LIM,326,END-LIM,36,'context window（Ollama 預設 num_ctx ＝ 4096 token）','font-size:24px;color:#e0442b');
+const U=150,A=300,GAP=8;
+const rows=[{y:380,seq:['問1'],lab:'第 1 次請求',out:'答1'},{y:490,seq:['問1','答1','問2'],lab:'第 2 次請求',out:'答2'},{y:600,seq:['問1','答1','問2','答2','問3'],lab:'第 3 次請求',out:'答3'}];
+rows.forEach(r=>{
+  el(110,r.y,180,76,r.lab,'font-size:26px;color:#5b574f;justify-content:flex-start');
+  const widths=r.seq.map(s=>s[0]==='問'?U:A),total=widths.reduce((a,b)=>a+b+GAP,-GAP);
+  let x=END-total;
+  r.seq.forEach((s,i)=>{const w=widths[i],q=s[0]==='問',cut=x+w<=LIM;
+    if(cut){D.rect(x,r.y,w,76,'#e6e1d4',{fillStyle:'hachure',stroke:D.C.grey,strokeWidth:2.2,hachureGap:9});el(x,r.y,w,76,s,'color:#a8a296');D.cross(x+w/2,r.y+38,22);}
+    else{D.rect(x,r.y,w,76,q?'#d9e1ee':'#f7d6cf',{fillStyle:'solid',stroke:q?D.C.ind:D.C.ver,strokeWidth:2.5});el(x,r.y,w,76,s);}
+    x+=w+GAP;});
+  D.arrow(END+14,r.y+38,END+70,r.y+38,{strokeWidth:2.6});
+  D.ci(END+112,r.y+38,70,'ver',{fillStyle:'hachure',strokeWidth:2.2});
+  D.arrow(END+154,r.y+38,END+210,r.y+38,{strokeWidth:2.6});
+  D.rect(END+218,r.y,120,76,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});el(END+218,r.y,120,76,r.out);
+});
+D.dash(LIM,340,LIM,690,{stroke:D.C.ver,strokeWidth:3});
+el(110,690,1400,40,'「問 1」落在窗口外，模型看不到它：使用者看到的就是「失憶」。','font-size:28px;color:#e0442b;justify-content:flex-start');
+</script></body></html>

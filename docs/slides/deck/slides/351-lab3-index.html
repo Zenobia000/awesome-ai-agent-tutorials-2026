@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab 3 切分與入庫</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;top:290px;font-size:34px;line-height:1.2}
+.nt{position:absolute;font-size:26px;line-height:1.5}
+.nt code{font-family:"JetBrains Mono",monospace;font-size:22px}
+</style></head><body><div class="slide">
+  <h1>Lab 3 程式：切分並寫入本地 Chroma</h1>
+  <p class="lead">先依標題切片，再把片段、metadata 和向量一起存進本地持久化的 Chroma。</p>
+
+  <div class="hd ind" style="left:110px"><span class="mut">01</span>　依標題切分</div>
+  <div class="hd ind" style="left:930px"><span class="mut">02</span>　寫入 Chroma</div>
+
+  <div class="code" style="left:110px;top:350px"><span class="k">from</span> langchain_text_splitters <span class="k">import</span> (
+    MarkdownHeaderTextSplitter,
+)
+
+splitter = MarkdownHeaderTextSplitter(
+    headers_to_split_on=[
+        ("#", "h1"), ("##", "h2"), ("###", "h3"),
+    ],
+    <span class="hl">strip_headers=False,</span>  <span class="c"># 標題留在內文</span>
+)
+md = open("whitepaper.md").read()
+chunks = splitter.split_text(md)</div>
+
+  <div class="code" style="left:930px;top:350px"><span class="k">import</span> chromadb
+<span class="k">from</span> sentence_transformers <span class="k">import</span> SentenceTransformer
+model = SentenceTransformer("BAAI/bge-m3")
+client = chromadb.PersistentClient(path="./chroma_db")
+col = client.get_or_create_collection("whitepaper")
+texts = [c.page_content <span class="k">for</span> c <span class="k">in</span> chunks]
+ids = [f"c{i}" for i in range(len(texts))]
+text = dict(zip(ids, texts))  <span class="c"># id → 內文，查詢要用</span>
+<span class="hl">metas = [{**c.metadata, "version": "v2"} for c in chunks]</span>
+col.upsert(
+    ids=ids, documents=texts, metadatas=metas,
+    embeddings=model.encode(texts).tolist(),
+)</div>
+
+  <div class="nt" style="left:110px;top:892px;width:1700px"><code>strip_headers=False</code> 讓標題進內文；<code>version</code> 寫進 metadata，之後才能用 <code>where</code> 過濾；重跑用 <code>upsert</code>，同 id 才會被覆寫（<code>add</code> 會靜默略過）。</div>
+  <div class="read"><em>怎麼讀：</em>左邊切片，右邊存庫；黃色那兩行是這個 Lab 最容易漏掉的設定。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

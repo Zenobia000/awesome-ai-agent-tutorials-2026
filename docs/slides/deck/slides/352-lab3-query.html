@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab 3 檢索到組裝</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;top:272px;font-size:34px;line-height:1.2}
+.nt{position:absolute;font-size:26px;line-height:1.5}
+.nt code{font-family:"JetBrains Mono",monospace;font-size:22px}
+</style></head><body><div class="slide">
+  <h1>Lab 3 程式：召回、融合、重排、組裝</h1>
+  <p class="lead">兩路各取前 20 名，RRF 融合後交給重排模型，只留前 3 段拼進提示詞。</p>
+
+  <div class="hd ind" style="left:110px"><span class="mut">01</span>　兩路召回：BM25 先斷詞</div>
+  <div class="hd ind" style="left:950px"><span class="mut">02</span>　融合、重排、組裝</div>
+
+  <div class="code" style="left:110px;top:322px"><span class="k">from</span> rank_bm25 <span class="k">import</span> BM25Okapi
+<span class="k">def</span> tok(s):  <span class="c"># 中文沒空格：取相鄰兩字</span>
+    s = s.lower()
+    <span class="k">return</span> <span class="hl">[s[i:i+2] for i in range(len(s) - 1)]</span>
+got = col.get(where={"version": "v2"})  <span class="c"># 同樣過濾</span>
+bm25 = BM25Okapi([tok(t) <span class="k">for</span> t <span class="k">in</span> got["documents"]])
+sc = bm25.get_scores(tok(q))
+top = sorted(zip(sc, got["ids"]), reverse=True)[:20]
+sparse = [d <span class="k">for</span> v, d <span class="k">in</span> top <span class="hl">if v &gt; 0</span>]
+
+dense = col.query(
+    query_embeddings=model.encode([q]).tolist(),
+    n_results=20, <span class="hl">where={"version": "v2"},</span>
+)["ids"][0]</div>
+
+  <div class="code" style="left:950px;top:322px"><span class="k">from</span> sentence_transformers <span class="k">import</span> CrossEncoder
+<span class="k">def</span> rrf(rankings, k=60):
+    score = {}
+    <span class="k">for</span> ranking <span class="k">in</span> rankings:
+        <span class="k">for</span> i, d <span class="k">in</span> enumerate(ranking, 1):
+            score[d] = score.get(d, 0) + 1 / (k + i)
+    <span class="k">return</span> sorted(score, key=score.get, reverse=True)
+
+fused = rrf([sparse, dense])[:20]
+reranker = CrossEncoder(<span class="hl">"BAAI/bge-reranker-v2-m3"</span>)
+scores = reranker.predict([(q, text[d]) <span class="k">for</span> d <span class="k">in</span> fused])
+ranked = sorted(zip(scores, fused), reverse=True)
+prompt = <span class="s">"只根據以下資料回答：\n"</span> + <span class="s">"\n---\n"</span>.join(
+    text[d] <span class="k">for</span> _, d <span class="k">in</span> ranked[:3])</div>
+
+  <div class="nt" style="left:110px;top:892px;width:1700px"><code>split()</code> 切不開中文，所以取相鄰兩字（bigram）；0 分＝一個詞都沒對上，不進榜；BM25 也套同一個 <code>version</code> 過濾。</div>
+  <div class="read"><em>怎麼讀：</em>左邊兩路各撈 20 名，黃色是容易漏掉的設定；右邊 RRF 融合，Cross-Encoder 重排，取前 3 段拼成提示詞。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>模組七 MCP</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.goal{position:absolute;left:960px;top:178px;width:850px}
+ul.dots.goal li{font-size:30px;margin:22px 0}
+.lab{position:absolute;left:110px;top:840px;width:1700px;height:135px;padding:24px 36px;font-size:30px;line-height:1.55}
+</style></head><body><div class="slide">
+  <h1 class="xl abs" style="left:110px;top:80px">模組七</h1>
+  <h2 class="abs ind" style="left:110px;top:225px;font-size:56px">MCP 與低代碼</h2>
+  <p class="lead abs" style="left:110px;top:315px;width:740px">心法：工具用一個協定接進來；固定流程交給低代碼，要自己決定下一步的留給程式碼。</p>
+
+  <h2 class="abs" style="left:960px;top:100px">學習目標</h2>
+  <ul class="dots goal">
+    <li>說出 MCP 解決什麼：N × M 個接頭，降成 N + M 個</li>
+    <li>畫出 Host／Client／Server，講得清 Tools、Resources、Prompts 各由誰決定何時用</li>
+    <li>分得清 stdio 與 Streamable HTTP，知道各自用在哪</li>
+    <li>用官方 SDK 寫出 MCP Server，接進 Cherry Studio 與 Dify</li>
+    <li>劃出 Dify／n8n 與 LangGraph 的邊界</li>
+  </ul>
+
+  <div class="lab"><span class="mus">本章實戰</span>　Lab7 Excel 自動分析智能體：使用者丟進一份 Excel，模型透過 MCP 呼叫本地工具，完成清洗、統計、畫圖，再寫出分析結論。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.ci(330,660,280,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+D.tri(620,560,110,'mus',{strokeWidth:2.5});
+D.sq(585,725,80,'ind',{strokeWidth:2.5});
+D.line(465,600,570,570,{strokeWidth:2.5});
+D.line(460,715,585,750,{strokeWidth:2.5});
+D.rect(110,840,1700,135,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+</script></body></html>

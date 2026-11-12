@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>LoRA 對比全量微調</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.pn{position:absolute;left:960px;width:850px;padding:20px 30px;height:214px}
+.pn .t{font-size:34px;line-height:1.3;margin-bottom:6px}
+.pn p{font-size:28px;line-height:1.5}
+.lg{position:absolute;font-size:26px;line-height:1.3}
+</style></head><body><div class="slide">
+  <h1>LoRA 追得上全量微調，但有條件</h1>
+  <p class="lead">條件對了，兩者相當；資料量超過旁路的容量，就會落後。</p>
+
+  <div class="abs" style="left:110px;top:300px;font-size:28px">訓練 loss 與步數（對數軸）<span class="tag" style="margin-left:14px">示意</span></div>
+  <div class="abs note" style="left:96px;top:356px;width:64px;text-align:right">loss</div>
+  <div class="abs note" style="left:180px;top:740px;width:700px;text-align:center">訓練步數 →</div>
+
+  <div class="lg" style="left:540px;top:372px"><span style="display:inline-block;width:54px;height:0;border-top:4px solid var(--ink);vertical-align:middle;margin-right:14px"></span>全量微調</div>
+  <div class="lg ver" style="left:540px;top:420px"><span style="display:inline-block;width:54px;height:0;border-top:4px dashed var(--ver);vertical-align:middle;margin-right:14px"></span>LoRA，r 夠大：幾乎重疊</div>
+  <div class="lg" style="left:540px;top:468px;color:#b98a12"><span style="display:inline-block;width:54px;height:0;border-top:4px solid #b98a12;vertical-align:middle;margin-right:14px"></span>LoRA，r 太小</div>
+  <div class="lg" style="left:600px;top:520px;color:#b98a12;width:300px">容量用完，<br>在這裡掉隊</div>
+
+  <div class="pn" style="top:330px"><div class="t ind">相當的條件</div>
+    <p>中小型的指令／推理資料集</p><p>LoRA 加在所有層（含 MLP）</p><p>r 夠大，容量裝得下資料量</p></div>
+  <div class="pn" style="top:576px"><div class="t ver">會落後的情況</div>
+    <p>資料量遠超過旁路的容量</p><p>只加在 attention 層</p><p>程式碼、繼續預訓練（Biderman 等 2024）</p></div>
+
+  <div class="bridge inline" style="left:110px;top:836px;width:1700px"><span class="k">你已經會的</span>模型容量對上資料量：小模型擬合大資料集會欠擬合。r 就是旁路的容量旋鈕。</div>
+  <div class="read"><em>怎麼讀：</em>左圖看曲線分岔：容量夠就貼著全量微調走，不夠就先趴下；右邊兩框是實驗歸納出的條件（Thinking Machines、Biderman 等）。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* 座標軸 */
+D.arrow(170,730,900,730,{strokeWidth:2.6});D.arrow(170,730,170,350,{strokeWidth:2.6});
+/* 同一條路徑：全量微調 / 高 r LoRA（重疊）；低 r LoRA 在中段後掉隊 */
+const full=[[190,420],[260,520],[340,590],[440,640],[560,672],[700,692],[860,704]];
+const hi=full.map(([x,y])=>[x,y+6]);
+const lo=[[190,420],[260,522],[340,596],[420,628],[500,636],[620,640],[740,644],[860,646]];
+D.curve(full,{strokeWidth:3.6});
+D.curve(hi,{strokeWidth:3.2,stroke:D.C.ver,strokeLineDash:[12,9]});
+D.curve(lo,{strokeWidth:3.6,stroke:'#b98a12'});
+/* 掉隊標註 */
+D.arrow(640,584,520,628,{strokeWidth:2.4,stroke:'#b98a12'});
+D.rect(960,330,850,214,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.8});
+D.rect(960,576,850,214,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.8});
+</script></body></html>

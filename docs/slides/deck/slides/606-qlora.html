@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>QLoRA：4-bit 基座加 LoRA</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cap{position:absolute;font-size:26px;line-height:1.4}
+.cap .t{font-size:30px;display:block}
+.bl{position:absolute;width:250px;text-align:right;font-size:26px;line-height:1.3}
+.bv{position:absolute;font-size:30px;line-height:1}
+</style></head><body><div class="slide">
+  <h1>QLoRA：基座壓成 4-bit，旁路照舊</h1>
+  <p class="lead">W 不需要梯度，所以能存得更省；要訓練的 A、B 仍是高精度。</p>
+
+  <div class="cap" style="left:110px;top:300px;width:330px"><span class="t">LoRA</span>W 以 16-bit 存放</div>
+  <div class="cap" style="left:560px;top:300px;width:330px"><span class="t ver">QLoRA</span>W 壓成 4-bit 存放</div>
+  <div class="abs lbl ver" style="left:390px;top:546px;width:100px;text-align:center">A、B</div>
+  <div class="abs lbl ver" style="left:700px;top:546px;width:100px;text-align:center">A、B</div>
+  <div class="abs note" style="left:110px;top:658px;width:760px">方塊面積按位元數畫：4-bit 只佔 16-bit 的 1/4。<br>7B 參數 × 2 bytes ≈ 14GB；× 0.5 byte ≈ 3.5GB。</div>
+  <div class="abs note" style="left:110px;top:742px;width:760px">前向計算時臨時還原成高精度。4-bit 的編碼叫 NF4。</div>
+
+  <div class="abs" style="left:960px;top:296px;font-size:30px;width:850px">7B 模型微調顯存估算 <span class="note" style="margin-left:10px">LLaMA-Factory 文件</span></div>
+  <div class="bl" style="left:960px;top:382px">LoRA 16-bit</div>
+  <div class="bl" style="left:960px;top:462px">QLoRA 8-bit</div>
+  <div class="bl" style="left:960px;top:542px">QLoRA 4-bit</div>
+  <div class="bl" style="left:960px;top:622px">QLoRA 2-bit</div>
+  <div class="bv" style="left:1630px;top:380px">16GB</div>
+  <div class="bv" style="left:1498px;top:460px">10GB</div>
+  <div class="bv" style="left:1410px;top:540px">6GB</div>
+  <div class="bv" style="left:1366px;top:620px">4GB</div>
+  <div class="abs lbl ver" style="left:1560px;top:676px;width:250px;text-align:right">RTX 4090　24GB</div>
+
+  <div class="bridge inline" style="left:110px;top:836px;width:1700px"><span class="k">你已經會的</span>混合精度訓練（FP16＋FP32）你可能用過；QLoRA 更進一步：凍結的部分不要梯度，所以壓得更狠。</div>
+  <div class="read"><em>怎麼讀：</em>左邊比 W 的大小（A、B 一樣大），右邊比整個訓練要多少顯存；虛線是 4090 的 24GB，條越短越有餘裕。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* W：16-bit 方塊 vs 4-bit 方塊（邊長 1 : 1/2 → 面積 1 : 1/4）；底線對齊 y=620 */
+D.rect(130,380,240,240,'ind',{fillStyle:'hachure',strokeWidth:2.6});
+D.rect(560,500,120,120,'ind',{fillStyle:'hachure',strokeWidth:2.6});
+/* A、B（旁路）：兩邊一樣大，仍是高精度 */
+D.rect(390,500,100,120,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.6});
+D.rect(700,500,100,120,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.6});
+/* 顯存長條：1GB = 22px，起點 x=1240 */
+const bars=[[16,380,'ind'],[10,460,'ind'],[6,540,'ver'],[4,620,'ver']];
+bars.forEach(([gb,y,c])=>D.rect(1240,y,gb*22,50,c,{fillStyle:'hachure',strokeWidth:2.4}));
+D.line(1240,370,1240,680,{strokeWidth:2.4});
+D.dash(1768,340,1768,668,{strokeWidth:3,stroke:D.C.ver});
+</script></body></html>

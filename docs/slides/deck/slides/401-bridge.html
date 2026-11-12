@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>從向量到圖：搭橋</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.ct{position:absolute;display:flex;align-items:center;height:160px;font-size:28px;line-height:1.4}
+.hd{position:absolute;font-size:30px}
+</style></head><body><div class="slide">
+  <h1>從「找像的」走到「找連的」</h1>
+  <p class="lead">模組三的「粗召回＋精排」照用；圖補上向量沒有的東西：關係。</p>
+
+  <div class="hd ind" style="left:110px;top:262px">你會的</div>
+  <div class="hd mus" style="left:1050px;top:262px">本章新的</div>
+
+  <div class="ct" style="left:360px;top:318px;width:450px"><span>兩階段檢索：向量粗召回，再用重排模型精判（模組三）</span></div>
+  <div class="ct" style="left:1345px;top:318px;width:445px"><span>向量先找到<b>入口實體</b>，再沿著關係往外走</span></div>
+  <div class="ct" style="left:360px;top:538px;width:450px"><span>分群與階層樹：由細到粗合併（dendrogram）</span></div>
+  <div class="ct" style="left:1345px;top:538px;width:445px"><span><b>Leiden 社群</b>，<br>加上預先寫好的社群報告</span></div>
+  <div class="ct" style="left:360px;top:758px;width:450px"><span>每個 chunk 各自 embedding，彼此無關（像 i.i.d. 樣本）</span></div>
+  <div class="ct" style="left:1345px;top:758px;width:445px"><span>節點之間有<b>有型別的邊</b>，關係本身就是資料</span></div>
+
+  <div class="read"><em>怎麼讀：</em>左邊是你已經會的，右邊是本章對應的新東西；三列都是同一個直覺的升級。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IND=['#d9e1ee',D.C.ind],MUS=['#f7e7c0','#b98a12'],VER=['#f7d6cf',D.C.ver];
+const sq=(x,y,s,f)=>D.rect(x,y,s,s,f[0],{fillStyle:'solid',stroke:f[1],strokeWidth:2.5});
+[318,538,758].forEach(y=>{
+  D.rect(110,y,720,160,IND[0],{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+  D.rect(1050,y,760,160,MUS[0],{fillStyle:'solid',stroke:MUS[1],strokeWidth:3});
+  D.arrow(850,y+80,1030,y+80,{strokeWidth:3});
+});
+/* 第一列左：粗召回 → 精排 */
+[0,1,2,3].forEach(i=>sq(132+i*36,383,28,i===1?MUS:IND));
+D.arrow(274,397,298,397,{strokeWidth:2.5});
+D.ci(324,397,38,'ver',{fillStyle:'hachure',strokeWidth:2.2});
+/* 第一列右：入口 → 沿關係 */
+sq(1075,383,36,MUS);D.line(1111,401,1160,401,{strokeWidth:2.5});sq(1160,383,36,IND);D.line(1196,401,1245,401,{strokeWidth:2.5});sq(1245,383,36,IND);
+/* 第二列左：dendrogram（由細到粗合併） */
+const lb=668,lw={strokeWidth:2.5};
+[[140,640],[180,640],[225,628],[265,628]].forEach(([x,y])=>{D.line(x,lb,x,y,lw);sq(x-6,lb,12,IND);});
+D.line(140,640,180,640,lw);D.line(225,628,265,628,lw);
+D.line(160,640,160,600,lw);D.line(245,628,245,600,lw);D.line(160,600,245,600,lw);D.line(202,600,202,576,lw);
+/* 第二列右：三個社群 */
+const blob=(x,y,w,h,col)=>D.poly([[x,y+12],[x+w*0.3,y-4],[x+w,y+8],[x+w+4,y+h*0.6],[x+w*0.6,y+h+6],[x+6,y+h]],null,{stroke:col,strokeWidth:2.5,strokeLineDash:[8,7]});
+blob(1070,600,70,70,D.C.ind);sq(1085,615,20,IND);sq(1110,635,20,IND);
+blob(1155,605,70,66,'#b98a12');sq(1170,620,20,MUS);sq(1195,640,20,MUS);
+blob(1240,600,60,70,D.C.ver);sq(1255,615,20,VER);sq(1270,640,20,VER);
+/* 第三列左：互不相連 */
+[0,1,2,3].forEach(i=>sq(132+i*48,818,32,IND));
+/* 第三列右：連起來 */
+const g=[[1080,810],[1150,850],[1220,805],[1285,850]];
+D.line(1096,826,1166,866,{strokeWidth:2.5});D.line(1166,866,1236,821,{strokeWidth:2.5});D.line(1236,821,1301,866,{strokeWidth:2.5});D.line(1096,826,1236,821,{strokeWidth:2.5});
+g.forEach(([x,y],i)=>sq(x,y,32,i===1?MUS:IND));
+</script></body></html>

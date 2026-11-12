@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>依標題切分並保留章節</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;top:296px;font-size:26px;color:var(--muted)}
+.body{position:absolute;left:728px;width:1060px;font-size:28px;line-height:1.4}
+.chip{position:absolute;font-size:24px;line-height:44px;height:44px;text-align:center;white-space:nowrap}
+.sep{position:absolute;font-size:24px;line-height:44px;color:var(--muted)}
+.warn{position:absolute;left:150px;top:790px;width:1620px;font-size:28px;line-height:1.5}
+.warn .k{color:var(--ind);margin-right:14px}
+</style></head><body><div class="slide">
+  <h1>結構感知切分：沿標題切，記住章節</h1>
+  <p class="lead">用標題層級當刀口。每個片段帶著父章節路徑（metadata：附在片段上的標籤），可過濾、可標出處。</p>
+
+  <div class="hd" style="left:110px">Markdown 原文</div>
+  <div class="hd" style="left:700px">切出的片段：內文＋章節路徑</div>
+  <div class="code" style="left:110px;top:340px"><span class="k"># 部署指南</span>
+<span class="k">## 安裝</span>
+<span class="k">### 環境需求</span>
+需要 Python 與 Docker。
+<span class="k">### 設定憑證</span>
+把 token 寫進 .env。
+<span class="k">## 疑難排解</span>
+<span class="k">### ERR-4012</span>
+先確認系統時間是否同步，
+再重新簽發憑證。</div>
+
+  <div class="body" style="top:340px">需要 Python 與 Docker。</div>
+  <div class="body" style="top:490px">把 token 寫進 .env。</div>
+  <div class="body" style="top:640px">先確認系統時間是否同步，再重新簽發憑證。</div>
+  <div id="chips"></div>
+
+  <div class="warn"><span class="k">注意</span><code style="font-family:'JetBrains Mono',monospace;font-size:26px">strip_headers</code> 預設是 True：標題從內文拿掉，只留在 metadata。<br>想讓 embedding 讀到章節脈絡，要設成 False，或自己把標題拼回內文。</div>
+  <div class="read"><em>怎麼讀：</em>左邊的標題行是刀口；每一段內文切成一個方塊，方塊下方的標籤是它所屬的章節路徑。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const box=document.getElementById('chips');
+const cw=t=>[...t].reduce((a,c)=>a+(c.charCodeAt(0)>255?24:13),30);
+const chip=(x,y,t)=>{const w=cw(t);D.rect(x,y,w,44,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.5});
+  const d=document.createElement('div');d.className='chip';d.style.cssText=`left:${x}px;top:${y}px;width:${w}px`;d.textContent=t;box.appendChild(d);return x+w;};
+const sep=(x,y)=>{const d=document.createElement('div');d.className='sep';d.style.cssText=`left:${x+4}px;top:${y}px`;d.textContent='›';box.appendChild(d);return x+26;};
+const path=(y,arr)=>{let x=730;arr.forEach((t,i)=>{if(i)x=sep(x,y);x=chip(x+(i?0:0),y,t)+(i<arr.length-1?0:0);});};
+const cards=[[330,['部署指南','安裝','環境需求']],[480,['部署指南','安裝','設定憑證']],[630,['部署指南','疑難排解','ERR-4012']]];
+cards.forEach(([y,arr],i)=>{
+  D.rect(700,y,1110,130,i===2?'#f7e7c0':'#fbf9f4',{fillStyle:'solid',stroke:i===2?'#b98a12':D.C.grey,strokeWidth:3});
+  path(y+72,arr);
+});
+/* 括號＋箭頭：原文段落 → 片段 */
+const br=(y1,y2,yc)=>{D.line(496,y1,516,y1,{strokeWidth:2.5});D.line(516,y1,516,y2,{strokeWidth:2.5});D.line(496,y2,516,y2,{strokeWidth:2.5});D.arrow(516,(y1+y2)/2,692,yc,{strokeWidth:2.5});};
+br(410,478,395);br(484,552,545);br(590,696,695);
+</script></body></html>

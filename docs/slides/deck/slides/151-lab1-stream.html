@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab 1 串流程式片段</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;font-size:26px}
+</style></head><body><div class="slide">
+  <h1>Lab 1：用 generator 接串流</h1>
+  <p class="lead">generator 用 yield 一次交出一小片結果，呼叫端拿到就能立刻顯示，不必等整段生成完。</p>
+  <div class="code" style="left:110px;top:286px"><span class="k">def</span> stream_chat(messages):
+    <span class="k">try</span>:
+        <span class="k">yield from</span> _run(LOCAL, <span class="s">"qwen3.5:9b"</span>, messages)
+    <span class="k">except</span> (APIConnectionError, APITimeoutError):
+        <span class="k">yield from</span> _run(CLOUD, <span class="s">"deepseek-flash"</span>, messages)
+
+<span class="k">def</span> _run(client, model, messages):
+    resp = client.chat.completions.create(
+        model=model, messages=messages, <span class="hl">stream=True</span>)
+    <span class="k">for</span> chunk <span class="k">in</span> resp:
+        piece = chunk.choices[0].delta.content
+        <span class="k">if</span> piece:
+            <span class="hl"><span class="k">yield</span> piece</span></div>
+  <div class="code" style="left:1090px;top:286px"><span class="k">for</span> piece <span class="k">in</span> stream_chat(history):
+    print(piece, end=<span class="s">""</span>, flush=<span class="k">True</span>)</div>
+  <div class="a" style="left:1090px;top:414px;width:720px;height:36px;justify-content:flex-start;color:#5b574f;font-size:24px">呼叫端：拿到一片就印一片</div>
+  <div id="g"></div>
+  <p class="abs" style="left:110px;top:842px;width:1700px;font-size:26px;line-height:1.5;color:#5b574f">注意：切換若發生在串流中途，已經顯示的字收不回來，要另外處理。</p>
+  <div class="read"><em>怎麼讀：</em>左邊是產生片段的 generator，右上是消費它的迴圈；右下對比不串流與串流：同樣的內容，使用者等待的樣子不同。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+/* 不串流 */
+el(1090,478,400,34,'不串流','font-size:26px;justify-content:flex-start;color:#e0442b');
+D.rect(1090,520,460,56,'#e6e1d4',{fillStyle:'hachure',stroke:D.C.grey,strokeWidth:2.2,hachureGap:9});el(1090,520,460,56,'空白等待','font-size:24px;color:#5b574f');
+D.rect(1560,520,250,56,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.6});el(1560,520,250,56,'整段一次出現','font-size:24px');
+/* 串流 */
+el(1090,614,400,34,'串流','font-size:26px;justify-content:flex-start;color:#2b4c7e');
+['你','好','，','我','是','助','理','。'].forEach((t,i)=>{const x=1090+i*90;D.rect(x,656,80,56,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.4});el(x,656,80,56,t,'font-size:28px');});
+D.arrow(1090,752,1810,752,{strokeWidth:2.6});el(1690,762,120,34,'時間','font-size:24px;color:#5b574f');
+</script></body></html>

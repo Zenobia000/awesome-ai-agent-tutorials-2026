@@ -1,0 +1,22 @@
+/* 方向 2 · 工程藍圖：深靛底＋細白線方格。青＝資料流、琥珀＝人工審批、紅＝危險操作 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+:root{--bg:#0e2a47;--line:#e8eef5;--mut:#9fb3c8;--cyan:#5fd3e8;--amber:#f2b24a;--red:#ff6a5c;--panel:#123559}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden}
+body{font-family:"Noto Sans TC",sans-serif;font-weight:300;color:var(--line);background:var(--bg);
+ background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px),
+ linear-gradient(rgba(255,255,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.1) 1px,transparent 1px);
+ background-size:24px 24px,24px 24px,120px 120px,120px 120px}
+.slide{position:relative;z-index:1;width:1920px;height:1080px;padding:90px 110px}
+h1{font-size:76px;font-weight:400;line-height:1.15;letter-spacing:.01em}
+.lead{font-size:32px;line-height:1.55;color:var(--mut);margin-top:16px}
+.abs{position:absolute}
+.mono{font-family:"JetBrains Mono",monospace;font-weight:400}
+.lbl{font-size:24px;line-height:1.35}.d{font-size:26px;line-height:1.45;color:var(--mut)}
+.cy{color:var(--cyan)}.am{color:var(--amber)}.rd{color:var(--red)}
+b{font-weight:500;color:var(--amber)}
+.bridge{position:absolute;padding:22px 28px;font-size:28px;line-height:1.55;border:2px dashed var(--line);background:rgba(14,42,71,.92)}
+.bridge .k{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--cyan);margin-bottom:8px}
+.read{position:absolute;left:110px;bottom:64px;width:1700px;font-size:26px;line-height:1.55;color:var(--mut)}
+.read em{font-style:normal;color:var(--line)}
+svg.bp{position:absolute;inset:0;z-index:0;pointer-events:none}

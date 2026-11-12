@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>傳輸：stdio 與 HTTP</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.bx{position:absolute;text-align:center;font-size:32px;line-height:1.3}
+.bx small{display:block;font-size:24px;color:var(--muted)}
+.al{position:absolute;font-size:24px}
+.tl{position:absolute;font-size:24px;line-height:1.45;color:var(--muted)}
+.dt{position:absolute;font-size:28px}
+</style></head><body><div class="slide">
+  <h1>傳輸：本機走 stdio，遠端走 HTTP</h1>
+  <p class="lead">同一份 JSON-RPC 訊息，可以走兩種管道；舊的 HTTP+SSE 已被取代。</p>
+
+  <h2 class="abs ind" style="left:110px;top:285px">stdio　本機子行程</h2>
+  <div class="abs note" style="left:110px;top:340px;width:790px">像 subprocess.Popen 的 stdin／stdout 管線</div>
+  <div class="bx" style="left:110px;top:462px;width:220px">Host</div>
+  <div class="bx" style="left:680px;top:445px;width:220px">MCP Server<small>子行程</small></div>
+  <div class="al" style="left:372px;top:432px">stdin：請求</div>
+  <div class="al" style="left:372px;top:566px">stdout：回覆</div>
+  <div class="abs ver" style="left:110px;top:632px;font-size:26px">stdout 只放協定訊息，別 print()</div>
+  <div class="al" style="left:330px;top:684px;width:410px;text-align:right">stderr：除錯訊息寫這裡</div>
+
+  <h2 class="abs ind" style="left:1020px;top:285px">Streamable HTTP　遠端</h2>
+  <div class="abs note" style="left:1020px;top:340px;width:790px">像呼叫一個推論 API：每則訊息一個 HTTP POST</div>
+  <div class="bx" style="left:1020px;top:462px;width:220px">Client</div>
+  <div class="bx" style="left:1590px;top:445px;width:220px">遠端 Server<small>HTTP 服務</small></div>
+  <div class="al" style="left:1295px;top:432px">POST /mcp</div>
+  <div class="al" style="left:1290px;top:566px">回傳 JSON，或 SSE 串流</div>
+  <div class="abs" style="left:1020px;top:632px;width:790px;font-size:26px">SSE 只是回覆的一種格式（邊做邊回報進度），不再是獨立的傳輸。</div>
+
+  <div class="dt" style="left:110px;top:748px">2024-11-05</div>
+  <div class="dt" style="left:660px;top:748px">2025-03-26</div>
+  <div class="dt" style="left:1210px;top:748px">2026-07-28</div>
+  <div class="tl" style="left:110px;top:840px;width:480px">HTTP+SSE（舊傳輸）</div>
+  <div class="tl" style="left:660px;top:840px;width:480px">Streamable HTTP 取代 HTTP+SSE</div>
+  <div class="tl" style="left:1210px;top:840px;width:600px">無狀態：拿掉 initialize 握手與 session；<br>HTTP+SSE 正式棄用</div>
+
+  <div class="read"><em>怎麼讀：</em>左右各是一種管道；最下面一條是版本演進，現行規格只教 stdio 與 Streamable HTTP。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* stdio */
+D.rect(110,425,220,180,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.rect(680,425,220,180,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+D.arrow(336,470,674,470,{strokeWidth:2.8});
+D.arrow(674,560,336,560,{strokeWidth:2.8});
+D.dash(790,608,790,676,{strokeWidth:2.4,stroke:D.C.grey});
+D.sq(768,676,44,'grey',{strokeWidth:2});
+/* HTTP */
+D.rect(1020,425,220,180,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.rect(1590,425,220,180,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:3});
+D.arrow(1246,470,1584,470,{strokeWidth:2.8});
+D.arrow(1584,560,1246,560,{strokeWidth:2.8});
+D.dash(960,290,960,700,{strokeWidth:2,stroke:D.C.grey});
+/* 時間軸 */
+D.line(110,805,1810,805,{strokeWidth:3});
+[[110,'#d9e1ee',D.C.grey],[660,'#d9e1ee',D.C.ind],[1210,'#f7e7c0','#b98a12']].forEach(([x,f,s])=>D.sq(x,788,34,f,{fillStyle:'solid',stroke:s,strokeWidth:2.8}));
+</script></body></html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>context 與 O(N²) 成本</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.a{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;line-height:1.3;font-size:26px}
+</style></head><body><div class="slide">
+  <h1>context 越長，成本平方成長</h1>
+  <p class="lead">attention 要為每一對 token 打分，N 個 token 就有 N×N 個分數。</p>
+  <div id="g"></div>
+  <p class="abs" style="left:900px;top:722px;width:910px;font-size:26px;line-height:1.55;color:#5b574f">模型標稱的 context 長度是上限（例：Qwen3.5 標稱 256K token）。沒超過上限，也是越長越慢、越貴。</p>
+  <div class="bridge inline" style="left:110px;top:836px;width:1700px"><span class="k">你已經會的</span>CNN 的輸入尺寸是固定的（如 224×224）；LLM 的輸入也有上限，放不下的，模型就看不到。</div>
+  <div class="read"><em>怎麼讀：</em>左邊兩張方格圖：長度加倍，格子變四倍；右邊是 context window：放滿之後，新來的 token 會把最舊的擠出去。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const g=document.getElementById('g');
+const el=(x,y,w,h,t,st)=>{const e=document.createElement('div');e.className='a';e.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;`+(st||'');e.innerHTML=t;g.appendChild(e);return e};
+/* 左：N×N 方格 */
+const grid=(x,y,n,c)=>{for(let i=0;i<n;i++)for(let j=0;j<n;j++)D.rect(x+j*c,y+i*c,c,c,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:1.6,roughness:0.6});};
+grid(130,590,4,40);grid(430,430,8,40);
+el(110,540,200,40,'N = 4','font-size:28px;color:#2b4c7e');el(110,752,200,36,'16 格','font-size:26px');
+el(430,382,320,40,'N = 8','font-size:28px;color:#2b4c7e');el(430,752,320,36,'64 格','font-size:26px');
+el(300,610,120,90,'長度 ×2<br>格子 ×4','font-size:26px;color:#e0442b');
+D.arrow(300,720,420,720,{stroke:D.C.ver,strokeWidth:2.8});
+/* 右：context window */
+el(900,300,910,40,'context window：模型一次放得進的 token 數，有固定上限','font-size:28px;justify-content:flex-start');
+const T=['今天','天','氣','真','好','，','適合','出','門'],X=i=>928+i*100;
+D.rect(916,392,812,96,null,{stroke:D.C.ink,strokeWidth:2.6,strokeLineDash:[12,10]});
+el(900,352,500,34,'放滿了（8 格）','font-size:24px;color:#5b574f;justify-content:flex-start');
+for(let i=0;i<8;i++){D.rect(X(i),406,92,68,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.4});el(X(i),406,92,68,T[i]);}
+el(900,512,900,34,'再來一個 token：最舊的被擠出去','font-size:24px;color:#5b574f;justify-content:flex-start');
+D.rect(916,552,812,96,null,{stroke:D.C.ink,strokeWidth:2.6,strokeLineDash:[12,10]});
+for(let i=0;i<8;i++){const t=T[i+1],nw=i===7;D.rect(X(i),566,92,68,nw?'#f7e7c0':'#d9e1ee',{fillStyle:'solid',stroke:nw?'#b98a12':D.C.ind,strokeWidth:2.4});el(X(i),566,92,68,t);}
+D.rect(790,566,92,68,'#e6e1d4',{fillStyle:'hachure',stroke:D.C.grey,strokeWidth:2.2,hachureGap:9});el(790,566,92,68,'今天','font-size:26px;color:#a8a296');
+D.cross(836,600,22);
+el(782,654,300,36,'被擠出：模型看不到','font-size:24px;color:#e0442b;justify-content:flex-start');
+</script></body></html>
