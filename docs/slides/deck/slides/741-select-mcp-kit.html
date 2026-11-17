@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：MCP 工具箱</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:440px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：寫 MCP、測 MCP、用 MCP</h1>
+  <p class="lead" style="width:1700px">寫 Server 用 SDK，測試用 Inspector，最後接到你平常用的客戶端。</p>
+  <div class="wrap"><table class="sel"><tr><th>名稱</th><th>是什麼</th><th>什麼時候用</th><th>注意</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">官方 Python SDK（mcp）</span><span class="mk">本課用</span><a href="https://github.com/modelcontextprotocol/python-sdk">github.com/modelcontextprotocol/python-sdk</a></td><td>官方 SDK</td><td>寫 Server／Client 的預設選擇</td><td>v2 起高階類別 FastMCP 改名為 MCPServer</td></tr>
+  <tr><td class="n"><span class="nm">FastMCP（獨立版）</span><a href="https://gofastmcp.com/getting-started/welcome">gofastmcp.com</a></td><td>Prefect 維護的高階框架</td><td>要代理、組合多個 Server 等進階功能</td><td>和官方 SDK 內的同名類別是兩回事</td></tr>
+  <tr><td class="n"><span class="nm">MCP Inspector</span><a href="https://github.com/modelcontextprotocol/inspector">github.com/modelcontextprotocol/inspector</a></td><td>官方除錯工具</td><td>寫完 Server 先在這裡點工具測試</td><td>npx 直接跑，不用安裝</td></tr>
+  <tr><td class="n"><span class="nm">Claude Desktop、Claude Code、Cursor、VS Code</span><a href="https://modelcontextprotocol.io/docs/develop/connect-local-servers">modelcontextprotocol.io</a></td><td>常見的 Host</td><td>日常寫程式、桌面助理裡直接用工具</td><td>專案層級設定檔可進版控，團隊共用</td></tr>
+  <tr class="hi"><td class="n"><span class="nm">Cherry Studio</span><span class="mk">本課用</span><a href="https://cherryai.com/docs/en/advanced-basic/extensions/mcp/">cherryai.com</a></td><td>桌面 LLM 客戶端</td><td>本課 Lab 7 跑通本機 stdio</td><td>要綁到 Agent 才用得到；AGPL-3.0</td></tr>
+  </table>
+  <div class="foot">官方 MCP Registry 仍是 preview，只收 Server 的中繼資料；MCP 自 2025-12 起由 Linux Foundation 旗下的 Agentic AI Foundation 治理。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>由上往下是開發順序：先用 SDK 寫，用 Inspector 測，再接進下面的客戶端。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

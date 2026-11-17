@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：評測工具</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:290px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:16px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:440px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：評測（eval）工具</h1>
+  <p class="lead" style="width:1700px">評測工具的差別在「評什麼」：RAG 的檢索品質、應用的單元測試，還是模型本身的能力。</p>
+  <div class="wrap"><table class="sel"><tr><th>工具</th><th>評什麼</th><th>什麼時候選它</th><th>授權／狀態</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">LangSmith Evals</span><span class="mk">本課用</span><a href="https://docs.langchain.com/langsmith/evaluation-concepts">docs.langchain.com</a></td><td>資料集＋評分器＋實驗比較</td><td>已經用 LangSmith 追蹤</td><td>商業 SaaS</td></tr>
+  <tr><td class="n"><span class="nm">Ragas</span><a href="https://github.com/vibrantlabsai/ragas">github.com/vibrantlabsai/ragas</a></td><td>RAG 指標：忠實度、相關性</td><td>評 RAG 檢索與回答品質（模組三）</td><td>Apache-2.0；GitHub 已搬家</td></tr>
+  <tr><td class="n"><span class="nm">DeepEval</span><a href="https://github.com/confident-ai/deepeval">github.com/confident-ai/deepeval</a></td><td>pytest 風格的 LLM 測試</td><td>想把評測寫進單元測試</td><td>Apache-2.0</td></tr>
+  <tr><td class="n"><span class="nm">promptfoo</span><a href="https://github.com/promptfoo/promptfoo">github.com/promptfoo/promptfoo</a></td><td>比 prompt／模型＋紅隊測試</td><td>在 CI 裡擋退步、做安全測試</td><td>MIT；2026-03 被 OpenAI 收購</td></tr>
+  <tr><td class="n"><span class="nm">Inspect（UK AISI）</span><a href="https://github.com/UKGovernmentBEIS/inspect_ai">github.com/UKGovernmentBEIS/inspect_ai</a></td><td>模型與 agent 能力、安全基準</td><td>評模型本身，而不是你的應用</td><td>MIT</td></tr>
+  </table>
+  <div class="foot">不管用哪個工具，最值錢的是你自己那份評測集（輸入＋參考答案）：工具可以換，考題要累積。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>先決定要評的是 RAG、應用流程還是模型本身，再挑對應的工具；紅字是本課 Lab 8 的組合。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：Agent 框架（一）</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:520px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：Agent 框架（一）</h1>
+  <p class="lead" style="width:1700px">同一家族由低到高三層，再加三家模型廠商自己的 SDK。廠商 SDK 上手快，但常綁自家模型。</p>
+  <div class="wrap"><table class="sel"><tr><th>框架</th><th>抽象層級</th><th>什麼時候選它</th><th>可換模型／狀態</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">LangGraph</span><a href="https://github.com/langchain-ai/langgraph">github.com/langchain-ai/langgraph</a></td><td>低階：狀態圖</td><td>確定性步驟和 agent 混合</td><td>可；MIT；穩定版</td></tr>
+  <tr class="hi"><td class="n"><span class="nm">LangChain create_agent</span><a href="https://docs.langchain.com/oss/python/langchain/overview">docs.langchain.com</a></td><td>高階：agent＋middleware</td><td>要能客製的 agent 外殼</td><td>可；MIT；跑在 LangGraph 上</td></tr>
+  <tr class="hi"><td class="n"><span class="nm">Deep Agents</span><a href="https://github.com/langchain-ai/deepagents">github.com/langchain-ai/deepagents</a></td><td>現成 harness：規劃＋子 agent</td><td>長任務、要開箱即用</td><td>可；MIT；Beta</td></tr>
+  <tr><td class="n"><span class="nm">OpenAI Agents SDK</span><a href="https://openai.github.io/openai-agents-python/">openai.github.io</a></td><td>高階：agent＋handoffs</td><td>OpenAI 生態、語音、沙箱</td><td>部分；MIT；仍是 0.x</td></tr>
+  <tr><td class="n"><span class="nm">Claude Agent SDK</span><a href="https://code.claude.com/docs/en/agent-sdk/overview">code.claude.com</a></td><td>把 Claude Code 當函式庫用</td><td>要現成檔案、終端機工具與權限</td><td><b>只能 Claude</b>；MIT＋商業條款；Alpha</td></tr>
+  <tr><td class="n"><span class="nm">Google ADK</span><a href="https://github.com/google/adk-python">github.com/google/adk-python</a></td><td>中高階：agent＋流程＋圖</td><td>Gemini／GCP、多種程式語言</td><td>可；Apache-2.0</td></tr>
+  </table>
+  <div class="foot">create_agent 和 Deep Agents 底下都跑在 LangGraph 上。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>紅字三列是本課主線，由低到高；下面三列是模型廠商的 SDK，先看「可換模型」那欄再決定。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：RAG 框架</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:300px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:18px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:440px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：RAG 框架與平台</h1>
+  <p class="lead" style="width:1700px">框架負責把「切分 → 入庫 → 檢索 → 組提示詞」串起來；差別在重心放在哪裡。</p>
+  <div class="wrap"><table class="sel"><tr><th>名稱</th><th>定位</th><th>什麼時候選它</th><th>授權／狀態</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">LangChain</span><span class="mk">本課用</span><a href="https://docs.langchain.com/oss/python/langchain/overview">docs.langchain.com</a></td><td>整合生態＋Agent 外殼</td><td>要大量整合，之後還要接 LangGraph</td><td>MIT；1.x 起舊 retriever 移到 langchain_classic</td></tr>
+  <tr><td class="n"><span class="nm">LlamaIndex</span><a href="https://github.com/run-llama/llama_index">github.com/run-llama/llama_index</a></td><td>以資料與索引為中心</td><td>重點在文件解析、切分、索引策略</td><td>MIT；公司重心已轉向 LlamaParse</td></tr>
+  <tr><td class="n"><span class="nm">Haystack</span><a href="https://github.com/deepset-ai/haystack">github.com/deepset-ai/haystack</a></td><td>元件化、可控的生產管線</td><td>要型別清楚、好測試的正式環境 pipeline</td><td>Apache-2.0；已進 3.x</td></tr>
+  <tr><td class="n"><span class="nm">RAGFlow</span><a href="https://github.com/infiniflow/ragflow">github.com/infiniflow/ragflow</a></td><td>開箱即用的 RAG 平台</td><td>不寫程式，要 Web UI 與深度文件解析</td><td>Apache-2.0；Docker 部署，吃記憶體</td></tr>
+  </table>
+  <div class="foot">框架不是必需品：本課 Lab 3 的核心邏輯（BM25、RRF、重排）都是自己寫的，框架只負責串接。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>上面三個是寫程式用的框架，最後一個是平台；先決定要不要寫程式，再挑重心符合的那個。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

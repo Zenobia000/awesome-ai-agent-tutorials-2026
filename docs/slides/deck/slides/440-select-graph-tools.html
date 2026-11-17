@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：圖資料庫與 GraphRAG</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:440px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：圖資料庫與 GraphRAG 工具</h1>
+  <p class="lead" style="width:1700px">分兩層看：底下存圖的資料庫，上面負責「建圖＋檢索」的套件。授權差很多，商用前先看清楚。</p>
+  <div class="wrap"><table class="sel"><tr><th>名稱</th><th>是什麼</th><th>什麼時候選它</th><th>授權／狀態</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">Neo4j</span><span class="mk">本課用</span><a href="https://neo4j.com/licensing/">neo4j.com</a></td><td>LPG 圖資料庫，Cypher 查詢</td><td>要成熟的圖 DB、教材多</td><td>Community 為 GPLv3；Enterprise 需商業合約</td></tr>
+  <tr class="hi"><td class="n"><span class="nm">LLMGraphTransformer</span><span class="mk">本課用</span><a href="https://github.com/langchain-ai/langchain-neo4j">github.com/langchain-ai/langchain-neo4j</a></td><td>LangChain 的抽圖工具</td><td>已用 LangChain，快速把文件轉成圖</td><td>MIT；從 langchain_neo4j 匯入</td></tr>
+  <tr><td class="n"><span class="nm">neo4j-graphrag-python</span><a href="https://neo4j.com/docs/neo4j-graphrag-python/current/user_guide_kg_builder.html">neo4j.com</a></td><td>Neo4j 官方建圖＋檢索</td><td>要消歧、Text2Cypher、混合檢索</td><td>Apache-2.0；建圖管線仍標實驗性</td></tr>
+  <tr><td class="n"><span class="nm">Microsoft GraphRAG</span><a href="https://github.com/microsoft/graphrag">github.com/microsoft/graphrag</a></td><td>社群報告派的研究實作</td><td>研究、重現 Global／Local 查詢</td><td>MIT；<b>維護模式</b>，不加新功能</td></tr>
+  <tr><td class="n"><span class="nm">LightRAG</span><a href="https://github.com/HKUDS/LightRAG">github.com/HKUDS/LightRAG</a></td><td>輕量 KG-RAG</td><td>要比 MS GraphRAG 便宜、多種查詢模式</td><td>MIT；server 預設不開認證</td></tr>
+  <tr><td class="n"><span class="nm">Memgraph</span><a href="https://memgraph.com/docs">memgraph.com</a></td><td>記憶體內圖 DB，相容 Cypher</td><td>要低延遲即時查詢、沿用 Neo4j 驅動</td><td>BSL 1.1，非 OSI 開源</td></tr>
+  </table>
+  <div class="foot">另外：FalkorDB（Redis 模組，SSPLv1）；Kùzu 已在 2025-10 封存，舊教材推薦它的要拿掉。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>紅字兩列是本課 Lab 4 的組合；要商用或對外提供服務，最右欄的授權比效能更先決定。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

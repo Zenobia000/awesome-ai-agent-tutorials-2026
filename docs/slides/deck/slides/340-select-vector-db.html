@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：向量庫</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:380px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：向量庫</h1>
+  <p class="lead" style="width:1700px">先問兩件事：資料多大、要不要內建混合檢索（BM25＋向量）。教學和原型用嵌入式，上線再換 server。</p>
+  <div class="wrap"><table class="sel"><tr><th>名稱</th><th>型態</th><th>內建混合檢索</th><th>什麼時候選它</th><th>授權</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">Chroma</span><span class="mk">本課用</span><a href="https://docs.trychroma.com">docs.trychroma.com</a></td><td>嵌入式／可自架</td><td>本地版<b>沒有</b>（雲端版才有）</td><td>教學、原型、單機 Lab</td><td>Apache-2.0</td></tr>
+  <tr><td class="n"><span class="nm">Qdrant</span><a href="https://qdrant.tech/documentation/concepts/hybrid-queries/">qdrant.tech</a></td><td>Server（Rust）</td><td>有，server 端 RRF</td><td>要上線，又要重度 metadata 過濾</td><td>Apache-2.0</td></tr>
+  <tr><td class="n"><span class="nm">Milvus</span><a href="https://milvus.io/docs/full-text-search.md">milvus.io</a></td><td>分散式 server</td><td>有，內建 BM25＋RRF</td><td>資料量極大，要水平擴展</td><td>Apache-2.0</td></tr>
+  <tr><td class="n"><span class="nm">pgvector</span><a href="https://github.com/pgvector/pgvector">github.com/pgvector/pgvector</a></td><td>Postgres 擴充</td><td>沒有，要自己合併</td><td>已經在用 Postgres，不想多一套 DB</td><td>PostgreSQL License</td></tr>
+  <tr><td class="n"><span class="nm">Weaviate</span><a href="https://docs.weaviate.io/weaviate/search/hybrid">docs.weaviate.io</a></td><td>Server（Go）</td><td>有，但預設不是 RRF</td><td>想要開箱即用的混合檢索</td><td>BSD-3；部分企業功能另授權</td></tr>
+  <tr><td class="n"><span class="nm">OpenSearch</span><a href="https://docs.opensearch.org/latest/search-plugins/search-pipelines/score-ranker-processor/">docs.opensearch.org</a></td><td>搜尋引擎</td><td>有，含 RRF</td><td>要 Elasticsearch 生態又要免費 RRF</td><td>Apache-2.0</td></tr>
+  </table>
+  <div class="foot">另外：FAISS 只是 ANN 函式庫，不是資料庫；Elasticsearch 的 RRF 要付費授權。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>先看第三欄：本課 Lab 用 Chroma，所以 BM25 與 RRF 要自己做；換成有內建混合檢索的庫，那段程式可以省掉。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

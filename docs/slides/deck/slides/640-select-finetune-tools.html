@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：微調工具</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:440px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：微調工具</h1>
+  <p class="lead" style="width:1700px">差別在你想寫多少程式：設定檔就能跑的，到自己寫訓練迴圈的。</p>
+  <div class="wrap"><table class="sel"><tr><th>工具</th><th>定位</th><th>什麼時候選它</th><th>授權／狀態</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">LLaMA-Factory</span><span class="mk">本課用</span><a href="https://github.com/hiyouga/LlamaFactory">github.com/hiyouga/LlamaFactory</a></td><td>零程式碼 YAML／WebUI</td><td>教學、Lab、想快速換模型</td><td>Apache-2.0；repo 已改名，舊網址會轉址</td></tr>
+  <tr><td class="n"><span class="nm">Unsloth</span><a href="https://github.com/unslothai/unsloth">github.com/unslothai/unsloth</a></td><td>單卡省顯存的快速微調</td><td>單張消費級 GPU、Colab、QLoRA</td><td>核心 Apache-2.0；<b>Studio UI 為 AGPL-3.0</b></td></tr>
+  <tr><td class="n"><span class="nm">TRL ＋ PEFT</span><a href="https://github.com/huggingface/trl">github.com/huggingface/trl</a></td><td>Hugging Face 官方底層庫</td><td>自己寫訓練流程：SFT、DPO、GRPO</td><td>Apache-2.0；LoRA 實作在 PEFT</td></tr>
+  <tr><td class="n"><span class="nm">Axolotl</span><a href="https://github.com/axolotl-ai-cloud/axolotl">github.com/axolotl-ai-cloud/axolotl</a></td><td>YAML 驅動的多卡微調</td><td>多 GPU／多節點、要可重現設定</td><td>Apache-2.0</td></tr>
+  <tr class="off"><td class="n"><span class="nm">torchtune</span><span class="mk">不推薦</span><a href="https://github.com/meta-pytorch/torchtune">github.com/meta-pytorch/torchtune</a></td><td>PyTorch 原生後訓練庫</td><td>不建議新專案採用</td><td>2025 年起停止積極維護</td></tr>
+  </table>
+  <div class="foot">LLaMA-Factory、Axolotl 底層多半也是 TRL＋PEFT，差別在包了幾層。另有 ms-swift（ModelScope，Apache-2.0）適合中國系與多模態模型。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>由上往下，越往下越需要自己寫程式；灰色那列是已經停更的，舊教學看到要換掉。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

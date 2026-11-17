@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：Embedding 與重排</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:400px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：Embedding 與重排模型</h1>
+  <p class="lead" style="width:1700px">中文語料先確認模型支援中文；要自架就挑開放權重，不想維運就用 API。</p>
+  <div class="wrap"><table class="sel"><tr><th>模型</th><th>用途</th><th>取得方式／授權</th><th>中文</th><th>什麼時候選它</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">bge-m3（BAAI）</span><span class="mk">本課用</span><a href="https://huggingface.co/BAAI/bge-m3">huggingface.co/BAAI</a></td><td>Embedding</td><td>開放權重／MIT</td><td>強</td><td>本地、多語；一個模型出稠密＋稀疏</td></tr>
+  <tr class="hi"><td class="n"><span class="nm">bge-reranker-v2-m3</span><span class="mk">本課用</span><a href="https://huggingface.co/BAAI/bge-reranker-v2-m3">huggingface.co/BAAI</a></td><td>重排</td><td>開放權重／Apache-2.0</td><td>支援</td><td>本地、多語精排</td></tr>
+  <tr><td class="n"><span class="nm">Qwen3-Embedding／Reranker</span><a href="https://huggingface.co/Qwen/Qwen3-Embedding-0.6B">huggingface.co/Qwen</a></td><td>兩者都有</td><td>開放權重／Apache-2.0</td><td>強</td><td>有 GPU、要長文與更強精排</td></tr>
+  <tr><td class="n"><span class="nm">nomic-embed-text v1.5</span><a href="https://huggingface.co/nomic-ai/nomic-embed-text-v1.5">huggingface.co/nomic-ai</a></td><td>Embedding</td><td>開放權重／Apache-2.0</td><td><b>只有英文</b></td><td>Ollama 跑英文語料；要加前綴</td></tr>
+  <tr><td class="n"><span class="nm">OpenAI text-embedding-3</span><a href="https://developers.openai.com/api/docs/guides/embeddings">developers.openai.com</a></td><td>Embedding</td><td>API</td><td>支援</td><td>已用 OpenAI、不想自架</td></tr>
+  <tr><td class="n"><span class="nm">Cohere Embed／Rerank</span><a href="https://docs.cohere.com/docs/models">docs.cohere.com</a></td><td>兩者都有</td><td>API</td><td>支援</td><td>要託管的多語重排</td></tr>
+  </table>
+  <div class="foot">小心授權：Jina 的開放權重多為 CC-BY-NC-4.0（不能商用）。Embedding 換模型，整座向量庫都要重建。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>中文語料先看第四欄排除不支援的，再依「自架或 API」挑；紅字是本課 Lab 用的組合。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

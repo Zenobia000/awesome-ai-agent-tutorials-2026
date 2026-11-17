@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：開放權重模型</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:440px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：開放權重模型家族</h1>
+  <p class="lead" style="width:1700px">權重下載到自己機器上跑。「開源」不等於隨便商用：同一家族，大小尺寸的授權可能不同。</p>
+  <div class="wrap"><table class="sel"><tr><th>家族／廠商</th><th>定位</th><th>什麼時候選它</th><th>授權（看 LICENSE 原文）</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">Qwen（阿里巴巴）</span><span class="mk">本課用</span><a href="https://huggingface.co/Qwen">huggingface.co/Qwen</a></td><td>尺寸最齊、中文強</td><td>本地小模型、中文、要微調</td><td>中小尺寸 Apache-2.0；<b>最大旗艦另有自訂授權</b></td></tr>
+  <tr><td class="n"><span class="nm">DeepSeek</span><a href="https://huggingface.co/deepseek-ai">huggingface.co/deepseek-ai</a></td><td>大型 MoE、授權寬</td><td>要寬鬆授權的前沿級權重</td><td>MIT（自架硬體門檻高）</td></tr>
+  <tr><td class="n"><span class="nm">Gemma（Google）</span><a href="https://huggingface.co/google">huggingface.co/google</a></td><td>手機到單卡的小模型</td><td>筆電、邊緣裝置、單張消費級 GPU</td><td>Gemma 4 為 Apache-2.0</td></tr>
+  <tr><td class="n"><span class="nm">gpt-oss（OpenAI）</span><a href="https://huggingface.co/openai/gpt-oss-120b">huggingface.co/openai</a></td><td>OpenAI 的開放推理模型</td><td>要 OpenAI 系權重做推理、agent</td><td>Apache-2.0；須用 harmony 格式</td></tr>
+  <tr><td class="n"><span class="nm">Mistral</span><a href="https://docs.mistral.ai/getting-started/models/models_overview/">docs.mistral.ai</a></td><td>歐洲系，尺寸分層</td><td>小尺寸要 Apache、歐盟合規考量</td><td>小尺寸 Apache-2.0；<b>Large 做 API 服務要另簽約</b></td></tr>
+  <tr><td class="n"><span class="nm">Llama（Meta）</span><a href="https://huggingface.co/meta-llama">huggingface.co/meta-llama</a></td><td>舊生態大</td><td>既有 Llama 生態或教材相容</td><td>自訂社群授權，有用戶數門檻與標示要求</td></tr>
+  </table>
+  <div class="foot">其他常見：GLM（智譜）、Kimi（Moonshot）——MIT 式授權但附營收門檻。Meta 2026 年的新開放模型改叫 Muse Glimmer（Apache-2.0）。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>先用第三欄挑家族，再一定要看第四欄：要商用或對外提供服務，授權要看到「你用的那個尺寸」。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

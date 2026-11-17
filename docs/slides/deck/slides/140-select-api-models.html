@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：商業 API 模型</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:440px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：商業 API 模型家族</h1>
+  <p class="lead" style="width:1700px">雲端呼叫、按 token 計費；型號約每季換一次，所以記家族、看連結，不要背型號。</p>
+  <div class="wrap"><table class="sel"><tr><th>家族／廠商</th><th>定位</th><th>什麼時候選它</th><th>怎麼呼叫</th></tr>
+  <tr><td class="n"><span class="nm">GPT（OpenAI）</span><a href="https://developers.openai.com/api/docs/models">developers.openai.com</a></td><td>生態最大的通用 API</td><td>要最多第三方整合、現成範例</td><td>Responses API；也有 OpenAI 相容端點</td></tr>
+  <tr><td class="n"><span class="nm">Claude（Anthropic）</span><a href="https://platform.claude.com/docs/en/about-claude/models/overview">platform.claude.com</a></td><td>長時程 agent 與寫程式</td><td>agent、coding 工作流、長文件</td><td>Messages API（tool_use／tool_result）</td></tr>
+  <tr><td class="n"><span class="nm">Gemini（Google）</span><a href="https://aistudio.google.com/docs/models">aistudio.google.com</a></td><td>多模態、Google 生態</td><td>影音多模態、已在 GCP／Workspace</td><td>Gemini API；舊文件網址會轉址</td></tr>
+  <tr><td class="n"><span class="nm">DeepSeek API</span><a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a></td><td>便宜、相容 OpenAI 格式</td><td>成本敏感，又想保留下載權重的退路</td><td>OpenAI 相容格式</td></tr>
+  <tr><td class="n"><span class="nm">Grok（xAI）</span><a href="https://docs.x.ai/docs/models">docs.x.ai</a></td><td>xAI 自家通用模型</td><td>已在 X／xAI 生態上</td><td>xAI API</td></tr>
+  </table>
+  <div class="foot">本課 Lab 1：本地 Ollama 為主、雲端 API 備援，兩邊都走 OpenAI 相容介面，換 base_url 就能切換。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>先看第三欄找到你的情境，再點左欄連結看當下的型號清單；表裡刻意不寫死型號。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>
