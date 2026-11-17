@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>精簡版路線圖</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.st{position:absolute;width:390px;height:150px;padding:14px 22px}
+.st .n{font-size:24px;color:var(--muted)}
+.st .t{font-size:30px;line-height:1.3}
+.st .q{font-size:24px;line-height:1.4;color:var(--muted);margin-top:4px}
+</style></head><body><div class="slide">
+  <h1>這份精簡版要走的八步</h1>
+  <p class="lead" style="width:1700px">每一步只回答一個問題；看完能說清楚一個 agent 系統由哪些零件組成、各自為什麼存在。</p>
+
+  <div class="st" style="left:110px;top:300px"><div class="n">1</div><div class="t">LLM 是什麼</div><div class="q">它怎麼「接話」？為什麼會胡說？</div></div>
+  <div class="st" style="left:540px;top:300px"><div class="n">2</div><div class="t">怎麼下指令</div><div class="q">交辦單怎麼寫，它才照做？</div></div>
+  <div class="st" style="left:970px;top:300px"><div class="n">3</div><div class="t">先查資料再回答</div><div class="q">它不知道的事，怎麼讓它知道？</div></div>
+  <div class="st" style="left:1400px;top:300px"><div class="n">4</div><div class="t">把關係串起來</div><div class="q">要繞好幾層的問題怎麼查？</div></div>
+  <div class="st" style="left:110px;top:530px"><div class="n">5</div><div class="t ver">讓它自己動手</div><div class="q">Agent：一個迴圈加一套配備</div></div>
+  <div class="st" style="left:540px;top:530px"><div class="n">6</div><div class="t">改它的習慣</div><div class="q">什麼時候才需要微調？</div></div>
+  <div class="st" style="left:970px;top:530px"><div class="n">7</div><div class="t">接上外部工具</div><div class="q">MCP：一個標準接頭</div></div>
+  <div class="st" style="left:1400px;top:530px"><div class="n">8</div><div class="t">上線後盯著</div><div class="q">它錯了不會報錯，怎麼發現？</div></div>
+
+  <div class="abs" style="left:110px;top:770px;width:1700px;font-size:26px;line-height:1.55;color:var(--muted)">藍框「學過深度學習的話」是給有底子的人的對照，沒學過可以直接跳過。<br>想看公式、程式碼與完整 Lab，請看完整版（20 小時課程）。</div>
+  <div class="read"><em>怎麼讀：</em>由左上往右下走；紅字第 5 步是重點，前四步都在幫它準備零件。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+[[110,300],[540,300],[970,300],[1400,300],[110,530],[540,530],[970,530],[1400,530]].forEach(([x,y],i)=>D.rect(x,y,390,150,i==4?'#f7d6cf':'#fbf9f4',{fillStyle:'solid',stroke:i==4?D.C.ver:D.C.ind,strokeWidth:2.6}));
+[[505,375],[935,375],[1365,375],[505,605],[935,605],[1365,605]].forEach(([x,y])=>D.arrow(x,y,x+30,y,{strokeWidth:2.6}));
+D.curve([[1600,455],[1100,500],[310,505]],{strokeWidth:2.4,stroke:D.C.grey});D.arrow(330,503,306,528,{strokeWidth:2.4,stroke:D.C.grey});
+</script></body></html>

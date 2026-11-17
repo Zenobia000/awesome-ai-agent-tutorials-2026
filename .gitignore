@@ -8,6 +8,7 @@ chroma_db/
 
 # 投影片：建置產物與不可公開的素材
 docs/slides/deck/shots/
+docs/slides/lite/shots/
 docs/slides/deck/assets/figures/**/_ref/
 # 條款未確認或要求事先授權的 logo（見 figures.md）
 docs/slides/deck/assets/figures/logos/docker.svg

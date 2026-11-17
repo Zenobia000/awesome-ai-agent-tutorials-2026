@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>子 agent 隔離 context</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.u{position:absolute;font-size:24px;line-height:1.45;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>子 agent：開一個乾淨的 context 去查</h1>
+  <p class="lead">主 agent 只看到一次 task 工具的一問一答；子 agent 讀了多少日誌、跑了幾步，它看不到。</p>
+
+<div class="code" style="left:110px;top:290px;width:1000px"><span class="c"># 子 agent：一份說明書、自己的提示詞、只讀的工具</span>
+log_checker = {
+    <span class="s">"name"</span>: <span class="s">"log-checker"</span>,
+<span class="hl">    "description": "查一個懷疑的原因：讀日誌、回報證據",</span>
+    <span class="s">"system_prompt"</span>: <span class="s">"只讀不寫。回三行：結論、證據、信心。"</span>,
+    <span class="s">"tools"</span>: [read_logs, query_metrics],
+}
+agent = <span class="k">create_deep_agent</span>(
+    model,
+    tools=[read_logs, query_metrics, restart_service],
+    system_prompt=<span class="s">"你是值班 agent。"</span>,
+    subagents=[log_checker])
+<span class="c"># 主 agent 用內建 task 工具叫它，一次一個任務</span></div>
+
+  <div class="u" style="left:1200px;top:420px;width:230px">description 就是主 agent 看到的說明書</div>
+  <div class="abs lbl" style="left:1590px;top:412px;width:230px;line-height:1.5"><span class="mut">輸入</span>　一個任務<br><span class="mut">輸出</span>　一份摘要</div>
+  <div class="abs lbl" style="left:1570px;top:318px">主 agent</div>
+  <div class="abs lbl" style="left:1250px;top:685px;width:100px;text-align:center">子 agent</div>
+  <div class="abs lbl ind" style="left:1200px;top:548px">主 agent 看得到</div>
+  <div class="abs lbl mut" style="left:1200px;top:600px">主 agent 看不到</div>
+  <div class="abs lbl" style="left:1535px;top:658px">讀日誌</div>
+  <div class="abs lbl" style="left:1535px;top:738px">查指標</div>
+  <div class="u" style="left:1200px;top:790px;width:600px">自己的 context、多步推理；只回最後一則訊息</div>
+
+  <div class="bridge inline" style="left:110px;top:858px;width:1700px"><span class="k">學過深度學習的話（可跳過）</span>把子網路包成一個 <b>nn.Module</b>：外層只看 forward 的輸入輸出，不管裡面幾層。</div>
+  <div class="read"><em>怎麼讀：</em>左邊是定義子 agent 的程式；右上是主 agent 看到的，右下是被隔離起來的那段工作。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const S=D.C;
+D.ci(1500,335,100,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+D.arrow(1500,390,1500,432,{strokeWidth:3});
+D.tri(1500,510,130,S.mus,{strokeWidth:2.5});
+D.line(1200,585,1830,585,{strokeWidth:3,stroke:S.ink});
+D.ci(1300,700,130,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+D.arrow(1368,684,1448,668,{strokeWidth:2.5});
+D.arrow(1368,716,1448,752,{strokeWidth:2.5});
+D.tri(1485,670,70,S.mus,{strokeWidth:2.5});
+D.tri(1485,750,70,S.mus,{strokeWidth:2.5});
+</script></body></html>

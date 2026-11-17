@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>固定長度切分的截斷</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.tx{position:absolute;font-size:28px;line-height:1.45;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 16px}
+.cl{position:absolute;font-size:24px;line-height:1.4}
+</style></head><body><div class="slide">
+  <h1>固定長度切分：照字數切，不管語意</h1>
+  <p class="lead">每 N 個字元切一刀最簡單，但刀口常落在句子中間，答案和它的線索就被拆開。<span class="tag">示意</span></p>
+
+  <div class="cl mut" style="left:110px;top:300px">原文（一段技術文件）</div>
+  <div class="cl mut" style="left:110px;top:540px">切完的三個片段</div>
+  <div id="t"></div>
+
+  <div class="cl" style="left:110px;top:810px;width:1100px;font-size:28px;line-height:1.5">問「ERR-4012 怎麼排除？」，向量庫撈到第一塊——它有錯誤碼，卻停在「請先」。<br>解法在第二塊，沒被撈到，模型只能亂接。</div>
+  <div class="cl" style="left:1290px;top:818px;width:520px;font-size:28px;line-height:1.5"><span class="ind">修法</span>　依標題、段落切分（見下頁）</div>
+
+  <div class="read"><em>怎麼讀：</em>先看上排的紅色虛線：刀口位置只由字數決定；再看下排哪一塊被撈到、哪一塊漏掉。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const T=document.getElementById('t');
+const tx=(x,y,w,h,html,st)=>{const d=document.createElement('div');d.className='tx';d.style.cssText=`left:${x}px;top:${y}px;width:${w}px;height:${h}px;${st||''}`;d.innerHTML=html;T.appendChild(d);};
+/* 上排：原文三段緊貼，刀口在段與段之間 */
+const W=[560,560,480], X=[110,670,1230], Y0=352, H0=120;
+const part=['ERR-4012 表示認證逾時。請先','確認系統時間是否同步，再重新簽發憑證','，仍失敗請聯絡管理員。'];
+D.rect(110,Y0,1600,H0,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:2.8});
+part.forEach((p,i)=>tx(X[i],Y0,W[i],H0,p));
+[670,1230].forEach(x=>D.dash(x,Y0-26,x,Y0+H0+26,{stroke:D.C.ver,strokeWidth:3.5}));
+/* 向下箭頭 */
+[390,950,1470].forEach((x,i)=>D.arrow(x,Y0+H0+26,x,598-14,{strokeWidth:2.6}));
+/* 下排：三個獨立片段 */
+const stat=[['#f7e7c0','#b98a12','被撈到'],['#f7d6cf',D.C.ver,'沒被撈到'],['#ece7db',D.C.grey,'']];
+part.forEach((p,i)=>{const x=X[i]+(i?10:0),w=W[i]-(i===0?10:20);
+  D.rect(x,598,w,130,stat[i][0],{fillStyle:'solid',stroke:stat[i][1],strokeWidth:3});
+  tx(x,598,w,130,p);});
+/* 狀態標籤 */
+const lbl=(x,w,t,c)=>{const d=document.createElement('div');d.className='cl '+c;d.style.cssText=`left:${x}px;top:742px;width:${w}px;text-align:center`;d.textContent=t;T.appendChild(d);};
+lbl(110,540,'被撈到：有錯誤碼，沒有解法','');
+lbl(680,540,'沒被撈到：解法在這裡','ver');
+</script></body></html>

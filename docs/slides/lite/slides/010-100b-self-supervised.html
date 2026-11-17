@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>不用標註怎麼學</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:34px;line-height:1.2}
+.tk{position:absolute;height:60px;line-height:60px;text-align:center;font-size:28px}
+.q{position:absolute;font-size:24px;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>不用人工標註，它怎麼學？</h1>
+  <p class="lead">文字自己就是答案：把下一個字遮起來，就是一道現成的考題。</p>
+
+  <!-- 左：影像分類要人標 -->
+  <div class="hd ind" style="left:110px;top:290px">你熟悉的：影像分類</div>
+  <div class="abs" style="left:150px;top:470px;width:180px;text-align:center;font-size:26px">一張圖片</div>
+  <div class="abs" style="left:420px;top:470px;width:160px;text-align:center;font-size:30px">貓</div>
+  <div class="abs lbl ver" style="left:400px;top:560px;width:200px;text-align:center">人工標上去</div>
+  <div class="abs" style="left:110px;top:640px;width:560px;font-size:26px;line-height:1.5;color:var(--muted)">每一張圖都要有人看過、標過；<br>標註是最貴、最慢的一步。</div>
+
+  <!-- 右：一句話自動出題 -->
+  <div class="hd ver" style="left:800px;top:290px">LLM：一句話自己出好幾題</div>
+  <div class="q" style="left:800px;top:350px">題目（已經讀到的字）</div>
+  <div class="q" style="left:1500px;top:350px">答案（下一個字）</div>
+
+  <div class="tk" style="left:800px;top:395px;width:130px">魯夫</div>
+  <div class="tk" style="left:1500px;top:395px;width:130px">想</div>
+
+  <div class="tk" style="left:800px;top:480px;width:130px">魯夫</div><div class="tk" style="left:940px;top:480px;width:130px">想</div>
+  <div class="tk" style="left:1500px;top:480px;width:130px">成為</div>
+
+  <div class="tk" style="left:800px;top:565px;width:130px">魯夫</div><div class="tk" style="left:940px;top:565px;width:130px">想</div><div class="tk" style="left:1080px;top:565px;width:130px">成為</div>
+  <div class="tk" style="left:1500px;top:565px;width:130px">海賊王</div>
+
+  <div class="abs" style="left:800px;top:650px;width:1010px;font-size:26px;line-height:1.5;color:var(--muted)">網路上每一句話都能這樣切成考題，<b>不用任何人標註</b>；<br>所以它讀得了海量文字。</div>
+
+  <div class="bridge" style="left:110px;top:770px;width:1700px"><span class="k">學過深度學習的話（可跳過）</span>分類的 label 要人標；這裡的 label 是「下一個 token」，直接從原文取，所以叫<b>自監督</b>（self-supervised）。</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊每個標籤都要人工；右邊每一列的黃色答案，都是原句裡的下一個字。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* 左：圖片框＋人工標籤 */
+D.rect(150,400,180,140,'#d9e1ee',{fillStyle:'hachure',stroke:D.C.ind,strokeWidth:2.6});
+D.arrow(340,486,410,486,{strokeWidth:2.8});
+D.rect(420,455,160,64,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+D.tri(500,580,0.01,null,{stroke:'none'});
+D.dash(500,525,500,556,{strokeWidth:2.2,stroke:D.C.ver});
+/* 右：題目方塊（藍）→ 答案（黃） */
+const rows=[[395,1],[480,2],[565,3]];
+rows.forEach(([y,n])=>{for(let i=0;i<n;i++)D.rect(800+i*140,y,130,60,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.4});
+  D.arrow(800+n*140+10,y+30,1490,y+30,{strokeWidth:2.6});
+  D.rect(1500,y,130,60,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.8});});
+D.line(800,780-20,800,780-20,{});
+D.dash(760,300,760,700,{stroke:D.C.grey,strokeWidth:2.2});
+</script></body></html>

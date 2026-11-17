@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>術語表（一）</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.tm{position:absolute;width:520px}
+.tm .w{font-size:30px;line-height:1.25;padding-left:40px}
+.tm .w i{font-style:normal;font-size:24px;color:var(--muted);margin-left:10px}
+.tm .d{font-size:26px;line-height:1.36;color:var(--ink);margin-top:3px}
+.tm .d b{color:var(--ind)}
+.key{position:absolute;left:1130px;top:116px;width:680px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>術語表（一）：模組一到四</h1>
+  <div class="key">圓＝模型相關　方＝資料與狀態　三角＝動作與閘門<br>依模組順序排列；忘了就回來查</div>
+  <div id="host"></div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const C=D.C,host=document.getElementById('host');
+const T=[
+ [
+  "token",
+  "d",
+  "模型讀寫文字的最小單位，可能是一個字或半個詞。",
+  ""
+ ],
+ [
+  "context window",
+  "d",
+  "模型一次能看的 token 上限，超出就看不到。例：Ollama 預設 4096。",
+  ""
+ ],
+ [
+  "temperature",
+  "m",
+  "softmax 前把分數除以 T：T 大更隨機、T 小更穩定。只管隨機性，不管對錯。",
+  ""
+ ],
+ [
+  "attention",
+  "m",
+  "每個位置依內容替其他位置打分，再做加權平均：Q·K 打分、softmax、加權 V。",
+  ""
+ ],
+ [
+  "prompt",
+  "d",
+  "送給模型的整段輸入：角色、任務、約束、示例。把它當輸入規格來寫。",
+  "提示詞"
+ ],
+ [
+  "few-shot",
+  "d",
+  "在 prompt 裡放幾組「輸入 → 輸出」示例，讓模型照格式做；不改權重。",
+  ""
+ ],
+ [
+  "CoT",
+  "m",
+  "讓模型先寫推理步驟再給答案；多生成的 token，就是多出來的計算步驟。",
+  "思維鏈"
+ ],
+ [
+  "prompt injection",
+  "t",
+  "夾在資料裡的文字冒充指令。分隔符號擋不住，要靠最小權限。",
+  ""
+ ],
+ [
+  "structured outputs",
+  "d",
+  "用 JSON Schema 約束解碼，輸出保證符合格式；拒答或被截斷時除外。",
+  ""
+ ],
+ [
+  "embedding",
+  "d",
+  "把一句話編成固定維度的向量，語意近的向量也近；找相關文件靠它。",
+  "文字向量"
+ ],
+ [
+  "RAG",
+  "d",
+  "先查文件、再生成：把查到的片段塞進輸入。改輸入，不改權重。",
+  "檢索增強生成"
+ ],
+ [
+  "chunk",
+  "d",
+  "把長文件切成可檢索的小片段；切法決定檢索的上限。",
+  "分塊"
+ ],
+ [
+  "混合檢索",
+  "d",
+  "BM25 抓關鍵詞、向量抓語意，兩路結果用 RRF 依名次融合。",
+  ""
+ ],
+ [
+  "reranker",
+  "m",
+  "Cross-Encoder：把問題和片段拼在一起讀並打分，從 Top-K 精排出 Top-N。",
+  "重排"
+ ],
+ [
+  "GraphRAG",
+  "d",
+  "把文字抽成實體與關係（SPO 三元組）存成圖，用來答多跳與全局問題。",
+  ""
+ ]
+];
+const X=[110,700,1290],Y0=206,P=152;
+T.forEach((t,i)=>{
+  const x=X[Math.floor(i/5)],y=Y0+(i%5)*P;
+  const d=document.createElement('div');d.className='tm';d.style.left=x+'px';d.style.top=y+'px';
+  d.innerHTML='<div class="w">'+t[0]+(t[3]?'<i>'+t[3]+'</i>':'')+'</div><div class="d">'+t[2]+'</div>';
+  host.appendChild(d);
+  const gy=y+19;
+  if(t[1]==='m')D.ci(x+12,gy,24,C.ver,{strokeWidth:2});
+  else if(t[1]==='d')D.sq(x,gy-12,24,'ind',{strokeWidth:2});
+  else D.tri(x+12,gy+1,30,C.mus,{strokeWidth:2});
+});
+/* 欄與欄之間的細線 */
+[670,1260].forEach(x=>D.line(x,214,x,950,{stroke:'#d3cdbf',strokeWidth:1.8,roughness:1.6}));
+</script></body></html>

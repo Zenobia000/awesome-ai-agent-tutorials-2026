@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>重排漏斗與模型</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.cl{position:absolute;font-size:26px;line-height:1.4}
+.hd{position:absolute;font-size:28px;line-height:1.3}
+.why .t{font-size:32px;margin-bottom:8px}
+.why{position:absolute;font-size:26px;line-height:1.5}
+.rk{position:absolute;width:90px;height:90px;line-height:90px;text-align:center;font-size:34px}
+</style></head><body><div class="slide">
+  <h1>漏斗：粗篩 10–20 段，精排留 3–5 段</h1>
+  <p class="lead">Cross-Encoder 準但貴，所以接在檢索後面：先便宜地撈一把，再只對這一把逐段打分。</p>
+
+  <div class="hd ind" style="left:110px;top:300px">粗篩 Top-K：10–20 段</div>
+  <div class="hd ver" style="left:640px;top:300px;width:260px;text-align:center">Cross-Encoder<br>逐段打分</div>
+  <div class="hd ind" style="left:960px;top:300px;width:260px">精排 Top-N：3–5 段</div>
+  <div id="t"></div>
+  <div class="rk" style="left:980px;top:372px">1</div>
+  <div class="rk" style="left:980px;top:482px">2</div>
+  <div class="rk" style="left:980px;top:592px">3</div>
+  <div class="cl" style="left:1160px;top:494px;width:180px;font-size:28px">進提示詞</div>
+
+  <div class="why" style="left:1320px;top:410px;width:490px"><div class="t ver">為什麼要漏斗</div>每一段都要和問題配成一對，<br>各過一次模型，不能預先算。<br>候選越多越慢，所以先用便宜的檢索，<br>把範圍縮到 10–20 段。</div>
+
+  <div class="code" style="left:110px;top:742px"><span class="k">from</span> FlagEmbedding <span class="k">import</span> FlagReranker
+rr = FlagReranker(<span class="s hl">'BAAI/bge-reranker-v2-m3'</span>, use_fp16=<span class="k">True</span>)
+s = rr.compute_score([query, passage], normalize=<span class="k">True</span>)  <span class="c"># 0–1</span></div>
+
+  <div class="why" style="left:1110px;top:735px;width:700px"><div class="t ind">模型名要寫完整</div>v2-m3 以 bge-m3 為底，多語，跨語種也能排<br>base、large 只支援中英</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊一把候選進朱紅圓（重排模型），右邊只剩名次最高的幾段，才會進提示詞。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const BL=['#d9e1ee',D.C.ind],YL=['#f7e7c0','#b98a12'];
+const sq=(x,y,s,[f,st],w)=>D.sq(x,y,s,f,{fillStyle:'solid',stroke:st,strokeWidth:w||2.8});
+const A=o=>Object.assign({strokeWidth:2.8},o||{});
+const cy=512;
+/* 漏斗輪廓 */
+D.poly([[110,345],[450,345],[630,440],[630,584],[450,679],[110,679]],'#ebe5d6',{stroke:D.C.grey,strokeWidth:2.4,strokeLineDash:[10,10]});
+/* 16 段候選（4×4），其中 3 段最後會被留下 */
+const pick=new Set([2,9,13]);
+for(let i=0;i<16;i++){const r=Math.floor(i/4),c=i%4;sq(135+c*80,360+r*80,64,pick.has(i)?YL:BL,2.6);}
+/* 重排模型 */
+D.ci(760,cy,230,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+D.arrow(892,cy,962,cy,A());
+/* 精排後 3 段 */
+[372,482,592].forEach(y=>sq(980,y,90,YL,3));
+D.line(1084,372,1100,372,A());D.line(1100,372,1100,682,A());D.line(1100,682,1084,682,A());
+D.arrow(1100,cy,1150,cy,A());
+</script></body></html>

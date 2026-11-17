@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>文字切成 token</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;left:110px;font-size:30px}
+.cnt{position:absolute;right:190px;font-size:30px;text-align:right;width:400px}
+.t{position:absolute;width:140px;height:76px;display:flex;align-items:center;justify-content:center;font-size:30px}
+.id{position:absolute;width:140px;text-align:center;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>文字進模型前，先切成 token</h1>
+  <p class="lead">token ＝ 詞表裡的一個單位，可能是一個詞、半個詞或一個字。每個 token 對應一個整數 id，模型只看得到 id。</p>
+  <div class="hd ind" style="top:318px">中文　今天天氣真好，適合出門散步。</div>
+  <div class="cnt ver" style="top:318px">11 個 token</div>
+  <div class="hd ind" style="top:548px">英文　The weather is great today, perfect for a walk.</div>
+  <div class="cnt ver" style="top:548px">11 個 token</div>
+  <div id="cells"></div>
+  <p class="abs" style="left:110px;top:776px;width:1700px;font-size:26px;line-height:1.55;color:#5b574f">切分結果來自 Qwen3 的 tokenizer（id 為實際查表值；英文 token 前面其實帶一個空白，圖中省略）。「天氣」被切成「天」「氣」兩塊——詞表不必認得每個詞，認得更小的零件就拼得出來。不同模型的 tokenizer 切法不同，費用與 context 用量都按 token 數計。</p>
+  <div class="read"><em>怎麼讀：</em>上排是原句切成的方塊，方塊下面的數字是它在詞表裡的 id；模型的輸入就是這一串整數。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const box=document.getElementById('cells');
+const F=['#d9e1ee','#f7e7c0','#f7d6cf'],S=[D.C.ind,'#b98a12',D.C.ver];
+const rows=[
+ {y:375,toks:['今天','天','氣','真','好','，','適合','出','門','散步','。'],ids:[100644,35727,104200,88051,52801,3837,113452,20221,102237,111261,1773]},
+ {y:605,toks:['The','weather','is','great','today',',','perfect','for','a','walk','.'],ids:[785,9104,374,2244,3351,11,4727,369,264,4227,13]}];
+rows.forEach(R=>R.toks.forEach((t,i)=>{const x=110+i*148;
+  D.rect(x,R.y,140,76,F[i%3],{fillStyle:'solid',stroke:S[i%3],strokeWidth:2.6});
+  const a=document.createElement('div');a.className='t';a.style.left=x+'px';a.style.top=R.y+'px';a.textContent=t;box.appendChild(a);
+  const b=document.createElement('div');b.className='id';b.style.left=x+'px';b.style.top=(R.y+86)+'px';b.textContent=R.ids[i];box.appendChild(b);}));
+</script></body></html>

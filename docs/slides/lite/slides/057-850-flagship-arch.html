@@ -1,0 +1,64 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>旗艦專案架構</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.rl{position:absolute;left:110px;width:235px;font-size:26px;line-height:1.3;color:var(--muted)}
+.t1{position:absolute;font-size:28px;line-height:1.3}
+.t2{position:absolute;font-size:24px;line-height:1.4;color:var(--muted)}
+.sk{position:absolute;width:350px;height:74px;padding:6px 16px}
+.sk .a{font-size:26px;line-height:1.3}.sk .b{font-size:22px;line-height:1.35;color:var(--muted)}
+.gt{position:absolute;text-align:center;font-size:24px;width:150px}
+</style></head><body><div class="slide">
+  <h1>旗艦專案：一個 agent，加一條審批流程</h1>
+  <p class="lead">值班 agent 帶三個 skill 和 MCP 工具負責查；會改到線上的動作，走寫死的審批流程。</p>
+
+  <div class="rl" style="top:300px">入口</div>
+  <div class="t1" style="left:380px;top:292px">前端　HTTP／SSE 串流，呈現思考步驟與工具調用</div>
+  <div class="t2" style="left:380px;top:334px;color:var(--ver)">Agent Chat UI 的 repo 已於 2026-11-03 封存：另選前端，或 fork 一份固定版本</div>
+
+  <div class="rl" style="top:430px">核心：<br>harness</div>
+  <div class="t1" style="left:380px;top:540px;width:200px;text-align:center">值班 agent</div>
+  <div class="t2" style="left:380px;top:576px;width:200px;text-align:center">Deep Agents</div>
+  <div class="sk" style="left:640px;top:410px"><div class="a">skill：doc-rag</div><div class="b">ChromaDB＋Neo4j 依賴鏈</div></div>
+  <div class="sk" style="left:1030px;top:410px"><div class="a">skill：text2sql</div><div class="b">Pydantic 驗證、只准 SELECT</div></div>
+  <div class="sk" style="left:1420px;top:410px"><div class="a">skill：ops-runbook</div><div class="b">排錯步驟與指令</div></div>
+  <div class="t2" style="left:700px;top:508px;color:var(--ink)">MCP 工具：日誌、監控、資料庫、服務控制</div>
+  <div class="t2" style="left:700px;top:566px;color:var(--ink)">子 agent：每個懷疑的原因開一個，平行查證、只讀不寫</div>
+
+  <div class="rl" style="top:668px">寫入：<br>固定流程</div>
+  <div class="t2" style="left:420px;top:676px;width:280px">要重啟、改設定<br>才進來</div>
+  <div class="gt" style="left:860px;top:730px">審批</div>
+  <div class="gt" style="left:1140px;top:730px">執行</div>
+  <div class="gt" style="left:1420px;top:730px">驗證</div>
+  <div class="t2" style="left:1580px;top:660px;width:230px">interrupt 暫停，<br>值班主管點頭才往下</div>
+
+  <div class="rl" style="top:788px">持久狀態</div>
+  <div class="t1" style="left:380px;top:784px">PostgresSaver　<span class="mut" style="font-size:24px">checkpoint、審批暫停後可恢復</span></div>
+  <div class="rl" style="top:866px">可觀測性</div>
+  <div class="t1" style="left:380px;top:862px">LangSmith　<span class="mut" style="font-size:24px">每一步的 token、耗時、錯誤</span></div>
+
+  <div class="read"><em>怎麼讀：</em>由上往下：請求進到一個 agent（圓），它用 skill 與工具查原因；要動線上服務才走下面三個三角的固定流程。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* 入口 */
+D.rect(360,282,1450,96,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.6,strokeLineDash:[12,9]});
+D.arrow(480,380,480,446,{strokeWidth:2.6});
+/* 核心框 */
+D.rect(360,398,1450,214,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:2.8});
+D.ci(480,486,96,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+[640,1030,1420].forEach(x=>D.rect(x,410,350,74,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.4}));
+D.line(530,486,630,447,{strokeWidth:2.2});
+[[655,526],[677,526]].forEach(([x,y])=>D.tri(x,y,24,'mus',{strokeWidth:1.8}));
+D.line(530,500,640,522,{strokeWidth:2.2});
+[[655,580],[680,580]].forEach(([x,y])=>D.ci(x,y,22,'ver',{fillStyle:'hachure',strokeWidth:1.6}));
+D.line(526,510,640,578,{strokeWidth:2.2});
+/* 寫入流程 */
+D.rect(360,640,1450,124,'#fbf9f4',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.4,strokeLineDash:[10,8]});
+D.arrow(480,614,480,666,{strokeWidth:2.6});D.arrow(700,700,880,700,{strokeWidth:2.6});
+D.tri(935,690,64,'#f7d6cf',{stroke:D.C.ver,strokeWidth:2.8});
+D.tri(1215,690,64,'mus',{strokeWidth:2.6});
+D.tri(1495,690,64,'mus',{strokeWidth:2.6});
+D.arrow(980,700,1170,700,{strokeWidth:2.6});D.arrow(1260,700,1450,700,{strokeWidth:2.6});
+/* 狀態、追蹤 */
+D.rect(360,776,1450,58,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.rect(360,854,1450,58,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ink,strokeWidth:3});
+</script></body></html>

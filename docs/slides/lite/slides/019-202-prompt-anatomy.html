@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>提示詞的四段結構</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+/* 程式框內的整行底色帶：每段一個 block，行高固定 36px，與右側標籤對齊 */
+.seg{display:block;margin:0 -22px;padding:0 22px}
+.seg:first-child{margin-top:-18px;padding-top:18px}.seg:last-child{margin-bottom:-18px;padding-bottom:18px}
+.seg.s1{background:#d9e1ee}.seg.s2{background:#f7e7c0}.seg.s3{background:#f7d6cf}.seg.s4{background:#e4e0d3}
+.seg.s5{background:#fff;outline:2px dashed var(--grey);outline-offset:-2px}
+.cap{position:absolute;left:1105px;width:700px}
+.cap .t{font-size:34px;line-height:1.25}.cap .d{font-size:26px;line-height:1.45;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>一則提示詞的四段結構</h1>
+  <p class="lead">不是一句話，是一份給模型的輸入規格：誰、在什麼情境、不准做什麼、照什麼樣子交。</p>
+
+  <div class="code" style="left:110px;top:290px;width:900px"><span class="seg s1"># 角色
+你是資深資料庫分析師，只處理 SQL 查詢。</span><span class="seg s2"># 背景與任務
+&lt;schema&gt;CREATE TABLE orders (id INT, amount INT);&lt;/schema&gt;
+把使用者的問題轉成一條 PostgreSQL SELECT。</span><span class="seg s3"># 約束
+- 只能 SELECT，禁止 DROP、ALTER、DELETE、UPDATE
+- 欄位不存在就回報 unclear，不要猜</span><span class="seg s4"># 示例
+問：訂單總金額？
+答：SELECT SUM(amount) FROM orders;</span><span class="seg s5"># 使用者問題
+&lt;user_query&gt;{question}&lt;/user_query&gt;</span></div>
+
+  <div class="cap" style="top:307px"><div class="t ind">角色</div><div class="d">鎖定專業領域與口吻</div></div>
+  <div class="cap" style="top:397px"><div class="t mus">背景與任務</div><div class="d">給資料（DDL）和要達成的目標</div></div>
+  <div class="cap" style="top:505px"><div class="t ver">約束</div><div class="d">寫「不准做什麼」，和不確定時怎麼辦</div></div>
+  <div class="cap" style="top:613px"><div class="t">示例</div><div class="d">輸入 → 輸出的範本，鎖定格式</div></div>
+  <div class="cap" style="top:703px"><div class="t mut">使用者輸入</div><div class="d">外部資料：用標籤隔開，放最後</div></div>
+
+  <div class="abs note" style="left:110px;top:835px;width:1700px">OpenAI 官方文件的 developer message 也是 Identity → Instructions → Examples → Context 四段；Markdown 標題分段、XML 標籤包住外部內容。</div>
+  <div class="read"><em>怎麼讀：</em>左邊是一則真的提示詞，底色對應右邊四段；最下面白底虛線那段是使用者輸入，永遠和上面隔開。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const ys=[348,438,546,654,744], cols=[D.C.ind,'#b98a12',D.C.ver,D.C.ink,D.C.grey];
+ys.forEach((y,i)=>{D.line(1022,y,1085,y,{stroke:cols[i],strokeWidth:3});D.sq(1078,y-8,16,cols[i],{stroke:cols[i],strokeWidth:1.5,fillStyle:'solid'});});
+</script></body></html>

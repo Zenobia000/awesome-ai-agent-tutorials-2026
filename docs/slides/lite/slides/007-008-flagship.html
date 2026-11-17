@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>旗艦專案預告</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.q{position:absolute;left:134px;top:448px;width:270px;font-size:28px;line-height:1.45}
+.q .l{font-size:24px;color:var(--muted)}
+.ag{position:absolute;left:520px;top:640px;width:300px;text-align:center}
+.ag .t{font-size:36px;line-height:1.2}
+.ag .d{font-size:26px;line-height:1.4;color:var(--muted)}
+.sk{position:absolute;left:960px;width:520px;height:110px;padding:12px 24px}
+.sk .t{font-size:30px;line-height:1.3}.sk .d{font-size:24px;line-height:1.4;color:var(--muted)}
+.lb{position:absolute;text-align:center;font-size:24px;line-height:1.3}
+</style></head><body><div class="slide">
+  <h1>旗艦專案：值班助理</h1>
+  <p class="lead">一個值班 agent，帶三個 skill 和一組工具自己查；會動到線上服務的指令要人點頭。</p>
+
+  <div class="q"><span class="l">使用者提問</span> <span class="tag">示意</span><br>訂單服務一直報 502，幫我查原因，必要時重啟。</div>
+  <div class="ag"><div class="t ver">值班 agent</div><div class="d">自己決定先查哪裡</div></div>
+
+  <div class="sk" style="top:300px"><div class="t">skill：查文件</div><div class="d">runbook 問答、服務依賴鏈</div></div>
+  <div class="sk" style="top:440px"><div class="t">skill：查資料庫</div><div class="d">自然語言轉 SQL，Pydantic 驗證、只准讀</div></div>
+  <div class="sk" style="top:580px"><div class="t">skill：運維排錯</div><div class="d">健康檢查、讀日誌的步驟與指令</div></div>
+
+  <div class="lb" style="left:110px;top:840px;width:360px">MCP 工具：日誌、監控、DB</div>
+  <div class="lb ver" style="left:1110px;top:812px;width:200px;font-size:28px">審批閘門</div>
+  <div class="lb" style="left:1110px;top:848px;width:200px">值班主管點頭</div>
+  <div class="lb" style="left:1340px;top:800px;width:240px">重啟、改設定<br>才會走到這裡</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊提問，一個 agent（圓）自己挑要用哪個 skill 和工具；朱紅邊的三角是動到線上前的人工審批。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.rect(110,425,310,230,'#fbf9f4',{fillStyle:'solid',strokeWidth:3});
+D.arrow(428,540,560,540,{strokeWidth:3});
+D.ci(670,540,170,'ver',{fillStyle:'hachure',strokeWidth:2.8});
+[300,440,580].forEach(y=>D.rect(960,y,520,110,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.6}));
+[355,495,635].forEach(y=>D.line(758,540,955,y,{strokeWidth:2.4}));
+[[220,800],[290,800],[360,800]].forEach(([x,y])=>D.tri(x,y,52,'mus',{strokeWidth:2.2}));
+D.line(600,605,390,780,{strokeWidth:2.4});
+D.arrow(700,628,1150,800,{strokeWidth:2.6});
+D.tri(1210,760,90,'#f7d6cf',{stroke:D.C.ver,strokeWidth:3});
+</script></body></html>

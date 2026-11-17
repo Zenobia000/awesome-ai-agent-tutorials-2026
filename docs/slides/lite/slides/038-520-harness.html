@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Harness 是什麼</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.bx{position:absolute;width:450px;height:116px;padding:12px 22px}
+.bx .t{font-size:30px;line-height:1.3}.bx .d{font-size:24px;line-height:1.4;color:var(--muted)}
+.ct{position:absolute;left:810px;width:300px;text-align:center}
+</style></head><body><div class="slide">
+  <h1>Harness：一個 agent 的整套配備</h1>
+  <p class="lead" style="width:1700px">Claude Code、Codex、Deep Agents 都長這樣：一個迴圈，外掛配齊。</p>
+
+  <div class="bx" style="left:110px;top:300px"><div class="t mus">Skills</div><div class="d">資料夾裡的做法說明，用到才載入</div></div>
+  <div class="bx" style="left:110px;top:490px"><div class="t ver">子 agent</div><div class="d">開一個乾淨的 context 去查，只拿回摘要</div></div>
+  <div class="bx" style="left:110px;top:680px"><div class="t">壓縮</div><div class="d">context 快滿時，把舊對話換成摘要</div></div>
+  <div class="bx" style="left:1360px;top:300px"><div class="t mus">MCP 工具</div><div class="d">外部系統的標準接頭</div></div>
+  <div class="bx" style="left:1360px;top:490px"><div class="t ind">檔案記憶</div><div class="d">AGENTS.md、筆記檔，跨次保存</div></div>
+  <div class="bx" style="left:1360px;top:680px"><div class="t ver">權限與 hooks</div><div class="d">危險動作先停下來，等人點頭</div></div>
+
+  <div class="ct" style="top:530px;font-size:30px">模型＋迴圈</div>
+  <div class="ct" style="top:572px;font-size:24px;color:var(--muted)">想 → 做 → 看</div>
+
+  <div class="abs" style="left:110px;top:870px"><span class="tag">本課整理</span>　依 Anthropic、OpenAI、LangChain 2025–26 官方文件與 pi、OpenClaw、Hermes 原始碼歸納</div>
+  <div class="read"><em>怎麼讀：</em>中間的圓是同一個迴圈；左右六格是它的外掛。要加能力，就加一格外掛，而不是再加一個 agent。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const F={mus:['#f7e7c0','#b98a12'],ver:['#f7d6cf',D.C.ver],ind:['#d9e1ee',D.C.ind],g:['#fbf9f4',D.C.grey]};
+[[110,300,'mus'],[110,490,'ver'],[110,680,'g'],[1360,300,'mus'],[1360,490,'ind'],[1360,680,'ver']].forEach(([x,y,k])=>D.rect(x,y,450,116,F[k][0],{fillStyle:'solid',stroke:F[k][1],strokeWidth:2.6}));
+D.ci(960,560,250,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+D.curve([[1050,470],[1090,520],[1080,600]],{strokeWidth:2.4});D.arrow(1088,580,1080,606,{strokeWidth:2.4});
+[[565,358,840,470],[565,548,833,548],[565,738,840,650],[1355,358,1080,470],[1355,548,1087,548],[1355,738,1080,650]].forEach(([a,b,c,d])=>D.line(a,b,c,d,{strokeWidth:2.4}));
+</script></body></html>
