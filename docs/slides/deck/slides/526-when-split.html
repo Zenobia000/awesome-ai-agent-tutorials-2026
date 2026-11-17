@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>什麼時候切多個 agent</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:32px;line-height:1.2}
+.ok{position:absolute;left:1010px;width:800px;padding-left:56px}
+.ok .t{font-size:30px;line-height:1.3}.ok .d{font-size:24px;line-height:1.4;color:var(--muted)}
+.c{position:absolute;text-align:center;font-size:24px;line-height:1.3}
+</style></head><body><div class="slide">
+  <h1>什麼時候才切成多個 agent</h1>
+  <p class="lead">切開的理由是 context、平行或權限，不是職能。先用一個 agent，有證據再切。</p>
+
+  <div class="hd ver" style="left:110px;top:290px">反模式：按職能切</div>
+  <div class="c" style="left:330px;top:340px;width:200px">主管 agent</div>
+  <div class="c" style="left:110px;top:640px;width:180px">文件 agent</div>
+  <div class="c" style="left:340px;top:640px;width:180px">資料庫 agent</div>
+  <div class="c" style="left:570px;top:640px;width:180px">運維 agent</div>
+  <div class="abs" style="left:110px;top:720px;width:780px;font-size:26px;line-height:1.5;color:var(--muted)">「502 是不是資料庫慢？」要同時查文件和資料庫，<br>就得來回轉手；每轉一次，細節就掉一點。</div>
+
+  <div class="hd ind" style="left:1010px;top:290px">值得切開的四種情況</div>
+  <div class="ok" style="top:350px"><div class="t">隔離 context</div><div class="d">要讀一大堆東西，交給子 agent 讀完只回摘要</div></div>
+  <div class="ok" style="top:470px"><div class="t">平行查證</div><div class="d">每個懷疑的原因開一個唯讀子 agent，同時跑</div></div>
+  <div class="ok" style="top:590px"><div class="t">寫的和審的分開</div><div class="d">產出的 agent 不該自己打分數</div></div>
+  <div class="ok" style="top:710px"><div class="t">權限或組織邊界</div><div class="d">不同部門的資料與權限不能共用</div></div>
+
+  <div class="abs" style="left:110px;top:868px;font-size:24px;color:var(--muted)"><span class="tag">本課轉述</span>　Anthropic（2026-01）：單一 agent 能處理大多數企業工作流程；多 agent 依「context 邊界」切，不依角色切</div>
+  <div class="read"><em>怎麼讀：</em>左邊是常見的錯誤切法；右邊四種才是切開的好理由。對回「多 agent 的 token 代價」那頁：每多一個 agent，帳單就多一截。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.ci(430,410,70,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+[200,430,660].forEach(x=>{D.ci(x,600,60,'ver',{fillStyle:'hachure',strokeWidth:2.2});D.arrow(430,448,x,566,{strokeWidth:2.2});});
+D.curve([[230,600],[315,560],[400,600]],{strokeWidth:2,stroke:D.C.grey});D.curve([[460,600],[545,560],[630,600]],{strokeWidth:2,stroke:D.C.grey});
+D.cross(820,420,24);
+D.rect(100,320,820,520,null,{stroke:D.C.ver,strokeWidth:2.4,strokeLineDash:[12,10]});
+[[1012,368],[1012,488],[1012,608],[1012,728]].forEach(([x,y])=>D.sq(x,y,26,'ind',{strokeWidth:2}));
+</script></body></html>

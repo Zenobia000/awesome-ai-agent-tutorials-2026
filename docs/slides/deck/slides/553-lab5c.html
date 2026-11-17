@@ -1,41 +1,37 @@
-<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab5-C 多智能體</title>
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Lab5-C Harness agent</title>
 <link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
 <style>
-.nt{position:absolute;left:1070px;top:722px;width:700px;font-size:26px;line-height:1.5}
+.nt{position:absolute;left:1180px;top:742px;width:610px;font-size:24px;line-height:1.5}
 </style></head><body><div class="slide">
-  <h1>Lab 5-C：兩個子 agent 掛上 Supervisor</h1>
-  <p class="lead">子 agent 已包成 schedule_event、manage_email；Supervisor 只拿這兩個工具。</p>
+  <h1>Lab 5-C：一個 harness agent</h1>
+  <p class="lead">不切成多個 agent：能力放進 skill 和工具，查證交給唯讀子 agent，重啟前要人點頭。</p>
 
-<div class="code" style="left:110px;top:290px">supervisor = <span class="k">create_agent</span>(
+<div class="code" style="left:110px;top:290px">agent = <span class="k">create_deep_agent</span>(
     model,
-    tools=[<span class="hl">schedule_event, manage_email</span>],
-    system_prompt=(
-        <span class="s">"你是個人助理。需求拆成排程與郵件兩類，"</span>
-        <span class="s">"分別交給對應工具，最後統整回覆。"</span>),
-    checkpointer=InMemorySaver(),   <span class="c"># 只有最上層掛</span>
-)
+    tools=[read_logs, query_metrics, restart_service],
+    system_prompt=<span class="s">"你是值班 agent。"</span>,
+    backend=FilesystemBackend(root_dir=<span class="s">"./oncall"</span>),
+<span class="hl">    skills=["/skills/"],</span>       <span class="c"># ops-runbook</span>
+    memory=[<span class="s">"/AGENTS.md"</span>],     <span class="c"># 值班慣例</span>
+<span class="hl">    subagents=[log_checker],</span>  <span class="c"># 唯讀查證</span>
+<span class="hl">    interrupt_on={"restart_service": True},</span>
+    checkpointer=InMemorySaver(),
+)</div>
 
-supervisor.invoke(
-    {<span class="s">"messages"</span>: [{<span class="s">"role"</span>: <span class="s">"user"</span>,
-        <span class="s">"content"</span>: <span class="s">"週二下午跟 Ann 開會，並寄議程給她"</span>}]},
-    {<span class="s">"configurable"</span>: {<span class="s">"thread_id"</span>: <span class="s">"u1"</span>}})</div>
+  <div class="abs lbl ind" style="left:1120px;top:290px">執行時的 trace <span class="tag">示意</span></div>
+<div class="code" style="left:1120px;top:345px;width:690px">agent → read_file …/ops-runbook/SKILL.md
+agent → task(log-checker) "DB 連線池？"
+agent → task(log-checker) "上游逾時？"
+  ← "連線池用盡；證據：…；信心高"
+agent → restart_service("order-db-proxy")
+  ⏸ 暫停，等值班主管審批</div>
 
-  <div class="abs lbl ind" style="left:1010px;top:290px">執行時 Supervisor 看到的 <span class="tag">示意</span></div>
-<div class="code" style="left:1010px;top:345px;width:800px">supervisor → schedule_event
-  "週二下午跟 Ann 開會"
-  ← "已排週二 15:00–16:00"
-supervisor → manage_email
-  "寄議程給 Ann，說明週二 15:00 開會"
-  ← "已寄出"
-supervisor → 使用者
-  "會議排好了，議程也寄給 Ann 了。"</div>
+  <div class="nt">核准後恢復：<code>Command(resume={"decisions": [{"type": "approve"}]})</code>。沒列在 interrupt_on 的工具自動放行。</div>
 
-  <div class="nt">子 agent 若掛 HumanInTheLoopMiddleware，寄信前一樣要過審批；checkpointer 只掛最上層。</div>
-
-  <div class="read"><em>怎麼讀：</em>左邊是組裝 Supervisor 的全部程式；右邊是它執行時的 trace，每個子 agent 只剩一問一答。</div>
+  <div class="read"><em>怎麼讀：</em>左邊是組裝 agent 的全部程式，黃底三行是 harness 的三件外掛；右邊是一次執行，兩個查證平行跑，重啟停在審批。</div>
 </div><svg class="rough" id="r" width="1920" height="1080"></svg>
 <script>const D=Draw('r');
 const S=D.C;
-D.rect(1010,700,800,138,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:3});
-D.tri(1040,742,44,S.mus,{strokeWidth:2.2});
+D.rect(1120,720,690,150,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:3});
+D.tri(1150,762,40,'#f7d6cf',{stroke:S.ver,strokeWidth:2.2});
 </script></body></html>

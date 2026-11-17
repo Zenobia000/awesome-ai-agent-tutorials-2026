@@ -51,7 +51,7 @@
 
 ## 硬規則
 1. 字級：標題 ≥ 72px（h1 預設 80px）；正文 ≥ 26px；標籤 ≥ 22px（`.lbl`／`.note` 24px）；`.code` 24px
-2. **數字只能來自課綱或 `product-facts.md`／素材地圖**，不准編。示意圖標 `<span class="tag">示意</span>`；課綱履歷數字（68%→91%、−35%、−42%）標「範本數字」；非權威框架標「本課整理」／「本課轉述」
+2. **數字只能來自課綱或 `product-facts.md`／素材地圖**，不准編。示意圖標 `<span class="tag">示意</span>`；課綱履歷數字（68%→91%、55%→80%、−38%、6.5→2.8 分鐘、0 次未核准）標「範本數字」；非權威框架標「本課整理」／「本課轉述」
 3. 不放頁碼、進度、全大寫小標籤；01/02/03 只在內容本身是順序時使用；不用 emoji
 4. 每個概念頁底部有 `.read`「怎麼讀」，**一行**（目標頁、小結頁除外）
 5. **跨頁引用寫頁面標題，不寫檔名編號**：deck 沒有頁碼，學生看不到「110」「503」。寫「對回『Q、K、V』那頁」；「下一頁」只用在緊接的下一頁，且要確認它真的是你指的那頁
@@ -103,7 +103,7 @@ uv run --with pillow python contact.py <你的前綴> <scratchpad>/<任意名>.p
 - 005-pillars：**已完成（showcase），不要改**
 - 006-tools：環境與工具（Python、Ollama、Docker、PostgreSQL、Neo4j、ChromaDB、LangGraph、LangSmith），依模組分組
 - 007-course-map：8 模組地圖＋時數（2／2／4／2／5／2／1.5／1.5h），標出重點章（模組三、五）
-- 008-flagship：旗艦專案預告：Supervisor → DocAgent／DBAgent／OpsAgent，OpsAgent 前有 HITL 三角閘門
+- 008-flagship：旗艦專案預告：一個值班 agent ＋ 三個 skill（查文件／查資料庫／運維排錯）＋ MCP 工具；重啟等高風險動作過審批閘門。**不得畫成 Supervisor 分派給職能 agent**
 - 009-glossary-howto：本課術語怎麼查（第一次出現就定義；附錄術語表在 9xx）
 - 900-summary：大總結：四支柱 × 8 模組各一句
 - 901-interview-mindset：面試三心法（談工程不談神話、談架構不談玩具、指標說話）
@@ -210,16 +210,18 @@ uv run --with pillow python contact.py <你的前綴> <scratchpad>/<任意名>.p
 - 513-hitl ★：`interrupt()` 暫停 → 人工決定 → `Command(resume=...)` 恢復
 
 ### 前綴 5xx 模組五（下）：多智能體與 Lab——編號 520–599
-- 520-supervisor ★：Supervisor 把需求拆給子 agent，再統整（**做法：子 agent 包成工具**；`langgraph-supervisor` 套件已封存，不用）
-- 521-subagent-as-tool：子 agent 包成工具的介面長相
+- 520-harness ★：Harness＝一個迴圈＋六種外掛（skills、子 agent、壓縮、MCP、檔案記憶、權限 hooks）。依據 `sources/architecture-2026.md`
+- 521-subagent-as-tool：子 agent 只為隔離 context：Deep Agents `subagents=[{name, description, system_prompt, tools}]`，主 agent 用 `task` 工具呼叫
 - 522-context-passing：子 agent 之間怎麼傳上下文、只回摘要
 - 523-deep-agents：Deep Agents（`deepagents`）：規劃（`write_todos` 要手動開）＋子 agent＋虛擬檔案系統
 - 524-agent-zoo：為每個場景各做一個 agent 的維護問題（標「本課轉述」）
 - 525-skills：通用 Agent＋可插拔 Skills
+- 526-when-split：什麼時候才切多個 agent：隔離 context、平行查證、寫審分開、權限邊界；按職能切是反模式
+- 527-workflow-shell：外殼用流程圖（觸發→審批→執行→驗證），核心用 harness；企業嵌入＝agent 包成服務＋系統功能做成 MCP
 - 550-lab5a：手寫 ReAct agent 的程式片段
 - 551-lab5b-graph：審批級 SQL agent 的狀態圖（敏感操作前的三角閘門）
 - 552-lab5b-code：`interrupt` 與 `Command(resume=...)` 程式片段；PostgresSaver
-- 553-lab5c：CalendarAgent＋EmailAgent 包成工具 → SupervisorAgent
+- 553-lab5c：一個 harness agent：`create_deep_agent`＋skills＋唯讀子 agent＋`interrupt_on`＋checkpointer
 - 580-pitfalls：死循環與 token 耗盡（`recursion_limit` 預設 10,007 擋不住 → 明確設小值＋呼叫次數上限）；並發狀態覆蓋（reducer）
 - 590-interview：舊版 AgentExecutor 只在這裡帶一句
 - 599-recap：下一章：LoRA 微調
@@ -264,7 +266,7 @@ uv run --with pillow python contact.py <你的前綴> <scratchpad>/<任意名>.p
 - 804-vibe-coding：Karpathy 2025-02 提出；「自然語言規劃 → AI 生成 → 人審查」工作流；工具舉 Cursor、Claude Code
 - 805-three-layers ★：AI 產業三層（標「本課整理」）
 - 806-resume：履歷改寫 before／after（數字標「範本數字」）
-- 850-flagship-arch ★：旗艦專案分層架構（前端 → Supervisor → Doc／DB／Ops Agent → PostgresSaver → LangSmith）；前端註明 Agent Chat UI 已封存
+- 850-flagship-arch ★：旗艦架構：入口 → 核心 harness（值班 agent＋三 skill＋MCP＋唯讀子 agent）→ 寫入固定流程（審批→執行→驗證）→ PostgresSaver → LangSmith
 - 851-lab8：整合步驟與公開 trace
 - 880-interview：兩個高頻考點＋回答維度
 - 899-recap：下一步：大總結

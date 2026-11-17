@@ -18,12 +18,12 @@ table.sel tr.hi td.n .nm{color:var(--ver)}
   <div class="wrap"><table class="sel"><tr><th>模式</th><th>誰決定下一步</th><th>一句話</th><th>什麼時候選它</th><th>代價</th></tr>
   <tr class="hi"><td class="n"><span class="nm">ReAct／工具呼叫迴圈</span><a href="https://docs.langchain.com/oss/python/langchain/agents">docs.langchain.com</a></td><td>模型</td><td>想 → 呼叫工具 → 看結果，重複</td><td>開放式問題、步數無法預估</td><td>錯誤會累積；要設上限</td></tr>
   <tr><td class="n"><span class="nm">Plan-and-execute</span><a href="https://docs.langchain.com/oss/python/langchain/middleware/built-in">docs.langchain.com</a></td><td>模型（規劃者）</td><td>先列計畫，再逐步執行</td><td>長任務，要讓人看得到進度</td><td>計畫可能過時</td></tr>
-  <tr class="hi"><td class="n"><span class="nm">Subagents／Supervisor</span><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/subagents">docs.langchain.com</a></td><td>主 agent</td><td>把子 agent 包成工具呼叫</td><td>多領域、要集中控管</td><td>每次都經主 agent 轉手</td></tr>
+  <tr class="hi"><td class="n"><span class="nm">Subagents（子 agent 當工具）</span><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/subagents">docs.langchain.com</a></td><td>主 agent</td><td>開乾淨 context 去查，只回摘要</td><td>隔離 context、平行查證</td><td>每次都經主 agent 轉手</td></tr>
   <tr><td class="n"><span class="nm">Handoffs</span><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/handoffs">docs.langchain.com</a></td><td>現任 agent</td><td>用工具把控制權交給下一位</td><td>使用者要直接和專員對話</td><td>訊息歷史容易膨脹</td></tr>
   <tr><td class="n"><span class="nm">Skills</span><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/skills">docs.langchain.com</a></td><td>模型</td><td>需要時才載入專業提示與知識</td><td>同類請求重複出現</td><td>載入內容留在 context 裡</td></tr>
   <tr><td class="n"><span class="nm">Custom workflow</span><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/custom-workflow">docs.langchain.com</a></td><td>混合</td><td>確定性節點和 agent 節點混一張圖</td><td>要精準控制</td><td>開發維護成本最高</td></tr>
   </table>
-  <div class="foot">LangChain 官方比較：同一個單次請求，Subagents 要 4 次模型呼叫，Handoffs、Skills、Router 各 3 次。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="foot">不要按職能切（文件 agent／資料庫 agent…）。LangChain 官方比較：同一請求 Subagents 要 4 次模型呼叫，其他各 3 次。　<span class="tag">核實 2026-11-17</span></div></div>
   <div class="read"><em>怎麼讀：</em>上兩列是單一 agent，下四列是多個 agent 或能力怎麼分工；本課 Lab 5 用的是紅字兩種。</div>
 </div><svg class="rough" id="r" width="1920" height="1080"></svg>
 <script>const D=Draw('r');</script></body></html>
