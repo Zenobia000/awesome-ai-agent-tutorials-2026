@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>為什麼需要 Agent</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:28px;color:var(--muted)}
+.gap{position:absolute;left:215px;width:580px}
+.gap .t{font-size:36px;line-height:1.25}
+.gap .d{font-size:26px;line-height:1.4;color:var(--muted);margin-top:4px}
+.fix{position:absolute;left:1150px;width:660px}
+.fix .t{font-size:36px;line-height:1.25}
+.fix .d{font-size:26px;line-height:1.4;color:var(--muted);margin-top:4px}
+.oth{position:absolute;width:640px}
+.oth .t{font-size:34px;line-height:1.25}
+.oth .d{font-size:26px;line-height:1.4;color:var(--muted);margin-top:4px}
+</style></head><body><div class="slide">
+  <h1>模型缺三樣，四根支柱來補</h1>
+  <p class="lead">模型像一顆很強的大腦，但被關在只吃文字、只吐文字的盒子裡。</p>
+
+  <div class="hd" style="left:110px;top:268px">模型單獨使用時</div>
+  <div class="hd" style="left:1030px;top:268px">補上它的支柱</div>
+
+  <div class="gap" style="top:342px"><div class="t ver">沒有長期記憶</div><div class="d">每次呼叫都從零開始，上一輪靠整串歷史重送</div></div>
+  <div class="gap" style="top:487px"><div class="t ver">不能動手</div><div class="d">只會輸出文字，碰不到資料庫、檔案、API</div></div>
+  <div class="gap" style="top:632px"><div class="t ver">知識有截止日</div><div class="d">訓練之後的新知識、公司內部文件，它都不知道</div></div>
+
+  <div class="fix" style="top:342px"><div class="t ind">記憶</div><div class="d">狀態存到模型外面，下次對話還找得回來</div></div>
+  <div class="fix" style="top:487px"><div class="t" style="color:#b98a12">工具（動手）</div><div class="d">跑 SQL、寄信、重啟服務，由程式代為執行</div></div>
+  <div class="fix" style="top:632px"><div class="t" style="color:#b98a12">工具（查資料）</div><div class="d">RAG、GraphRAG：把內部與最新的文件查來給它</div></div>
+
+  <div class="oth" style="left:218px;top:800px"><div class="t ver">大腦</div><div class="d">模型本身，不補缺口，負責理解與決定下一步</div></div>
+  <div class="oth" style="left:1150px;top:800px"><div class="t">規劃</div><div class="d">想 → 做 → 看的迴圈，高風險動作先停下來問人</div></div>
+
+  <div class="read"><em>怎麼讀：</em>左欄是模型單獨用時的缺口，右欄是補它的支柱；最下面兩根不補缺口，一個負責判斷，一個負責串連。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const gapBox=(y)=>{D.rect(110,y,700,122,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3,strokeLineDash:[12,10]});
+  D.cross(152,y+61,14,{strokeWidth:5});};
+[326,471,616].forEach(gapBox);
+/* 缺口 → 支柱 */
+[387,532,677].forEach(y=>D.arrow(822,y,1010,y,{strokeWidth:3}));
+D.sq(1030,350,86,'ind',{strokeWidth:2.5});
+D.tri(1074,540,104,'mus',{strokeWidth:2.5});
+D.tri(1074,685,104,'mus',{strokeWidth:2.5});
+/* 分隔線 */
+D.line(110,775,1810,775,{stroke:D.C.grey,strokeWidth:2});
+/* 大腦、規劃 */
+D.ci(150,866,76,'ver',{fillStyle:'hachure',strokeWidth:2.5});
+/* 迴圈符號 */
+D.curve([[1050,846],[1080,818],[1116,832],[1124,870],[1100,900],[1058,896]],{strokeWidth:3.5});
+D.arrow(1076,897,1052,893,{strokeWidth:3.5});
+</script></body></html>

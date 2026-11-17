@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>一段真實的 tool calling</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.who{position:absolute;left:1190px;width:620px}
+.who .w{font-size:30px;line-height:1.3}
+.who .d{font-size:26px;line-height:1.45;color:var(--muted);margin-top:2px}
+</style></head><body><div class="slide">
+  <h1>Tool calling 的真面目</h1>
+  <p class="lead">模型不會執行函式，它只「寫出」一段 JSON；真正去跑函式的，是你的程式。</p>
+
+  <div class="code" style="left:230px;top:290px;width:900px">{"role": "user", "content": "USB-C 轉接器多少錢？"}</div>
+  <div class="code" style="left:230px;top:400px;width:900px">{"role": "assistant", "<span class="hl">tool_calls</span>": [
+  {"id": "<span class="hl">call_1</span>", "type": "function", "function": {
+     "name": "<span class="hl">get_price</span>",
+     "arguments": "{\"item\": \"USB-C 轉接器\"}"}}]}</div>
+  <div class="code" style="left:230px;top:618px;width:900px">{"role": "tool", "tool_call_id": "<span class="hl">call_1</span>",
+ "content": "{\"price\": 350, \"currency\": \"TWD\"}"}</div>
+  <div class="code" style="left:230px;top:764px;width:900px">{"role": "assistant", "content": "USB-C 轉接器 350 元。"}</div>
+
+  <div class="who" style="top:285px"><div class="w ind">使用者問</div><div class="d">問題，外加工具清單：名稱、說明、參數格式</div></div>
+  <div class="who" style="top:405px"><div class="w ver">模型回覆（只是 token）</div><div class="d">不是答案，是一段符合 schema 的 JSON。它的最後一層仍是 softmax，只是被微調成會吐這種格式；它沒執行任何東西。</div></div>
+  <div class="who" style="top:620px"><div class="w mus">你的程式</div><div class="d">解析 JSON、真的呼叫 get_price，回傳值包成 tool 訊息，用 id 配對。</div></div>
+  <div class="who" style="top:766px"><div class="w ver">模型回覆</div><div class="d">讀完整串訊息，這次直接寫文字答案。</div></div>
+
+  <div class="abs note" style="left:230px;top:880px"><span class="tag">示意</span>　格式是真的（OpenAI 相容 Chat Completions，Ollama 端點也吃這種）；商品與價格是編的。</div>
+  <div class="read"><em>怎麼讀：</em>由上往下四則訊息；方＝使用者資料、圓＝模型、三角＝你的程式去做事。標黃的 id 是同一次呼叫的配對。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IL='#d9e1ee',VL='#f7d6cf';
+D.rect(118,298,64,64,IL,{fillStyle:'solid',stroke:D.C.ind,strokeWidth:3});
+D.ci(150,494,70,VL,{stroke:D.C.ver,strokeWidth:3});
+D.tri(150,672,84,'mus',{strokeWidth:2.6});
+D.ci(150,804,70,VL,{stroke:D.C.ver,strokeWidth:3});
+D.arrow(150,368,150,452,{strokeWidth:2.5});
+D.arrow(150,532,150,616,{strokeWidth:2.5});
+D.arrow(150,718,150,766,{strokeWidth:2.5});
+</script></body></html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>幻覺從哪來</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:32px;line-height:1.2}
+.it{position:absolute;left:1040px;width:770px;font-size:26px;line-height:1.45}
+.no{position:absolute;left:1000px;top:640px;width:810px;padding:18px 30px}
+.no .t{font-size:30px;line-height:1.3}.no .d{font-size:26px;line-height:1.55;color:var(--muted);margin-top:4px}
+.c{position:absolute;text-align:center;font-size:26px;line-height:1.35}
+.cap{position:absolute;font-size:26px;line-height:1.5;color:var(--muted)}
+
+</style></head><body><div class="slide">
+  <h1>為什麼會一本正經地胡說</h1>
+  <p class="lead" style="width:1700px">模型只會挑「最像」的下一個字，不會先查證真假；沒讀過的事，它一樣接得很通順。</p>
+  <div class="hd ind" style="left:110px;top:290px">沒讀過，也照樣接</div>
+  <div class="c" style="left:110px;top:358px;width:520px">「某間小公司去年營收多少？」</div>
+  <div class="cap" style="left:250px;top:505px;font-size:24px">模型</div>
+  <div class="c" style="left:560px;top:455px;width:90px;font-size:24px">3 億</div>
+  <div class="c" style="left:560px;top:505px;width:90px;font-size:24px">5 億</div>
+  <div class="c" style="left:560px;top:555px;width:90px;font-size:24px">8 億</div>
+  <div class="cap" style="left:560px;top:600px;font-size:24px">每個候選分數都差不多低 <span class="tag">示意</span></div>
+  <div class="c" style="left:110px;top:678px;width:520px">「去年營收約 5 億元。」</div>
+  <div class="cap ver" style="left:110px;top:748px;font-size:26px">還是接出一句通順的話——這就是<b>幻覺</b></div>
+  <div class="hd mus" style="left:1000px;top:290px">你可能已經見過</div>
+  <div class="it" style="top:350px">引用一篇不存在的論文或網址</div>
+  <div class="it" style="top:442px">編出套件裡根本沒有的函式參數</div>
+  <div class="it" style="top:534px">問它不知道的事，它很少主動說「不知道」</div>
+  <div class="no"><div class="t ind">怎麼壓下來 → 後面幾章</div><div class="d">把資料查來給它看 → RAG（模組三）<br>允許它回答「不知道」→ 提示詞（模組二）<br>上線前用考題抓出來 → 評測（模組八）</div></div>
+  <div class="read"><em>怎麼讀：</em>從上往下：問題進圓（模型），右邊的候選分數都很低，它還是挑了一個接下去；右邊是常見樣子和對策。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IN=['#d9e1ee',D.C.ind],MU=['#f7e7c0','#b98a12'],VE=['#f7d6cf',D.C.ver],PA=['#f3efe6',D.C.ink];
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:2.6},o||{}));
+D.sq(1004,359,20,'mus',{strokeWidth:2});
+D.sq(1004,451,20,'mus',{strokeWidth:2});
+D.sq(1004,543,20,'mus',{strokeWidth:2});
+R(1000,640,810,220,IN,{strokeWidth:3});
+R(110,345,520,62,PA,{strokeWidth:2.4});
+D.arrow(370,412,370,458,{strokeWidth:2.6});
+D.ci(370,520,100,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+D.arrow(424,520,556,520,{strokeWidth:2.4,stroke:D.C.grey});
+[[468,70],[518,96],[568,58]].forEach(([y,w],i)=>D.rect(660,y,w,30,i==1?MU[0]:'#ebe6da',{fillStyle:'solid',stroke:i==1?MU[1]:D.C.grey,strokeWidth:2}));
+D.arrow(370,575,370,660,{strokeWidth:2.6});
+R(110,665,520,62,VE,{strokeWidth:2.6});D.cross(668,696,16);
+</script></body></html>

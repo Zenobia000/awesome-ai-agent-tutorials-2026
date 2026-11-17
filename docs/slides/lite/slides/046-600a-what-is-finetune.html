@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>微調是什麼</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:32px;line-height:1.2}
+.it{position:absolute;left:1040px;width:770px;font-size:26px;line-height:1.45}
+.no{position:absolute;left:1000px;top:640px;width:810px;padding:18px 30px}
+.no .t{font-size:30px;line-height:1.3}.no .d{font-size:26px;line-height:1.55;color:var(--muted);margin-top:4px}
+.c{position:absolute;text-align:center;font-size:26px;line-height:1.35}
+.cap{position:absolute;font-size:26px;line-height:1.5;color:var(--muted)}
+.rw{position:absolute;left:230px;width:660px}.rw .t{font-size:30px;line-height:1.3}.rw .d{font-size:24px;color:var(--muted);line-height:1.4}
+</style></head><body><div class="slide">
+  <h1>微調是什麼</h1>
+  <p class="lead" style="width:1700px">微調＝拿少量範例再訓練一下，把口吻、格式、術語練進權重裡；和 Prompt、RAG 的差別是「人變了沒有」。</p>
+  <div class="hd ind" style="left:110px;top:290px">教新同事的三種方法</div>
+  <div class="rw" style="top:355px"><div class="t">給交辦單 → Prompt</div><div class="d">每次交代清楚；人沒變（模組二）</div></div>
+  <div class="rw" style="top:485px"><div class="t">給參考資料夾 → RAG</div><div class="d">要用時再翻；人沒變（模組三）</div></div>
+  <div class="rw" style="top:615px"><div class="t ver">送去受訓 → 微調</div><div class="d">練到變成習慣；<b>人變了</b>，權重被改過（本章）</div></div>
+  <div class="cap" style="left:110px;top:740px">空心圓＝權重沒動，朱紅圓＝權重被改過</div>
+  <div class="hd mus" style="left:1000px;top:290px">你可能已經見過</div>
+  <div class="it" style="top:350px">客服機器人永遠用同一種口吻、同一種格式回答</div>
+  <div class="it" style="top:442px">醫療、法律等領域的專用模型，滿口行內術語</div>
+  <div class="it" style="top:534px">公司自己的小模型，回答帶著公司的寫法和習慣</div>
+  <div class="no"><div class="t ver">受訓教不了的</div><div class="d">每天在變的資料 → 那是 RAG 的事<br>受訓要 GPU、要資料、要時間：先試 Prompt，不夠再微調</div></div>
+  <div class="read"><em>怎麼讀：</em>三列由上往下，越往下越「深入」模型：前兩種只改輸入，第三種把東西練進權重；右邊是你見過的微調產品。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IN=['#d9e1ee',D.C.ind],MU=['#f7e7c0','#b98a12'],VE=['#f7d6cf',D.C.ver],PA=['#f3efe6',D.C.ink];
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:2.6},o||{}));
+D.sq(1004,359,20,'mus',{strokeWidth:2});
+D.sq(1004,451,20,'mus',{strokeWidth:2});
+D.sq(1004,543,20,'mus',{strokeWidth:2});
+R(1000,640,810,180,VE,{strokeWidth:3,strokeLineDash:[12,10]});
+D.ci(160,390,64,null,{strokeWidth:2.6,stroke:D.C.ver});
+D.ci(160,520,64,null,{strokeWidth:2.6,stroke:D.C.ver});
+D.ci(160,650,64,'ver',{strokeWidth:2.6});
+D.dash(110,460,900,460,{stroke:D.C.grey,strokeWidth:1.8});D.dash(110,590,900,590,{stroke:D.C.grey,strokeWidth:1.8});
+</script></body></html>

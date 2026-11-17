@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>流程圖外殼＋harness 核心</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.c{position:absolute;text-align:center;font-size:26px;line-height:1.3}
+.s{position:absolute;text-align:center;font-size:22px;line-height:1.3;color:var(--muted)}
+.nt{position:absolute;width:540px;font-size:26px;line-height:1.5}
+.nt b{display:block;font-size:28px;font-weight:400;color:var(--ink)}
+.nt span{color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1>外殼用流程圖，核心用 harness</h1>
+  <p class="lead" style="width:1700px">企業系統裡兩種東西並存：步驟寫得出來的寫成圖，查不完的部分交給一個 agent。</p>
+
+  <div class="c" style="left:110px;top:398px;width:200px">觸發</div><div class="s" style="left:110px;top:440px;width:200px">ERP 單據、告警</div>
+  <div class="c" style="left:540px;top:398px;width:300px;color:var(--ver)">harness agent</div><div class="s" style="left:540px;top:436px;width:300px">調查、草擬處理方案</div>
+  <div class="c" style="left:950px;top:470px;width:160px">審批</div>
+  <div class="c" style="left:1200px;top:470px;width:160px">執行</div>
+  <div class="c" style="left:1450px;top:470px;width:160px">驗證、回寫</div>
+  <div class="s" style="left:110px;top:540px;width:1700px;text-align:left">灰色虛線框＝LangGraph 固定圖（每次走一樣的路）；紅框＝裡面那一格交給 agent 自己決定</div>
+
+  <div class="nt" style="left:110px;top:640px"><b>嵌進既有系統</b><span>agent 包成後端服務（HTTP／SSE）；不是把 Claude Code 這種 CLI 塞進去</span></div>
+  <div class="nt" style="left:690px;top:640px"><b>系統功能給 agent 用</b><span>把 ERP、工單、監控的 API 做成 MCP server 或工具</span></div>
+  <div class="nt" style="left:1270px;top:640px"><b>審批放哪裡</b><span>圖上的 interrupt 節點，或工具層的 HumanInTheLoopMiddleware</span></div>
+
+  <div class="read"><em>怎麼讀：</em>由左往右是一次處理：只有紅框那一格由模型決定怎麼走，其餘都是寫死的；對回「Workflow 還是 Agent」那頁的分法。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+D.rect(100,300,1720,280,null,{stroke:D.C.grey,strokeWidth:2.4,strokeLineDash:[12,10]});
+D.rect(120,380,180,100,'#fbf9f4',{fillStyle:'solid',strokeWidth:2.6});
+D.arrow(305,430,520,430,{strokeWidth:2.8});
+D.rect(520,330,340,200,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+D.ci(690,500,46,'ver',{fillStyle:'hachure',strokeWidth:2.2});
+D.curve([[718,488],[740,505],[720,522]],{strokeWidth:2});
+D.arrow(865,430,960,430,{strokeWidth:2.8});
+[[1030,'#f7d6cf',D.C.ver],[1280,'#f7e7c0','#b98a12'],[1530,'#f7e7c0','#b98a12']].forEach(([x,f,s])=>D.tri(x,425,72,f,{stroke:s,strokeWidth:2.6}));
+D.arrow(1075,430,1230,430,{strokeWidth:2.6});D.arrow(1325,430,1480,430,{strokeWidth:2.6});
+[[110,630],[690,630],[1270,630]].forEach(([x,y])=>D.rect(x-10,y,560,170,'#fbf9f4',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.4}));
+</script></body></html>
