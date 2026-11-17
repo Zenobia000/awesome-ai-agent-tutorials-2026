@@ -56,7 +56,7 @@
 5. **跨頁引用寫頁面標題，不寫檔名編號**：deck 沒有頁碼，學生看不到「110」「503」。寫「對回『Q、K、V』那頁」；「下一頁」只用在緊接的下一頁，且要確認它真的是你指的那頁
 6. 文字不得互相重疊、不得被圖形蓋住、不得超出畫面；`.read` 上方要留空，不能和圖或 `.bridge` 撞到
 7. 不搬別人的圖：素材地圖裡的「可借的圖解結構」是要你用 rough.js 重畫
-8. 小說《凡人修仙傳》只用人物／宗門／法寶的關係當例子，不引用原文段落
+8. 《海賊王》只用人物／海賊團／寶物的關係當例子；文本一律用自寫的劇情摘要，不引用原作台詞或畫面
 
 ## 每一章固定結構
 1. **章首頁** `<前綴>00-goals.html`：左側大字「模組 N」＋章名＋本章心法（`.lead`）；右側「學習目標」（`ul.dots`）；底部淺黃框寫「本章實戰」。配一個大幾何形（依章輪流：圓／方／三角）
@@ -173,10 +173,10 @@ uv run --with pillow python contact.py <你的前綴> <scratchpad>/<任意名>.p
 - 399-recap：下一章：知識圖譜與 GraphRAG
 
 ### 前綴 4xx 模組四：知識圖譜與 GraphRAG（`M4-graphrag.md`）
-- 400-goals：本章實戰＝Lab4《凡人修仙傳》人物關係圖譜
+- 400-goals：本章實戰＝Lab4《海賊王》人物關係圖譜
 - 401-bridge：沿用模組三「粗召回＋精排」的思路
 - 402-why-graph：向量 RAG 答不了的兩種題：多跳關係、全局總結
-- 403-entity-relation：實體、關係、屬性（用修仙例子）
+- 403-entity-relation：實體、關係、屬性（用海賊王例子）
 - 404-lpg-vs-rdf：標籤屬性圖 vs 三元組；RDF 1.1 關係不能掛屬性（1.2 草案在補）
 - 405-cypher：Cypher 基本句型；Neo4j 2026.02 起預設 Cypher 25
 - 406-spo-extract：LLM 從文字抽 SPO 三元組（`LLMGraphTransformer` 從 `langchain_neo4j` 匯入）
@@ -184,7 +184,7 @@ uv run --with pillow python contact.py <你的前綴> <scratchpad>/<任意名>.p
 - 408-global-search：Leiden 社群 → 社群報告 → Map-Reduce 聚合
 - 409-local-search：Microsoft 的局部檢索：實體描述 embedding 找入口 → 收集上下文
 - 410-query-modes：Global／Local／DRIFT／Basic；GraphRAG 已大致進入維護模式（v3.3.0）
-- 450-lab4-graph：人物／宗門／法寶圖譜長相
+- 450-lab4-graph：人物／海賊團／寶物圖譜長相
 - 451-lab4-multihop：提問 → 抽出角色 → Cypher 多跳 → 格式化成上下文 → 回答
 - 480-pitfalls：同名與別名（實體消歧）、全局檢索 token 開銷
 - 490-interview
