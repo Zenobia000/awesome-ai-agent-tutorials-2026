@@ -23,7 +23,7 @@ sub,sup{font-size:.52em;line-height:0}
 .src{left:110px;top:884px;width:1700px}
 </style></head><body><div class="slide">
   <h1>Attention 公式：逐項拆解</h1>
-  <p class="lead">每一項對應 110 頁的哪個矩陣；以及為什麼要除以 √d<sub>k</sub>。<span class="tag" style="margin-left:14px">進階</span></p>
+  <p class="lead">每一項對應「Q、K、V」那頁的哪個矩陣；以及為什麼要除以 √d<sub>k</sub>。<span class="tag" style="margin-left:14px">進階</span></p>
 
   <div class="fm" id="fm">
     <span class="lhs">Attention(Q, K, V) ＝</span>
@@ -44,7 +44,7 @@ sub,sup{font-size:.52em;line-height:0}
   <div class="bridge" style="left:1160px;top:660px;width:650px"><span class="k">你已經會的</span>softmax 一飽和（近乎 one-hot），梯度 p(1−p) 趨近 0，和 sigmoid、tanh 飽和一樣。÷√d<sub>k</sub> 把分數拉回不飽和區。</div>
 
   <div class="src">來源：Vaswani et al.（2017）〈Attention Is All You Need〉§3.2.1 式 (1) 與腳註 4（p.4），公式重新排版，未放原圖；arXiv:1706.03762，arXiv 預設授權。右側示意假設 d<sub>k</sub>＝64（√d<sub>k</sub>＝8），權重為實算。</div>
-  <div class="read"><em>怎麼讀：</em>左邊由上往下就是公式由內往外的計算順序，顏色對回 110 頁（藍 Q、黃 K、粉紅 V）；右邊看除不除的差別。</div>
+  <div class="read"><em>怎麼讀：</em>左邊由上往下就是公式由內往外的計算順序，顏色對回「Q、K、V」那頁（藍 Q、黃 K、粉紅 V）；右邊看除不除的差別。</div>
 </div><svg class="rough" id="r" width="1920" height="1080"></svg>
 <script>const D=Draw('r');
 const HUE={q:['#e9edf5','#d9e1ee','#9fb4d3'],k:['#fbf1d9','#f7e7c0','#e8b53a'],v:['#fbe6e1','#f7d6cf','#e89a8a'],
@@ -68,13 +68,13 @@ function row(y0,no,op,sub,items,text){
 }
 const Q=rand('q',20),Kt=rand('k',21),V=rand('v',30),Z=rand('v',31);
 row(430,'①','Q K<sup style="font-size:.5em">T</sup>','4×3 乘 3×4',[['m',4,3,Q,'Q 4×3'],['s','×'],['m',3,4,Kt,'Kᵀ 3×4'],['s','＝'],['m',4,4,(i,j)=>HUE.sc[S[i][j]],'分數 4×4']],
-  'Q 每列和 K 每列做內積，<br>得到 4×4 分數表（110 頁藍格）。');
+  'Q 每列和 K 每列做內積，<br>得到 4×4 分數表（Q、K、V 頁藍格）。');
 row(540,'②','÷ √d<sub>k</sub>','整張表同除一數',[['m',4,4,(i,j)=>HUE.sc[S[i][j]],'分數'],['s','→'],['m',4,4,(i,j)=>HUE.sc[S2[i][j]],'值變小']],
-  '同除一個常數 √d<sub>k</sub>；<br>d<sub>k</sub>＝K 的欄數（110 頁是 3）。<br>數值變小，相對大小不變。');
+  '同除一個常數 √d<sub>k</sub>；<br>d<sub>k</sub>＝K 的欄數（Q、K、V 頁是 3）。<br>數值變小，相對大小不變。');
 row(650,'③','softmax','每一列各自算',[['m',4,4,(i,j)=>HUE.sc[S2[i][j]],'縮放後'],['s','→'],['m',4,4,(i,j)=>HUE.wt[Wt[i][j]],'列和 1']],
-  '每一列各自變成<br>合計 1 的權重（110 頁黃格）。');
+  '每一列各自變成<br>合計 1 的權重（Q、K、V 頁黃格）。');
 row(760,'④','<span class="v">V</span>','權重加權 V',[['m',4,4,(i,j)=>HUE.wt[Wt[i][j]],'權重'],['s','×'],['m',4,3,V,'V 4×3'],['s','＝'],['m',4,3,Z,'輸出 Z']],
-  '用權重把各 token 的 V 加權相加，<br>得到輸出 Z（110 頁粉紅 4×3）。');
+  '用權重把各 token 的 V 加權相加，<br>得到輸出 Z（Q、K、V 頁粉紅 4×3）。');
 /* 分隔細線 */
 [532,642,752].forEach(y=>D.line(110,y,1140,y,{stroke:'#d3cdbf',strokeWidth:1.5,roughness:.6}));
 

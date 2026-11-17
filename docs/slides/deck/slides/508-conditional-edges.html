@@ -26,7 +26,7 @@
 g.add_conditional_edges(
     "call_model", route, ["run_tool", END])
 g.add_edge("run_tool", "call_model")</div>
-  <div class="abs note" style="left:1060px;top:670px;width:750px">對照 505：手寫迴圈裡的 <span class="mono" style="font-size:22px">if not msg.tool_calls</span>，現在變成圖上的一條邊。<br>MessagesState 內建 messages 欄位（下一頁說它怎麼合併）。</div>
+  <div class="abs note" style="left:1060px;top:670px;width:750px">對照「50 行手寫 agent」那頁：手寫迴圈裡的 <span class="mono" style="font-size:22px">if not msg.tool_calls</span>，現在變成圖上的一條邊。<br>MessagesState 內建 messages 欄位（下一頁說它怎麼合併）。</div>
 
   <div class="abs lbl" style="left:205px;top:792px">實線＝固定邊</div>
   <div class="abs lbl" style="left:610px;top:792px">虛線＝條件邊，由 route 決定走哪條</div>
