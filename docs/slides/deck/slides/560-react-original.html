@@ -11,18 +11,18 @@
 #o{position:absolute;inset:0;z-index:3;pointer-events:none}
 </style></head><body><div class="slide">
   <h1>ReAct 原圖：Thought、Act、Obs</h1>
-  <p class="lead">503 頁的三步，在論文裡就是這三個標籤，每一輪都照 Thought → Act → Obs 走。</p>
+  <p class="lead">ReAct 迴圈那頁的三步，在論文裡就是這三個標籤，每一輪都照 Thought → Act → Obs 走。</p>
 
   <div class="fig"><img src="../assets/figures/m5/p-react-fig1-1d-crop.png" alt="Yao et al. 2022 Fig. 1(1d)：ReAct 在 HotpotQA 的軌跡，截取前兩輪"></div>
 
   <div class="pn" style="top:262px;height:134px"><div class="t ver">Thought：想</div><p>先寫下推理：<br>要搜尋 <span class="nw">Apple Remote</span>。</p></div>
-  <div class="pn" style="top:404px;height:134px"><div class="t" style="color:#b98a12">Act：做（503 的 Action）</div><p><span class="nw">Search[…]</span>＝呼叫搜尋工具<br>對應 <span class="nw">tool_calls</span>。</p></div>
-  <div class="pn" style="top:546px;height:134px"><div class="t ind">Obs：看（503 的 Observation）</div><p>搜尋結果寫回上下文<br>對應 <span class="nw">role: tool</span> 訊息。</p></div>
-  <div class="pn" style="top:688px;height:134px;padding-left:24px"><p style="font-size:26px;color:var(--ink)">圖的後半（已裁掉）還有第 3、4 輪。<br>最後一步 <span class="nw">Finish[…]</span> 結束迴圈，<br>就是 503 的 Final Answer。</p></div>
+  <div class="pn" style="top:404px;height:134px"><div class="t" style="color:#b98a12">Act：做（＝迴圈的 Action）</div><p><span class="nw">Search[…]</span>＝呼叫搜尋工具<br>對應 <span class="nw">tool_calls</span>。</p></div>
+  <div class="pn" style="top:546px;height:134px"><div class="t ind">Obs：看（＝迴圈的 Observation）</div><p>搜尋結果寫回上下文<br>對應 <span class="nw">role: tool</span> 訊息。</p></div>
+  <div class="pn" style="top:688px;height:134px;padding-left:24px"><p style="font-size:26px;color:var(--ink)">圖的後半（已裁掉）還有第 3、4 輪。<br>最後一步 <span class="nw">Finish[…]</span> 結束迴圈，<br>就是迴圈的 Final Answer。</p></div>
 
   <div class="abs note" style="left:110px;top:840px;width:1700px">同一題的其他做法（Standard、CoT、Act-only）都答錯，只有 ReAct 答對；原圖其餘三格沒有放進來。</div>
   <div class="src">來源：Yao et al.（2022）〈ReAct: Synergizing Reasoning and Acting in Language Models〉Fig. 1（p.2）中 (1d) 格的上半部（裁切，未改動內容），CC BY 4.0（arXiv:2210.03629）。裁切檔：assets/figures/m5/p-react-fig1-1d-crop.png。</div>
-  <div class="read"><em>怎麼讀：</em>先看左邊三種顏色的框（一輪 Thought、Act、Obs），再順著箭頭到右邊，對回 503 頁的圓、三角、方。</div>
+  <div class="read"><em>怎麼讀：</em>先看左邊三種顏色的框（一輪 Thought、Act、Obs），再順著箭頭到右邊，對回 ReAct 迴圈那頁的圓、三角、方。</div>
 </div><svg class="rough" id="r" width="1920" height="1080"></svg>
 <svg id="o" width="1920" height="1080"></svg>
 <script>const D=Draw('r'),O=Draw('o');
