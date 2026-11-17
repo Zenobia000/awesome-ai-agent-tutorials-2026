@@ -34,7 +34,7 @@
 
 - **Neo4j Fundamentals — What is Neo4j?**（GraphAcademy 課程第一課） — Neo4j GraphAcademy — https://graphacademy.neo4j.com/courses/neo4j-fundamentals/1-graph-thinking/1-what-is-neo4j/（已核實 2026-11-12；課文內容公開可讀，免費註冊只用於記錄進度與取得沙盒資料庫）
   - 適合程度：四個元素各一段：Node（圓圈）、Label（類別，單數名詞，可多個）、Relationship（有型別、有方向，型別用動詞）、Property（鍵值對，schemaless）；附命名慣例，學生 Lab 4 建模時直接套用。
-  - 可借的圖解結構：社群網路圖：圓圈＝人／公司，連線＝WORKS_AT、MARRIED_TO（雙向語意）、LOVES（單向語意）。可改畫成《凡人修仙傳》版本：韓立 –[:MEMBER_OF]→ 七玄門、韓立 –[:OWNS]→ 法寶。
+  - 可借的圖解結構：社群網路圖：圓圈＝人／公司，連線＝WORKS_AT、MARRIED_TO（雙向語意）、LOVES（單向語意）。可改畫成《海賊王》版本：魯夫 –[:MEMBER_OF]→ 草帽海賊團、魯夫 –[:OWNS]→ 草帽。
   - 搭橋：label 像 one-hot 類別但可多標籤（multi-label classification）；「方向」對應有向圖的鄰接矩陣不對稱。
 
 - **RDF vs. property graphs: Choosing the right approach for implementing a knowledge graph** — Jim Webber / Neo4j Blog（2024-06-04） — https://neo4j.com/blog/knowledge-graph/rdf-vs-property-graphs-knowledge-graphs/（已核實 2026-11-12）

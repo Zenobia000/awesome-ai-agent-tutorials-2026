@@ -17,6 +17,7 @@
 3. **先看實物再講抽象**：講 prompt／tool calling／agent／MCP 前，先用 `.code` 放一則真實的 messages JSON、trace 或程式片段。
 4. **一頁一個概念**；難的概念拆成「直覺 → 機制 → 工程後果」最多三頁。
 5. **不講框架歷史包袱**：學生沒用過舊版 LangChain。舊 API（AgentExecutor 等）只在面試題頁帶一句。
+6. **白話入口先於搭橋**：每章核心新概念（LLM、RAG、知識圖譜、Agent…）先用一頁講「它是什麼、你在哪見過、它做不到什麼」：一句不用術語的定義＋一個生活比喻。之後才接 `.bridge` 的 DL 對照與機制。搭橋解釋「怎麼運作」，白話頁解釋「這是什麼、為什麼存在」，順序不可顛倒
 
 ## 已核准的視覺方向：幾何色塊（系列延續，不得更改）
 - 參考頁（必看）：`slides/005-pillars.html`、`slides/309-hybrid-rrf.html`；系列母版是 EDA 課的同款 deck
@@ -56,15 +57,16 @@
 5. **跨頁引用寫頁面標題，不寫檔名編號**：deck 沒有頁碼，學生看不到「110」「503」。寫「對回『Q、K、V』那頁」；「下一頁」只用在緊接的下一頁，且要確認它真的是你指的那頁
 6. 文字不得互相重疊、不得被圖形蓋住、不得超出畫面；`.read` 上方要留空，不能和圖或 `.bridge` 撞到
 7. 不搬別人的圖：素材地圖裡的「可借的圖解結構」是要你用 rough.js 重畫
-8. 小說《凡人修仙傳》只用人物／宗門／法寶的關係當例子，不引用原文段落
+8. 《海賊王》只用人物／海賊團／寶物的關係當例子；文本一律用自寫的劇情摘要，不引用原作台詞或畫面
 
 ## 每一章固定結構
 1. **章首頁** `<前綴>00-goals.html`：左側大字「模組 N」＋章名＋本章心法（`.lead`）；右側「學習目標」（`ul.dots`）；底部淺黃框寫「本章實戰」。配一個大幾何形（依章輪流：圓／方／三角）
-2. **搭橋頁** `<前綴>01-bridge.html`：本章從你已知的哪裡出發（左：你會的 DL 概念；右：本章新概念；連線）
-3. **概念頁**：照下方清單，每頁一張主圖
-4. **Lab 頁** `<前綴>5x`：架構圖一頁＋關鍵程式片段（`.code`）
-5. **踩坑頁** `<前綴>80`、**面試頁** `<前綴>90`：踩坑用「症狀 → 原因 → 修法」三欄圖；面試題 2–3 題，每題附「回答維度」短句
-6. **章末小結頁** `<前綴>99-recap.html`：標題「模組 N 小結」，左側 3–5 點重點，右側縮小版的本章主視覺（★）；右下角 `<div class="next">下一章：○○○</div>`
+2. **白話入口頁** `<前綴>00a-…`（講法硬規則第 6 條）：放在章首與搭橋之間
+3. **搭橋頁** `<前綴>01-bridge.html`：本章從你已知的哪裡出發（左：你會的 DL 概念；右：本章新概念；連線）
+4. **概念頁**：照下方清單，每頁一張主圖
+5. **Lab 頁** `<前綴>5x`：架構圖一頁＋關鍵程式片段（`.code`）
+6. **踩坑頁** `<前綴>80`、**面試頁** `<前綴>90`：踩坑用「症狀 → 原因 → 修法」三欄圖；面試題 2–3 題，每題附「回答維度」短句
+7. **章末小結頁** `<前綴>99-recap.html`：標題「模組 N 小結」，左側 3–5 點重點，右側縮小版的本章主視覺（★）；右下角 `<div class="next">下一章：○○○</div>`
 
 ## 實物層（第二輪新增）：原圖、數據、logo
 手繪負責「第一次講懂」；實物負責「這是真的」與「想再深入」。素材一律來自 `assets/figures/figures.md` 清單，**清單外的圖不准用**。
@@ -73,6 +75,7 @@
 |---|---|---|
 | 原圖對照 | X60–X64 | 原圖放在白底卡片（`.fig`），用 rough.js 在圖上圈出重點、拉箭頭到旁邊的說明：「這塊＝剛剛講的 ○○」。底部 `.src` 寫出處 |
 | 數據比較 | X65–X69 | 論文／官方的真實數字重畫成乾淨圖表（不用 rough 抖動線，用 SVG 直線），標 `.src`。數字只能用 figures.md 記錄的 |
+| 選型比較 | X40–X49 | 放在 Lab 前：一張比較表，列出真實常用套件／模型，每列附官方連結（`<a href>`，PDF 可點）、「什麼時候選它」與授權／狀態；本課用的標紅、停更的標灰。資料只能來自 `sources/tool-selection.md`，頁尾標核實日期 |
 | 進階延伸 | X70–X79 | 標 `<span class="tag">進階</span>`：公式推導、設計取捨、延伸論文。上課可跳過 |
 
 - **授權分級**（figures.md 的 `license` 欄決定）：`direct`＝CC BY／官方允許，可直接放原圖；`redraw`＝只能用真實數據重畫，`.src` 寫「依 ○○ Fig. N 重繪」；`link`＝只放標題＋網址，不放圖
@@ -151,8 +154,8 @@ uv run --with pillow python contact.py <你的前綴> <scratchpad>/<任意名>.p
 ### 前綴 3xx 模組三：企業級 RAG（`M3-rag.md`；重點章）
 - 300-goals：本章實戰＝Lab3 私有技術文檔多路召回問答
 - 301-bridge：RAG＝改輸入，微調＝改權重
-- 302-three-pains：傳統 RAG 三痛點（精度不足、缺大局觀、上下文斷裂）
 - 303-two-pipelines ★：離線鏈路（載入 → 分塊 → 向量化 → 入庫）與在線鏈路（改寫 → 召回 → 重排 → 組裝 → 生成）
+- 3035-three-pains：傳統 RAG 三痛點（精度不足、缺大局觀、上下文斷裂）
 - 304-fixed-chunk：固定長度切分的語義截斷
 - 305-structure-chunk：按標題層級切分＋保留父章節 metadata（`MarkdownHeaderTextSplitter`，`strip_headers` 預設 True）
 - 306-semantic-vs-agentic：**分清兩件事**：semantic chunking 用 embedding 距離找切點；agentic chunking 才用 LLM 判斷（無標準 API）
@@ -173,10 +176,10 @@ uv run --with pillow python contact.py <你的前綴> <scratchpad>/<任意名>.p
 - 399-recap：下一章：知識圖譜與 GraphRAG
 
 ### 前綴 4xx 模組四：知識圖譜與 GraphRAG（`M4-graphrag.md`）
-- 400-goals：本章實戰＝Lab4《凡人修仙傳》人物關係圖譜
+- 400-goals：本章實戰＝Lab4《海賊王》人物關係圖譜
 - 401-bridge：沿用模組三「粗召回＋精排」的思路
 - 402-why-graph：向量 RAG 答不了的兩種題：多跳關係、全局總結
-- 403-entity-relation：實體、關係、屬性（用修仙例子）
+- 403-entity-relation：實體、關係、屬性（用海賊王例子）
 - 404-lpg-vs-rdf：標籤屬性圖 vs 三元組；RDF 1.1 關係不能掛屬性（1.2 草案在補）
 - 405-cypher：Cypher 基本句型；Neo4j 2026.02 起預設 Cypher 25
 - 406-spo-extract：LLM 從文字抽 SPO 三元組（`LLMGraphTransformer` 從 `langchain_neo4j` 匯入）
@@ -184,7 +187,7 @@ uv run --with pillow python contact.py <你的前綴> <scratchpad>/<任意名>.p
 - 408-global-search：Leiden 社群 → 社群報告 → Map-Reduce 聚合
 - 409-local-search：Microsoft 的局部檢索：實體描述 embedding 找入口 → 收集上下文
 - 410-query-modes：Global／Local／DRIFT／Basic；GraphRAG 已大致進入維護模式（v3.3.0）
-- 450-lab4-graph：人物／宗門／法寶圖譜長相
+- 450-lab4-graph：人物／海賊團／寶物圖譜長相
 - 451-lab4-multihop：提問 → 抽出角色 → Cypher 多跳 → 格式化成上下文 → 回答
 - 480-pitfalls：同名與別名（實體消歧）、全局檢索 token 開銷
 - 490-interview

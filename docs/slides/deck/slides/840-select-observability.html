@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：可觀測性工具</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:440px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：追蹤（trace）工具</h1>
+  <p class="lead" style="width:1700px">2026 年這類工具接連被收購；選哪家之外，更重要的是資料走 OpenTelemetry 標準，換家時不用重寫。</p>
+  <div class="wrap"><table class="sel"><tr><th>工具</th><th>定位</th><th>什麼時候選它</th><th>授權／狀態</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">LangSmith</span><span class="mk">本課用</span><a href="https://docs.langchain.com/langsmith/self-hosted">docs.langchain.com</a></td><td>LangChain 官方追蹤＋評測</td><td>用 LangChain／LangGraph</td><td>商業 SaaS；自架限企業版</td></tr>
+  <tr><td class="n"><span class="nm">Langfuse</span><a href="https://github.com/langfuse/langfuse">github.com/langfuse/langfuse</a></td><td>開源的 LangSmith 替代</td><td>要自架、資料不出公司</td><td>MIT；2026-01 被 ClickHouse 收購</td></tr>
+  <tr><td class="n"><span class="nm">Arize Phoenix</span><a href="https://github.com/Arize-ai/phoenix">github.com/Arize-ai/phoenix</a></td><td>本機一行起的追蹤介面</td><td>notebook 裡除錯</td><td>Elastic License 2.0：<b>非 OSI 開源</b></td></tr>
+  <tr><td class="n"><span class="nm">MLflow Tracing</span><a href="https://mlflow.org/docs/latest/genai/tracing/">mlflow.org</a></td><td>MLflow 的 GenAI 追蹤</td><td>團隊已經在用 MLflow 管模型</td><td>Apache-2.0</td></tr>
+  <tr><td class="n"><span class="nm">OpenLLMetry</span><a href="https://github.com/traceloop/openllmetry">github.com/traceloop/openllmetry</a></td><td>OTel 埋點套件</td><td>想匯出到任何支援 OTel 的後端</td><td>Apache-2.0；母公司加入 ServiceNow</td></tr>
+  <tr class="off"><td class="n"><span class="nm">Helicone</span><span class="mk">不推薦</span><a href="https://github.com/Helicone/helicone">github.com/Helicone/helicone</a></td><td>改 base URL 的代理式追蹤</td><td>不建議新專案</td><td>2026-03 被收購後進入維護模式</td></tr>
+  </table>
+  <div class="foot">OpenTelemetry 的 GenAI 語意規範仍在 Development 階段，欄位名稱可能再變。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>紅字是本課 Lab 8 用的；想自架看第二、三列；灰色那列已停止加新功能。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

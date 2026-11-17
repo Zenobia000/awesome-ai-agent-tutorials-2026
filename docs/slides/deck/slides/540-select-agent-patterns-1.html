@@ -1,0 +1,28 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：Workflow 五種模式</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:14px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:330px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">Agent 設計模式（一）：Workflow 五式</h1>
+  <p class="lead" style="width:1700px">路徑大多由程式決定；能用這五種解決，就先別上自主 agent。</p>
+  <div class="wrap"><table class="sel"><tr><th>模式</th><th>誰決定下一步</th><th>一句話</th><th>什麼時候選它</th><th>代價</th></tr>
+  <tr><td class="n"><span class="nm">Prompt chaining</span><a href="https://www.anthropic.com/engineering/building-effective-agents">www.anthropic.com</a></td><td>程式</td><td>固定步驟串接，中間設檢查</td><td>能拆成固定子任務</td><td>延遲疊加；前錯後錯</td></tr>
+  <tr><td class="n"><span class="nm">Routing</span><a href="https://docs.langchain.com/oss/python/langchain/multi-agent/router">docs.langchain.com</a></td><td>模型分類，程式分派</td><td>先分類，再交給專責流程</td><td>類別清楚、各類要不同處理</td><td>分錯類就全錯</td></tr>
+  <tr><td class="n"><span class="nm">Parallelization</span><a href="https://docs.langchain.com/oss/python/langgraph/workflows-agents">docs.langchain.com</a></td><td>程式</td><td>子任務同時跑，或跑多次投票</td><td>子任務獨立、要速度或信心</td><td>token 隨分支數倍增</td></tr>
+  <tr><td class="n"><span class="nm">Orchestrator-workers</span><a href="https://docs.langchain.com/oss/python/langgraph/workflows-agents">docs.langchain.com</a></td><td>模型拆題，程式扇出</td><td>中央模型拆任務、派工、彙整</td><td>事先不知道要拆成哪些子任務</td><td>拆題品質決定成敗</td></tr>
+  <tr><td class="n"><span class="nm">Evaluator-optimizer</span><a href="https://www.anthropic.com/engineering/building-effective-agents">www.anthropic.com</a></td><td>程式管迴圈，模型評分</td><td>一個寫、一個評，改到通過</td><td>評分標準明確</td><td>每輪多一次推論</td></tr>
+  </table>
+  <div class="foot">名稱與分法出自 Anthropic〈Building effective agents〉；LangGraph 文件有每一種的實作。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>看第二欄：越多「程式」越好測、越便宜；對回「Workflow 還是 Agent」那頁的原則——先用最簡單的。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

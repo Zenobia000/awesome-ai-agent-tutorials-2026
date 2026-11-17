@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>MCP 是什麼</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:32px;line-height:1.2}
+.it{position:absolute;left:1040px;width:770px;font-size:26px;line-height:1.45}
+.no{position:absolute;left:1000px;top:640px;width:810px;padding:18px 30px}
+.no .t{font-size:30px;line-height:1.3}.no .d{font-size:26px;line-height:1.55;color:var(--muted);margin-top:4px}
+.c{position:absolute;text-align:center;font-size:26px;line-height:1.35}
+.cap{position:absolute;font-size:26px;line-height:1.5;color:var(--muted)}
+
+</style></head><body><div class="slide">
+  <h1>MCP 是什麼</h1>
+  <p class="lead" style="width:1700px">MCP＝AI 應用接外部工具的標準接頭：工具做一次接頭，各家 AI 應用都能插。</p>
+  <div class="hd ind" style="left:110px;top:290px">像 AI 的 USB-C</div>
+  <div class="c" style="left:120px;top:470px;width:220px;font-size:28px">AI 應用</div>
+  <div class="cap" style="left:120px;top:520px;width:220px;text-align:center;font-size:22px">Claude Desktop、<br>Cursor…</div>
+  <div class="c" style="left:400px;top:400px;width:110px;font-size:24px">MCP</div>
+  <div class="c" style="left:640px;top:382px;width:240px">本機檔案</div>
+  <div class="c" style="left:640px;top:472px;width:240px">GitHub</div>
+  <div class="c" style="left:640px;top:562px;width:240px">行事曆</div>
+  <div class="c" style="left:640px;top:652px;width:240px">資料庫</div>
+  <div class="cap" style="left:110px;top:720px">每個工具都長同一種插頭：做一次，哪個 AI 應用都能接。</div>
+  <div class="hd mus" style="left:1000px;top:290px">你可能已經見過</div>
+  <div class="it" style="top:350px">Claude Desktop、Cursor 設定裡的「新增 MCP server」</div>
+  <div class="it" style="top:442px">讓 AI 讀你的本機檔案、GitHub、行事曆</div>
+  <div class="it" style="top:534px">工具廠商公告：「我們提供 MCP server」</div>
+  <div class="no"><div class="t ver">MCP 做不到的</div><div class="d">不會讓模型變聰明，只是把接頭統一<br>插上的工具能動你的資料 → 權限與信任要自己管</div></div>
+  <div class="read"><em>怎麼讀：</em>左邊的應用只有一個 MCP 接口；右邊每個工具都用同一種插頭（小方塊）接上來。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IN=['#d9e1ee',D.C.ind],MU=['#f7e7c0','#b98a12'],VE=['#f7d6cf',D.C.ver],PA=['#f3efe6',D.C.ink];
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:2.6},o||{}));
+D.sq(1004,359,20,'mus',{strokeWidth:2});
+D.sq(1004,451,20,'mus',{strokeWidth:2});
+D.sq(1004,543,20,'mus',{strokeWidth:2});
+R(1000,640,810,180,VE,{strokeWidth:3,strokeLineDash:[12,10]});
+R(120,420,220,170,IN,{strokeWidth:3});
+D.rect(400,440,110,40,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.6});
+D.line(340,500,400,470,{strokeWidth:2.6});
+[372,462,552,642].forEach(y=>{D.line(510,460,600,y+18,{strokeWidth:2.4});
+  D.rect(596,y+8,22,20,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2});
+  D.tri(628+0,y+20,0.01,null,{stroke:'none'});
+  D.rect(640,y,240,56,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.4});});
+</script></body></html>

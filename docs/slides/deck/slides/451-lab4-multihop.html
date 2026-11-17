@@ -15,18 +15,18 @@
   <div class="sn" style="left:1100px;top:420px">格式化成上下文</div>
   <div class="sn" style="left:1450px;top:420px">回答</div>
 
-  <div class="sa" style="left:60px;top:470px">「和韓立同門派的人，<br>還有誰？」</div>
-  <div class="sa mono" style="left:410px;top:470px">["韓立"]</div>
+  <div class="sa" style="left:60px;top:470px">「和魯夫同團的人，<br>還有誰？」</div>
+  <div class="sa mono" style="left:410px;top:470px">["魯夫"]</div>
   <div class="sa" style="left:760px;top:470px">把名字填進模板，<br>唯讀執行</div>
-  <div class="sa" style="left:1110px;top:470px">七玄門的成員：<br>韓立、厲飛雨、墨大夫</div>
-  <div class="sa" style="left:1460px;top:470px">韓立的同門有<br>厲飛雨、墨大夫。</div>
+  <div class="sa" style="left:1110px;top:470px">草帽海賊團的成員：<br>魯夫、索隆、娜美</div>
+  <div class="sa" style="left:1460px;top:470px">魯夫的同伴有<br>索隆、娜美。</div>
 
   <div class="cl lbl ind" style="left:110px;top:625px">實際執行的 Cypher（結果為示意）</div>
-  <div class="code" style="left:110px;top:668px"><span class="k">MATCH</span> (h:Person {name: <span class="s">$name</span>})-[:MEMBER_OF]-&gt;(s:Sect)
+  <div class="code" style="left:110px;top:668px"><span class="k">MATCH</span> (h:Person {name: <span class="s">$name</span>})-[:MEMBER_OF]-&gt;(s:Crew)
       &lt;-[:MEMBER_OF]-(p:Person)
 <span class="k">RETURN</span> s.name <span class="k">AS</span> sect, p.name <span class="k">AS</span> peer
-<span class="c">// → 七玄門 | 厲飛雨</span>
-<span class="c">// → 七玄門 | 墨大夫</span></div>
+<span class="c">// → 草帽海賊團 | 索隆</span>
+<span class="c">// → 草帽海賊團 | 娜美</span></div>
 
   <div class="bridge" style="left:1010px;top:668px;width:800px"><span class="k">你已經會的</span>模組二的 Text2SQL 讓模型寫整句 SQL；這裡只讓模型抽名字，Cypher 是固定模板，更好驗證、更可控。</div>
   <div class="read"><em>怎麼讀：</em>由左往右：圓是 LLM，三角是工具動作（跑 Cypher），方塊是資料；程式碼對應中間的三角。</div>

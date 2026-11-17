@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：低代碼平台</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:440px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：低代碼與視覺化平台</h1>
+  <p class="lead" style="width:1700px">畫布平台適合「路徑畫得出來」的流程；挑之前先看兩件事：MCP 接法，和授權是不是真的開源。</p>
+  <div class="wrap"><table class="sel"><tr><th>平台</th><th>定位</th><th>MCP 支援</th><th>授權（注意是否 OSI 開源）</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">Dify</span><span class="mk">本課用</span><a href="https://github.com/langgenius/dify">github.com/langgenius/dify</a></td><td>LLM 應用＋工作流畫布</td><td>雙向；當 Client <b>只接 HTTP</b></td><td>Apache-2.0 加條件：多租戶 SaaS 要書面授權</td></tr>
+  <tr class="hi"><td class="n"><span class="nm">n8n</span><span class="mk">本課用</span><a href="https://github.com/n8n-io/n8n">github.com/n8n-io/n8n</a></td><td>整合與排程優先，AI 是節點</td><td>雙向；不支援 stdio</td><td>Sustainable Use License：<b>非 OSI 開源</b></td></tr>
+  <tr><td class="n"><span class="nm">Langflow</span><a href="https://docs.langflow.org/mcp-client">docs.langflow.org</a></td><td>Python 視覺化流程，偏開發者</td><td>雙向；Client 支援 stdio</td><td>MIT</td></tr>
+  <tr><td class="n"><span class="nm">RAGFlow</span><a href="https://github.com/infiniflow/ragflow">github.com/infiniflow/ragflow</a></td><td>深度文件解析 RAG＋Agent</td><td>雙向</td><td>Apache-2.0</td></tr>
+  <tr><td class="n"><span class="nm">Coze Studio</span><a href="https://github.com/coze-dev/coze-studio">github.com/coze-dev/coze-studio</a></td><td>字節跳動 Coze 的開源版</td><td>官方文件未載明</td><td>Apache-2.0</td></tr>
+  <tr class="off"><td class="n"><span class="nm">Flowise</span><span class="mk">不推薦</span><a href="https://flowiseai.com/sunset">flowiseai.com</a></td><td>視覺化 Agent 建構器</td><td>—</td><td>2026-08 起停止維護、repo 已封存</td></tr>
+  </table>
+  <div class="foot">Flowise 停更是個提醒：平台會消失，流程邏輯最好也能用程式碼重現（LangGraph），兩邊經 MCP 互接。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>先看第三欄確認它能不能接你的 MCP Server（本機 stdio 還是 HTTP），再看最右欄的授權。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

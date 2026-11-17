@@ -7,7 +7,7 @@
 .sub{position:absolute;font-size:26px;line-height:1.45;color:var(--muted)}
 </style></head><body><div class="slide">
   <h1>兩種圖資料模型：LPG 與 RDF</h1>
-  <p class="lead">同一件事：記下「韓立加入七玄門的時間」。差別在，時間能不能直接掛在關係上。</p>
+  <p class="lead">同一件事：記下「索隆加入草帽海賊團的時間」。差別在，時間能不能直接掛在關係上。</p>
 
   <div class="hd ind" style="left:110px;top:268px">RDF：三元組</div>
   <div class="sub" style="left:110px;top:330px;width:800px">強項：W3C 標準、URI 全域識別、可推理、利於跨組織交換資料</div>
@@ -32,10 +32,10 @@ const link=(a,b,lbl,o)=>{const [x1,y1]=clip(a,b.cx,b.cy,6),[x2,y2]=clip(b,a.cx,a
 D.dash(960,290,960,830,{stroke:D.C.grey,strokeWidth:2.5});
 /* 左：RDF，時間要靠事件節點 */
 const ev=nd(505,470,200,72,'加入事件','g',28,{stroke:D.C.ink,strokeLineDash:[9,8]});
-const han=nd(230,665,150,72,'韓立','p'), sec=nd(780,665,170,72,'七玄門','s'), tm=nd(505,665,170,72,'〈時間〉','g');
-link(ev,han,'成員');link(ev,tm,'時間');link(ev,sec,'門派');
+const han=nd(230,665,150,72,'索隆','p'), sec=nd(780,665,170,72,'草帽海賊團','s'), tm=nd(505,665,170,72,'〈時間〉','g');
+link(ev,han,'成員');link(ev,tm,'時間');link(ev,sec,'團體');
 /* 右：LPG，時間掛在邊上 */
-const a=nd(1130,570,150,72,'韓立','p'), b=nd(1700,570,170,72,'七玄門','s');
+const a=nd(1130,570,150,72,'索隆','p'), b=nd(1700,570,170,72,'草帽海賊團','s');
 link(a,b,'MEMBER_OF');
 D.dash(1415,590,1415,640,{strokeWidth:2.5,stroke:D.C.grey});
 T(1275,642,300,40,'{ since: 〈時間〉 }','','mono');T(1600,640,100,40,'<span class="tag">示意</span>');

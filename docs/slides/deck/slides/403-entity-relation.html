@@ -8,9 +8,9 @@
   <h1>知識圖譜：實體、關係、屬性</h1>
   <p class="lead">把文字拆成「誰」「和誰」「什麼關係」——每條邊讀起來，就是一句話。</p>
 
-  <div class="abs def" style="left:1330px;top:300px;width:480px"><div class="t ind">實體（節點）</div><div class="d">圖裡的一個「東西」：一個人、一個宗門、一件法寶。</div></div>
-  <div class="abs def" style="left:1330px;top:495px;width:480px"><div class="t ver">關係（邊）</div><div class="d">有方向、有型別的連線。讀成一句話：韓立 屬於 七玄門。</div></div>
-  <div class="abs def" style="left:1330px;top:690px;width:480px"><div class="t mus">屬性</div><div class="d">掛在節點上的「鍵：值」。例：name 是「韓立」。</div></div>
+  <div class="abs def" style="left:1330px;top:300px;width:480px"><div class="t ind">實體（節點）</div><div class="d">圖裡的一個「東西」：<br>一個人、一個海賊團、一件寶物。</div></div>
+  <div class="abs def" style="left:1330px;top:495px;width:480px"><div class="t ver">關係（邊）</div><div class="d">有方向、有型別的連線。<br>讀成：魯夫 屬於 草帽海賊團。</div></div>
+  <div class="abs def" style="left:1330px;top:690px;width:480px"><div class="t mus">屬性</div><div class="d">掛在節點上的「鍵：值」。例：name 是「魯夫」。</div></div>
 
   <div class="read"><em>怎麼讀：</em>方塊是實體，箭頭是關係；方塊的顏色是實體的類型，旁邊的大括號是屬性。</div>
 </div><svg class="rough" id="r" width="1920" height="1080"></svg>
@@ -24,16 +24,16 @@ const link=(a,b,lbl,o)=>{const [x1,y1]=clip(a,b.cx,b.cy,6),[x2,y2]=clip(b,a.cx,a
   if(lbl){const d=T((x1+x2)/2,(y1+y2)/2,0,0,lbl,'','el');d.style.position='absolute';}};
 
 /* 圖例：標籤＝實體類型 */
-[['p','Person 人物',110],['s','Sect 宗門',400],['w','Treasure 法寶',660]].forEach(([k,t,x])=>{const f=FILL[k];D.rect(x,282,28,28,f[0],{fillStyle:'solid',stroke:f[1],strokeWidth:2.5});T(x+40,278,300,34,t,'font-size:24px;line-height:34px');});
+[['p','Person 人物',110],['s','Crew 海賊團',400],['w','Treasure 寶物',660]].forEach(([k,t,x])=>{const f=FILL[k];D.rect(x,282,28,28,f[0],{fillStyle:'solid',stroke:f[1],strokeWidth:2.5});T(x+40,278,300,34,t,'font-size:24px;line-height:34px');});
 
-const ly=nd(250,385,150,72,'厲飛雨','p'), qx=nd(250,565,170,72,'七玄門','s'), hf=nd(250,805,170,72,'黃楓谷','s');
-const hl=nd(700,650,170,84,'韓立','p',32);
-const zt=nd(1090,495,170,72,'掌天瓶','w'), qz=nd(1090,805,210,72,'青竹蜂雲劍','w');
+const ly=nd(250,385,150,72,'索隆','p'), qx=nd(250,565,170,72,'草帽海賊團','s'), hf=nd(250,805,170,72,'草帽大船團','s');
+const hl=nd(700,650,170,84,'魯夫','p',32);
+const zt=nd(1090,495,170,72,'草帽','w'), qz=nd(1090,805,210,72,'橡膠果實','w');
 link(ly,qx,'MEMBER_OF');link(hl,qx,'MEMBER_OF');link(hl,hf,'MEMBER_OF');link(hl,zt,'OWNS');link(hl,qz,'OWNS');
 
 /* 屬性：虛線連到節點旁的大括號 */
 D.dash(700,694,700,740,{strokeWidth:2.5,stroke:D.C.grey});
-T(585,742,300,40,'{ name: "韓立" }','','mono');
+T(585,742,300,40,'{ name: "魯夫" }','','mono');
 D.dash(1090,843,1090,868,{strokeWidth:2.5,stroke:D.C.grey});
-T(960,870,300,80,'{ name: "青竹蜂雲劍",<br>&nbsp;&nbsp;kind: "飛劍" }','','mono');
+T(960,870,300,80,'{ name: "橡膠果實",<br>&nbsp;&nbsp;kind: "惡魔果實" }','','mono');
 </script></body></html>

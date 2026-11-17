@@ -12,7 +12,7 @@
   <div class="q"><div class="h">4-bit 量化</div>每個權重從 16 bit 壓成 4 bit，檔案大幅縮小，品質略降。</div>
   <div class="code" style="left:110px;top:716px"><span class="k">ollama pull</span> qwen3.5:9b            <span class="c"># 對話模型，16 GB 顯存可跑</span>
 <span class="k">ollama pull</span> deepseek-r1:8b        <span class="c"># 現在指向 R1-0528-Qwen3-8B</span>
-<span class="k">ollama pull</span> nomic-embed-text      <span class="c"># 嵌入模型，模組三會用</span>
+<span class="k">ollama pull</span> nomic-embed-text      <span class="c"># 英文嵌入模型；中文語料改用 bge-m3</span>
 <span class="c"># 要原版 Llama distill：deepseek-r1:8b-llama-distill-q4_K_M</span></div>
   <div class="read"><em>怎麼讀：</em>長條是模型檔案大小，虛線是 16 GB 顯存（課綱的單卡條件）。檔案要遠小於顯存，因為 context 也要佔位置。</div>
 </div><svg class="rough" id="r" width="1920" height="1080"></svg>

@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Prompt 是什麼</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hd{position:absolute;font-size:32px;line-height:1.2}
+.it{position:absolute;left:1040px;width:770px;font-size:26px;line-height:1.45}
+.no{position:absolute;left:1000px;top:640px;width:810px;padding:18px 30px}
+.no .t{font-size:30px;line-height:1.3}.no .d{font-size:26px;line-height:1.55;color:var(--muted);margin-top:4px}
+.c{position:absolute;text-align:center;font-size:26px;line-height:1.35}
+.cap{position:absolute;font-size:26px;line-height:1.5;color:var(--muted)}
+
+</style></head><body><div class="slide">
+  <h1>Prompt 是什麼</h1>
+  <p class="lead" style="width:1700px">Prompt（提示詞）＝交給模型的那份交辦單。模型不變，交辦單一換，它做的事就跟著換。</p>
+  <div class="hd ind" style="left:110px;top:290px">像交辦工作給一位新同事</div>
+  <div class="c" style="left:130px;top:360px;width:280px;font-size:28px">交辦單</div>
+  <div class="cap" style="left:150px;top:410px;font-size:24px;line-height:1.7">你的角色是…<br>背景資料是…<br>要做到…不准…<br>照這個範例交</div>
+  <div class="c" style="left:520px;top:540px;width:220px;font-size:24px;color:var(--muted)">很聰明，但不知道<br>你公司的任何事</div>
+  <div class="cap" style="left:110px;top:620px">同一個模型，換一張交辦單就換一份工作：</div>
+  <div class="c" style="left:110px;top:678px;width:240px">「翻成英文」</div>
+  <div class="c" style="left:380px;top:678px;width:240px">「三句話摘要」</div>
+  <div class="c" style="left:650px;top:678px;width:240px">「轉成 SQL」</div>
+  <div class="cap" style="left:110px;top:748px">權重一個都沒動，不用重新訓練</div>
+  <div class="hd mus" style="left:1000px;top:290px">你可能已經見過</div>
+  <div class="it" style="top:350px">在 ChatGPT、Claude 對話框打的每一句話</div>
+  <div class="it" style="top:442px">「自訂指令」「專案說明」：每次對話前自動附上的那張交辦單</div>
+  <div class="it" style="top:534px">程式呼叫 API 時，messages 裡的 system 與 user 內容</div>
+  <div class="no"><div class="t ver">交辦單補不了的</div><div class="d">它不知道的資料，寫得再好也變不出來 → RAG（模組三）<br>要它每次都照固定格式交 → 結構化輸出（本章後半）</div></div>
+  <div class="read"><em>怎麼讀：</em>左上是一張交辦單交給模型（圓）；下面三張不同的交辦單，讓同一個模型做三種工作。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const IN=['#d9e1ee',D.C.ind],MU=['#f7e7c0','#b98a12'],VE=['#f7d6cf',D.C.ver],PA=['#f3efe6',D.C.ink];
+const R=(x,y,w,h,f,o)=>D.rect(x,y,w,h,f[0],Object.assign({fillStyle:'solid',stroke:f[1],strokeWidth:2.6},o||{}));
+D.sq(1004,359,20,'mus',{strokeWidth:2});
+D.sq(1004,451,20,'mus',{strokeWidth:2});
+D.sq(1004,543,20,'mus',{strokeWidth:2});
+R(1000,640,810,180,VE,{strokeWidth:3,strokeLineDash:[12,10]});
+R(130,350,280,240,MU,{strokeWidth:2.6});
+D.arrow(420,470,560,470,{strokeWidth:2.8});
+D.ci(630,470,110,'ver',{fillStyle:'hachure',strokeWidth:2.4});
+[110,380,650].forEach(x=>R(x,672,240,52,MU,{strokeWidth:2.4}));
+</script></body></html>

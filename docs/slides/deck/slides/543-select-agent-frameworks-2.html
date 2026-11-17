@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：Agent 框架（二）</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:520px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：Agent 框架（二）</h1>
+  <p class="lead" style="width:1700px">其他常見框架：角色分工、企業整合、型別優先、極簡教學。微軟系最近大整併，舊教學要對照新名字。</p>
+  <div class="wrap"><table class="sel"><tr><th>框架</th><th>抽象層級</th><th>什麼時候選它</th><th>授權／狀態</th></tr>
+  <tr><td class="n"><span class="nm">CrewAI</span><a href="https://github.com/crewAIInc/crewAI">github.com/crewAIInc/crewAI</a></td><td>多 agent 角色：Crew＋Flow</td><td>想用角色分工快速做原型</td><td>MIT；不依賴 LangChain</td></tr>
+  <tr><td class="n"><span class="nm">Microsoft Agent Framework</span><a href="https://github.com/microsoft/agent-framework">github.com/microsoft/agent-framework</a></td><td>高階 agent＋圖形流程</td><td>.NET／Azure 企業環境</td><td>MIT；AutoGen 與 Semantic Kernel 的後繼</td></tr>
+  <tr><td class="n"><span class="nm">Pydantic AI</span><a href="https://github.com/pydantic/pydantic-ai">github.com/pydantic/pydantic-ai</a></td><td>有型別的 agent 迴圈</td><td>重視型別與結構化輸出</td><td>MIT</td></tr>
+  <tr><td class="n"><span class="nm">AG2</span><a href="https://github.com/ag2ai/ag2">github.com/ag2ai/ag2</a></td><td>多 agent 對話</td><td>原本用 AutoGen 0.2 風格的團隊</td><td>Apache-2.0；舊 API 拆到 ag2-classic</td></tr>
+  <tr><td class="n"><span class="nm">smolagents</span><a href="https://github.com/huggingface/smolagents">github.com/huggingface/smolagents</a></td><td>極簡：用程式碼當動作</td><td>教學、讀原始碼、做實驗</td><td>Apache-2.0；發版放緩</td></tr>
+  <tr class="off"><td class="n"><span class="nm">AutoGen</span><span class="mk">不推薦</span><a href="https://github.com/microsoft/autogen">github.com/microsoft/autogen</a></td><td>多 agent 對話</td><td>不建議新專案</td><td>官方宣告停止維護</td></tr>
+  </table>
+  <div class="foot">框架換得快，模式留得住：先從「Agent 設計模式」那兩頁選定模式，再挑實作它最順手的框架。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>先排除灰色那列；剩下的依團隊環境挑：微軟生態、型別優先、還是要快速原型。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

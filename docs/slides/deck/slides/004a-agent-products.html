@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>你用過的 Agent</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.card{position:absolute;top:330px;width:395px;padding:0 30px}
+.card .cat{font-size:40px;line-height:1.2;padding-left:58px}
+.card .prod{font-size:28px;line-height:1.4;margin-top:14px}
+.card .k{font-size:24px;color:var(--muted);margin-top:26px}
+.card .say{font-size:28px;line-height:1.4}
+.card .do{font-size:26px;line-height:1.5;color:var(--muted)}
+.common{position:absolute;top:768px;font-size:30px;line-height:1.4;text-align:center}
+</style></head><body><div class="slide">
+  <h1>你可能已經用過 Agent</h1>
+  <p class="lead">先看四類常見產品：你交給它一句話，它自己做了哪些事。</p>
+
+  <div class="card" style="left:110px"><div class="cat ver">寫程式</div>
+    <div class="prod">Claude Code、Cursor、Codex</div>
+    <div class="k">你說</div><div class="say">「把這個測試修到會過」</div>
+    <div class="k">它自己</div><div class="do">讀程式碼 → 改檔 → 跑測試 → 沒過再改</div></div>
+
+  <div class="card" style="left:545px"><div class="cat ver">做研究</div>
+    <div class="prod">ChatGPT、Gemini 的 Deep Research</div>
+    <div class="k">你說</div><div class="say">「比較三套向量資料庫」</div>
+    <div class="k">它自己</div><div class="do">搜尋 → 讀網頁 → 發現缺口再搜 → 寫成附出處的報告</div></div>
+
+  <div class="card" style="left:980px"><div class="cat ver">操作瀏覽器</div>
+    <div class="prod">ChatGPT agent、Manus</div>
+    <div class="k">你說</div><div class="say">「找下週飛東京最便宜的票」</div>
+    <div class="k">它自己</div><div class="do">開網站 → 填表單 → 比價 → 付款前停下來問你</div></div>
+
+  <div class="card" style="left:1415px"><div class="cat mut">自動化流程</div>
+    <div class="prod">Dify、n8n 的畫布流程</div>
+    <div class="k">你畫好</div><div class="say">收信 → 分類 → 回覆</div>
+    <div class="k">它照著跑</div><div class="do">步驟是人排好的，模型只負責其中幾格</div></div>
+
+  <div class="common" style="left:110px;width:1265px">共同點：你給的是<b>目標</b>，不是步驟——下一步由它自己決定</div>
+  <div class="common mut" style="left:1415px;width:395px">對照組：步驟由人決定</div>
+
+  <div class="read"><em>怎麼讀：</em>前三類每一步做什麼是模型自己挑的；最右邊的流程是人排好的。這個差別就是下一頁的定義。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+const xs=[110,545,980];
+/* Agent 類：淺朱紅卡＋圓（模型）＋繞圈箭頭 */
+xs.forEach(x=>{D.rect(x,305,395,420,'#f7d6cf',{fillStyle:'solid',stroke:D.C.ver,strokeWidth:3});
+  const cx=x+52,cy=355;D.ci(cx,cy,30,D.C.ver,{strokeWidth:2});
+  D.curve([[cx+20,cy+4],[cx+16,cy-18],[cx,cy-22],[cx-18,cy-12],[cx-20,cy+8]],{strokeWidth:2.6});
+  D.arrow(cx-22,cy+2,cx-18,cy+14,{strokeWidth:2.6});});
+/* 對照組：灰虛線卡＋三個方塊一直線 */
+D.rect(1415,305,395,420,'#f3efe6',{fillStyle:'solid',stroke:D.C.grey,strokeWidth:2.5,strokeLineDash:[10,9]});
+[1438,1458,1478].forEach(x=>D.sq(x,348,14,'grey',{strokeWidth:1.6}));
+/* 共同點括號 */
+D.line(130,750,1355,750,{strokeWidth:2.6});D.line(130,735,130,750,{strokeWidth:2.6});D.line(1355,735,1355,750,{strokeWidth:2.6});
+D.dash(1435,750,1790,750,{strokeWidth:2.4,stroke:D.C.grey});
+</script></body></html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：本地推理與服務</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:440px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：本地推理與服務</h1>
+  <p class="lead" style="width:1700px">個人跑模型和給一群人用，是兩種需求：前者求方便，後者求吞吐量。</p>
+  <div class="wrap"><table class="sel"><tr><th>工具</th><th>定位</th><th>什麼時候選它</th><th>授權／狀態</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">Ollama</span><span class="mk">本課用</span><a href="https://github.com/ollama/ollama">github.com/ollama/ollama</a></td><td>一行指令跑本地模型</td><td>課堂 demo、個人開發；有 OpenAI 相容 /v1</td><td>MIT</td></tr>
+  <tr><td class="n"><span class="nm">llama.cpp</span><a href="https://github.com/ggml-org/llama.cpp">github.com/ggml-org/llama.cpp</a></td><td>C/C++ 推理、GGUF 量化</td><td>CPU、Mac、邊緣裝置；Ollama 的底層</td><td>MIT；1.0 版移除舊 C API</td></tr>
+  <tr><td class="n"><span class="nm">LM Studio</span><a href="https://lmstudio.ai">lmstudio.ai</a></td><td>圖形介面的本地模型 App</td><td>不想碰命令列的桌機使用者</td><td><b>App 為閉源</b>；CLI lms 為 MIT</td></tr>
+  <tr><td class="n"><span class="nm">vLLM</span><a href="https://github.com/vllm-project/vllm">github.com/vllm-project/vllm</a></td><td>高吞吐 GPU 服務引擎</td><td>上線、多人同時呼叫</td><td>Apache-2.0</td></tr>
+  <tr><td class="n"><span class="nm">SGLang</span><a href="https://github.com/sgl-project/sglang">github.com/sgl-project/sglang</a></td><td>高效能 LLM／多模態服務</td><td>多輪、共用前綴多、大型 MoE</td><td>Apache-2.0</td></tr>
+  <tr class="off"><td class="n"><span class="nm">TGI</span><span class="mk">不推薦</span><a href="https://github.com/huggingface/text-generation-inference">github.com/huggingface/text-generation-inference</a></td><td>Hugging Face 舊推理伺服器</td><td>不建議新專案；官方建議改用 vLLM、SGLang</td><td>repo 已封存</td></tr>
+  </table>
+  <div class="foot">上面三列偏「自己用」，下面三列偏「給很多人用」。開發用 Ollama，上線換 vLLM，程式只要改 base_url。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>先決定是自己用還是要服務多人，再挑上半或下半；灰色那列已封存。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

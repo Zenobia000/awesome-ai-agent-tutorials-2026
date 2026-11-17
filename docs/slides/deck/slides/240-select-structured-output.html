@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：結構化輸出工具</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:24px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:9px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:520px}
+table.sel td.n .nm{font-size:26px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.off td{color:var(--muted)}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:24px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <h1 style="font-size:72px">選型：結構化輸出工具</h1>
+  <p class="lead" style="width:1700px">三種機制：事後驗證重試、伺服器端約束、逐 token 遮罩。格式能保證，內容仍要自己驗。</p>
+  <div class="wrap"><table class="sel"><tr><th>名稱</th><th>機制</th><th>什麼時候選它</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">Pydantic</span><span class="mk">本課用</span><a href="https://github.com/pydantic/pydantic">github.com/pydantic/pydantic</a></td><td>只定義 schema 與驗證，不負責生成</td><td>所有方案的共同底層</td></tr>
+  <tr><td class="n"><span class="nm">服務商原生（OpenAI、Claude、Gemini）</span><a href="https://developers.openai.com/api/docs/guides/structured-outputs">developers.openai.com</a></td><td>原生 JSON Schema，伺服器端約束</td><td>用雲端 API；Gemini 只支援 schema 子集</td></tr>
+  <tr class="hi"><td class="n"><span class="nm">Ollama format</span><span class="mk">本課用</span><a href="https://docs.ollama.com/capabilities/structured-outputs">docs.ollama.com</a></td><td>API 直接吃 JSON Schema</td><td>本機 Lab</td></tr>
+  <tr><td class="n"><span class="nm">LangChain with_structured_output</span><a href="https://docs.langchain.com/oss/python/langchain/models">docs.langchain.com</a></td><td>包一層，自動選原生或工具呼叫</td><td>換模型不想改程式；agent 用 response_format</td></tr>
+  <tr><td class="n"><span class="nm">Instructor</span><a href="https://python.useinstructor.com/">python.useinstructor.com</a></td><td>提示＋Pydantic 驗證＋失敗重試</td><td>只做資料萃取、要跨服務商</td></tr>
+  <tr><td class="n"><span class="nm">Outlines／vLLM／llama.cpp</span><a href="https://dottxt-ai.github.io/outlines/latest/">dottxt-ai.github.io</a></td><td>約束解碼：每個 token 都被遮罩</td><td>自架模型，要保證格式</td></tr>
+  </table>
+  <div class="foot">舊教學常見的 vLLM guided_json 參數已移除，現在叫 structured_outputs。　<span class="tag">核實 2026-11-17</span></div></div>
+  <div class="read"><em>怎麼讀：</em>由上往下，越往下「保證」做得越早：上面是事後檢查，最後一列是在生成當下就不讓模型寫錯。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

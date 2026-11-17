@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>什麼是 Agent</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.col{position:absolute;width:500px;text-align:center}
+.ct{font-size:40px;line-height:1.2}
+.who{font-size:24px;color:var(--muted)}
+.ans{font-size:30px;line-height:1.35}
+.ex{font-size:26px;line-height:1.4;color:var(--muted)}
+.ml{position:absolute;font-size:24px;color:var(--muted);text-align:center;width:120px}
+</style></head><body><div class="slide">
+  <h1>什麼是 Agent</h1>
+  <p class="lead" style="width:1700px">Agent：讓模型<b>自己決定下一步</b>要做什麼、用哪個工具，一直做到目標完成的系統。</p>
+
+  <div class="col ct" style="left:130px;top:300px">聊天機器人</div>
+  <div class="col ct" style="left:710px;top:300px">Workflow 流程</div>
+  <div class="col ct ver" style="left:1290px;top:300px">Agent</div>
+
+  <!-- 圖內小標 -->
+  <div class="ml" style="left:140px;top:530px">問題</div>
+  <div class="ml" style="left:320px;top:530px">模型</div>
+  <div class="ml" style="left:500px;top:530px">回答</div>
+  <div class="ml" style="left:1395px;top:540px">模型</div>
+  <div class="ml" style="left:1290px;top:385px">搜尋</div>
+  <div class="ml" style="left:1670px;top:385px">跑程式</div>
+  <div class="ml" style="left:1572px;top:592px">讀檔</div>
+
+  <div class="ml" style="left:820px;top:552px;width:280px">程式寫死的路徑</div>
+
+  <!-- 誰決定下一步 -->
+  <div class="col who" style="left:130px;top:656px">誰決定下一步？</div>
+  <div class="col who" style="left:710px;top:656px">誰決定下一步？</div>
+  <div class="col who" style="left:1290px;top:656px">誰決定下一步？</div>
+  <div class="col ans" style="left:130px;top:698px">沒有下一步<br>呼叫一次就結束</div>
+  <div class="col ans" style="left:710px;top:698px">工程師<br>路徑寫死在程式裡</div>
+  <div class="col ans" style="left:1290px;top:698px">模型<br>看完結果，每輪重新決定</div>
+
+  <div class="col ex" style="left:130px;top:832px">例：一般的問答聊天</div>
+  <div class="col ex" style="left:710px;top:832px">例：Dify、n8n 畫好的流程</div>
+  <div class="col ex" style="left:1290px;top:832px">例：Claude Code、Deep Research</div>
+
+  <div class="src" style="left:110px;top:906px"><span class="tag">本課轉述</span>　Anthropic（2024）〈Building effective agents〉：workflow 走預先寫好的程式路徑；agent 由 LLM 動態主導自己的流程與工具使用</div>
+
+  <div class="read"><em>怎麼讀：</em>從左到右，「下一步由誰決定」從沒人、工程師，移到模型自己；判斷一個產品是不是 Agent，問這一句就夠了。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');
+/* 聊天機器人：方 → 圓 → 方 */
+D.rect(155,445,90,60,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.6});
+D.ci(380,475,90,'ver',{strokeWidth:2.4});
+D.rect(515,445,90,60,'#d9e1ee',{fillStyle:'solid',stroke:D.C.ind,strokeWidth:2.6});
+D.arrow(252,475,328,475,{strokeWidth:2.8});D.arrow(432,475,508,475,{strokeWidth:2.8});
+
+/* Workflow：圓 → 三角 → 圓 → 三角，一條直線 */
+const wy=470;
+D.ci(760,wy,64,'ver',{strokeWidth:2.2});D.tri(880,wy+4,62,'mus',{strokeWidth:2.2});
+D.ci(1000,wy,64,'ver',{strokeWidth:2.2});D.tri(1120,wy+4,62,'mus',{strokeWidth:2.2});
+[[796,842],[916,962],[1036,1082]].forEach(([a,b])=>D.arrow(a,wy,b,wy,{strokeWidth:2.6}));
+D.dash(730,540,1150,540,{strokeWidth:2.2,stroke:D.C.grey});
+D.line(730,532,730,548,{strokeWidth:2.2,stroke:D.C.grey});D.line(1150,532,1150,548,{strokeWidth:2.2,stroke:D.C.grey});
+
+/* Agent：中心圓，四周三角，雙向往返 */
+const ax=1540,ay=475;
+D.ci(ax,ay,110,'ver',{fillStyle:'hachure',strokeWidth:2.6});
+const tools=[[1350,435],[1730,435],[1540,606]];
+tools.forEach(([x,y])=>D.tri(x,y,58,'mus',{strokeWidth:2.2}));
+/* 往（實線）與回（彎線） */
+D.arrow(1488,462,1384,440,{strokeWidth:2.6});D.curve([[1380,462],[1430,500],[1484,494]],{strokeWidth:2.2,stroke:D.C.grey});
+D.arrow(1592,462,1696,440,{strokeWidth:2.6});D.curve([[1700,462],[1650,500],[1596,494]],{strokeWidth:2.2,stroke:D.C.grey});
+D.arrow(1540,532,1540,574,{strokeWidth:2.6});
+</script></body></html>
