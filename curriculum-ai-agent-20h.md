@@ -13,7 +13,7 @@
    - [模組六：領域大模型 LoRA 微調與私有化部署](#模組六領域大模型-lora-微調與私有化部署20-小時)
    - [模組七：MCP 協議與現代低代碼/自動化 Agent 工具鏈](#模組七mcp-協議與現代低代碼自動化-agent-工具鏈15-小時)
    - [模組八：2026 轉職衝刺](#模組八2026-轉職衝刺工程落地項目復盤與求職面試通關15-小時)
-4. [貫穿式旗艦大專案設計](#4-貫穿式旗艦大專案設計企業級多智能體研發與維運值班助理系統)
+4. [貫穿式旗艦大專案設計](#4-貫穿式旗艦大專案設計企業級研發與維運值班-agent)
 5. [轉職學員學習路徑與面試準備指南](#5-轉職學員學習路徑與面試準備指南)
 
 ---
@@ -35,7 +35,7 @@
 | **決策中樞**（Brain / LLM） | 語意理解、意圖識別、子任務規劃與結果評估 | DeepSeek、Qwen 等開源或商業模型 |
 | **記憶管理系統**（Memory System） | 確保業務上下文持續不丟失 | 短期：`InMemorySaver`；長期：`PostgresSaver` |
 | **任務規劃模組**（Planning Engine） | 任務拆解與關鍵節點授權 | ReAct（Thought-Action-Observation）、Plan-and-Execute、Human-in-the-loop（HITL） |
-| **工具執行體系**（Tool Integration） | 打通外部系統操作邊界 | 標準化接口、數據庫直連、MCP、Supervisor 多智能體協作 |
+| **工具執行體系**（Tool Integration） | 打通外部系統操作邊界 | 標準化接口、數據庫直連、MCP、Skills 與子 agent |
 
 ### 課程定位
 
@@ -64,7 +64,7 @@
 | 二 | 工業級提示詞工程與結構化輸出控制 | 2.0h | 0.8h / 1.2h | 角色框架、CoT/ToT、Prompt 攻擊防禦、Pydantic 結構化 | 生產級 Text2SQL 提示詞與結構化解析引擎 |
 | 三 | 企業級 RAG 檢索增強全鏈路與檢索優化 | 4.0h | 1.5h / 2.5h | 結構感知分塊、Embedding、ChromaDB、多路召回、Rerank | 企業級私有技術文檔多路召回問答系統 |
 | 四 | 知識圖譜與 GraphRAG 拓撲檢索實戰 | 2.0h | 0.8h / 1.2h | Neo4j、SPO 三元組、GraphRAG、全局與局部檢索 | 基於《海賊王》實體關係的 GraphRAG 系統 |
-| 五 | AI Agent 核心架構與 LangGraph 狀態機深度實踐 | 5.0h | 1.8h / 3.2h | ReAct、記憶持久化、Checkpointer、HITL、Supervisor 多智能體 | 基於 LangGraph 的多智能體客服與研發值班系統 |
+| 五 | AI Agent 核心架構與 LangGraph 狀態機深度實踐 | 5.0h | 1.8h / 3.2h | ReAct、記憶持久化、Checkpointer、HITL、Agent Harness（Skills／子 agent） | 基於 Deep Agents 的研發值班 agent |
 | 六 | 領域大模型 LoRA 微調與私有化部署 | 2.0h | 0.8h / 1.2h | LoRA 原理、LLaMA-Factory、Qwen3/DeepSeek-R1、多模態 | 30 分鐘搞定行業專屬問診模型微調與本地部署 |
 | 七 | MCP 協議與現代低代碼/自動化 Agent 工具鏈 | 1.5h | 0.5h / 1.0h | MCP Client/Server、Dify 企業工作流、n8n 自動化 | 構建零代碼/低代碼 Excel 數據自動分析智能體 |
 | 八 | 2026 轉職衝刺：工程落地、項目復盤與求職面試通關 | 1.5h | 0.7h / 0.8h | LangSmith 可觀測性、Vibe Coding、簡歷優化、面試高頻考點 | 打造生產級個人數字分身與面試通關沙盤 |
@@ -285,7 +285,7 @@
 
 #### 1. 課堂目標與定位
 
-本模組為**全體系技術含金量最高的板塊**。2026 年的 Agent 開發已全面揚棄線性鏈條（Chain），進入以「狀態圖（State Graph）」為核心的動態決策時代。學員將從 50 行代碼手寫 ReAct 原生智能體出發，深入 LangChain 1.0 架構重構、LangGraph 狀態管理、短期/持久化記憶、人在回路（HITL）以及 Supervisor 多智能體協同架構。
+本模組為**全體系技術含金量最高的板塊**。2026 年的 Agent 開發已全面揚棄線性鏈條（Chain），進入以「狀態圖（State Graph）」為核心的動態決策時代。學員將從 50 行代碼手寫 ReAct 原生智能體出發，深入 LangChain 1.0 架構重構、LangGraph 狀態管理、短期/持久化記憶、人在回路（HITL）以及 2026 年主流的 Agent Harness（單一 agent＋Skills＋子 agent＋MCP）。
 
 #### 2. 核心技術知識點
 
@@ -307,9 +307,11 @@
   - **狀態快照與檢查點（Checkpointer）**：`InMemorySaver` 與 `PostgresSaver` 在跨會話對話持久化中的實現原理
   - **時光旅行（Time Travel）與狀態回滾**：獲取歷史步驟快照，修改歷史狀態並重新分支出全新決策路徑
   - **人在回路（Human-in-the-loop, HITL）**：透過中斷機制（Interrupt）在涉及高風險操作（如數據庫修改、資金支付、郵件發布）時掛起執行，等待人工確認或修改參數後恢復運行
-- **Multi-Agent 多智能體協同系統**
-  - **Supervisor 監督架構**：主管 Agent 作為路由中心，將複雜用戶需求拆解為子任務，分派給多個專屬 Worker Agent（如日曆管理、郵件發送、數據統計）並統合反饋
-  - **DeepAgent 與沙盒文件系統**：面向複雜長調研任務的自主規劃、Sub-agent 並發調度與內部虛擬文件系統讀寫
+- **Agent Harness：一個 agent 的完整配備**
+  - **單一迴圈＋外掛**：Skills（按需載入的做法說明）、子 agent（`task` 工具開乾淨的 context，只回摘要）、MCP 工具、檔案記憶（AGENTS.md）、壓縮、權限與 hooks；Claude Code、Codex、Deep Agents 都是這個形狀
+  - **Deep Agents（`deepagents`）**：`create_deep_agent` 一次組好 harness，底層仍跑在 LangGraph 上（checkpointer、interrupt 照用）
+  - **什麼時候才切多個 agent**：只為隔離 context、平行查證、生成與驗證分開、或權限／組織邊界；**不按職能切**（文件 agent／資料庫 agent／運維 agent 是反模式）。多 agent 的 token 成本約為單 agent 數倍
+  - **外殼用流程圖、核心用 harness**：企業系統裡固定步驟（觸發、審批、執行、驗證）寫成 LangGraph 圖，查不完的部分交給一個 agent；agent 包成後端服務、系統功能做成 MCP server
 - **Anthropic 通用 Agent + Skills 新典範**
   - 解析為何「為每個垂直場景獨立開發 Agent」會導致難以維護的「智能體動物園」
   - 掌握「通用核心 Agent + 模組化可插拔 Skills（流程化可執行知識包）」的先進工程設計思路
@@ -325,10 +327,11 @@
 - 使用 `StateGraph` 定義包含 `messages` 的狀態字典，集成 SQLite/PostgreSQL 查詢工具。
 - 在工具執行前設置 LangGraph 中斷機制（Interrupt）；當檢測到敏感操作時暫停工作流，等待管理員發送批准指令（`Command` approve）後再行恢復執行。
 
-**實戰 5-C：多智能體 Supervisor 企業協同編排實戰**
+**實戰 5-C：一個 Harness Agent（Deep Agents）**
 
-- 分別構建專注日程管理的 `CalendarAgent` 與專注郵件發送的 `EmailAgent`，將子 Agent 封裝為工具集。
-- 構建頂層 `SupervisorAgent` 統一接收複雜混合指令，實現動態路由、跨智能體上下文傳遞與最終整合反饋。
+- 用 `create_deep_agent` 組出一個值班 agent：工具（讀日誌、查指標、重啟服務）、一個 `ops-runbook` Skill、`AGENTS.md` 記憶。
+- 定義唯讀的 `log-checker` 子 agent，讓主 agent 對多個懷疑的原因平行查證，只收摘要。
+- 以 `interrupt_on={"restart_service": True}` 加 checkpointer，在重啟前暫停等待人工核准，再用 `Command(resume=...)` 恢復。
 
 #### 4. 常見踩坑與除錯指南
 
@@ -479,9 +482,9 @@ RAG 與提示工程能解決外部知識檢索問題，但當企業需要固定�
 
 **實作重點**：
 
-1. 整合端到端專案鏈路：LangChain Chat-UI 前端 + LangGraph 狀態圖編排 + 混合檢索 RAG / Neo4j + 混合模型大腦。
+1. 整合端到端專案鏈路：前端（SSE 串流）＋ 值班 harness agent（三個 Skill＋MCP 工具＋唯讀子 agent）＋ LangGraph 寫入審批流程 ＋ 混合檢索 RAG / Neo4j。
 2. 配置 LangSmith Project，生成公開調試 Trace 鏈接，作為面試時展現工程嚴謹度的技術佐證。
-3. 進行面試實戰沙盤演練：針對多智能體通訊衝突、RAG 向量檢索漂移、生產環境冷啟動延遲等經典技術陷阱進行高頻問答對抗。
+3. 進行面試實戰沙盤演練：針對 context 膨脹與壓縮、RAG 向量檢索漂移、生產環境冷啟動延遲等經典技術陷阱進行高頻問答對抗。
 
 #### 4. 2026 轉職面試高頻考點與標準回答維度
 
@@ -491,53 +494,56 @@ RAG 與提示工程能解決外部知識檢索問題，但當企業需要固定�
 
 **考點 2：「面對長流程、多工具調用的複雜 Agent 任務，如何保證執行穩定性？」**
 
-> **回答維度**：說明單 Agent 認知負載過重的弊端，闡述 Supervisor 多智能體架構的職能解耦，結合 LangGraph Checkpointer 實現故障重試與狀態回滾。
+> **回答維度**：說明 context 膨脹的成因，用 Skills 按需載入與子 agent 隔離 context 解決，而不是按職能切多個 agent；寫入步驟走固定的審批流程，結合 LangGraph Checkpointer 實現故障重試與狀態回滾。
 
 ---
 
-## 4. 貫穿式旗艦大專案設計：企業級多智能體研發與維運值班助理系統
+## 4. 貫穿式旗艦大專案設計：企業級研發與維運值班 Agent
 
 為確保學員學完即可直接轉化為履歷上的核心項目，本課綱設計了一套貫穿全流程的旗艦實戰專案：
 
-> **企業級多智能體研發與維運值班助理系統（Enterprise DevAgent Platform）**
+> **企業級研發與維運值班 Agent（Enterprise On-call Agent）**
 
 ### 1. 業務情境與核心痛點
 
-在現代企業研發流程中，值班工程師每天需應對海量來自客服、業務與監控系統的排障請求。傳統方式需手動翻閱內部架構手冊、編寫 SQL 查詢業務庫、登入伺服器查看即時日誌甚至執行重啟操作，流程繁瑣且極易出錯。本專案旨在打造一個具備自主決策、權限控制與跨系統操作能力的專案級助理。
+在現代企業研發流程中，值班工程師每天需應對海量來自客服、業務與監控系統的排障請求。傳統方式需手動翻閱內部架構手冊、編寫 SQL 查詢業務庫、登入伺服器查看即時日誌甚至執行重啟操作，流程繁瑣且極易出錯。本專案旨在打造一個能自主調查、受權限控制、可嵌入既有系統的值班 agent。
 
-### 2. 系統架構分層設計
+### 2. 系統架構：流程圖外殼＋Harness 核心
 
-系統採取嚴格的職責分離分層架構，確保各模組獨立可測：
+架構依 2026 年主流做法設計（研究依據見 `docs/slides/sources/architecture-2026.md`）：查原因交給一個 agent，會改動線上的步驟寫成固定流程。
 
 ```text
 ┌────────────────────────────────────────────────────────────┐
-│ 前端交互層   LangChain Chat-UI（HTTP / SSE 流式）            │
+│ 入口         前端（HTTP / SSE 串流）                          │
 ├────────────────────────────────────────────────────────────┤
-│ 核心編排層   LangGraph Supervisor 主管智能體                  │
-├───────────────────┬───────────────────┬────────────────────┤
-│ DocAgent          │ DBAgent           │ OpsAgent           │
-│ ChromaDB + Neo4j  │ Text2SQL+Pydantic │ 健康檢查/日誌 + HITL │
-├───────────────────┴───────────────────┴────────────────────┤
-│ 持久狀態與記憶層   LangGraph PostgresSaver                    │
+│ 核心 harness  值班 agent（Deep Agents，單一迴圈）               │
+│              Skills：doc-rag ｜ text2sql ｜ ops-runbook        │
+│              MCP 工具：日誌、監控、資料庫、服務控制               │
+│              子 agent：每個懷疑的原因一個，平行查證、唯讀          │
 ├────────────────────────────────────────────────────────────┤
-│ 可觀測性追蹤層     LangSmith                                 │
+│ 寫入流程      LangGraph 固定圖：審批（interrupt）→ 執行 → 驗證    │
+├────────────────────────────────────────────────────────────┤
+│ 持久狀態      LangGraph PostgresSaver                          │
+├────────────────────────────────────────────────────────────┤
+│ 可觀測性      LangSmith                                        │
 └────────────────────────────────────────────────────────────┘
 ```
 
-- **前端交互層（Presentation Layer）**：基於 LangChain Chat-UI 構建，透過 HTTP/SSE 流式協議與後端維持長連接，即時呈現模型的思考步驟、工具調用過程與結構化結果反饋。
-- **核心編排層（Orchestration Layer）**：基於 LangGraph 構建頂層 Supervisor 主管智能體，負責接收自然語言提問、拆解業務任務並路由至專屬子 Agent。
-- **專業子智能體集群（Specialized Worker Agents）**：
-  - **DocAgent（技術文檔檢索智能體）**：集成 ChromaDB 向量檢索與 Neo4j 拓撲圖譜，支援微服務架構手冊的語義問答與依賴鏈查詢。
-  - **DBAgent（數據庫查詢智能體）**：結合 Pydantic 結構化校驗與 SQLite/PostgreSQL 實例，實現安全受控的 Text2SQL 數據統計。
-  - **OpsAgent（運維操作智能體）**：封裝服務健康檢查與日誌過濾工具，內嵌 LangGraph 人在回路（HITL）中斷機制，高風險指令需經值班主管審批授權後執行。
-- **持久狀態與記憶層（State & Persistence Layer）**：採用 LangGraph PostgresSaver 檢查點管理器，實現跨對話會話的長期狀態存儲與步進快照。
-- **可觀測性追蹤層（Observability Layer）**：全面接入 LangSmith，實時記錄每次執行的 Token 開銷、調用鏈路耗時與錯誤堆疊。
+- **入口**：透過 HTTP/SSE 串流即時呈現 agent 的思考步驟與工具調用（Agent Chat UI 已於 2026-11-03 封存，需另選前端或 fork 固定版本）。
+- **核心 harness**：一個值班 agent，能力以 Skills 提供，而非拆成多個職能 agent：
+  - **doc-rag**：ChromaDB 混合檢索＋Neo4j 服務依賴鏈，回答架構手冊與 runbook 問題。
+  - **text2sql**：Pydantic 結構化校驗、只准 SELECT 的安全 Text2SQL。
+  - **ops-runbook**：健康檢查、日誌過濾的排錯步驟。
+  - 外部系統以 **MCP server** 接入；需要同時驗證多個假設時，開**唯讀子 agent** 平行查證，只回摘要。
+- **寫入流程**：重啟、改設定等高風險動作走 LangGraph 固定圖——人在回路審批（interrupt）→ 執行 → 驗證，值班主管核准後才放行。
+- **持久狀態**：PostgresSaver 檢查點，跨會話狀態與審批暫停後的恢復。
+- **可觀測性**：全面接入 LangSmith，記錄每一步的 Token、耗時與錯誤。
 
 ### 3. 履歷量化成果描述範本
 
-> **【專案經歷】企業級多智能體智能研發值班平臺**（專案負責人 / AI Agent 架構師）
+> **【專案經歷】企業級研發值班 Agent 平臺**（專案負責人 / AI Agent 架構師）
 >
-> - **架構設計**：基於 LangChain 1.0 與 LangGraph 打造主管-工人（Supervisor-Worker）模式的多智能體協同系統，實現自然語言驅動的跨系統日誌診斷、SQL 查詢與文檔檢索。
+> - **架構設計**：以 Deep Agents 打造單一值班 agent，能力以 Skills 與 MCP 工具接入、子 agent 平行查證假設；高風險寫入走 LangGraph 固定審批流程，實現自然語言驅動的跨系統日誌診斷、SQL 查詢與文檔檢索。
 > - **檢索優化**：搭建 BM25 + ChromaDB 混合檢索管線並引入 Cross-Encoder 重排序模型，將內部架構文檔的查詢召回準確率（Top-3）從 68% 提升至 91%；利用 Neo4j 構建服務拓撲 GraphRAG，解決複雜微服務依賴鏈推理問題。
 > - **安全與狀態控制**：利用 LangGraph 狀態檢查點管理器（PostgresSaver）實現跨會話長期記憶，並在高風險運維指令節點集成「人在回路（HITL）」中斷審批機制，實現生產環境 0 誤操作。
 > - **性能與成本**：透過 LangSmith 實施全鏈路 Tracing 監控，優化 Prompt 與 Tool 邊界，使平均對話延遲下降 35%，單次任務 Token 消耗降低 42%。
