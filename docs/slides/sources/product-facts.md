@@ -21,6 +21,8 @@
 | 5 | `recursion_limit` 強制終止 | langgraph ≥1.1.4 預設 10,007（舊版 25），預設擋不住死循環 | 要求明確設小值＋呼叫次數上限 middleware |
 | 5 | `Command approve` | 正確是 `Command(resume=...)`；HITL middleware 用 `Command(resume={"decisions": [...]})` | Lab5-B 照正確寫法 |
 | 5 | Supervisor 用 `langgraph-supervisor` | 套件已封存，官方推「子 agent 包成工具」 | Lab5-C 用工具包裝法，不裝該套件 |
+| 5 | Supervisor 多智能體（Doc／DB／Ops 職能分派）為主架構 | 2026 年 Anthropic、OpenAI、LangChain 與企業 SRE 產品都以「單一 agent＋skills＋子 agent＋MCP」的 harness 為預設；按職能切 agent 被點名為反模式（見 `architecture-2026.md`） | 旗艦與 Lab 5-C 改為 harness；Supervisor 只在「什麼時候才切多個 agent」頁當反例 |
+| 5、7 | `langchain-mcp-adapters` 的 `MultiServerMCPClient` | 已併入 LangChain：`pip install "langchain[mcp]"`，`from langchain.mcp import MCPAdapter`（beta，非同步）；舊套件仍可裝但 README 要求遷移 | 新程式碼用 `MCPAdapter` |
 | 5 | DeepAgent | 正式名 Deep Agents，套件 `deepagents` 0.7.x；`write_todos` 從 v0.7 起要手動開 | 改名 |
 | 5 | 「智能體動物園」 | 非 Anthropic 原文用語 | 標「本課轉述」 |
 | 6 | LoRA「不到 1% 參數達到全量微調效果」 | 參數量對；效果只在中小資料集、且 LoRA 加在所有層時相當；程式碼與繼續預訓練明顯落後 | 加條件 |
