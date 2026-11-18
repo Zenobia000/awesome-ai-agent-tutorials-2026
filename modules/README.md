@@ -32,6 +32,8 @@ ollama pull qwen2.5:3b && ollama pull bge-m3
 uv run jupyter lab
 ```
 
+Ollama 安裝與設定見 [infra/services/ollama.md](../infra/services/ollama.md)；沒有 GPU 可租雲端算力，見 [infra/cloud-gpu.md](../infra/cloud-gpu.md)。其他服務（Chroma、Neo4j、Langfuse、Opik）見 [infra/README.md](../infra/README.md)。
+
 各模組共用的程式只有 `course_utils/`（模型客戶端與小工具），模組之間不互相 import。
 
 ## 模組與 notebook 規劃
@@ -62,7 +64,7 @@ uv run jupyter lab
 | | 07 Lab 3 評估：Hit@k、MRR，前後對比 | 🟢 610 ＋ 🆕 |
 | | 08 PDF 解析為什麼會壞（選讀） | 🟢 612、multimodal-RAG 03 |
 | | 09 同一條管線換成 LlamaIndex | 🆕 |
-| | 10 多模態 RAG 與 RAG-Anything 導讀（選讀，不實作） | 🆕 |
+| | 10 多模態 RAG：MinerU 解析與 RAG-Anything 導讀（選讀，不實作） | 🟢 multimodal-RAG 03 ＋ 🆕 |
 | **M4 GraphRAG** | 01 用 LLM 抽三元組（海賊王自寫語料） | 🆕 |
 | | 02 networkx 手寫圖檢索與多跳查詢 | 🆕 |
 | | 03 換成 Neo4j 與 Cypher | 🆕 |
@@ -80,8 +82,10 @@ uv run jupyter lab
 | **M6 LoRA** | 01 LoRA 手寫：20 行 PyTorch 包住一個 Linear | 🆕 |
 | | 02 用 PEFT 微調小模型（Qwen2.5-0.5B，16GB 顯卡可跑） | 🟢 One-Piece PEFT Lab-01、HF 03-PEFT |
 | | 03 推論、合併權重、匯出給 Ollama | 🟢 One-Piece Lab-01 04 |
-| **M7 MCP** | 01 MCP server 📄 ＋ client notebook | 🆕 |
-| | 02 Lab 7 Excel 分析 agent | 🆕 |
+| **M7 MCP** | 01 為什麼要 MCP：手寫 JSON-RPC 看見協定本體 | 🆕 |
+| | 02 MCP client：官方 SDK 接 `servers/ops_server.py` 📄，再接上 tool calling | 🆕 |
+| | 03 Lab 7 Excel 分析 agent（`servers/excel_server.py` 📄） | 🆕 |
+| | 04 實務：掛到 Claude Code／Cursor、白名單、唯讀、審批 | 🆕 |
 | **M8 評估與求職** | 01 LLM-as-a-judge 手寫 | 🟢 206 ＋ 🆕 |
 | | 02 回歸評估集：改 prompt 前後跑同一份題目 | 🆕 |
 | | 03 最小 trace：每一步寫一行 JSONL | 🆕 |
@@ -98,6 +102,7 @@ uv run jupyter lab
 | OpenRouter、Anthropic Messages API | M1-07 | 是（沒有就跳過） |
 | Chroma | M3-04 | 否 |
 | LlamaIndex | M3-09 | 否 |
+| MinerU（PDF 版面解析） | M3-08、10 導讀與輸出範例 | — |
 | RAG-Anything | M3-10 導讀 | — |
 | LangGraph | M5-04、05 | 否 |
 | deepagents | M5-06 | 否 |
@@ -114,7 +119,7 @@ uv run jupyter lab
 | Triton、vLLM 生產部署、Kubernetes、CI/CD（One-Piece 02） | 維運技術，不是理解 agent 的必要條件 |
 | DeepSpeed、DDP、FlashAttention、MQA/GQA 實作（One-Piece 01） | 訓練基礎建設，本課只微調小模型 |
 | 八種 PEFT 方法逐一實作（One-Piece PEFT_Labs） | 只留 LoRA；其他放選型表 |
-| MinerU、olmocr GPU 管線、Qdrant 叢集（multimodal-RAG 03～05） | 只留「PDF 解析為什麼會壞」的概念 |
+| olmocr GPU 管線、MinerU 批次部署、Qdrant 叢集（multimodal-RAG 03～05） | MinerU 只介紹用法與輸出，不在課堂上部署 |
 | Assistants API、Swarm（cookbooks 720、960） | 官方已淘汰 |
 | CrewAI manager 模式、依角色硬拆 | 只在 M5-09 當對照組實測，主線教「平行獨立任務＋審查者」這種值得拆的情況 |
 | Streamlit、Gradio 介面 | 介面不是重點，notebook 直接印輸出 |
