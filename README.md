@@ -6,7 +6,7 @@
 ![MCP Ready](https://img.shields.io/badge/MCP-Ready-purple.svg)
 
 > **從 Vibe Coding 到規格驅動（Spec-Driven），從玩具 Demo 到企業級生產上線。**
-> 本倉庫為「2026 AI Agent + 大模型全棧工程師」20 小時高強度轉職技術課程配套代碼庫，系統涵蓋 **Transformer 機制、工業級 RAG/GraphRAG 幻覺抑制、LangGraph 狀態工作流、Supervisor 多智能體、MCP 標準協議、LoRA 微調與評測驅動開發（EDD）**。
+> 本倉庫為「2026 AI Agent + 大模型全棧工程師」20 小時高強度轉職技術課程配套代碼庫，系統涵蓋 **Transformer 機制、工業級 RAG/GraphRAG 幻覺抑制、LangGraph 狀態工作流、單一 Agent Harness（skills＋subagent＋MCP）、LoRA 微調與評測驅動開發（EDD）**。
 
 完整課綱：[curriculum-ai-agent-20h.md](curriculum-ai-agent-20h.md)
 
@@ -16,7 +16,7 @@
 
 在 2026 年，單純呼叫 API 寫 Prompt 的初階「AI 封裝工程師」已被完全淘汰。企業急需能夠解決以下硬核工程問題的 **AI Agent 工程師**：
 
-1. **可靠性與架構收斂**：懂得何時用 Deterministic Workflow、何時用 Single-Agent、何時才需 Supervisor Multi-Agent。
+1. **可靠性與架構收斂**：懂得何時用固定流程圖、何時用單一 agent 配 skills 與工具，以及什麼情況才值得切出 subagent。
 2. **檢索深度優化**：不只會向量檢索，更能熟練落地 **Contextual Chunking × 混合檢索（RRF）× Cross-Encoder Reranker**，將幻覺率壓至 5% 以下。
 3. **協議與工具標準化**：全面放棄脆弱的硬編碼 Tool Calling，遷移至標準 **Model Context Protocol (MCP)** 生態。
 4. **評測驅動開發 (EDD)**：以評測集和回歸測試（Ragas、LLM-as-a-Judge）驗證 Agent 演進，杜絕憑感覺調試。
@@ -34,15 +34,16 @@
 │   ├── 02-rag-and-graphrag/
 │   ├── 03-langgraph-and-agents/
 │   └── 04-eval-and-mcp/
-├── modules/                            # 各模組代碼與 Hands-on Lab
-│   ├── module-01-vibe-to-spec/         # Spec 規範、提示詞與結構化輸出
-│   ├── module-02-rag-optimization/     # 分塊、混合檢索 RRF、Reranker、PageIndex
-│   ├── module-03-graphrag-neo4j/       # 知識圖譜抽取與 Cypher 混合檢索
-│   ├── module-04-langgraph-state/      # 狀態圖、Checkpointer、Human-in-the-Loop
-│   ├── module-05-multi-agent-system/   # Supervisor 架構、Tavily、SQL Agent
-│   ├── module-06-mcp-ecosystem/        # FastMCP Server / Client 開發
-│   ├── module-07-lora-fine-tuning/     # Qwen3 / DeepSeek R1 微調與量化部署
-│   └── module-08-eval-and-career/      # EDD 評測鏈、LangSmith 追蹤、履歷模組
+├── course_utils/                       # 共用模型客戶端（Lab 1-05 的成品）
+├── modules/                            # 各模組 notebook，總覽見 modules/README.md
+│   ├── module-01-llm-local/            # token、next-token、attention 手寫、Chat API、雙軌客戶端
+│   ├── module-02-prompt-structured/    # 提示詞、結構化輸出、Text2SQL
+│   ├── module-03-rag/                  # RAG 手寫、混合檢索 RRF、重排序、評估
+│   ├── module-04-graphrag/             # 三元組抽取、圖檢索、Neo4j
+│   ├── module-05-agent-harness/        # ReAct、function calling、LangGraph 審批、harness
+│   ├── module-06-lora/                 # LoRA 手寫、PEFT 微調小模型
+│   ├── module-07-mcp/                  # MCP server／client、Excel 分析 agent
+│   └── module-08-eval-career/          # LLM-as-a-judge、回歸評估、最小 trace
 ├── projects/
 │   └── incident-autonomous-agent/      # 企業級智慧運維事故處置平台
 │       ├── docker-compose.yml
@@ -56,16 +57,18 @@
 
 ## 🗺️ 20 小時核心課綱架構
 
-| 模組 | 核心主題與實戰目標 | 核心技術棧 | 時數 |
-| :--- | :--- | :--- | :--- |
-| **Module 01** | **底層機制與上下文工程 (Context Engineering)**<br>• 從 Tokenizer 到注意力機制、KV Cache 重用<br>• Spec-Driven Development 規格驅動開發<br>• Pydantic 結構化輸出與 Prompt 攻擊防護 | Transformer, Ollama, Pydantic, Prompt Caching | 2.5h |
-| **Module 02** | **工業級 RAG 深度檢索與幻覺抑制**<br>• 父子分塊、語義分塊與 Contextual Retrieval<br>• 稠密+稀疏雙路檢索與 RRF（倒數排名融合）<br>• Cross-Encoder 重排序、無向量 PageIndex | Qwen3-Reranker, ChromaDB, BM25, PageIndex | 3.0h |
-| **Module 03** | **拓撲關係與 GraphRAG 實戰**<br>• 非結構化文檔實體/關係抽取<br>• Neo4j 知識圖譜建模與 Cypher 查詢轉換<br>• Text2SQL 企業資料庫查詢與動態元數據注入 | Neo4j, Cypher, GraphRAG, Dify Text2SQL | 2.5h |
-| **Module 04** | **LangGraph 循環狀態圖與人機協同 (HITL)**<br>• StateGraph、節點、條件路由與 Checkpointer 持久化<br>• PostgresSaver 會話隔離與狀態時光機（Time Travel）<br>• 人在迴路（Human-in-the-Loop）中斷審批 | LangGraph 1.0, PostgreSQL, PostgresSaver | 2.5h |
-| **Module 05** | **多智能體（Multi-Agent）架構與企業級工具協同**<br>• Single-Agent vs. Multi-Agent 邊界評估<br>• Supervisor 主管中樞與專門 Sub-agents 路由<br>• SQL Agent + 搜尋引擎（Tavily）全網自主調研 | LangGraph Supervisor, Tavily Search, SQL Agent | 2.5h |
-| **Module 06** | **標準協議（MCP）與跨生態集成**<br>• MCP 架構解析：Host、Client、Server<br>• 基於 FastMCP 開發自定義 Enterprise Server<br>• 串接 Dify / Cherry Studio / Claude Code 開發流 | Model Context Protocol (MCP), FastMCP, Dify | 2.0h |
-| **Module 07** | **領域模型微調（LoRA）與邊緣部署**<br>• Qwen3-8B/14B、DeepSeek-R1 領域微調<br>• LoRA / QLoRA 顯存優化與訓練損失可視化<br>• Qwen3-VL 多模態視覺模型本地推理 | Unsloth / LLaMA-Factory, LoRA, Qwen3-VL | 2.5h |
-| **Module 08** | **評測驅動開發（EDD）、可觀測性與轉職突破**<br>• 評測集構建（Faithfulness, Answer Relevance）<br>• LangSmith 全鏈路追蹤與 Token/延遲診斷<br>• 轉職履歷改造與架構面試通關 | LangSmith, Ragas, Eval-Driven Development | 2.5h |
+| 模組 | 動手做什麼 | 時數 |
+| :--- | :--- | :--- |
+| **M1 LLM 底層與本地環境** | 手寫 BPE、看 logits 自己寫生成迴圈、numpy 手寫 attention、雙軌模型客戶端 | 2.0h |
+| **M2 提示詞與結構化輸出** | 好壞 prompt 對照、CoT、Pydantic 結構化輸出、prompt injection、Text2SQL | 2.0h |
+| **M3 RAG** | numpy 手寫 RAG、分塊、Chroma、BM25＋向量 RRF、重排序、Hit@k／MRR 評估 | 4.0h |
+| **M4 GraphRAG** | LLM 抽三元組、networkx 多跳查詢、Neo4j Cypher、圖 vs 向量 | 2.0h |
+| **M5 Agent** | 手寫 ReAct、function calling 迴圈、LangGraph 審批流程、harness（skills＋subagent） | 5.0h |
+| **M6 LoRA** | 20 行手寫 LoRA、PEFT 微調 Qwen2.5-0.5B、合併並匯出給 Ollama | 2.0h |
+| **M7 MCP** | 寫一個 MCP server 與 client、Excel 分析 agent | 1.5h |
+| **M8 評估與求職** | LLM-as-a-judge、回歸評估集、最小 trace、履歷量化 | 1.5h |
+
+每個模組的 notebook 清單與取材來源見 [modules/README.md](modules/README.md)。
 
 ---
 
@@ -73,44 +76,25 @@
 
 本倉庫包含一套完整的生產級端到端 Agent 專案：`projects/incident-autonomous-agent`。
 
-- **事故自動診斷**：透過 MCP 協議動態接入 Prometheus 監控指標與日誌系統。
-- **拓撲關聯分析**：利用 GraphRAG 與 Neo4j 拓撲結構定位微服務雪崩根本原因（Root Cause）。
-- **人機協同處置**：具備危險指令審批機制（Human-in-the-Loop），非危險修復自動執行，日誌全程同步至 LangSmith。
+- **一個值班 agent**：帶三個 skill（查文件、查資料庫、運維排錯），透過 MCP 呼叫日誌與監控工具。
+- **唯讀的事交給 subagent**：平行查日誌、查依賴，結果回報給主 agent。
+- **寫入走固定流程**：重啟、改設定一律經過「審批 → 執行 → 驗證」，人點頭才動手。
 
 ---
 
 ## ⚡ 快速開始 (Quick Start)
 
-### 1. 環境準備
-
 ```bash
 git clone https://github.com/Zenobia000/awesome-ai-agent-tutorials-2026.git
 cd awesome-ai-agent-tutorials-2026
 
-python3 -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-pip install -r requirements.txt
+uv sync --group m1                 # 安裝模組 1 需要的套件（每個模組一個群組）
+cp .env.example .env               # 預設連本機 Ollama，不需要金鑰
+ollama pull qwen2.5:3b
+uv run jupyter lab modules/module-01-llm-local
 ```
 
-### 2. 配置環境變數
-
-```bash
-cp .env.example .env
-# 編輯 .env 填入必要的 API 金鑰 (DeepSeek, Qwen, LangSmith, Tavily 等) 與資料庫密碼
-```
-
-### 3. 本地啟動基礎服務 (PostgreSQL + Neo4j)
-
-```bash
-docker compose --env-file .env -f projects/incident-autonomous-agent/docker-compose.yml up -d
-```
-
-### 4. 執行第一個極簡 Agent (50 行代碼體驗)
-
-```bash
-python modules/module-04-langgraph-state/minimal_agent.py
-```
+沒有 [uv](https://docs.astral.sh/uv/)？`pip install uv` 或參考官方安裝說明。
 
 ---
 
