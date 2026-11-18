@@ -36,6 +36,11 @@ notebook 要從本資料夾開啟（讀的是相對路徑 `data/`，並 `import 
 
 ## 注意事項
 
+- **Linux／Windows 用 uv 安裝時，LlamaIndex 的 `SentenceSplitter` 可能報 `PermissionError: refusing multiply-linked file`。** uv 預設用硬連結安裝套件，LlamaIndex 內附的 NLTK 資料會被安全檢查擋下。解法擇一：
+  - 安裝時改成複製：`UV_LINK_MODE=copy uv sync --group m3 --reinstall-package llama-index-core`
+  - 或打破那個資料夾的硬連結：`d=.venv/lib/python3.*/site-packages/llama_index/core/_static/nltk_cache; cp -r $d $d.tmp && rm -rf $d && mv $d.tmp $d`
+  本模組 notebook 用 `MarkdownNodeParser`、`TokenTextSplitter`，不受影響。
+
 - Chroma 一律用 `EphemeralClient`（只在記憶體）；`02` 示範 `PersistentClient` 時寫到暫存資料夾並刪除，不要把資料庫檔放進 repo。
 - LlamaIndex 預設的 `SentenceSplitter` 需要 NLTK 資料；本模組改用 `MarkdownNodeParser` 與 `TokenTextSplitter`，不受影響。
 - `qwen2.5:3b` 當生成器與評審都不穩：同一題重跑可能從對變錯，當評審時與規則版的一致率不高。檢索指標（Hit@k、MRR）是確定的，答對率差一兩題不要過度解讀。
