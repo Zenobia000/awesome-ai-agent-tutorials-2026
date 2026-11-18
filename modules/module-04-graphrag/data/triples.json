@@ -6,8 +6,55 @@
    "aliases": []
   },
   {
+   "name": "BIG MOM",
+   "label": "Person",
+   "aliases": [
+    "夏洛特·玲玲"
+   ]
+  },
+  {
+   "name": "BIG MOM 海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "CP0",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "CP9",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "XXX健身武鬥會",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "一先生",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "三先生",
+   "label": "Person",
+   "aliases": []
+  },
+  {
    "name": "世界第一大劍豪",
    "label": "Dream",
+   "aliases": []
+  },
+  {
+   "name": "二先生",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "五先生",
+   "label": "Person",
    "aliases": []
   },
   {
@@ -16,13 +63,122 @@
    "aliases": []
   },
   {
+   "name": "人人果實．幻獸種．模型「尼卡」",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "伊迪歐",
+   "label": "Person",
+   "aliases": []
+  },
+  {
    "name": "佛朗基",
+   "label": "Person",
+   "aliases": [
+    "卡迪·佛朗姆"
+   ]
+  },
+  {
+   "name": "佛朗基家族",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "佩羅娜",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "倫巴海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "光月御田",
+   "label": "Person",
+   "aliases": [
+    "御田"
+   ]
+  },
+  {
+   "name": "光月時",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "克洛克達爾",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "八寶水軍",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "凪凪果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "凱多",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "凱撒·庫朗",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "凱文迪許",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "刃刃果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "加布拉",
    "label": "Person",
    "aliases": []
   },
   {
    "name": "勇敢的海上戰士",
    "label": "Dream",
+   "aliases": []
+  },
+  {
+   "name": "北海",
+   "label": "Place",
+   "aliases": []
+  },
+  {
+   "name": "千陽號",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "南海",
+   "label": "Place",
+   "aliases": []
+  },
+  {
+   "name": "卡塔庫栗",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "卡彭·貝基",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "卡莉法",
+   "label": "Person",
    "aliases": []
   },
   {
@@ -49,7 +205,85 @@
    ]
   },
   {
+   "name": "哈拉爾德",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "哥亞王國",
+   "label": "Place",
+   "aliases": []
+  },
+  {
+   "name": "唐吉訶德海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
    "name": "喬巴",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "城堡果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "基德",
+   "label": "Person",
+   "aliases": [
+    "尤斯塔斯·基德"
+   ]
+  },
+  {
+   "name": "基德海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "基拉",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "多佛朗明哥",
+   "label": "Person",
+   "aliases": [
+    "唐吉訶德·多佛朗明哥"
+   ]
+  },
+  {
+   "name": "多拉格",
+   "label": "Person",
+   "aliases": [
+    "蒙其·D·多拉格"
+   ]
+  },
+  {
+   "name": "大和",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "大熊",
+   "label": "Person",
+   "aliases": [
+    "巴索羅繆·大熊"
+   ]
+  },
+  {
+   "name": "天候棒",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "太陽海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "奎因",
    "label": "Person",
    "aliases": []
   },
@@ -61,8 +295,18 @@
    ]
   },
   {
+   "name": "寇布拉",
+   "label": "Person",
+   "aliases": []
+  },
+  {
    "name": "屏障果實",
    "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "巨兵海賊團",
+   "label": "Crew",
    "aliases": []
   },
   {
@@ -76,8 +320,115 @@
    "aliases": []
   },
   {
+   "name": "巴洛克工作社",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "布洛基",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "布蕾",
+   "label": "Person",
+   "aliases": []
+  },
+  {
    "name": "布魯克",
    "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "年齡果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "幽靈果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "弗雷凡斯",
+   "label": "Place",
+   "aliases": []
+  },
+  {
+   "name": "影子果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "戰桃丸",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "手術果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "摩利亞",
+   "label": "Person",
+   "aliases": [
+    "月光·摩利亞"
+   ]
+  },
+  {
+   "name": "文斯莫克·加治",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "斯摩卡",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "新巨兵海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "新魚人海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "時時果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "暗暗果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "東利",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "東海",
+   "label": "Place",
+   "aliases": []
+  },
+  {
+   "name": "柯拉松",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "桃之助",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "模模果實",
+   "label": "Treasure",
    "aliases": []
   },
   {
@@ -86,8 +437,55 @@
    "aliases": []
   },
   {
+   "name": "歐倫波斯",
+   "label": "Person",
+   "aliases": []
+  },
+  {
    "name": "歐哈拉",
    "label": "Place",
+   "aliases": []
+  },
+  {
+   "name": "毒毒果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "比斯塔",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "氣體果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "沙沙果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "波妮",
+   "label": "Person",
+   "aliases": [
+    "珠寶·波妮"
+   ]
+  },
+  {
+   "name": "波妮海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "洛基",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "海爾丁",
+   "label": "Person",
    "aliases": []
   },
   {
@@ -96,13 +494,63 @@
    "aliases": []
   },
   {
+   "name": "涅普頓",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "涉留",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "火戰車海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "炸炸果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "煙煙果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "熊鬥",
+   "label": "Person",
+   "aliases": []
+  },
+  {
    "name": "燒燒果實",
    "label": "Treasure",
    "aliases": []
   },
   {
+   "name": "燭燭果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "犬犬果實．幻獸種．模型「大口真神」",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "琵卡",
+   "label": "Person",
+   "aliases": []
+  },
+  {
    "name": "畫出全世界的地圖",
    "label": "Dream",
+   "aliases": []
+  },
+  {
+   "name": "白星",
+   "label": "Person",
    "aliases": []
   },
   {
@@ -118,13 +566,53 @@
    "aliases": []
   },
   {
+   "name": "百獸海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "砂糖",
+   "label": "Person",
+   "aliases": []
+  },
+  {
    "name": "磁鼓島",
    "label": "Place",
    "aliases": []
   },
   {
+   "name": "福克斯",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "秋水",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "章魚八",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "約塔瑪麗亞大船團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "紅心海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
    "name": "紅髮海賊團",
    "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "索爾貝王國",
+   "label": "Place",
    "aliases": []
   },
   {
@@ -136,13 +624,52 @@
    ]
   },
   {
+   "name": "線線果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "縫縫果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "羅",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "羅傑",
+   "label": "Person",
+   "aliases": [
+    "哥爾·D·羅傑"
+   ]
+  },
+  {
+   "name": "羅傑海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
    "name": "羅賓",
    "label": "Person",
+   "aliases": [
+    "妮可·羅賓"
+   ]
+  },
+  {
+   "name": "美麗海賊團",
+   "label": "Crew",
    "aliases": []
   },
   {
    "name": "耶穌布",
    "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "肉球果實",
+   "label": "Treasure",
    "aliases": []
   },
   {
@@ -160,8 +687,19 @@
    "label": "Person",
    "aliases": [
     "火拳艾斯",
-    "火拳"
+    "火拳",
+    "波特卡斯·D·艾斯"
    ]
+  },
+  {
+   "name": "艾涅爾",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "艾爾巴夫",
+   "label": "Place",
+   "aliases": []
   },
   {
    "name": "花花果實",
@@ -184,13 +722,115 @@
    "aliases": []
   },
   {
+   "name": "荷帝·瓊斯",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "莫比迪克號",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "蕾玖",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "薇薇",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "薩奇",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "薩波",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "藤虎",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "裘斯",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "西爾巴斯·雷利",
+   "label": "Person",
+   "aliases": [
+    "雷利"
+   ]
+  },
+  {
    "name": "西羅布村",
    "label": "Place",
    "aliases": []
   },
   {
+   "name": "角",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "記憶果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
    "name": "讀懂歷史本文",
    "label": "Dream",
+   "aliases": []
+  },
+  {
+   "name": "貓貓果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "貝爾",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "費雪·泰格",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "路基",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "透明果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "重重果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "閃閃果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "閻魔",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "阿布薩羅姆",
+   "label": "Person",
    "aliases": []
   },
   {
@@ -204,6 +844,11 @@
    "aliases": []
   },
   {
+   "name": "雷歐",
+   "label": "Person",
+   "aliases": []
+  },
+  {
    "name": "震震果實",
    "label": "Treasure",
    "aliases": []
@@ -211,6 +856,26 @@
   {
    "name": "霜月村",
    "label": "Place",
+   "aliases": []
+  },
+  {
+   "name": "靈魂果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "革命軍",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "響雷果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "頓塔塔海賊團",
+   "label": "Crew",
    "aliases": []
   },
   {
@@ -233,8 +898,23 @@
    ]
   },
   {
+   "name": "馬可",
+   "label": "Person",
+   "aliases": []
+  },
+  {
    "name": "騙人布",
    "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "魚人島",
+   "label": "Place",
+   "aliases": []
+  },
+  {
+   "name": "魚魚果實．幻獸種．模型「青龍」",
+   "label": "Treasure",
    "aliases": []
   },
   {
@@ -242,12 +922,63 @@
    "label": "Person",
    "aliases": [
     "蒙其·D·魯夫",
-    "草帽小子"
+    "草帽小子",
+    "橡膠人"
    ]
+  },
+  {
+   "name": "鳥鳥果實",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "麥哲倫",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "麻糬果實",
+   "label": "Treasure",
+   "aliases": []
   },
   {
    "name": "黃泉果實",
    "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "黃猿",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "黃金梅利號",
+   "label": "Treasure",
+   "aliases": []
+  },
+  {
+   "name": "黑桃海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "黑鬍子",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "黑鬍子海賊團",
+   "label": "Crew",
+   "aliases": []
+  },
+  {
+   "name": "齊",
+   "label": "Person",
+   "aliases": []
+  },
+  {
+   "name": "龍馬",
+   "label": "Person",
    "aliases": []
   }
  ],
@@ -264,21 +995,21 @@
    "relation": "OWNS",
    "object": "橡膠果實",
    "paragraph": "01",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "香克斯",
    "relation": "CAPTAIN_OF",
    "object": "紅髮海賊團",
    "paragraph": "02",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "香克斯",
    "relation": "OWNS",
    "object": "草帽",
    "paragraph": "02",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "魯夫",
@@ -299,14 +1030,14 @@
    "relation": "DREAMS_OF",
    "object": "海賊王",
    "paragraph": "03",
-   "source": "manual"
+   "source": "llm"
   },
   {
    "subject": "索隆",
    "relation": "MEMBER_OF",
    "object": "草帽海賊團",
    "paragraph": "04",
-   "source": "manual"
+   "source": "llm"
   },
   {
    "subject": "索隆",
@@ -320,21 +1051,21 @@
    "relation": "FROM",
    "object": "霜月村",
    "paragraph": "05",
-   "source": "manual"
+   "source": "reviewed"
   },
   {
    "subject": "古伊娜",
    "relation": "OWNS",
    "object": "和道一文字",
    "paragraph": "05",
-   "source": "manual"
+   "source": "reviewed"
   },
   {
    "subject": "索隆",
    "relation": "FROM",
    "object": "霜月村",
    "paragraph": "06",
-   "source": "manual"
+   "source": "llm"
   },
   {
    "subject": "索隆",
@@ -348,210 +1079,210 @@
    "relation": "FROM",
    "object": "可可亞西村",
    "paragraph": "07",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "娜美",
    "relation": "MEMBER_OF",
    "object": "草帽海賊團",
    "paragraph": "07",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "娜美",
    "relation": "DREAMS_OF",
    "object": "畫出全世界的地圖",
    "paragraph": "07",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "阿龍",
    "relation": "CAPTAIN_OF",
    "object": "阿龍海賊團",
    "paragraph": "08",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "魯夫",
    "relation": "DEFEATED",
    "object": "阿龍",
    "paragraph": "09",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "騙人布",
    "relation": "FROM",
    "object": "西羅布村",
    "paragraph": "10",
-   "source": "manual"
+   "source": "reviewed"
   },
   {
    "subject": "騙人布",
    "relation": "MEMBER_OF",
    "object": "草帽海賊團",
    "paragraph": "10",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "騙人布",
    "relation": "DREAMS_OF",
    "object": "勇敢的海上戰士",
    "paragraph": "10",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "騙人布",
    "relation": "HAS_FATHER",
    "object": "耶穌布",
    "paragraph": "10",
-   "source": "manual"
+   "source": "reviewed"
   },
   {
    "subject": "耶穌布",
    "relation": "MEMBER_OF",
    "object": "紅髮海賊團",
    "paragraph": "11",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "香吉士",
    "relation": "MEMBER_OF",
    "object": "草帽海賊團",
    "paragraph": "13",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "香吉士",
    "relation": "DREAMS_OF",
    "object": "All Blue",
    "paragraph": "13",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "喬巴",
    "relation": "MEMBER_OF",
    "object": "草帽海賊團",
    "paragraph": "14",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "喬巴",
    "relation": "FROM",
    "object": "磁鼓島",
    "paragraph": "14",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "喬巴",
    "relation": "OWNS",
    "object": "人人果實",
    "paragraph": "14",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "喬巴",
    "relation": "DREAMS_OF",
    "object": "能治百病的醫生",
    "paragraph": "14",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "羅賓",
    "relation": "MEMBER_OF",
    "object": "草帽海賊團",
    "paragraph": "15",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "羅賓",
    "relation": "FROM",
    "object": "歐哈拉",
    "paragraph": "15",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "羅賓",
    "relation": "OWNS",
    "object": "花花果實",
    "paragraph": "15",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "羅賓",
    "relation": "DREAMS_OF",
    "object": "讀懂歷史本文",
    "paragraph": "15",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "佛朗基",
    "relation": "MEMBER_OF",
    "object": "草帽海賊團",
    "paragraph": "16",
-   "source": "manual"
+   "source": "reviewed"
   },
   {
    "subject": "布魯克",
    "relation": "MEMBER_OF",
    "object": "草帽海賊團",
    "paragraph": "16",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "布魯克",
    "relation": "OWNS",
    "object": "黃泉果實",
    "paragraph": "16",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "布魯克",
    "relation": "DREAMS_OF",
    "object": "與拉布重逢",
    "paragraph": "16",
-   "source": "manual"
+   "source": "reviewed"
   },
   {
    "subject": "吉貝爾",
    "relation": "MEMBER_OF",
    "object": "草帽海賊團",
    "paragraph": "17",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "艾斯",
    "relation": "BROTHER_OF",
    "object": "魯夫",
    "paragraph": "18",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "艾斯",
    "relation": "OWNS",
    "object": "燒燒果實",
    "paragraph": "18",
-   "source": "manual"
+   "source": "llm"
   },
   {
    "subject": "白鬍子",
    "relation": "CAPTAIN_OF",
    "object": "白鬍子海賊團",
    "paragraph": "19",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "白鬍子",
    "relation": "OWNS",
    "object": "震震果實",
    "paragraph": "19",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "艾斯",
    "relation": "MEMBER_OF",
    "object": "白鬍子海賊團",
    "paragraph": "19",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "魯夫",
@@ -565,21 +1296,966 @@
    "relation": "CAPTAIN_OF",
    "object": "巴托俱樂部",
    "paragraph": "21",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "巴托洛米奧",
    "relation": "OWNS",
    "object": "屏障果實",
    "paragraph": "21",
-   "source": "llm"
+   "source": "reviewed"
   },
   {
    "subject": "巴托洛米奧",
    "relation": "MEMBER_OF",
    "object": "草帽大船團",
    "paragraph": "21",
+   "source": "reviewed"
+  },
+  {
+   "subject": "艾斯",
+   "relation": "HAS_FATHER",
+   "object": "羅傑",
+   "paragraph": "18",
    "source": "llm"
+  },
+  {
+   "subject": "艾斯",
+   "relation": "CAPTAIN_OF",
+   "object": "黑桃海賊團",
+   "paragraph": "18",
+   "source": "manual"
+  },
+  {
+   "subject": "艾斯",
+   "relation": "FROM",
+   "object": "哥亞王國",
+   "paragraph": "18",
+   "source": "manual"
+  },
+  {
+   "subject": "薩波",
+   "relation": "FROM",
+   "object": "哥亞王國",
+   "paragraph": "18",
+   "source": "manual"
+  },
+  {
+   "subject": "薩波",
+   "relation": "BROTHER_OF",
+   "object": "魯夫",
+   "paragraph": "18",
+   "source": "manual"
+  },
+  {
+   "subject": "薩波",
+   "relation": "BROTHER_OF",
+   "object": "艾斯",
+   "paragraph": "18",
+   "source": "manual"
+  },
+  {
+   "subject": "白鬍子",
+   "relation": "OWNS",
+   "object": "莫比迪克號",
+   "paragraph": "19",
+   "source": "reviewed"
+  },
+  {
+   "subject": "馬可",
+   "relation": "MEMBER_OF",
+   "object": "白鬍子海賊團",
+   "paragraph": "19",
+   "source": "reviewed"
+  },
+  {
+   "subject": "薩奇",
+   "relation": "MEMBER_OF",
+   "object": "白鬍子海賊團",
+   "paragraph": "19",
+   "source": "reviewed"
+  },
+  {
+   "subject": "裘斯",
+   "relation": "MEMBER_OF",
+   "object": "白鬍子海賊團",
+   "paragraph": "19",
+   "source": "reviewed"
+  },
+  {
+   "subject": "比斯塔",
+   "relation": "MEMBER_OF",
+   "object": "白鬍子海賊團",
+   "paragraph": "19",
+   "source": "reviewed"
+  },
+  {
+   "subject": "黑鬍子",
+   "relation": "MEMBER_OF",
+   "object": "白鬍子海賊團",
+   "paragraph": "19",
+   "source": "reviewed"
+  },
+  {
+   "subject": "黑鬍子",
+   "relation": "CAPTAIN_OF",
+   "object": "黑鬍子海賊團",
+   "paragraph": "19",
+   "source": "reviewed"
+  },
+  {
+   "subject": "黑鬍子",
+   "relation": "OWNS",
+   "object": "暗暗果實",
+   "paragraph": "19",
+   "source": "reviewed"
+  },
+  {
+   "subject": "黑鬍子",
+   "relation": "DEFEATED",
+   "object": "艾斯",
+   "paragraph": "19",
+   "source": "reviewed"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "DEFEATED",
+   "object": "多佛朗明哥",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "多佛朗明哥",
+   "relation": "OWNS",
+   "object": "線線果實",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "薩波",
+   "relation": "OWNS",
+   "object": "燒燒果實",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "凱文迪許",
+   "relation": "CAPTAIN_OF",
+   "object": "美麗海賊團",
+   "paragraph": "20",
+   "source": "llm"
+  },
+  {
+   "subject": "齊",
+   "relation": "CAPTAIN_OF",
+   "object": "八寶水軍",
+   "paragraph": "20",
+   "source": "llm"
+  },
+  {
+   "subject": "伊迪歐",
+   "relation": "CAPTAIN_OF",
+   "object": "XXX健身武鬥會",
+   "paragraph": "20",
+   "source": "llm"
+  },
+  {
+   "subject": "雷歐",
+   "relation": "CAPTAIN_OF",
+   "object": "頓塔塔海賊團",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "雷歐",
+   "relation": "OWNS",
+   "object": "縫縫果實",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "歐倫波斯",
+   "relation": "CAPTAIN_OF",
+   "object": "約塔瑪麗亞大船團",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "海爾丁",
+   "relation": "CAPTAIN_OF",
+   "object": "新巨兵海賊團",
+   "paragraph": "20",
+   "source": "llm"
+  },
+  {
+   "subject": "海爾丁",
+   "relation": "FROM",
+   "object": "艾爾巴夫",
+   "paragraph": "20",
+   "source": "llm"
+  },
+  {
+   "subject": "巴托俱樂部",
+   "relation": "MEMBER_OF",
+   "object": "草帽大船團",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "美麗海賊團",
+   "relation": "MEMBER_OF",
+   "object": "草帽大船團",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "八寶水軍",
+   "relation": "MEMBER_OF",
+   "object": "草帽大船團",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "XXX健身武鬥會",
+   "relation": "MEMBER_OF",
+   "object": "草帽大船團",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "頓塔塔海賊團",
+   "relation": "MEMBER_OF",
+   "object": "草帽大船團",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "約塔瑪麗亞大船團",
+   "relation": "MEMBER_OF",
+   "object": "草帽大船團",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "新巨兵海賊團",
+   "relation": "MEMBER_OF",
+   "object": "草帽大船團",
+   "paragraph": "20",
+   "source": "manual"
+  },
+  {
+   "subject": "巴托洛米奧",
+   "relation": "FROM",
+   "object": "東海",
+   "paragraph": "21",
+   "source": "reviewed"
+  },
+  {
+   "subject": "東利",
+   "relation": "FROM",
+   "object": "艾爾巴夫",
+   "paragraph": "22",
+   "source": "reviewed"
+  },
+  {
+   "subject": "布洛基",
+   "relation": "FROM",
+   "object": "艾爾巴夫",
+   "paragraph": "22",
+   "source": "reviewed"
+  },
+  {
+   "subject": "東利",
+   "relation": "CAPTAIN_OF",
+   "object": "巨兵海賊團",
+   "paragraph": "22",
+   "source": "reviewed"
+  },
+  {
+   "subject": "布洛基",
+   "relation": "CAPTAIN_OF",
+   "object": "巨兵海賊團",
+   "paragraph": "22",
+   "source": "reviewed"
+  },
+  {
+   "subject": "草帽海賊團",
+   "relation": "OWNS",
+   "object": "黃金梅利號",
+   "paragraph": "22",
+   "source": "reviewed"
+  },
+  {
+   "subject": "五先生",
+   "relation": "OWNS",
+   "object": "炸炸果實",
+   "paragraph": "22",
+   "source": "reviewed"
+  },
+  {
+   "subject": "三先生",
+   "relation": "OWNS",
+   "object": "燭燭果實",
+   "paragraph": "22",
+   "source": "reviewed"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "DEFEATED",
+   "object": "三先生",
+   "paragraph": "22",
+   "source": "reviewed"
+  },
+  {
+   "subject": "薇薇",
+   "relation": "HAS_FATHER",
+   "object": "寇布拉",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "克洛克達爾",
+   "relation": "OWNS",
+   "object": "沙沙果實",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "克洛克達爾",
+   "relation": "CAPTAIN_OF",
+   "object": "巴洛克工作社",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "羅賓",
+   "relation": "MEMBER_OF",
+   "object": "巴洛克工作社",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "DEFEATED",
+   "object": "克洛克達爾",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "斯摩卡",
+   "relation": "OWNS",
+   "object": "煙煙果實",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "貝爾",
+   "relation": "OWNS",
+   "object": "鳥鳥果實",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "一先生",
+   "relation": "OWNS",
+   "object": "刃刃果實",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "索隆",
+   "relation": "DEFEATED",
+   "object": "一先生",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "二先生",
+   "relation": "OWNS",
+   "object": "模模果實",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "娜美",
+   "relation": "OWNS",
+   "object": "天候棒",
+   "paragraph": "23",
+   "source": "reviewed"
+  },
+  {
+   "subject": "艾涅爾",
+   "relation": "OWNS",
+   "object": "響雷果實",
+   "paragraph": "24",
+   "source": "reviewed"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "DEFEATED",
+   "object": "艾涅爾",
+   "paragraph": "24",
+   "source": "reviewed"
+  },
+  {
+   "subject": "佛朗基",
+   "relation": "CAPTAIN_OF",
+   "object": "佛朗基家族",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "路基",
+   "relation": "MEMBER_OF",
+   "object": "CP9",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "路基",
+   "relation": "OWNS",
+   "object": "貓貓果實",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "DEFEATED",
+   "object": "路基",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "索隆",
+   "relation": "DEFEATED",
+   "object": "角",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "香吉士",
+   "relation": "DEFEATED",
+   "object": "加布拉",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "娜美",
+   "relation": "DEFEATED",
+   "object": "卡莉法",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "喬巴",
+   "relation": "DEFEATED",
+   "object": "熊鬥",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "佛朗基",
+   "relation": "DEFEATED",
+   "object": "福克斯",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "草帽海賊團",
+   "relation": "OWNS",
+   "object": "千陽號",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "HAS_FATHER",
+   "object": "多拉格",
+   "paragraph": "25",
+   "source": "reviewed"
+  },
+  {
+   "subject": "摩利亞",
+   "relation": "OWNS",
+   "object": "影子果實",
+   "paragraph": "26",
+   "source": "reviewed"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "DEFEATED",
+   "object": "摩利亞",
+   "paragraph": "26",
+   "source": "reviewed"
+  },
+  {
+   "subject": "布魯克",
+   "relation": "MEMBER_OF",
+   "object": "倫巴海賊團",
+   "paragraph": "26",
+   "source": "reviewed"
+  },
+  {
+   "subject": "大熊",
+   "relation": "OWNS",
+   "object": "肉球果實",
+   "paragraph": "26",
+   "source": "reviewed"
+  },
+  {
+   "subject": "阿布薩羅姆",
+   "relation": "OWNS",
+   "object": "透明果實",
+   "paragraph": "26",
+   "source": "reviewed"
+  },
+  {
+   "subject": "佩羅娜",
+   "relation": "OWNS",
+   "object": "幽靈果實",
+   "paragraph": "26",
+   "source": "reviewed"
+  },
+  {
+   "subject": "索隆",
+   "relation": "DEFEATED",
+   "object": "龍馬",
+   "paragraph": "26",
+   "source": "reviewed"
+  },
+  {
+   "subject": "索隆",
+   "relation": "OWNS",
+   "object": "秋水",
+   "paragraph": "26",
+   "source": "reviewed"
+  },
+  {
+   "subject": "娜美",
+   "relation": "DEFEATED",
+   "object": "阿布薩羅姆",
+   "paragraph": "26",
+   "source": "reviewed"
+  },
+  {
+   "subject": "騙人布",
+   "relation": "DEFEATED",
+   "object": "佩羅娜",
+   "paragraph": "26",
+   "source": "reviewed"
+  },
+  {
+   "subject": "西爾巴斯·雷利",
+   "relation": "MEMBER_OF",
+   "object": "羅傑海賊團",
+   "paragraph": "27",
+   "source": "reviewed"
+  },
+  {
+   "subject": "羅",
+   "relation": "CAPTAIN_OF",
+   "object": "紅心海賊團",
+   "paragraph": "27",
+   "source": "reviewed"
+  },
+  {
+   "subject": "羅",
+   "relation": "FROM",
+   "object": "北海",
+   "paragraph": "27",
+   "source": "reviewed"
+  },
+  {
+   "subject": "羅",
+   "relation": "OWNS",
+   "object": "手術果實",
+   "paragraph": "27",
+   "source": "reviewed"
+  },
+  {
+   "subject": "基德",
+   "relation": "CAPTAIN_OF",
+   "object": "基德海賊團",
+   "paragraph": "27",
+   "source": "reviewed"
+  },
+  {
+   "subject": "基德",
+   "relation": "FROM",
+   "object": "南海",
+   "paragraph": "27",
+   "source": "reviewed"
+  },
+  {
+   "subject": "黃猿",
+   "relation": "OWNS",
+   "object": "閃閃果實",
+   "paragraph": "27",
+   "source": "reviewed"
+  },
+  {
+   "subject": "基拉",
+   "relation": "MEMBER_OF",
+   "object": "基德海賊團",
+   "paragraph": "27",
+   "source": "reviewed"
+  },
+  {
+   "subject": "章魚八",
+   "relation": "MEMBER_OF",
+   "object": "阿龍海賊團",
+   "paragraph": "27",
+   "source": "reviewed"
+  },
+  {
+   "subject": "麥哲倫",
+   "relation": "OWNS",
+   "object": "毒毒果實",
+   "paragraph": "28",
+   "source": "reviewed"
+  },
+  {
+   "subject": "黑鬍子",
+   "relation": "OWNS",
+   "object": "震震果實",
+   "paragraph": "28",
+   "source": "reviewed"
+  },
+  {
+   "subject": "涉留",
+   "relation": "MEMBER_OF",
+   "object": "黑鬍子海賊團",
+   "paragraph": "28",
+   "source": "reviewed"
+  },
+  {
+   "subject": "白星",
+   "relation": "HAS_FATHER",
+   "object": "涅普頓",
+   "paragraph": "29",
+   "source": "reviewed"
+  },
+  {
+   "subject": "吉貝爾",
+   "relation": "FROM",
+   "object": "魚人島",
+   "paragraph": "29",
+   "source": "reviewed"
+  },
+  {
+   "subject": "荷帝·瓊斯",
+   "relation": "CAPTAIN_OF",
+   "object": "新魚人海賊團",
+   "paragraph": "29",
+   "source": "reviewed"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "DEFEATED",
+   "object": "荷帝·瓊斯",
+   "paragraph": "29",
+   "source": "reviewed"
+  },
+  {
+   "subject": "費雪·泰格",
+   "relation": "CAPTAIN_OF",
+   "object": "太陽海賊團",
+   "paragraph": "29",
+   "source": "reviewed"
+  },
+  {
+   "subject": "吉貝爾",
+   "relation": "CAPTAIN_OF",
+   "object": "太陽海賊團",
+   "paragraph": "29",
+   "source": "reviewed"
+  },
+  {
+   "subject": "阿龍",
+   "relation": "MEMBER_OF",
+   "object": "太陽海賊團",
+   "paragraph": "29",
+   "source": "reviewed"
+  },
+  {
+   "subject": "凱撒·庫朗",
+   "relation": "OWNS",
+   "object": "氣體果實",
+   "paragraph": "30",
+   "source": "reviewed"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "DEFEATED",
+   "object": "凱撒·庫朗",
+   "paragraph": "30",
+   "source": "reviewed"
+  },
+  {
+   "subject": "多佛朗明哥",
+   "relation": "CAPTAIN_OF",
+   "object": "唐吉訶德海賊團",
+   "paragraph": "30",
+   "source": "reviewed"
+  },
+  {
+   "subject": "羅",
+   "relation": "FROM",
+   "object": "弗雷凡斯",
+   "paragraph": "30",
+   "source": "reviewed"
+  },
+  {
+   "subject": "薩波",
+   "relation": "MEMBER_OF",
+   "object": "革命軍",
+   "paragraph": "30",
+   "source": "reviewed"
+  },
+  {
+   "subject": "柯拉松",
+   "relation": "BROTHER_OF",
+   "object": "多佛朗明哥",
+   "paragraph": "30",
+   "source": "reviewed"
+  },
+  {
+   "subject": "柯拉松",
+   "relation": "OWNS",
+   "object": "凪凪果實",
+   "paragraph": "30",
+   "source": "reviewed"
+  },
+  {
+   "subject": "騙人布",
+   "relation": "DEFEATED",
+   "object": "砂糖",
+   "paragraph": "30",
+   "source": "reviewed"
+  },
+  {
+   "subject": "索隆",
+   "relation": "DEFEATED",
+   "object": "琵卡",
+   "paragraph": "30",
+   "source": "reviewed"
+  },
+  {
+   "subject": "藤虎",
+   "relation": "OWNS",
+   "object": "重重果實",
+   "paragraph": "30",
+   "source": "reviewed"
+  },
+  {
+   "subject": "香吉士",
+   "relation": "HAS_FATHER",
+   "object": "文斯莫克·加治",
+   "paragraph": "31",
+   "source": "reviewed"
+  },
+  {
+   "subject": "BIG MOM",
+   "relation": "CAPTAIN_OF",
+   "object": "BIG MOM 海賊團",
+   "paragraph": "31",
+   "source": "reviewed"
+  },
+  {
+   "subject": "BIG MOM",
+   "relation": "OWNS",
+   "object": "靈魂果實",
+   "paragraph": "31",
+   "source": "reviewed"
+  },
+  {
+   "subject": "布蕾",
+   "relation": "OWNS",
+   "object": "記憶果實",
+   "paragraph": "31",
+   "source": "reviewed"
+  },
+  {
+   "subject": "卡塔庫栗",
+   "relation": "OWNS",
+   "object": "麻糬果實",
+   "paragraph": "31",
+   "source": "reviewed"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "DEFEATED",
+   "object": "卡塔庫栗",
+   "paragraph": "31",
+   "source": "reviewed"
+  },
+  {
+   "subject": "卡彭·貝基",
+   "relation": "CAPTAIN_OF",
+   "object": "火戰車海賊團",
+   "paragraph": "31",
+   "source": "reviewed"
+  },
+  {
+   "subject": "卡彭·貝基",
+   "relation": "OWNS",
+   "object": "城堡果實",
+   "paragraph": "31",
+   "source": "reviewed"
+  },
+  {
+   "subject": "香吉士",
+   "relation": "BROTHER_OF",
+   "object": "蕾玖",
+   "paragraph": "31",
+   "source": "reviewed"
+  },
+  {
+   "subject": "光月御田",
+   "relation": "MEMBER_OF",
+   "object": "白鬍子海賊團",
+   "paragraph": "32",
+   "source": "manual"
+  },
+  {
+   "subject": "光月御田",
+   "relation": "MEMBER_OF",
+   "object": "羅傑海賊團",
+   "paragraph": "32",
+   "source": "manual"
+  },
+  {
+   "subject": "桃之助",
+   "relation": "HAS_FATHER",
+   "object": "光月御田",
+   "paragraph": "32",
+   "source": "manual"
+  },
+  {
+   "subject": "凱多",
+   "relation": "CAPTAIN_OF",
+   "object": "百獸海賊團",
+   "paragraph": "32",
+   "source": "llm"
+  },
+  {
+   "subject": "凱多",
+   "relation": "OWNS",
+   "object": "魚魚果實．幻獸種．模型「青龍」",
+   "paragraph": "32",
+   "source": "manual"
+  },
+  {
+   "subject": "大和",
+   "relation": "HAS_FATHER",
+   "object": "凱多",
+   "paragraph": "32",
+   "source": "manual"
+  },
+  {
+   "subject": "索隆",
+   "relation": "OWNS",
+   "object": "閻魔",
+   "paragraph": "32",
+   "source": "manual"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "OWNS",
+   "object": "人人果實．幻獸種．模型「尼卡」",
+   "paragraph": "32",
+   "source": "manual"
+  },
+  {
+   "subject": "魯夫",
+   "relation": "DEFEATED",
+   "object": "凱多",
+   "paragraph": "32",
+   "source": "manual"
+  },
+  {
+   "subject": "光月時",
+   "relation": "OWNS",
+   "object": "時時果實",
+   "paragraph": "32",
+   "source": "llm"
+  },
+  {
+   "subject": "香吉士",
+   "relation": "DEFEATED",
+   "object": "奎因",
+   "paragraph": "32",
+   "source": "manual"
+  },
+  {
+   "subject": "大和",
+   "relation": "OWNS",
+   "object": "犬犬果實．幻獸種．模型「大口真神」",
+   "paragraph": "32",
+   "source": "manual"
+  },
+  {
+   "subject": "波妮",
+   "relation": "CAPTAIN_OF",
+   "object": "波妮海賊團",
+   "paragraph": "33",
+   "source": "reviewed"
+  },
+  {
+   "subject": "波妮",
+   "relation": "OWNS",
+   "object": "年齡果實",
+   "paragraph": "33",
+   "source": "reviewed"
+  },
+  {
+   "subject": "波妮",
+   "relation": "HAS_FATHER",
+   "object": "大熊",
+   "paragraph": "33",
+   "source": "reviewed"
+  },
+  {
+   "subject": "大熊",
+   "relation": "FROM",
+   "object": "索爾貝王國",
+   "paragraph": "33",
+   "source": "reviewed"
+  },
+  {
+   "subject": "大熊",
+   "relation": "MEMBER_OF",
+   "object": "革命軍",
+   "paragraph": "33",
+   "source": "reviewed"
+  },
+  {
+   "subject": "黃猿",
+   "relation": "DEFEATED",
+   "object": "戰桃丸",
+   "paragraph": "33",
+   "source": "reviewed"
+  },
+  {
+   "subject": "路基",
+   "relation": "MEMBER_OF",
+   "object": "CP0",
+   "paragraph": "33",
+   "source": "reviewed"
+  },
+  {
+   "subject": "洛基",
+   "relation": "HAS_FATHER",
+   "object": "哈拉爾德",
+   "paragraph": "34",
+   "source": "reviewed"
+  },
+  {
+   "subject": "海爾丁",
+   "relation": "BROTHER_OF",
+   "object": "洛基",
+   "paragraph": "34",
+   "source": "reviewed"
   }
  ]
 }

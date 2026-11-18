@@ -94,5 +94,21 @@
   "answer_keywords": [
    "大劍豪"
   ]
+ },
+ {
+  "id": "q13",
+  "type": "multi",
+  "question": "新巨兵海賊團船長的弟弟，他的父親是誰？",
+  "answer_keywords": [
+   "哈拉爾德"
+  ]
+ },
+ {
+  "id": "q14",
+  "type": "multi",
+  "question": "和東利一起擔任巨兵海賊團船長的人是誰？",
+  "answer_keywords": [
+   "布洛基"
+  ]
  }
 ]

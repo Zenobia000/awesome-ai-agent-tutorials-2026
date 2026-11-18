@@ -1,8 +1,8 @@
-"""Lab 4-02 手寫的圖檢索，整理成檔案給 Lab 4-04 重用。
+"""Lab 4-02 的圖檢索（networkx 走訪＋超級節點展開規則），整理成檔案給 Lab 4-04 重用。
 
     from graph_retrieval import load_graph, graph_context, graph_answer
 
-每個函式在 02_graph_from_scratch.ipynb 裡都有一步一步的版本。
+每個函式在 02_graph_networkx.ipynb 裡都有一步一步的版本。
 """
 
 from __future__ import annotations
@@ -51,32 +51,35 @@ def link_entities(graph: nx.MultiDiGraph, question: str) -> list[str]:
     return sorted({hits[s] for s in surfaces})
 
 
+def expansion_graph(graph: nx.MultiDiGraph, hub_rule: bool = True) -> nx.DiGraph:
+    """可以往哪走：出邊一律可走；入邊反著走時，hub_rule=True 的話海賊團（Crew）只能走回船長。
+
+    這條規則避免一個大團體把整張圖都拉進來（超級節點）。
+    """
+    expand = nx.DiGraph()
+    for node, label in graph.nodes(data="label"):
+        expand.add_node(node)
+        expand.add_edges_from((node, v) for v in graph.successors(node))
+        expand.add_edges_from((node, u) for u, _, rel in graph.in_edges(node, data="relation")
+                              if not (hub_rule and label == "Crew" and rel != "CAPTAIN_OF"))
+    return expand
+
+
 def bfs_edges(graph: nx.MultiDiGraph, starts: list[str], hops: int,
               hub_rule: bool = True) -> list[tuple[str, str, str, int]]:
-    """從起點往外走 hops 步，回傳 (主體, 關係, 客體, 第幾步)。
-
-    hub_rule=True 時，走到海賊團（Crew）只沿 CAPTAIN_OF 找船長，不展開全部成員，
-    避免一個大團體把整張圖都拉進來。
-    """
-    seen, frontier, edges = set(starts), list(starts), []
-    for hop in range(1, hops + 1):
-        nxt = []
-        for node in frontier:
-            is_crew = graph.nodes[node].get("label") == "Crew"
-            incident = list(graph.out_edges(node, data=True)) + list(graph.in_edges(node, data=True))
-            for u, v, d in incident:
-                if hub_rule and is_crew and v == node and d["relation"] != "CAPTAIN_OF":
-                    continue
-                edge = (u, d["relation"], v)
-                if edge in [e[:3] for e in edges]:
-                    continue
-                edges.append((*edge, hop))
+    """從起點往外走 hops 步，回傳 (主體, 關係, 客體, 第幾步)。走訪交給 nx.bfs_layers。"""
+    expand = expansion_graph(graph, hub_rule)
+    edges: dict[tuple[str, str, str], int] = {}
+    for depth, layer in enumerate(nx.bfs_layers(expand, starts)):
+        if depth >= hops:
+            break
+        for node in layer:
+            incident = list(graph.out_edges(node, data="relation")) + list(graph.in_edges(node, data="relation"))
+            for u, v, rel in incident:
                 other = v if u == node else u
-                if other not in seen:
-                    seen.add(other)
-                    nxt.append(other)
-        frontier = nxt
-    return edges
+                if expand.has_edge(node, other):
+                    edges.setdefault((u, rel, v), depth + 1)
+    return [(*e, hop) for e, hop in edges.items()]
 
 
 def to_text(edges: list[tuple]) -> str:
