@@ -1,0 +1,20 @@
+{
+  "source": "Vaswani et al. 2017, Attention Is All You Need（arXiv:1706.03762），第 8 頁 Table 2",
+  "license_note": "論文首頁聲明：Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works.",
+  "parser": "olmocr",
+  "parser_version": "0.4.6",
+  "pdf_total_pages": 15,
+  "page_attributes": {
+    "pdf_page_numbers": [
+      22764,
+      27124,
+      8
+    ],
+    "primary_language": "en",
+    "is_rotation_valid": true,
+    "rotation_correction": 0,
+    "is_table": false,
+    "is_diagram": false
+  },
+  "how_obtained": "2025 年課程 multimodal-RAG-course 以 olmocr 0.4.6 處理整份論文的輸出（jsonl），本檔只截取第 8 頁的 Table 2；pymupdf 版本為同一頁以 page.get_text() 抽出的同一段。"
+}
