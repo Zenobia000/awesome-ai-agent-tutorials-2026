@@ -1,0 +1,49 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>多模態 RAG 與 RAG-Anything</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hands{position:absolute;right:110px;top:34px;font-size:22px;line-height:1.4;color:var(--muted);padding:3px 14px;border:2px solid var(--grey)}
+.hands b{font-weight:400;color:var(--ver);margin-right:12px}
+.hands code{font-family:"JetBrains Mono",monospace;font-size:22px}
+.blk{position:absolute;display:flex;align-items:center;justify-content:center;font-size:26px;width:170px;height:70px}
+.op{position:absolute;font-size:24px;line-height:1.3;color:var(--muted)}
+.col{position:absolute;left:1240px;width:570px;font-size:26px;line-height:1.5}
+.col .h{font-size:32px;color:var(--ind);margin-bottom:6px}
+.col ol{margin:0;padding-left:1.3em}
+.col li{margin-bottom:6px}
+</style></head><body><div class="slide">
+  <div class="hands"><b>動手</b><code>modules/module-03-rag/08_pdf_parsing.ipynb</code></div>
+  <h1>多模態 RAG：先把區塊拆出來</h1>
+  <p class="lead" style="width:1700px">純文字 RAG 會在三處壞：解析時丟掉圖裡的數字、切塊時拆散表格、問題的答案在圖裡卻檢索不到。</p>
+
+  <div class="abs lbl mut" style="left:120px;top:290px">一頁 PDF</div>
+  <div class="blk" style="left:130px;top:340px">文字</div>
+  <div class="blk" style="left:130px;top:440px">表格</div>
+  <div class="blk" style="left:130px;top:540px">圖片</div>
+  <div class="blk" style="left:130px;top:640px">公式</div>
+
+  <div class="op" style="left:360px;top:338px">切塊</div>
+  <div class="op" style="left:360px;top:438px">轉 HTML／Markdown</div>
+  <div class="abs lbl" style="left:505px;top:560px">VLM</div>
+  <div class="op" style="left:600px;top:538px">寫一段描述</div>
+  <div class="op" style="left:360px;top:638px">轉 LaTeX</div>
+
+  <div class="abs" style="left:900px;top:490px;width:250px;text-align:center;font-size:26px;line-height:1.4">索引<br><span style="font-size:24px;color:var(--muted)">向量＋知識圖</span></div>
+  <div class="note" style="position:absolute;left:110px;top:770px;width:1050px">拆區塊交給解析器（見「選型：PDF 解析器」那頁），放在離線批次；問答時只查索引。</div>
+
+  <div class="col" style="top:290px"><div class="h">RAG-Anything 是什麼</div>香港大學 HKUDS 的開源框架（MIT）：解析預設用 MinerU，圖片交視覺語言模型寫描述，表格、公式各有處理器，再建在 LightRAG 上組成多模態知識圖。</div>
+  <div class="col" style="top:580px"><div class="h">本課為何只導讀</div><ol><li>解析器要 GPU 與大模型，安裝重</li><li>零件本課都拆開教過：版面區塊、混合檢索、GraphRAG</li><li>本課語料是 Markdown，用不到它</li></ol></div>
+
+  <div class="read"><em>怎麼讀：</em>左邊每一列是一種區塊各走各的路，最後都變成可檢索的文字；右邊是把整條路包好的框架。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const S=D.C;
+D.rect(110,320,210,420,'#fbf9f4',{fillStyle:'solid',stroke:S.grey,strokeWidth:2.5});
+const B=[['#d9e1ee',S.ind],['#f7e7c0','#b98a12'],['#f7d6cf',S.ver],['#d9e1ee',S.ind]];
+B.forEach((c,i)=>D.rect(130,340+i*100,170,70,c[0],{fillStyle:'solid',stroke:c[1],strokeWidth:2.4}));
+const IX=900,IY=330,IW=250,IH=390;
+D.rect(IX,IY,IW,IH,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:3});
+[375,475,675].forEach(y=>D.arrow(310,y,IX-8,y,{strokeWidth:2.4}));
+D.arrow(310,575,470,575,{strokeWidth:2.4});
+D.ci(525,575,90,'#f7d6cf',{stroke:S.ver,strokeWidth:2.8});
+D.arrow(580,575,IX-8,575,{strokeWidth:2.4});
+D.line(1200,300,1200,880,{stroke:S.grey,strokeWidth:2});
+</script></body></html>

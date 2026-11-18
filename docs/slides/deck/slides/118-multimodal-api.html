@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>多模態 API 四端點</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hands{position:absolute;right:110px;top:34px;font-size:22px;line-height:1.4;color:var(--muted);padding:3px 14px;border:2px solid var(--grey)}
+.hands b{font-weight:400;color:var(--ver);margin-right:12px}
+.hands code{font-family:"JetBrains Mono",monospace;font-size:22px}
+.box{position:absolute;display:flex;align-items:center;justify-content:center;font-size:26px;height:84px}
+.ep{position:absolute;display:flex;align-items:center;font-family:"JetBrains Mono",monospace;font-size:24px;height:84px;color:var(--ind)}
+</style></head><body><div class="slide">
+  <div class="hands"><b>動手</b><code>modules/module-01-llm-local/05_multimodal_api.ipynb</code></div>
+  <h1>圖片、聲音也走同一個 client</h1>
+  <p class="lead">四種能力是四個端點。看圖最簡單：messages 裡的 content 從字串變成陣列，圖片就是其中一塊。</p>
+
+<div class="code" style="left:110px;top:290px;width:800px">message = {
+    <span class="s">"role"</span>: <span class="s">"user"</span>,
+<span class="hl">    "content": [</span>
+        {<span class="s">"type"</span>: <span class="s">"text"</span>,
+         <span class="s">"text"</span>: <span class="s">"哪一天漁獲最多？"</span>},
+        {<span class="s">"type"</span>: <span class="s">"image_url"</span>,
+         <span class="s">"image_url"</span>: {
+<span class="hl">             "url": "data:image/png;base64,iVBOR...",</span>
+             <span class="s">"detail"</span>: <span class="s">"low"</span>}},
+    ],
+}
+<span class="c"># 本機檔案用 base64；公開圖片直接給網址</span></div>
+  <div class="abs note" style="left:110px;top:790px;width:820px">朱紅線＝閉環測試：生成的語音再轉回文字，比對有沒有走樣。</div>
+
+  <div class="box" style="left:1000px;top:300px;width:150px">文字＋圖片</div>
+  <div class="ep" style="left:1290px;top:300px">chat.completions</div>
+  <div class="box" style="left:1655px;top:300px;width:155px">文字</div>
+
+  <div class="box" style="left:1000px;top:430px;width:150px">文字</div>
+  <div class="ep" style="left:1290px;top:430px">images.generate</div>
+  <div class="box" style="left:1655px;top:430px;width:155px">圖片</div>
+
+  <div class="box" style="left:1000px;top:560px;width:150px">文字</div>
+  <div class="ep" style="left:1290px;top:560px">audio.speech</div>
+  <div class="box" style="left:1655px;top:560px;width:155px">語音</div>
+
+  <div class="box" style="left:1000px;top:690px;width:150px">語音</div>
+  <div class="ep" style="left:1290px;top:690px">audio.transcriptions</div>
+  <div class="box" style="left:1655px;top:690px;width:155px">文字</div>
+
+  <div class="bridge inline" style="left:110px;top:850px;width:1700px"><span class="k">你已經會的</span>ViT 把圖切成 patch、每格變一個向量。模型看圖也一樣：<b>圖越大，token 越多、越貴</b>。</div>
+  <div class="read"><em>怎麼讀：</em>每一列是一種能力：左邊進、中間是端點、右邊出；四列共用同一個 client 和金鑰。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const S=D.C;
+const fills={'文字':['#d9e1ee',S.ind],'文字＋圖片':['#d9e1ee',S.ind],'圖片':['#f7e7c0','#b98a12'],'語音':['#f7d6cf',S.ver]};
+const rows=[['文字＋圖片','文字'],['文字','圖片'],['文字','語音'],['語音','文字']];
+rows.forEach((r,i)=>{const y=300+i*130;
+  const a=fills[r[0]],b=fills[r[1]];
+  D.rect(1000,y,150,84,a[0],{fillStyle:'solid',stroke:a[1],strokeWidth:2.5});
+  D.arrow(1156,y+42,1206,y+42,{strokeWidth:2.5});
+  D.ci(1245,y+42,64,'#f7d6cf',{stroke:S.ver,strokeWidth:2.6});
+  D.arrow(1600,y+42,1648,y+42,{strokeWidth:2.5});
+  D.rect(1655,y,155,84,b[0],{fillStyle:'solid',stroke:b[1],strokeWidth:2.5});
+});
+D.curve([[1732,647],[1600,668],[1200,664],[1075,688]],{stroke:S.ver,strokeWidth:3});
+D.arrow(1100,680,1075,689,{stroke:S.ver,strokeWidth:3});
+</script></body></html>

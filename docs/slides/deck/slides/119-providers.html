@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>換供應商只換網址</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hands{position:absolute;right:110px;top:34px;font-size:22px;line-height:1.4;color:var(--muted);padding:3px 14px;border:2px solid var(--grey)}
+.hands b{font-weight:400;color:var(--ver);margin-right:12px}
+.hands code{font-family:"JetBrains Mono",monospace;font-size:22px}
+.m{font-family:"JetBrains Mono",monospace;font-size:24px}
+.card{position:absolute;top:785px;width:540px;height:110px;padding:14px 22px;font-size:26px;line-height:1.4}
+</style></head><body><div class="slide">
+  <div class="hands"><b>動手</b><code>modules/module-01-llm-local/06_providers.ipynb</code></div>
+  <h1>換供應商：通常只換 base_url</h1>
+  <p class="lead">Ollama、OpenRouter、DeepSeek 都吃 OpenAI 相容格式：同一段程式，換網址、金鑰、模型名。</p>
+
+<div class="code" style="left:110px;top:290px;width:820px">URLS = {
+    <span class="s">"Ollama"</span>:     <span class="s">"http://localhost:11434/v1"</span>,
+    <span class="s">"OpenRouter"</span>: <span class="s">"https://openrouter.ai/api/v1"</span>,
+    <span class="s">"DeepSeek"</span>:   <span class="s">"https://api.deepseek.com/v1"</span>,
+}
+<span class="hl">client = OpenAI(base_url=URLS[name],</span>
+                api_key=os.getenv(KEY_ENV[name]))
+r = client.chat.completions.<span class="k">create</span>(
+        model=MODEL[name], messages=messages)
+<span class="c"># Ollama 不檢查金鑰，但 SDK 要非空字串</span></div>
+
+  <div class="abs lbl" style="left:1010px;top:448px;width:140px;text-align:center">messages</div>
+  <div class="abs lbl mut" style="left:1190px;top:296px">換 base_url</div>
+  <div class="abs lbl" style="left:1480px;top:340px">Ollama</div>
+  <div class="abs lbl" style="left:1480px;top:440px">OpenRouter</div>
+  <div class="abs lbl" style="left:1480px;top:540px">DeepSeek</div>
+  <div class="abs m ind" style="left:1215px;top:622px">to_anthropic()</div>
+  <div class="abs lbl" style="left:1650px;top:622px">Anthropic</div>
+
+  <div class="abs" style="left:110px;top:730px;font-size:28px;color:var(--ind)">Anthropic 格式的三個不同</div>
+  <div class="card" style="left:110px">system 放最外層，<br>不是 messages 裡的角色</div>
+  <div class="card" style="left:690px">content 是區塊陣列，<br>回應也是，要挑 type 為 text 的</div>
+  <div class="card" style="left:1270px">max_tokens 必填；金鑰放<br><span class="m">x-api-key</span> 標頭</div>
+
+  <div class="read"><em>怎麼讀：</em>右上三家走同一條路；Anthropic 要先經過轉換函式。差異收在自己包的一層客戶端裡。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const S=D.C;
+D.rect(1000,420,160,84,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.6});
+[360,460,560].forEach(y=>{D.arrow(1166,462,1390,y,{strokeWidth:2.5});D.ci(1430,y,64,'#f7d6cf',{stroke:S.ver,strokeWidth:2.6});});
+D.arrow(1080,510,1200,630,{strokeWidth:2.5,stroke:S.grey});
+D.rect(1205,612,240,56,'#fbf9f4',{fillStyle:'solid',stroke:S.grey,strokeWidth:2.4});
+D.arrow(1450,640,1555,640,{strokeWidth:2.5});
+D.ci(1600,640,64,'#f7d6cf',{stroke:S.ver,strokeWidth:2.6});
+[110,690,1270].forEach(x=>D.rect(x,785,540,110,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.4}));
+</script></body></html>

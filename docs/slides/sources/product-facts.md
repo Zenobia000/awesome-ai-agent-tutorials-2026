@@ -73,3 +73,14 @@
 | 4 | RDF 關係不能掛屬性 | 是 RDF 1.1 限制，1.2 草案在補 | 改精確 |
 
 核實相符：bge-m3、text-embedding-3。
+
+## 本課 notebook 實測數字
+
+只能引用下表；每次重跑數字會有些不同，投影片引用時要寫出「本課實測」與來源 notebook。
+
+| 數字 | 條件 | 來源 |
+|---|---|---|
+| 同一個「查 502 根因」任務：A 單一 agent 1,356 tokens、2 次請求；B 依角色硬拆（4 agent）13,212 tokens、28 次請求；C 平行查證＋審查（4 agent）14,116 tokens、28 次請求 | CrewAI、本機 `qwen2.5:3b`、跑一次；三版都找對根因 | `modules/module-05-agent-harness/09_crewai_multiagent.ipynb` Step 4–7 |
+| B 約單一 agent 的 9.7 倍 tokens、C 約 10.4 倍 | 同上 | 同上 Step 7 |
+
+和「多 agent 的 token 代價」那頁的「約 15 倍」不同：那是 Anthropic 多智能體研究系統（2025-06）的數字，這是本課小任務的單次實測，兩者都可以引用，但不能混成同一個數字。

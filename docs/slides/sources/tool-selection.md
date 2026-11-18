@@ -360,3 +360,22 @@ Cherry Studio 授權：AGPL-3.0，另售商業授權（https://github.com/Cherry
 11. **ChatGPT 的 MCP 入口名稱一直在變。** 官方文件現在寫「ChatGPT Plugins」；第三方教學多寫 Developer mode（2025-09-09 推出），各方案的可用範圍說法也互相矛盾。投影片只寫「ChatGPT 只接遠端 HTTPS MCP」，不要寫選單路徑。
 12. **OpenAI Evals repo 沒有封存**，但 README 第一行就導向 Dashboard 的 Evals，代表重心已移到平台。
 13. 各 repo 的 release 日期如果頁面沒顯示年份，就標「推定」：Langflow 1.13.2（Nov 10）、Coze Studio v0.5.1（Feb）。有年份的是 Dify、n8n（GitHub API）和 RAGFlow（README）。
+
+---
+
+## 技術選型補充 E：PDF 解析器與多模態 RAG（M3；核實日 2026-11-19）
+
+做法：每列都用 WebFetch 打開 GitHub README 讀授權與定位；README 沒寫版本日期的就不寫版本。用於投影片「選型：PDF 解析器」「多模態 RAG」。
+
+| 工具 | 定位 | 什麼時候選它 | 授權 | 狀態／備註 | 連結 |
+|---|---|---|---|---|---|
+| PyMuPDF（`pymupdf`） | 讀 PDF 物件：文字、座標、圖片、`find_tables()` 轉 Markdown | 單欄、少量格線表格；要快、不想下載模型 | **AGPL-3.0**，另售 Artifex 商業授權 | 運作中；本課 `08_pdf_parsing` 用它 | https://github.com/pymupdf/PyMuPDF |
+| Docling | 版面分析模型管線：閱讀順序、表格結構、公式、OCR；輸出 Markdown／HTML／JSON | 表格多、掃描檔；要寬鬆授權、可本機跑 | MIT（模型各自授權） | 運作中；IBM Research Zurich 發起、LF AI & Data 託管 | https://github.com/docling-project/docling |
+| MinerU | 版面分析＋表格轉 HTML＋公式轉 LaTeX；輸出 Markdown 與區塊清單（content list） | 中文、論文、財報這類表格與公式密集的 PDF | MinerU Open Source License（Apache 2.0 加條件） | 運作中；README 列 4.2；預設可 CPU 推論，進階引擎要 GPU（`full` 版建議 NVIDIA ≥ 8 GB） | https://github.com/opendatalab/MinerU |
+| olmOCR | 7B 視覺語言模型讀頁面圖片 | 有 GPU、大量掃描或版面怪的 PDF 批次轉文字 | Apache-2.0 | AI2；v0.4.0（2025-10-21）；需 NVIDIA GPU ≥ 12 GB、30 GB 磁碟 | https://github.com/allenai/olmocr |
+| RAG-Anything（框架，不是解析器） | 多模態 RAG：解析（預設 MinerU，可換 Docling／PaddleOCR）→ 圖片交 VLM 寫描述、表格與公式各有處理器 → 建在 LightRAG 上的多模態知識圖 | 圖表密集、要「看圖＋讀文」一起推理，且有 GPU 跑離線解析 | MIT | 運作中；HKUDS（香港大學）；README 2026-06 消息：LightRAG 原生整合 RAG-Anything | https://github.com/HKUDS/RAG-Anything |
+
+注意：
+1. PyMuPDF 是 AGPL：包進閉源服務對外提供時要開源或買商業授權。課堂與內部批次轉檔不受影響。
+2. MinerU 的授權不是純 Apache 2.0，商用前讀它的 LICENSE 條件。
+3. 不論哪一種，解析放離線批次，不放在問答路徑上（`modules/module-03-rag/00_concepts.md` 第 8 節）。

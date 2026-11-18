@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>多 agent 實測：三種拆法</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hands{position:absolute;right:110px;top:34px;font-size:22px;line-height:1.4;color:var(--muted);padding:3px 14px;border:2px solid var(--grey)}
+.hands b{font-weight:400;color:var(--ver);margin-right:12px}
+.hands code{font-family:"JetBrains Mono",monospace;font-size:22px}
+.v{position:absolute;text-align:center;font-size:26px;width:240px}
+.nm{position:absolute;text-align:center;font-size:26px;line-height:1.35;width:300px;margin-left:-30px}
+.nm span{display:block;font-size:24px;color:var(--muted)}
+.vd{position:absolute;left:1180px;width:630px;font-size:26px;line-height:1.45}
+.vd .h{font-size:28px;margin-bottom:2px}
+</style></head><body><div class="slide">
+  <div class="hands"><b>動手</b><code>modules/module-05-agent-harness/09_crewai_multiagent.ipynb</code></div>
+  <h1>多 agent 何時值得拆：實測三種拆法</h1>
+  <p class="lead" style="width:1700px">同一題「下單一直 502，找根因」用 CrewAI 做三版。三版都找對根因，差在花多少、資訊轉手幾次。</p>
+
+  <div class="abs lbl mut" style="left:110px;top:290px">總 tokens <span class="tag">本課實測</span></div>
+  <div class="v" style="left:200px;top:0" id="va">1,356</div>
+  <div class="v" style="left:490px;top:0" id="vb">13,212</div>
+  <div class="v" style="left:780px;top:0" id="vc">14,116</div>
+  <div class="nm" style="left:200px;top:752px">A 單一 agent<span>1 個 agent・2 次請求</span></div>
+  <div class="nm" style="left:490px;top:752px">B 依角色硬拆<span>4 個 agent・28 次請求</span></div>
+  <div class="nm" style="left:780px;top:752px">C 平行查證＋審查<span>4 個 agent・28 次請求</span></div>
+
+  <div class="vd" style="top:300px"><div class="h ind">A：問題小、工具少，一個就夠</div>先用一個 agent，有證據不夠用才拆。</div>
+  <div class="vd" style="top:450px"><div class="h ver">B：依職能切，是反模式</div>主管看不到原始資料，只能信三份摘要；任何一份抄錯，結論跟著錯。</div>
+  <div class="vd" style="top:640px"><div class="h mus">C：一樣貴，但買到東西</div>每條線索同時查、各自 context 乾淨，再由審查者挑沒有證據的結論。</div>
+
+  <div class="src" style="left:110px;top:858px;width:1700px">本課實測：CrewAI＋本機 qwen2.5:3b，跑一次；B 約 A 的 9.7 倍、C 約 10.4 倍，重跑會略有不同。大型系統的倍數見「多 agent 的代價：token 約 15 倍」那頁。</div>
+  <div class="read"><em>怎麼讀：</em>柱子越高越貴；右邊三段是「多花的 token 有沒有換到東西」。拆的理由見「什麼時候才切成多個 agent」那頁。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const S=D.C;
+const BASE=740,H=400,MAX=15000,W=160;
+const data=[[1356,'#d9e1ee',S.ind,'va',220],[13212,'#f7d6cf',S.ver,'vb',510],[14116,'#f7e7c0','#b98a12','vc',800]];
+data.forEach(([v,f,s,id,x])=>{const h=H*v/MAX;
+  D.rect(x+20,BASE-h,W,h,f,{fillStyle:'solid',stroke:s,strokeWidth:2.6});
+  document.getElementById(id).style.top=(BASE-h-44)+'px';});
+D.line(160,BASE,1080,BASE,{strokeWidth:2.6});
+D.cross(1150,503,18);
+D.ci(1150,322,30,'#d9e1ee',{stroke:S.ind,strokeWidth:2.4});
+D.ci(1150,662,30,'#f7e7c0',{stroke:'#b98a12',strokeWidth:2.4});
+</script></body></html>
