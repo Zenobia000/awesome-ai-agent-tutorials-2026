@@ -92,7 +92,7 @@
  {
   "module": 7,
   "slide": "模組七面試題",
-  "question": "在大型企業軟體架構中，如何界定 Dify／n8n 與 LangGraph 純程式碼架構各自的應用邊界？"
+  "question": "在大型企業軟體架構中，如何界定 n8n 等低代碼平台與 LangGraph 純程式碼架構各自的應用邊界？"
  },
  {
   "module": 8,
