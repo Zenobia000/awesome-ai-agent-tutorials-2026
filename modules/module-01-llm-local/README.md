@@ -9,8 +9,12 @@
 | `03_attention.ipynb` | 用 numpy 手寫 attention，跟 PyTorch 對答案，量 O(N²) | numpy、torch |
 | `04_chat_api.ipynb` | 用 `requests` 直接打 Chat API：messages、記不住對話、串流 | Ollama |
 | `05_dual_track.ipynb` | Lab 1：本地失敗自動切雲端的客戶端，成品是 `course_utils/llm.py` | Ollama；雲端金鑰選填 |
+| `06_multimodal_api.ipynb` | 圖片放進 messages、圖片 token、生成圖片、文字轉語音、log-mel 頻譜圖、本機 Whisper 與雲端轉錄對照 | `OPENAI_API_KEY` 選填；下載 whisper-tiny 約 150MB |
+| `07_providers.ipynb` | 換 base_url 連 Ollama／OpenRouter／DeepSeek／OpenAI，Ollama 原生 API，Anthropic 格式對照與延遲圖 | Ollama；各家金鑰選填 |
 
 ## 準備
+
+Ollama 安裝見 [infra/services/ollama.md](../../infra/services/ollama.md)；沒有 GPU 見 [infra/cloud-gpu.md](../../infra/cloud-gpu.md)。
 
 ```bash
 uv sync --group m1
@@ -20,6 +24,9 @@ uv run jupyter lab modules/module-01-llm-local
 ```
 
 notebook 從本資料夾開啟（`01_tokens` 讀的是相對路徑 `data/one_piece.txt`）。
+
+雲端金鑰都是選填，放在 `.env`：`OPENAI_API_KEY`（06、07）、`OPENROUTER_API_KEY`、`DEEPSEEK_API_KEY`、`ANTHROPIC_API_KEY`（07）。沒填的步驟會印出說明並略過，notebook 照樣能跑完。
+`06` 生成的圖片和語音已存在 `data/`（`gen_ship.jpg`、`luffy_line.mp3`），檔案存在就不會重打 API；想自己生成就先刪掉檔案。
 
 ## 已存的輸出
 
