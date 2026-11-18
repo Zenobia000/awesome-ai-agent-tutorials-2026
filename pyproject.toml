@@ -14,8 +14,15 @@ dependencies = [
 ]
 
 [dependency-groups]
-m1 = ["tiktoken>=0.8", "torch>=2.3", "transformers>=4.45"]
-dev = ["pytest>=8.0", "nbclient>=0.10", "nbformat>=5.10"]
+m1 = ["tiktoken>=0.8", "torch>=2.3", "transformers>=4.45", "anthropic>=0.40", "soundfile>=0.12", "pillow>=10.0"]
+m2 = ["pydantic>=2.8", "pandas>=2.2"]
+m3 = ["chromadb>=0.5", "rank-bm25>=0.2", "jieba>=0.42", "sentence-transformers>=3.0", "scikit-learn>=1.5", "pymupdf>=1.24", "pandas>=2.2", "llama-index-core>=0.12", "llama-index-embeddings-ollama>=0.5", "llama-index-llms-openai-like>=0.3"]
+m4 = ["networkx>=3.3", "neo4j>=5.20", "pydantic>=2.8"]
+m5 = ["langgraph>=1.0", "langchain>=1.0", "langchain-openai>=1.0", "deepagents>=0.7", "pydantic>=2.8", "crewai>=0.100", "openai-agents>=0.2", "claude-agent-sdk>=0.1"]
+m6 = ["torch>=2.3", "transformers>=4.45", "peft>=0.13", "datasets>=3.0", "accelerate>=1.0"]
+m7 = ["mcp>=1.10", "pandas>=2.2", "openpyxl>=3.1"]
+m8 = ["pandas>=2.2", "pydantic>=2.8", "langfuse>=3.0", "opik>=1.5"]
+dev = ["pytest>=8.0", "nbclient>=0.10", "nbformat>=5.10", "pillow>=10.0"]
 
 [tool.uv]
 package = true
