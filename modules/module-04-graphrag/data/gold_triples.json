@@ -1,0 +1,284 @@
+[
+ {
+  "subject": "魯夫",
+  "relation": "FROM",
+  "object": "風車村",
+  "paragraph": "01"
+ },
+ {
+  "subject": "魯夫",
+  "relation": "OWNS",
+  "object": "橡膠果實",
+  "paragraph": "01"
+ },
+ {
+  "subject": "香克斯",
+  "relation": "CAPTAIN_OF",
+  "object": "紅髮海賊團",
+  "paragraph": "02"
+ },
+ {
+  "subject": "香克斯",
+  "relation": "OWNS",
+  "object": "草帽",
+  "paragraph": "02"
+ },
+ {
+  "subject": "魯夫",
+  "relation": "CAPTAIN_OF",
+  "object": "草帽海賊團",
+  "paragraph": "03"
+ },
+ {
+  "subject": "魯夫",
+  "relation": "OWNS",
+  "object": "草帽",
+  "paragraph": "03"
+ },
+ {
+  "subject": "魯夫",
+  "relation": "DREAMS_OF",
+  "object": "海賊王",
+  "paragraph": "03"
+ },
+ {
+  "subject": "索隆",
+  "relation": "MEMBER_OF",
+  "object": "草帽海賊團",
+  "paragraph": "04"
+ },
+ {
+  "subject": "索隆",
+  "relation": "DREAMS_OF",
+  "object": "世界第一大劍豪",
+  "paragraph": "04"
+ },
+ {
+  "subject": "古伊娜",
+  "relation": "FROM",
+  "object": "霜月村",
+  "paragraph": "05"
+ },
+ {
+  "subject": "古伊娜",
+  "relation": "OWNS",
+  "object": "和道一文字",
+  "paragraph": "05"
+ },
+ {
+  "subject": "索隆",
+  "relation": "FROM",
+  "object": "霜月村",
+  "paragraph": "06"
+ },
+ {
+  "subject": "索隆",
+  "relation": "OWNS",
+  "object": "和道一文字",
+  "paragraph": "06"
+ },
+ {
+  "subject": "娜美",
+  "relation": "FROM",
+  "object": "可可亞西村",
+  "paragraph": "07"
+ },
+ {
+  "subject": "娜美",
+  "relation": "MEMBER_OF",
+  "object": "草帽海賊團",
+  "paragraph": "07"
+ },
+ {
+  "subject": "娜美",
+  "relation": "DREAMS_OF",
+  "object": "畫出全世界的地圖",
+  "paragraph": "07"
+ },
+ {
+  "subject": "阿龍",
+  "relation": "CAPTAIN_OF",
+  "object": "阿龍海賊團",
+  "paragraph": "08"
+ },
+ {
+  "subject": "魯夫",
+  "relation": "DEFEATED",
+  "object": "阿龍",
+  "paragraph": "09"
+ },
+ {
+  "subject": "騙人布",
+  "relation": "FROM",
+  "object": "西羅布村",
+  "paragraph": "10"
+ },
+ {
+  "subject": "騙人布",
+  "relation": "MEMBER_OF",
+  "object": "草帽海賊團",
+  "paragraph": "10"
+ },
+ {
+  "subject": "騙人布",
+  "relation": "DREAMS_OF",
+  "object": "勇敢的海上戰士",
+  "paragraph": "10"
+ },
+ {
+  "subject": "騙人布",
+  "relation": "HAS_FATHER",
+  "object": "耶穌布",
+  "paragraph": "10"
+ },
+ {
+  "subject": "耶穌布",
+  "relation": "MEMBER_OF",
+  "object": "紅髮海賊團",
+  "paragraph": "11"
+ },
+ {
+  "subject": "香吉士",
+  "relation": "MEMBER_OF",
+  "object": "草帽海賊團",
+  "paragraph": "13"
+ },
+ {
+  "subject": "香吉士",
+  "relation": "DREAMS_OF",
+  "object": "All Blue",
+  "paragraph": "13"
+ },
+ {
+  "subject": "喬巴",
+  "relation": "MEMBER_OF",
+  "object": "草帽海賊團",
+  "paragraph": "14"
+ },
+ {
+  "subject": "喬巴",
+  "relation": "FROM",
+  "object": "磁鼓島",
+  "paragraph": "14"
+ },
+ {
+  "subject": "喬巴",
+  "relation": "OWNS",
+  "object": "人人果實",
+  "paragraph": "14"
+ },
+ {
+  "subject": "喬巴",
+  "relation": "DREAMS_OF",
+  "object": "能治百病的醫生",
+  "paragraph": "14"
+ },
+ {
+  "subject": "羅賓",
+  "relation": "MEMBER_OF",
+  "object": "草帽海賊團",
+  "paragraph": "15"
+ },
+ {
+  "subject": "羅賓",
+  "relation": "FROM",
+  "object": "歐哈拉",
+  "paragraph": "15"
+ },
+ {
+  "subject": "羅賓",
+  "relation": "OWNS",
+  "object": "花花果實",
+  "paragraph": "15"
+ },
+ {
+  "subject": "羅賓",
+  "relation": "DREAMS_OF",
+  "object": "讀懂歷史本文",
+  "paragraph": "15"
+ },
+ {
+  "subject": "佛朗基",
+  "relation": "MEMBER_OF",
+  "object": "草帽海賊團",
+  "paragraph": "16"
+ },
+ {
+  "subject": "布魯克",
+  "relation": "MEMBER_OF",
+  "object": "草帽海賊團",
+  "paragraph": "16"
+ },
+ {
+  "subject": "布魯克",
+  "relation": "OWNS",
+  "object": "黃泉果實",
+  "paragraph": "16"
+ },
+ {
+  "subject": "布魯克",
+  "relation": "DREAMS_OF",
+  "object": "與拉布重逢",
+  "paragraph": "16"
+ },
+ {
+  "subject": "吉貝爾",
+  "relation": "MEMBER_OF",
+  "object": "草帽海賊團",
+  "paragraph": "17"
+ },
+ {
+  "subject": "艾斯",
+  "relation": "BROTHER_OF",
+  "object": "魯夫",
+  "paragraph": "18"
+ },
+ {
+  "subject": "艾斯",
+  "relation": "OWNS",
+  "object": "燒燒果實",
+  "paragraph": "18"
+ },
+ {
+  "subject": "白鬍子",
+  "relation": "CAPTAIN_OF",
+  "object": "白鬍子海賊團",
+  "paragraph": "19"
+ },
+ {
+  "subject": "白鬍子",
+  "relation": "OWNS",
+  "object": "震震果實",
+  "paragraph": "19"
+ },
+ {
+  "subject": "艾斯",
+  "relation": "MEMBER_OF",
+  "object": "白鬍子海賊團",
+  "paragraph": "19"
+ },
+ {
+  "subject": "魯夫",
+  "relation": "CAPTAIN_OF",
+  "object": "草帽大船團",
+  "paragraph": "20"
+ },
+ {
+  "subject": "巴托洛米奧",
+  "relation": "CAPTAIN_OF",
+  "object": "巴托俱樂部",
+  "paragraph": "21"
+ },
+ {
+  "subject": "巴托洛米奧",
+  "relation": "OWNS",
+  "object": "屏障果實",
+  "paragraph": "21"
+ },
+ {
+  "subject": "巴托洛米奧",
+  "relation": "MEMBER_OF",
+  "object": "草帽大船團",
+  "paragraph": "21"
+ }
+]
