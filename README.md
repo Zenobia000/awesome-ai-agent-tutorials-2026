@@ -34,6 +34,7 @@
 │   ├── 02-rag-and-graphrag/
 │   ├── 03-langgraph-and-agents/
 │   └── 04-eval-and-mcp/
+├── infra/                              # 服務部署教材（Ollama、Chroma、Neo4j…），見 infra/README.md
 ├── course_utils/                       # 共用模型客戶端（Lab 1-05 的成品）
 ├── modules/                            # 各模組 notebook，總覽見 modules/README.md
 │   ├── module-01-llm-local/            # token、next-token、attention 手寫、Chat API、雙軌客戶端
@@ -93,6 +94,8 @@ cp .env.example .env               # 預設連本機 Ollama，不需要金鑰
 ollama pull qwen2.5:3b
 uv run jupyter lab modules/module-01-llm-local
 ```
+
+Ollama、Neo4j 等服務的安裝與 docker compose 一鍵啟動，見 [infra/README.md](infra/README.md)。
 
 沒有 [uv](https://docs.astral.sh/uv/)？`pip install uv` 或參考官方安裝說明。
 
