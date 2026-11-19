@@ -32,7 +32,26 @@ ollama pull qwen2.5:3b && ollama pull bge-m3
 uv run jupyter lab
 ```
 
-整門課一次裝好用 `uv sync --all-groups`（含 torch 約 6GB）。幾本 notebook 跨群組：M4-04、M5-03 會用到 m3 的 Chroma 與 BM25。
+整門課一次裝好：`uv sync --group m1 --group m2 --group m3 --group m4 --group m5 --group m6 --group m7 --group m8`（含 torch 約 6GB）。幾本 notebook 跨群組：M4-04、M5-03 會用到 m3 的 Chroma 與 BM25。
+
+### 兩個環境：主環境與相容環境
+
+2026 年 11 月，CrewAI 與 Opik 的最新版仍要求 `openai<3`（CrewAI 另要求 `mcp<2`），其他套件都已升到 openai 3.x、MCP SDK 2.x、huggingface_hub 2.x。為了讓其餘教材都用最新版，這兩個套件放在獨立的 `compat` 群組，裝在另一個資料夾：
+
+```bash
+UV_PROJECT_ENVIRONMENT=.venv-compat uv sync --group compat --group dev
+UV_PROJECT_ENVIRONMENT=.venv-compat uv run --no-sync jupyter lab
+```
+
+只有 M5-09（CrewAI）、M8-01、M8-04（Opik）用相容環境，其他 notebook 都用主環境。
+
+| 套件 | 主環境 | 相容環境 |
+|---|---|---|
+| openai | 3.55 | 2.54 |
+| mcp | 2.3 | 1.30 |
+| huggingface_hub | 2.4 | 1.33 |
+| litellm | 1.110 | 1.105 |
+| crewai、opik | — | 1.15.42、2.2.150（最新） |
 
 Ollama 安裝與設定見 [infra/services/ollama.md](../infra/services/ollama.md)；沒有 GPU 可租雲端算力，見 [infra/cloud-gpu.md](../infra/cloud-gpu.md)。其他服務（Chroma、Neo4j、Langfuse、Opik）見 [infra/README.md](../infra/README.md)。
 

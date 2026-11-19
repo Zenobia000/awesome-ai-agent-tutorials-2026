@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "20 小時 AI Agent 課程的實作 notebook"
 requires-python = ">=3.11"
 dependencies = [
-    "openai>=1.50",
+    "openai>=2.30",  # 各群組再要求 openai>=3；compat 群組留在 2.x
     "requests>=2.32",
     "python-dotenv>=1.0",
     "numpy>=1.26",
@@ -14,18 +14,32 @@ dependencies = [
 ]
 
 [dependency-groups]
-m1 = ["tiktoken>=0.8", "torch>=2.3", "transformers>=4.45", "anthropic>=0.40", "soundfile>=0.12", "pillow>=10.0", "litellm>=1.50", "huggingface-hub>=0.25", "datasets>=3.0", "accelerate>=1.0"]
-m2 = ["pydantic>=2.8", "pandas>=2.2"]
-m3 = ["chromadb>=0.5", "rank-bm25>=0.2", "jieba>=0.42", "sentence-transformers>=3.0", "scikit-learn>=1.5", "pymupdf>=1.24", "pandas>=2.2", "llama-index-core>=0.12", "llama-index-embeddings-ollama>=0.5", "llama-index-llms-openai-like>=0.3"]
-m4 = ["networkx>=3.3", "neo4j>=5.20", "pydantic>=2.8"]
-m5 = ["langgraph>=1.0", "langchain>=1.0", "langchain-openai>=1.0", "deepagents>=0.7", "pydantic>=2.8", "crewai>=0.100", "openai-agents>=0.2", "claude-agent-sdk>=0.1"]
-m6 = ["torch>=2.3", "transformers>=4.45", "peft>=0.13", "datasets>=3.0", "accelerate>=1.0"]
-m7 = ["mcp>=1.10", "pandas>=2.2", "openpyxl>=3.1"]
-m8 = ["pandas>=2.2", "pydantic>=2.8", "langfuse>=3.0", "opik>=1.5"]
+m1 = ["openai>=3.0", "tiktoken>=0.8", "torch>=2.3", "transformers>=4.45", "anthropic>=0.40", "soundfile>=0.12", "pillow>=10.0", "litellm>=1.110", "huggingface-hub>=2.0", "datasets>=3.0", "accelerate>=1.0"]
+m2 = ["openai>=3.0", "pydantic>=2.8", "pandas>=2.2"]
+m3 = ["openai>=3.0", "chromadb>=0.5", "rank-bm25>=0.2", "jieba>=0.42", "sentence-transformers>=3.0", "scikit-learn>=1.5", "pymupdf>=1.24", "pandas>=2.2", "llama-index-core>=0.12", "llama-index-embeddings-ollama>=0.5", "llama-index-llms-openai-like>=0.3"]
+m4 = ["openai>=3.0", "networkx>=3.3", "neo4j>=5.20", "pydantic>=2.8"]
+# 相容環境：CrewAI、Opik 的最新版仍要求 openai<3（以及 mcp<2、舊版 litellm），
+# 和其他群組分開安裝：uv sync --group compat
+compat = ["crewai>=1.15.42", "opik>=2.2.150", "pandas>=2.2", "pydantic>=2.8"]
+m5 = ["openai>=3.0", "langgraph>=1.0", "langchain>=1.0", "langchain-openai>=1.0", "deepagents>=0.7", "pydantic>=2.8", "openai-agents>=0.25", "claude-agent-sdk>=0.1"]
+m6 = ["openai>=3.0", "torch>=2.3", "transformers>=4.45", "peft>=0.13", "datasets>=3.0", "accelerate>=1.0"]
+m7 = ["openai>=3.0", "mcp>=2.3", "pandas>=2.2", "openpyxl>=3.1"]
+m8 = ["openai>=3.0", "pandas>=2.2", "pydantic>=2.8", "langfuse>=5.0"]
 dev = ["pytest>=8.0", "nbclient>=0.10", "nbformat>=5.10", "pillow>=10.0"]
 
 [tool.uv]
 package = true
+# compat 群組（CrewAI、Opik）不和其他群組裝在同一個環境
+conflicts = [
+    [{ group = "compat" }, { group = "m2" }],
+    [{ group = "compat" }, { group = "m3" }],
+    [{ group = "compat" }, { group = "m4" }],
+    [{ group = "compat" }, { group = "m6" }],
+    [{ group = "compat" }, { group = "m1" }],
+    [{ group = "compat" }, { group = "m5" }],
+    [{ group = "compat" }, { group = "m7" }],
+    [{ group = "compat" }, { group = "m8" }],
+]
 
 [build-system]
 requires = ["hatchling"]
