@@ -63,9 +63,11 @@ MCP 的每一則訊息都是 JSON-RPC 2.0，只有三種：
 
 ```json
 → {"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"get_service_status","arguments":{"service":"payment"}}}
-← {"jsonrpc":"2.0","id":3,"result":{"content":[{"type":"text","text":"{\"service\": \"payment\", \"state\": \"degraded\", …}"}]}}
-→ {"jsonrpc":"2.0","method":"notifications/initialized"}
+← {"jsonrpc":"2.0","id":3,"result":{"resultType":"complete","content":[{"type":"text","text":"{\"service\": \"payment\", \"state\": \"degraded\", …}"}]}}
+→ {"jsonrpc":"2.0","method":"notifications/cancelled","params":{"requestId":4}}
 ```
+
+最後一行是通知：client 不想等第 4 號請求了，告訴 server 一聲，server 不用回。
 
 `id` 的用途：client 可以連送好幾個請求，回應的順序不一定一樣，靠 `id` 對回是哪一題的答案。
 呼叫不存在的工具時，server 回的是 `error` 而不是 `result`，行程不會掛掉。
@@ -74,19 +76,32 @@ MCP 的每一則訊息都是 JSON-RPC 2.0，只有三種：
 
 ![一次 MCP 連線的訊息往返：initialize、initialized 通知、tools/list、tools/call](images/mcp_handshake.jpg)
 
-*圖：時間由上往下。實線是請求、虛線是回應；灰色的 `initialized` 是通知，沒有回應。*
+*圖：時間由上往下。實線是請求、虛線是回應；灰色的 `initialized` 是通知，沒有回應。這是 2025-11-25 版協定的流程。*
 
-打招呼 → 問有什麼 → 叫它做事。官方 SDK 的 `ClientSession` 幫你做的就是：配 `id`、版本協商、把回應轉成 Python 物件。
-server 端的 `FastMCP` 則是從函式的型別註記產生 `inputSchema`、在邊界驗證參數。
+打招呼 → 問有什麼 → 叫它做事。
+
+**2026-07-28 版協定把「打招呼」改掉了**（官方 changelog，SEP-2575）：
+
+| | 2025-11-25（圖上這版） | 2026-07-28（現行） |
+|---|---|---|
+| 打招呼 | `initialize` 請求＋`notifications/initialized` 通知，之後整條連線共用一個 session | 沒有握手；client 可以先送 `server/discover` 問「你支援哪些版本、有哪些能力、你是誰」 |
+| 版本與能力 | 握手時交換一次 | 每個請求的 `_meta` 都自己帶協定版本與 client 能力，server 不必記住連線狀態 |
+| 結果 | 只有 `result` | 每個 `result` 多一個 `resultType`（一般是 `"complete"`） |
+
+為什麼要改：無狀態之後，HTTP server 可以放在負載平衡後面任意擴充，不用把同一個 client 黏在同一台機器上。
+對 notebook 的影響很小：官方 SDK 2.x 的 `Client` 預設 `mode="auto"`，先試 `server/discover`，對方是舊 server 才退回 `initialize` 握手；你寫的程式不用分兩套。
+
+官方 SDK 的 `Client` 幫你做的就是：配 `id`、版本協商、把回應轉成 Python 物件。
+server 端的 `MCPServer` 則是從函式的型別註記產生 `input_schema`、在邊界驗證參數。
 
 ### SDK 幫你做掉的事
 
 | 你在 notebook 寫的 | SDK 在底層做的 |
 |---|---|
 | `stdio_client(params)` | 開子行程，把 stdin/stdout 接成兩條管線 |
-| `await session.initialize()` | 送 `initialize`、比對協定版本、送 `initialized` 通知 |
-| `await session.list_tools()` | 送 `tools/list`，把回應轉成 `Tool` 物件（含 `inputSchema`） |
-| `await session.call_tool(name, args)` | 送 `tools/call`，依 `id` 等到對應的回應 |
+| `async with Client(...) as client:` | 送 `server/discover` 協商版本（舊 server 則改走 `initialize` 握手） |
+| `await client.list_tools()` | 送 `tools/list`，把回應轉成 `Tool` 物件（含 `input_schema`） |
+| `await client.call_tool(name, args)` | 送 `tools/call`，依 `id` 等到對應的回應 |
 | `@mcp.tool()` 裝飾一個函式 | 用函式名稱當工具名、docstring 當說明、型別註記產生 JSON Schema |
 | 型別寫 `Literal[...]`、`Field(ge=1, le=20)` | 變成 schema 的 `enum`、上下限，模型亂填參數會在 server 邊界被擋下 |
 
@@ -103,7 +118,7 @@ Host ──(MCP：Host 找到 X 在哪支 server，替模型去叫)────�
 
 - **function calling** 是模型 API 的功能：你把工具清單交給模型，模型回一個「想呼叫哪個工具、參數是什麼」的結構。模組 5 寫的迴圈就是這一層。
 - **MCP** 是 Host 跟工具之間的協定：工具清單從哪裡來、呼叫要送去哪裡。
-- 接起來的方法只有一步：把 MCP 的 `inputSchema` 放進 OpenAI 格式的 `parameters`。`01_mcp_client.ipynb` 會做這件事，迴圈本身一行都不用改。
+- 接起來的方法只有一步：把 MCP 的 `input_schema`（線上 JSON 叫 `inputSchema`）放進 OpenAI 格式的 `parameters`。`01_mcp_client.ipynb` 會做這件事，迴圈本身一行都不用改。
 
 ## 5. 兩種傳輸：stdio 與 streamable-http
 
@@ -121,7 +136,8 @@ Host ──(MCP：Host 找到 X 在哪支 server，替模型去叫)────�
 | 速度 | 兩條管線，往返約 1 毫秒 | 走網路 |
 | 安全 | 只有本機使用者能用 | 對外開放就要另外處理認證 |
 
-server 程式本身不用改，只換最後一行：`mcp.run()`（預設 stdio）或 `mcp.run(transport="streamable-http")`。
+server 程式本身不用改，只換最後一行：`mcp.run()`（預設 stdio）或 `mcp.run(transport="streamable-http", host="127.0.0.1", port=8000)`。
+SDK 2.x 起 `host`、`port` 這類傳輸參數寫在 `run()`，不再寫在建構子 `MCPServer(...)` 裡（1.x 是 `FastMCP("x", port=8000)`）。
 
 ## 6. 最重要的坑：stdio server 裡不能亂 print
 
@@ -130,7 +146,7 @@ stdio 的規則是：**server 從 stdin 讀一行 JSON，往 stdout 寫一行 JS
 ```
 你在 server 裡加了：print("debug: 收到", method)
 
-Client 讀到的第一行： debug: 收到 initialize      ← 不是 JSON
+Client 讀到的第一行： debug: 收到 server/discover ← 不是 JSON
                       → JSONDecodeError，連線當場壞掉
 Host 顯示的錯誤：     「連線逾時」或「解析錯誤」  ← 完全看不出是 print 造成的
 ```
@@ -147,11 +163,12 @@ Host 顯示的錯誤：     「連線逾時」或「解析錯誤」  ← 完全�
 | Client | Host 裡連一個 server 的連線物件 |
 | Server | 包好能力、等人呼叫的小程式 |
 | JSON-RPC 2.0 | 「請求／回應／通知」三種 JSON 訊息的規格 |
-| `inputSchema` | 工具參數的 JSON Schema；放進 OpenAI 格式的 `parameters` 就能直接用 |
+| `input_schema` | 工具參數的 JSON Schema（線上 JSON 欄位叫 `inputSchema`，SDK 2.x 的 Python 屬性一律改 snake_case）；放進 OpenAI 格式的 `parameters` 就能直接用 |
 | stdio | 用子行程的標準輸入輸出傳訊息 |
 | streamable-http | 用 HTTP 傳訊息，可搭配 SSE 串流 |
-| `readOnlyHint` | server 自稱「這個工具只讀不寫」的標記，Host 可參考但無法驗證 |
-| FastMCP | 官方 Python SDK 裡寫 server 的高階介面（1.x：`mcp.server.fastmcp`） |
+| `read_only_hint`（線上叫 `readOnlyHint`） | server 自稱「這個工具只讀不寫」的標記，Host 可參考但無法驗證 |
+| MCPServer | 官方 Python SDK 2.x 裡寫 server 的高階介面（`from mcp.server import MCPServer`）；1.x 叫 `FastMCP`（`mcp.server.fastmcp`），2.x 已移除舊名 |
+| `server/discover` | 2026-07-28 版協定取代 `initialize` 握手的 RPC：問 server 支援的版本、能力與身分 |
 
 ## 8. 常見坑
 
@@ -159,13 +176,13 @@ Host 顯示的錯誤：     「連線逾時」或「解析錯誤」  ← 完全�
 2. **設定檔寫相對路徑**：Host 的工作目錄不是你的專案資料夾，`servers/x.py` 找不到。一律寫絕對路徑（`03` 會重現這個坑）。
 3. **Host 沒帶到環境變數**：從 GUI 啟動的 app 不一定有你終端機裡的 `PATH` 和金鑰，要寫進設定的 `env`。
 4. **Docker 裡的 `localhost`**：容器裡的 `localhost` 是容器自己。連本機的 HTTP server 要用 `host.docker.internal`。
-5. **把 `readOnlyHint` 當防線**：它只是 server 自己說的話。真正的唯讀要靠 server 的實作（白名單路徑、不提供寫入工具），加上 client 端的白名單與寫入前審批。
+5. **把 `read_only_hint` 當防線**：它只是 server 自己說的話。真正的唯讀要靠 server 的實作（白名單路徑、不提供寫入工具），加上 client 端的白名單與寫入前審批。
 6. **把第三方 server 當成安全的**：裝之前先看它能讀哪些路徑、有沒有寫入或刪除的工具、會不會連外網。
 
 ## 9. 接下來
 
 | notebook | 用上這份的哪一段 |
 |---|---|
-| `01_mcp_client.ipynb` | §2 三角色、§4 連線流程：用 SDK 的 `ClientSession` 連 server，再把工具接上本地模型 |
+| `01_mcp_client.ipynb` | §2 三角色、§4 連線流程：用 SDK 的 `Client` 連 server，再把工具接上本地模型 |
 | `02_excel_agent.ipynb` | §3 Tools 與 Resources 的差別 |
 | `03_mcp_in_practice.ipynb` | §5 兩種傳輸、§8 常見坑：各家 Host 設定、白名單與審批 |

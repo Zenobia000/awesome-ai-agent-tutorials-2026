@@ -11,6 +11,9 @@
     uv run python modules/module-07-mcp/servers/excel_server.py
 
 stdio Server 不能 print()；除錯訊息用 logging（寫 stderr）。
+
+預期中的失敗（路徑不允許、找不到工作表或欄位）一律丟 `ToolError`：模型會在 `is_error=True` 的結果裡讀到這段訊息、自己修正。
+SDK 2.x 起，其他例外（例如 ValueError、KeyError）被當成程式當掉，模型只看到 `Error executing tool <name>`，細節只寫進 server 日誌。
 """
 
 from __future__ import annotations
@@ -30,7 +33,8 @@ matplotlib.use("Agg")  # 伺服器沒有螢幕，只存檔
 import matplotlib.pyplot as plt  # noqa: E402
 import pandas as pd  # noqa: E402
 from matplotlib.ticker import FuncFormatter  # noqa: E402
-from mcp.server.fastmcp import FastMCP  # noqa: E402
+from mcp.server import MCPServer  # noqa: E402
+from mcp.server.mcpserver.exceptions import ToolError  # noqa: E402
 from mcp.types import ToolAnnotations  # noqa: E402
 from pydantic import Field  # noqa: E402
 
@@ -44,9 +48,9 @@ DATA_DIR = MODULE_DIR / "data"
 CHART_DIR = MODULE_DIR / "outputs" / "charts"
 MAX_ROWS = 20
 
-mcp = FastMCP("excel-analyst", instructions="唯讀的 Excel 分析工具：列工作表、看欄位、彙總查詢、畫圖。")
+mcp = MCPServer("excel-analyst", version="1.0.0", instructions="唯讀的 Excel 分析工具：列工作表、看欄位、彙總查詢、畫圖。")
 logging.getLogger("mcp").setLevel(logging.WARNING)
-READ_ONLY = ToolAnnotations(readOnlyHint=True, openWorldHint=False)
+READ_ONLY = ToolAnnotations(read_only_hint=True, open_world_hint=False)
 
 FileName = Annotated[str, Field(description="data/ 資料夾裡的檔名，例如 sales.xlsx")]
 Agg = Annotated[
@@ -59,10 +63,10 @@ Agg = Annotated[
 def _safe_path(file: str) -> Path:
     path = (DATA_DIR / file).resolve()
     if not path.is_relative_to(DATA_DIR) or path.suffix != ".xlsx":
-        raise ValueError(f"不允許讀取 {file!r}：只能讀 data/ 裡的 .xlsx 檔")
+        raise ToolError(f"不允許讀取 {file!r}：只能讀 data/ 裡的 .xlsx 檔")
     if not path.exists():
         available = sorted(p.name for p in DATA_DIR.glob("*.xlsx"))
-        raise ValueError(f"找不到 {file!r}，可用的檔案：{available}")
+        raise ToolError(f"找不到 {file!r}，可用的檔案：{available}")
     return path
 
 
@@ -77,14 +81,14 @@ def _sheet(file: str, sheet: str) -> pd.DataFrame:
     path = _safe_path(file)
     book = _read_book(path, path.stat().st_mtime)
     if sheet not in book:
-        raise ValueError(f"沒有工作表 {sheet!r}，可用的工作表：{list(book)}")
+        raise ToolError(f"沒有工作表 {sheet!r}，可用的工作表：{list(book)}")
     return book[sheet]
 
 
 def _check_columns(df: pd.DataFrame, *cols: str | None) -> None:
     for col in cols:
         if col is not None and col not in df.columns:
-            raise ValueError(f"沒有欄位 {col!r}，可用的欄位：{list(df.columns)}")
+            raise ToolError(f"沒有欄位 {col!r}，可用的欄位：{list(df.columns)}")
 
 
 def _filter(df: pd.DataFrame, where_column: str | None, where_value: str | None) -> pd.DataFrame:
@@ -97,7 +101,7 @@ def _filter(df: pd.DataFrame, where_column: str | None, where_value: str | None)
 def _aggregate(df: pd.DataFrame, group_by: str, value_column: str, agg: str) -> pd.Series:
     _check_columns(df, group_by, value_column)
     if agg != "count" and not pd.api.types.is_numeric_dtype(df[value_column]):
-        raise ValueError(f"欄位 {value_column!r} 不是數字，不能做 {agg}")
+        raise ToolError(f"欄位 {value_column!r} 不是數字，不能做 {agg}")
     return df.groupby(group_by)[value_column].agg(agg)
 
 

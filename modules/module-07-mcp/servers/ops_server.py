@@ -14,7 +14,7 @@ import json
 import logging
 from typing import Annotated, Literal
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server import MCPServer
 from mcp.types import ToolAnnotations
 from pydantic import Field
 
@@ -48,9 +48,9 @@ RUNBOOK = """# 星港物流值班手冊（節錄）
 - 任何重啟、回滾都要先經過值班主管核准，不能由 agent 直接執行。
 """
 
-mcp = FastMCP("ops", instructions="星港物流的唯讀維運查詢：服務狀態、日誌、值班手冊。")
+mcp = MCPServer("ops", version="1.0.0", instructions="星港物流的唯讀維運查詢：服務狀態、日誌、值班手冊。")
 logging.getLogger("mcp").setLevel(logging.WARNING)  # 關掉 SDK 每個請求一行的訊息
-READ_ONLY = ToolAnnotations(readOnlyHint=True, openWorldHint=False)
+READ_ONLY = ToolAnnotations(read_only_hint=True, open_world_hint=False)
 
 
 @mcp.tool(annotations=READ_ONLY)
