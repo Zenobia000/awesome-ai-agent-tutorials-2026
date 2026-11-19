@@ -1,0 +1,78 @@
+# 課程用的單機容器服務。用 profile 挑要開哪一個，不需要全開。
+#   docker compose --env-file .env up -d ollama        # 只開 Ollama
+#   docker compose --env-file .env --profile m4 up -d  # 開模組 4 需要的服務
+# 密碼一律從 .env 讀，沒設就拒絕啟動。各服務的完整流程見 services/*.md。
+name: aiagent
+
+services:
+  ollama:                                   # M1 起全課預設模型服務
+    image: ollama/ollama:${OLLAMA_TAG:-0.40.16}
+    profiles: ["m1", "m2", "m3", "m4", "m5", "m7", "all"]
+    ports: ["${OLLAMA_PORT:-11434}:11434"]
+    environment:
+      OLLAMA_KEEP_ALIVE: ${OLLAMA_KEEP_ALIVE:-10m}
+      OLLAMA_CONTEXT_LENGTH: ${OLLAMA_CONTEXT_LENGTH:-8192}   # 預設 4096 會截斷長對話
+    volumes: [ollama:/root/.ollama]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      retries: 6
+    restart: unless-stopped
+
+  chroma:                                   # M3 伺服器模式（notebook 預設用內嵌模式，不一定要開）
+    image: chromadb/chroma:${CHROMA_TAG:-1.5.9}
+    profiles: ["m3", "all"]
+    ports: ["${CHROMA_PORT:-8000}:8000"]
+    volumes: [chroma:/data]
+    restart: unless-stopped
+
+  neo4j:                                    # M4 GraphRAG、旗艦專案拓撲
+    image: neo4j:${NEO4J_TAG:-2026.10.2-community}
+    profiles: ["m4", "all"]
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"     # 瀏覽器介面
+      - "${NEO4J_BOLT_PORT:-7687}:7687"     # Python driver
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:?set NEO4J_PASSWORD in infra/.env (至少 8 字元)}
+      NEO4J_PLUGINS: '["apoc"]'             # langchain_neo4j 讀 schema 需要 APOC
+      NEO4J_server_memory_heap_max__size: ${NEO4J_HEAP:-1G}
+    volumes: [neo4j:/data]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:7474 >/dev/null || exit 1"]
+      interval: 10s
+      retries: 12
+    restart: unless-stopped
+
+  postgres:                                 # M5 PostgresSaver、旗艦專案
+    image: postgres:${POSTGRES_TAG:-17}
+    profiles: ["m5", "all"]
+    ports: ["${POSTGRES_PORT:-5432}:5432"]
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-agent}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in infra/.env}
+      POSTGRES_DB: ${POSTGRES_DB:-agent}
+    volumes: [postgres:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      retries: 10
+    restart: unless-stopped
+
+  n8n:                                      # M7 低代碼自動化
+    image: n8nio/n8n:${N8N_TAG:-stable}
+    profiles: ["m7", "all"]
+    ports: ["${N8N_PORT:-5678}:5678"]
+    environment:
+      GENERIC_TIMEZONE: ${TZ:-Asia/Taipei}
+      TZ: ${TZ:-Asia/Taipei}
+      N8N_SECURE_COOKIE: "false"            # 本機 http 測試用；上線要走 https 並拿掉
+    extra_hosts: ["host.docker.internal:host-gateway"]   # 讓容器連到本機 Ollama
+    volumes: [n8n:/home/node/.n8n]
+    restart: unless-stopped
+
+volumes:
+  ollama:
+  chroma:
+  neo4j:
+  postgres:
+  n8n:

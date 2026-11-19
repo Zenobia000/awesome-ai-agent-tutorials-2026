@@ -1,0 +1,12 @@
+# NVIDIA 顯卡覆寫檔：只有 Linux（含 WSL2）裝好 NVIDIA Container Toolkit 才用。
+#   docker compose -f compose.yml -f compose.gpu.yml --env-file .env up -d ollama
+# macOS 的 Docker 拿不到 GPU，請改用原生 Ollama（見 services/ollama.md）。
+services:
+  ollama:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
