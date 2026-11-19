@@ -13,6 +13,8 @@
 | `05_text2sql.ipynb` | Lab 2：建 SQLite、DDL 注入、`SQLGenerationResult` 只放行 SELECT、唯讀連線、錯誤回饋重試、14 題正確率 | Ollama、內建 `sqlite3` |
 | `06_eval_prompts.ipynb` | 用標註工單比較兩版 prompt：dev/test 切分、分類報告、混淆矩陣、bootstrap | Ollama、`scikit-learn` |
 
+**驗證環境**（2026-11-19 全部重跑通過）：Python 3.12.13、openai 3.55.1、ollama 0.6.3、pydantic 2.14.3、pandas 3.1.1、scikit-learn 1.9.1；Ollama 0.40.16（qwen2.5:3b）。
+
 ## 準備
 
 ```bash

@@ -11,6 +11,8 @@
 | `02_merge_and_serve.ipynb` | 載入 adapter、`merge_and_unload`、驗證 `W + B·A × scaling`、GGUF 與 Modelfile 步驟 | 先跑 01；`/tmp` 暫用約 1GB |
 | `03_when_not_to_finetune.ipynb` | 選讀：同一任務改用 prompt＋值班手冊（0.5B、3B）對比 LoRA | 先跑 01；Ollama `qwen2.5:3b` |
 
+**驗證環境**（2026-11-19 全部重跑通過）：Python 3.12.13、torch 2.15.0、transformers 5.23.0、peft 0.21.3、accelerate 1.16.0、datasets 5.2.0、safetensors 0.8.0、openai 3.55.1（03 透過 `course_utils.llm`）；Ollama 0.40.16（qwen2.5:3b）。
+
 ## 準備
 
 ```bash
