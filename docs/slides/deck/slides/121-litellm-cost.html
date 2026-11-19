@@ -1,0 +1,63 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>LiteLLM 與 API 計費</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hands{position:absolute;right:110px;top:34px;font-size:22px;line-height:1.4;color:var(--muted);padding:3px 14px;border:2px solid var(--grey)}
+.hands b{font-weight:400;color:var(--ver);margin-right:12px}
+.hands code{font-family:"JetBrains Mono",monospace;font-size:22px}
+.m{font-family:"JetBrains Mono",monospace;font-size:24px}
+.hd{position:absolute;top:296px;font-size:32px}
+.f{position:absolute;left:1040px;font-size:30px;line-height:1.4}
+.rnd{position:absolute;left:1040px;font-size:24px;height:44px;line-height:44px}
+.pt{position:absolute;left:1070px;width:740px;font-size:26px;line-height:1.45}
+</style></head><body><div class="slide">
+  <div class="hands"><b>動手</b><code>modules/module-01-llm-local/08_litellm_and_cost.ipynb</code></div>
+  <h1>一個介面接所有家，帳單都算 token</h1>
+  <p class="lead">LiteLLM 把各家 API 統一成 OpenAI 格式；不管接哪一家，費用都是 token 數乘上單價。</p>
+
+  <!-- 左：LiteLLM -->
+  <div class="hd ind" style="left:110px">LiteLLM：一個 <span class="m" style="font-size:30px">completion()</span> 接所有供應商</div>
+<div class="code" style="left:110px;top:356px;width:850px"><span class="k">from</span> litellm <span class="k">import</span> completion, completion_cost, Router
+<span class="hl">r = completion(model="ollama/qwen3:14b", messages=m)</span>
+<span class="c"># 換一家只換前綴：openai/… openrouter/… anthropic/…</span>
+cost = completion_cost(completion_response=r)
+
+router = Router(model_list=[
+  {<span class="s">"model_name"</span>: <span class="s">"local"</span>,
+   <span class="s">"litellm_params"</span>: {<span class="s">"model"</span>: <span class="s">"ollama/qwen3:14b"</span>}},
+  {<span class="s">"model_name"</span>: <span class="s">"cloud"</span>,
+   <span class="s">"litellm_params"</span>: {<span class="s">"model"</span>: <span class="s">"openrouter/…"</span>}},
+<span class="hl">], fallbacks=[{"local": ["cloud"]}])</span>
+router.completion(model=<span class="s">"local"</span>, messages=m)</div>
+  <div class="abs" style="left:110px;top:852px;width:840px;font-size:26px;line-height:1.45">前綴決定送去哪家，回應一律是 OpenAI 格式。CrewAI 早期底層就用它；1.x 起常見供應商改走原生 SDK，LiteLLM 變成選裝的備援。</div>
+
+  <!-- 右：計費 -->
+  <div class="hd ind" style="left:1040px">API 怎麼計費</div>
+  <div class="f" style="top:352px">費用 ＝ <span class="ind">輸入 token</span> × 輸入單價</div>
+  <div class="f" style="top:396px">　　 ＋ <span class="ver">輸出 token</span> × 輸出單價</div>
+
+  <div class="abs lbl" style="left:1040px;top:470px">長對話每一輪的帳單 <span class="tag">示意</span></div>
+  <div class="abs lbl ind" style="left:1500px;top:470px">■ 輸入</div>
+  <div class="abs lbl ver" style="left:1610px;top:470px">■ 輸出</div>
+  <div class="rnd" style="top:520px">第 1 輪</div>
+  <div class="rnd" style="top:578px">第 2 輪</div>
+  <div class="rnd" style="top:636px">第 3 輪</div>
+  <div class="abs lbl mut" style="left:1590px;top:578px;width:220px">舊輪次照樣<br>算輸入費</div>
+
+  <div class="pt" style="top:712px">輸出單價通常比輸入貴：要一個一個生成</div>
+  <div class="pt" style="top:762px">圖片、語音也先換算成 token 再計費</div>
+  <div class="pt" style="top:812px">單價常變動，以各家定價頁為準</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊是寫一次、接多家的程式；右邊長條一輪比一輪長，因為歷史整串重送（對回「為什麼記不住對話：每次都重送」那頁）。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const S=D.C;
+D.line(975,300,975,900,{stroke:S.grey,strokeWidth:2});
+// 每輪：輸入＝前面所有輪的輸入＋輸出＋新問題；輸出固定（示意單位）
+const U=48,X=1150;
+[[2,1],[5,1],[8,1]].forEach(([inp,out],i)=>{const y=520+i*58;
+  D.rect(X,y,inp*U,44,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.4});
+  D.rect(X+inp*U,y,out*U,44,'#f7d6cf',{fillStyle:'solid',stroke:S.ver,strokeWidth:2.4});});
+// 第 2、3 輪裡「重送的歷史」用斜線標出
+D.rect(X,578,3*U,44,S.ind,{fillStyle:'hachure',hachureGap:9,stroke:'none'});
+D.rect(X,636,6*U,44,S.ind,{fillStyle:'hachure',hachureGap:9,stroke:'none'});
+[712,762,812].forEach(y=>D.sq(1042,y+10,18,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2}));
+</script></body></html>

@@ -379,3 +379,25 @@ Cherry Studio 授權：AGPL-3.0，另售商業授權（https://github.com/Cherry
 1. PyMuPDF 是 AGPL：包進閉源服務對外提供時要開源或買商業授權。課堂與內部批次轉檔不受影響。
 2. MinerU 的授權不是純 Apache 2.0，商用前讀它的 LICENSE 條件。
 3. 不論哪一種，解析放離線批次，不放在問答路徑上（`modules/module-03-rag/00_concepts.md` 第 8 節）。
+
+---
+
+## 技術選型補充 F：Hugging Face 函式庫與 LiteLLM（M1；核實日 2026-11-19）
+
+做法：授權、封存狀態、最新 release 用 `gh api repos/{r}` 與 `/releases/latest` 查（2026-11-19）；定位描述取自各 repo README 或 GitHub description 原文。用於投影片「Hugging Face：模型倉庫＋一組函式庫」「一個介面接所有家，帳單都算 token」。不放 star 數與價格。
+
+| 工具 | 定位（README／description 原文摘要） | 本課用在哪 | 授權 | 狀態 | 連結 |
+|---|---|---|---|---|---|
+| transformers | 模型定義框架，推論與訓練都用（“the model-definition framework … for both inference and training”） | M1 看 logits／attention、M3 embedding／reranker、M6 微調 | Apache-2.0 | 活躍（v5.23.0，2026-11-13） | https://github.com/huggingface/transformers |
+| tokenizers | 快速 tokenizer，核心用 Rust 寫（README 附 Rust crate） | transformers 底層切詞 | Apache-2.0 | 活躍（v0.23.3，2026-10-09） | https://github.com/huggingface/tokenizers |
+| datasets | 現成資料集的下載與處理工具 | M6 微調資料 | Apache-2.0 | 活躍（5.2.0，2026-11-09） | https://github.com/huggingface/datasets |
+| safetensors | 存放張量的安全格式：“safely (as opposed to pickle) and that is still fast (zero-copy)”；README 比較表說 pickle 下載後載入可能執行任意程式碼 | Hub 上權重檔的預設格式 | Apache-2.0 | 活躍（v0.8.0，2026-06-09） | https://github.com/huggingface/safetensors |
+| peft | 參數高效微調（LoRA 等） | M6 LoRA | Apache-2.0 | 活躍（v0.21.3，2026-11-13；與表 2a 一致） | https://github.com/huggingface/peft |
+| accelerate | 同一份 PyTorch 訓練程式不改就能跑在本機或多 GPU／TPU／fp16（“the same code can then be run without modification”） | M6 訓練 | Apache-2.0 | 活躍（v1.16.0，2026-11-16） | https://github.com/huggingface/accelerate |
+| huggingface_hub | Hub 的官方 CLI 與 Python client（下載、上傳） | `from_pretrained()` 背後的下載 | Apache-2.0 | 活躍（v2.4.0，2026-10-29） | https://github.com/huggingface/huggingface_hub |
+| LiteLLM | 開源 AI Gateway，用 OpenAI 格式呼叫 100+ 家 LLM API；Python SDK 的 `Router` 提供跨部署的 retry／fallback 與成本追蹤 | M1 統一介面、`completion_cost()` 算錢 | **MIT，但 `litellm/enterprise/` 目錄另有授權**（LICENSE 檔原文；GitHub API 因此顯示 NOASSERTION） | 活躍（v1.110.0，2026-11-18）；description 寫「Rust core with Python SDK」 | https://github.com/BerriAI/litellm |
+
+注意：
+1. **「CrewAI 底層用 LiteLLM」已過時。** 本機安裝的 crewai 1.15.41（與表 C 的最新版相同）`crewai/llm.py` 中 `LLM.__new__` 先查 `SUPPORTED_NATIVE_PROVIDERS`（openai、anthropic、gemini、bedrock、azure、openrouter、deepseek、ollama 等）走原生 SDK，前綴不在清單內才退回 LiteLLM；LiteLLM 是選裝的 extra（`crewai[litellm]`，METADATA：`litellm<1.105.4,>=1.105.3; extra == 'litellm'`）。投影片寫成「早期底層就用它；1.x 起常見供應商改走原生 SDK，LiteLLM 變成選裝的備援」。
+2. LiteLLM 的 `Router(model_list=…, fallbacks=[{"local": ["cloud"]}])` 與 `completion_cost(completion_response=r)` 已在本機 litellm 1.105.7 用 `inspect.signature` 確認參數存在。
+3. 價格：LiteLLM 的成本是依它內建的價目表估算，單價會隨供應商調整，投影片不寫具體數字。
