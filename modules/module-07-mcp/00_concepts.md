@@ -74,15 +74,15 @@ MCP 的每一則訊息都是 JSON-RPC 2.0，只有三種：
 
 ### 一次連線的固定流程
 
-![一次 MCP 連線的訊息往返：initialize、initialized 通知、tools/list、tools/call](images/mcp_handshake.jpg)
+![MCP 2026-07-28 版：server/discover 選用，每個請求在 _meta 帶協定版本與 client 能力](images/mcp_stateless.jpg)
 
-*圖：時間由上往下。實線是請求、虛線是回應；灰色的 `initialized` 是通知，沒有回應。這是 2025-11-25 版協定的流程。*
+*圖：時間由上往下。實線是請求、虛線是回應。2026-07-28 版沒有 `initialize` 握手：client 可以先用 `server/discover` 問一次（黃色，選用），之後每個請求都在 `_meta` 自己帶協定版本與能力，每個結果都帶 `resultType`；server 不必記住連線狀態。*
 
 打招呼 → 問有什麼 → 叫它做事。
 
 **2026-07-28 版協定把「打招呼」改掉了**（官方 changelog，SEP-2575）：
 
-| | 2025-11-25（圖上這版） | 2026-07-28（現行） |
+| | 2025-11-25（舊版） | 2026-07-28（現行，圖上這版） |
 |---|---|---|
 | 打招呼 | `initialize` 請求＋`notifications/initialized` 通知，之後整條連線共用一個 session | 沒有握手；client 可以先送 `server/discover` 問「你支援哪些版本、有哪些能力、你是誰」 |
 | 版本與能力 | 握手時交換一次 | 每個請求的 `_meta` 都自己帶協定版本與 client 能力，server 不必記住連線狀態 |
