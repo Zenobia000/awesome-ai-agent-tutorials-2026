@@ -64,7 +64,11 @@ dev = [
     { name = "pytest" },
 ]
 m1 = [
+    { name = "accelerate" },
     { name = "anthropic" },
+    { name = "datasets" },
+    { name = "huggingface-hub" },
+    { name = "litellm" },
     { name = "pillow" },
     { name = "soundfile" },
     { name = "tiktoken" },
@@ -141,7 +145,11 @@ dev = [
     { name = "pytest", specifier = ">=8.0" },
 ]
 m1 = [
+    { name = "accelerate", specifier = ">=1.0" },
     { name = "anthropic", specifier = ">=0.40" },
+    { name = "datasets", specifier = ">=3.0" },
+    { name = "huggingface-hub", specifier = ">=0.25" },
+    { name = "litellm", specifier = ">=1.50" },
     { name = "pillow", specifier = ">=10.0" },
     { name = "soundfile", specifier = ">=0.12" },
     { name = "tiktoken", specifier = ">=0.8" },
