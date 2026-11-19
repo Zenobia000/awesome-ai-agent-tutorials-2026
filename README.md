@@ -15,7 +15,7 @@
 
 [**立即開始實作 →**](#快速開始)　[**先看 60 頁精華 →**](docs/slides/lite/deck.pdf)　[**看完整課綱 →**](curriculum-ai-agent-20h.md)
 
-> 20 小時為課綱的講授與實作安排；環境安裝、模型下載、完整跑完 47 本 notebook 與延伸練習另計。模組教材可分別學習，旗艦值班助理仍在整合中。
+> 20 小時為課綱的講授與實作安排；環境安裝、模型下載、完整跑完 47 本 notebook 與延伸練習另計。模組教材可分別學習；[旗艦值班助理](projects/incident-autonomous-agent/)另提供可執行的整合示範。
 
 ## 把你的 Python，升級成 Agent 工程力
 
@@ -122,11 +122,17 @@ uv run --no-sync jupyter lab modules/module-01-llm-local
 - **讓寫入經過審批。** 練習「審批 → 執行 → 驗證」、狀態保存與明確的迴圈上限；防護措施需配合權限及測試。
 - **先掌握單一 Agent。** 再用實驗比較，何時值得加入 skills、subagent 與多 Agent 協作。
 
-## 下一站：值班助理
+## 把整門課接起來：值班助理
 
-把查文件、查資料庫、MCP 工具、人工審批與效果評估，接成同一個值班 Agent，是本課的整合方向。
+[**打開旗艦專案 →**](projects/incident-autonomous-agent/)
 
-**目前狀態：各模組提供獨立練習；[旗艦專案](projects/incident-autonomous-agent/)仍在建置，現有基礎服務 Compose 設定，完整整合流程尚未交付。** 學習請以模組教材為入口。
+查文件、查訂單、讀監控，再由你決定是否修復。值班助理提供 HTTP／SSE 操作頁面、混合檢索、MCP 工具與完整的「人工審批 → 執行 → 驗證」流程。
+
+- **先跑免模型 Demo**：合成故障資料，能看到拒絕、核准及修復驗證的完整結果。
+- **再接 Live 整合**：Ollama／Deep Agents、三個 skills、唯讀子 agent、MCP、Chroma 與 PostgreSQL checkpoint；Neo4j 可選。
+- **用測試確認邊界**：涵蓋重複審批、過期審批、禁用服務與驗證失敗，附[固定情境評估報告](eval_benchmarks/results/incident-demo.json)。
+
+服務操作限定教學模擬環境；可先在本機完成整合實作，再自行接入企業的受控系統。
 
 ## 常見問題
 

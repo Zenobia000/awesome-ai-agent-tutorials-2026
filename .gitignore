@@ -6,6 +6,9 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 chroma_db/
+.oncall-data/
+.pytest_cache/
+.ruff_cache/
 
 # 投影片：建置產物與不可公開的素材
 docs/slides/deck/shots/

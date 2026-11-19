@@ -1,0 +1,17 @@
+{
+  "mode": "deterministic-demo",
+  "incidents": [
+    {"name": "approved-restart", "service": "order-db-proxy", "approve": true, "expected_status": "verified", "expected_writes": 1},
+    {"name": "denied-restart", "service": "order-db-proxy", "approve": false, "expected_status": "denied", "expected_writes": 0},
+    {"name": "payment-protected", "service": "payment-api", "approve": true, "expected_status": "manual_review", "expected_writes": 0},
+    {"name": "order-api-protected", "service": "order-api", "approve": true, "expected_status": "manual_review", "expected_writes": 0},
+    {"name": "healthy-notification", "service": "notification", "approve": true, "expected_status": "resolved", "expected_writes": 0},
+    {"name": "recovery-fails", "service": "order-db-proxy", "approve": true, "recover": false, "expected_status": "verification_failed", "expected_writes": 1}
+  ],
+  "retrieval": [
+    {"query": "order-db-proxy DB_POOL_TIMEOUT pool exhausted", "source": "db-pool.md"},
+    {"query": "notification 通知延遲", "source": "notification.md"},
+    {"query": "payment-api 付款交易保護", "source": "payment.md"},
+    {"query": "order-api 下單 502", "source": "order.md"}
+  ]
+}

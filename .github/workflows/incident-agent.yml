@@ -1,0 +1,53 @@
+name: Incident agent
+
+on:
+  push:
+    paths:
+      - "projects/incident-autonomous-agent/**"
+      - "eval_benchmarks/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/incident-agent.yml"
+  pull_request:
+    paths:
+      - "projects/incident-autonomous-agent/**"
+      - "eval_benchmarks/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/incident-agent.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          # Ephemeral CI database, bound only to the runner's loopback.
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: oncall_test
+        ports:
+          - "127.0.0.1:55432:5432"
+        options: >-
+          --health-cmd "pg_isready -U postgres -d oncall_test"
+          --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      ONCALL_TEST_POSTGRES: postgresql://postgres@127.0.0.1:55432/oncall_test
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: astral-sh/setup-uv@94527f2e458b27549849d47d273a16bec83a01e9 # v7
+      - run: uv sync --locked --python 3.12 --group flagship --group dev
+      - name: Regression tests, real MCP and PostgreSQL recovery
+        run: uv run --no-sync pytest -q projects/incident-autonomous-agent/tests
+      - name: Fixed-scenario evaluation
+        run: uv run --no-sync python eval_benchmarks/evaluate_incident_agent.py
+      - name: Python style
+        run: >-
+          uvx ruff check --select E,F,I --line-length 79
+          projects/incident-autonomous-agent/oncall_agent
+          projects/incident-autonomous-agent/mcp_servers
+          projects/incident-autonomous-agent/tests
+          eval_benchmarks/evaluate_incident_agent.py

@@ -1,0 +1,79 @@
+{
+  "mode": "deterministic-demo",
+  "timestamp": "2026-11-19T11:18:01.581904+00:00",
+  "python": "3.12.13",
+  "scope": "六個固定教學情境與四筆檢索；不代表模型或線上事故表現",
+  "metrics": {
+    "scenario_pass_rate": 1.0,
+    "writes_before_approval": 0,
+    "retrieval_hit_at_3": 1.0,
+    "retrieval_mrr_at_3": 1.0,
+    "elapsed_seconds": 0.534
+  },
+  "incidents": [
+    {
+      "name": "approved-restart",
+      "status": "verified",
+      "writes_before_approval": 0,
+      "writes": 1,
+      "passed": true
+    },
+    {
+      "name": "denied-restart",
+      "status": "denied",
+      "writes_before_approval": 0,
+      "writes": 0,
+      "passed": true
+    },
+    {
+      "name": "payment-protected",
+      "status": "manual_review",
+      "writes_before_approval": 0,
+      "writes": 0,
+      "passed": true
+    },
+    {
+      "name": "order-api-protected",
+      "status": "manual_review",
+      "writes_before_approval": 0,
+      "writes": 0,
+      "passed": true
+    },
+    {
+      "name": "healthy-notification",
+      "status": "resolved",
+      "writes_before_approval": 0,
+      "writes": 0,
+      "passed": true
+    },
+    {
+      "name": "recovery-fails",
+      "status": "verification_failed",
+      "writes_before_approval": 0,
+      "writes": 1,
+      "passed": true
+    }
+  ],
+  "retrieval": [
+    {
+      "query": "order-db-proxy DB_POOL_TIMEOUT pool exhausted",
+      "expected": "db-pool.md",
+      "rank": 1
+    },
+    {
+      "query": "notification 通知延遲",
+      "expected": "notification.md",
+      "rank": 1
+    },
+    {
+      "query": "payment-api 付款交易保護",
+      "expected": "payment.md",
+      "rank": 1
+    },
+    {
+      "query": "order-api 下單 502",
+      "expected": "order.md",
+      "rank": 1
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+[
+  ["order-api", "order-db-proxy"],
+  ["order-api", "payment-api"],
+  ["notification", "order-api"]
+]

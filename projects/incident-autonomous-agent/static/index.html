@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>晨光外送 · 值班助理</title>
+<style>
+  :root { color-scheme: dark; --paper: #171916; --ink: #f4f1e8; --accent: #ff865f; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.65 "Noto Sans TC", system-ui, sans-serif; }
+  main { max-width: 1080px; margin: auto; padding: 48px 24px; }
+  h1 { font-size: clamp(2.4rem, 7vw, 4.5rem); line-height: 1.12; letter-spacing: -.03em; margin: 30px 0 20px; }
+  h2 { margin: 0 0 16px; font-size: 1.25rem; }
+  p { max-width: 70ch; }
+  .brand, .status { color: var(--accent); }
+  .intro { color: #c4c6ba; max-width: 58ch; }
+  .layout { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(0, 1.3fr); gap: 48px; margin-top: 40px; }
+  label { display: block; margin: 18px 0 7px; }
+  input, select, textarea, button { font: inherit; }
+  input, select, textarea { width: 100%; padding: 12px; color: var(--ink); background: #23261f; border: 1px solid #737969; border-radius: 8px; }
+  textarea { resize: vertical; min-height: 100px; }
+  ::placeholder { color: #c4c6ba; opacity: 1; }
+  button { border: 0; border-radius: 8px; padding: 12px 20px; background: var(--accent); color: #24170f; cursor: pointer; font-weight: 650; margin: 16px 8px 0 0; }
+  button.secondary { background: #d8ddcf; color: #171916; }
+  button:hover { filter: brightness(1.12); }
+  button:disabled { opacity: .5; cursor: wait; }
+  :focus-visible { outline: 3px solid #f1c47e; outline-offset: 4px; }
+  ::selection { background: #ff865f; color: #171916; }
+  .result { border-top: 1px solid #737969; padding-top: 22px; overflow-wrap: anywhere; }
+  .result p { white-space: pre-wrap; }
+  pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .85rem; max-height: 480px; overflow: auto; }
+  details { margin-top: 20px; }
+  summary { cursor: pointer; }
+  .muted { color: #c4c6ba; font-size: .9rem; }
+  #approval { margin-top: 24px; padding-top: 20px; border-top: 1px solid #737969; }
+  #error { color: #ffb399; }
+  [hidden] { display: none !important; }
+  @media (max-width: 720px) { .layout { grid-template-columns: 1fr; gap: 32px; } main { padding-top: 24px; } }
+</style>
+<main>
+  <div class="brand">晨光外送 / On-call Agent</div>
+  <h1>查清楚。<br>核准後，再動手。</h1>
+  <p class="intro">把服務指標、日誌、操作手冊與訂單證據放在一起。值班助理提出修復建議，由你決定是否執行，再用監控確認結果。</p>
+  <p class="muted" id="mode">正在讀取執行模式…</p>
+  <div class="layout">
+    <section aria-labelledby="form-title">
+      <h2 id="form-title">開始一次調查</h2>
+      <form id="form">
+        <label for="service">調查服務</label>
+        <select id="service"><option>order-db-proxy</option><option>order-api</option><option>payment-api</option><option>notification</option></select>
+        <label for="question">發生什麼事？</label>
+        <textarea id="question" required maxlength="2000">14:00 起下單持續 502，請查明原因與修復建議。</textarea>
+        <label for="token">API Token（有設定時填寫）</label>
+        <input id="token" type="password" autocomplete="off">
+        <button id="start" type="submit">開始調查 →</button>
+      </form>
+      <details><summary>恢復待審事件</summary>
+        <label for="restore-id">事件 ID</label><input id="restore-id" autocomplete="off">
+        <button class="secondary" type="button" id="restore">讀取事件</button>
+      </details>
+      <p id="error" role="alert"></p>
+    </section>
+    <section class="result" aria-labelledby="result-title">
+      <h2 id="result-title">調查紀錄</h2>
+      <div id="progress" class="status" role="status" aria-live="polite">等待開始</div>
+      <p id="summary">預設情境：order-db-proxy 連線池耗盡，造成下單失敗。</p>
+      <p class="muted" id="incident"></p>
+      <div id="approval" hidden>
+        <h2>待人工審批</h2><p id="proposal"></p>
+        <label for="reviewer">審批者</label><input id="reviewer" required maxlength="100" placeholder="請填姓名或識別代號">
+        <button type="button" id="approve">核准模擬重啟</button>
+        <button type="button" id="deny" class="secondary">拒絕執行</button>
+      </div>
+      <details><summary>查看證據與完整結果</summary><pre id="evidence">尚無結果。</pre></details>
+    </section>
+  </div>
+</main>
+<script>
+  const $ = id => document.getElementById(id);
+  let state = null;
+  const labels = { awaiting_approval: '等待人工審批', verified: '修復已通過驗證', denied: '已拒絕，未執行重啟', resolved: '無需操作', manual_review: '需人工處理', blocked: '操作已阻擋', execution_failed: '執行失敗', verification_failed: '驗證未通過，請升級人工處理' };
+  function headers() { return { 'Content-Type': 'application/json', ...($('token').value ? { Authorization: `Bearer ${$('token').value}` } : {}) }; }
+  async function checked(response) {
+    if (!response.ok) { const data = await response.json(); throw Error(typeof data.detail === 'string' ? data.detail : '請檢查輸入內容'); }
+    return response;
+  }
+  function render(value) {
+    state = value;
+    $('progress').textContent = labels[state.status] || state.status || '調查未完成';
+    $('summary').textContent = state.diagnosis?.summary || state.error || '調查尚未完成';
+    $('incident').textContent = `事件 ID：${state.incident_id}`;
+    $('evidence').textContent = JSON.stringify(state, null, 2);
+    $('approval').hidden = !state.pending?.length;
+    $('proposal').textContent = state.proposal?.service ? `重啟 ${state.proposal.service}；操作 ID：${state.proposal.action_id}` : '';
+  }
+  function busy(value) { for (const id of ['start', 'restore', 'approve', 'deny']) $(id).disabled = value; }
+  $('form').addEventListener('submit', async event => {
+    event.preventDefault(); busy(true); $('error').textContent = ''; $('approval').hidden = true;
+    $('progress').textContent = '正在收集證據…';
+    try {
+      const response = await checked(await fetch('/api/incidents/stream', { method: 'POST', headers: headers(), body: JSON.stringify({ service: $('service').value, question: $('question').value }) }));
+      const reader = response.body.getReader(); const decoder = new TextDecoder(); let buffer = '';
+      while (true) {
+        const { value, done } = await reader.read(); buffer += decoder.decode(value, { stream: !done });
+        let boundary;
+        while ((boundary = buffer.indexOf('\n\n')) !== -1) {
+          const block = buffer.slice(0, boundary); buffer = buffer.slice(boundary + 2);
+          const kind = block.split('\n').find(line => line.startsWith('event: '))?.slice(7);
+          const raw = block.split('\n').filter(line => line.startsWith('data: ')).map(line => line.slice(6)).join('\n');
+          if (!raw) continue;
+          const data = JSON.parse(raw);
+          if (kind === 'incident') { $('restore-id').value = data.incident_id; $('incident').textContent = `事件 ID：${data.incident_id}`; }
+          if (kind === 'step') $('progress').textContent = `已完成：${data.step}`;
+          if (kind === 'state') render(data);
+          if (kind === 'failure') throw Error(data.message);
+        }
+        if (done) break;
+      }
+    } catch (error) { $('error').textContent = error.message; $('progress').textContent = '調查未完成'; }
+    finally { busy(false); }
+  });
+  async function decide(approved) {
+    if (!$('reviewer').value.trim()) { $('error').textContent = '請填寫審批者'; $('reviewer').focus(); return; }
+    busy(true); $('error').textContent = '';
+    try {
+      const response = await checked(await fetch(`/api/incidents/${state.incident_id}/decision`, { method: 'POST', headers: headers(), body: JSON.stringify({ action_id: state.proposal.action_id, approved, reviewer: $('reviewer').value.trim() }) }));
+      render(await response.json());
+    } catch (error) { $('error').textContent = error.message; }
+    finally { busy(false); }
+  }
+  $('approve').onclick = () => decide(true); $('deny').onclick = () => decide(false);
+  $('restore').onclick = async () => {
+    busy(true); $('error').textContent = '';
+    try { render(await (await checked(await fetch(`/api/incidents/${encodeURIComponent($('restore-id').value.trim())}`, { headers: headers() }))).json()); }
+    catch (error) { $('error').textContent = error.message; }
+    finally { busy(false); }
+  };
+  fetch('/health').then(r => r.json()).then(data => { $('mode').textContent = `${data.mode === 'demo' ? '示範模式：固定規則調查，免模型與金鑰。' : '整合模式：Deep Agents + MCP。'} 所有服務操作皆為教學模擬。${data.checkpoint === 'memory' ? '記憶體檢查點於程序結束後清除。' : 'PostgreSQL 保存事件與審批進度。'}`; }).catch(() => { $('mode').textContent = '無法連線，請確認伺服器已啟動。'; });
+</script>
+</html>
