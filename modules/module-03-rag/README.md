@@ -15,6 +15,8 @@
 | `07_llamaindex.ipynb` | 用 LlamaIndex 重組整條管線，自訂 BM25 Retriever、重排 postprocessor，對照拼裝版 | Ollama、llama-index |
 | `08_pdf_parsing.ipynb` | 選讀：雙欄交錯、表格攤平、區塊偵測；MinerU 與 olmocr 的輸出長什麼樣 | pymupdf（不下載模型） |
 
+**驗證環境**（2026-11-19，8 本全部重跑通過）：Python 3.12.13、chromadb 1.5.9、llama-index-core 0.14.26、llama-index-embeddings-ollama 0.11.0、llama-index-llms-openai-like 0.9.0、sentence-transformers 6.3.0、transformers 5.23.0、torch 2.15.0、openai 3.55.1、rank-bm25 0.2.2、jieba 0.42.1、pymupdf 2.1、scikit-learn 1.9.1；Ollama `qwen2.5:3b`、`bge-m3`。
+
 ## 準備
 
 ```bash

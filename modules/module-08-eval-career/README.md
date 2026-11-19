@@ -12,10 +12,10 @@
 | notebook | 做什麼 | 需要 |
 |---|---|---|
 | `00_concepts.md` | 原理紀要（不是 notebook） | — |
-| `01_llm_as_judge.ipynb` | Opik 內建指標（字串相似度、Hallucination 經 LiteLLM 接 Ollama）＋結構化輸出寫 judge；重現位置偏誤與長度偏誤；四種評分器對 10 筆人工標註算一致率、TPR、TNR、混淆矩陣 | Ollama |
+| `01_llm_as_judge.ipynb` | Opik 內建指標（字串相似度、Hallucination 經 LiteLLM 接 Ollama）＋結構化輸出寫 judge；重現位置偏誤與長度偏誤；四種評分器對 10 筆人工標註算一致率、TPR、TNR、混淆矩陣 | Ollama；**相容環境 `.venv-compat`** |
 | `02_regression_eval.ipynb` | 40 題固定題庫，改 top_k、改 prompt 前後各跑一次；對比表、分標籤長條圖、回歸閘門與 pytest 版 | Ollama；約 240 次模型呼叫 |
 | `03_langfuse.ipynb` | Langfuse SDK（5.x，OTel 架構）替檢索、生成、judge 打點並寫回分數；延遲分布、每題 token、瀑布圖、錯誤分析 | Langfuse 金鑰選填 |
-| `04_opik.ipynb` | Opik `@opik.track` 打點、`record_traces_locally` 看 trace；把 02 的回答交給三種評分器比較；有伺服器時跑 `opik.evaluate()` | Opik 伺服器選填；先跑 02 |
+| `04_opik.ipynb` | Opik `@opik.track` 打點、`record_traces_locally` 看 trace；把 02 的回答交給三種評分器比較；有伺服器時跑 `opik.evaluate()` | **相容環境 `.venv-compat`**；Opik 伺服器選填；先跑 02 |
 | `05_interview_sandbox.ipynb` | 把 01～03 的實測結果轉成履歷句子並查核數字出處；從投影片 21 題面試題抽題，judge 依「限制、結構、數字」打分 | Ollama；先跑 01～03 |
 
 模組內的檔案：
@@ -33,16 +33,30 @@
 | `runs/` | 01～03 跑出來的結果（04、05 會讀）；重跑 notebook 會覆寫 |
 | `images/` | notebook 與 `00_concepts.md` 用的圖解 |
 
+**驗證環境**（2026-11-19）：主環境（02、03、05）Python 3.12.13、langfuse 5.2.0、opentelemetry-sdk 1.45.2、openai 3.55.1、pydantic 2.14.3、pandas 3.1.1、pytest 9.2.0；相容環境 `.venv-compat`（01、04）opik 2.2.150、openai 2.54.0、litellm 1.105.7、pydantic 2.12.5、pandas 3.1.1；Ollama `qwen2.5:3b`、`bge-m3`。
+
 ## 準備
 
+本模組要**兩個環境**：Opik 的最新版（2.2.x）仍要求 `openai<3`，跟其他套件（`openai>=3`）裝不進同一個環境，
+所以 **01 與 04 用相容環境 `.venv-compat`（`compat` 群組）**，02、03、05 用主環境。
+
 ```bash
-uv sync --group m8 --group dev
 cp .env.example .env
 ollama pull qwen2.5:3b && ollama pull bge-m3
+
+# 主環境：02、03、05
+uv sync --group m8 --group dev
 uv run jupyter lab modules/module-08-eval-career
+
+# 相容環境：01、04（Opik）。另開一個終端機，裝在 .venv-compat，不會動到主環境
+UV_PROJECT_ENVIRONMENT=.venv-compat uv sync --group compat
+UV_PROJECT_ENVIRONMENT=.venv-compat uv run --no-sync jupyter lab modules/module-08-eval-career
 ```
 
-notebook 從本資料夾開啟，並**依序**執行：04 讀 02 的 `runs/`，05 讀 01～03 的 `runs/`。
+`compat` 群組只有 crewai、opik、pandas、pydantic，加上專案共同的 numpy、matplotlib、python-dotenv、jupyterlab，01 與 04 用到的就這些。
+之後在相容環境跑指令都要加 `--no-sync`，不然 uv 會把環境同步回預設的群組組合。
+
+notebook 從本資料夾開啟，並**依序**執行：01（相容環境）→ 02 → 03 → 04（相容環境）→ 05。04 讀 02 的 `runs/`，05 讀 01～03 的 `runs/`。
 跑 pytest 版閘門：
 
 ```bash

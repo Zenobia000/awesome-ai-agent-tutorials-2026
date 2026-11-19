@@ -2136,7 +2136,7 @@
    "relation": "CAPTAIN_OF",
    "object": "百獸海賊團",
    "paragraph": "32",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "凱多",
@@ -2178,7 +2178,7 @@
    "relation": "OWNS",
    "object": "時時果實",
    "paragraph": "32",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "香吉士",
