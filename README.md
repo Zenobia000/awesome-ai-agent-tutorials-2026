@@ -1,59 +1,88 @@
-# AI Agent 工程實戰：20 小時，從 LLM 原理做到可上線的 Agent
+# 台灣 AI Agent 極速實戰課｜20 小時，打造你的 AI Agent
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)
-![Notebooks](https://img.shields.io/badge/notebooks-47%20本，全部實跑-2ea44f.svg)
-![Slides](https://img.shields.io/badge/投影片-220%20頁-orange.svg)
-![Verified](https://img.shields.io/badge/套件驗證-2026--11--19-blue.svg)
+![20 小時打造你的 AI Agent：台灣 AI Agent 極速實戰課，8 個模組、47 本 Notebook、繁體中文、開源免費](assets/marketing/agent-course-hero.png)
 
-**一套免費、在自己電腦上就能跑完的 AI Agent 課程。** 220 頁投影片講觀念，47 本 notebook 動手做，8 份原理紀要補上「為什麼」。從「LLM 到底在算什麼」開始，一路做到一個會查資料、會等人審批、做完能拿數字證明效果的值班 agent。
+[![License: MIT](https://img.shields.io/badge/License-MIT-ef542d.svg)](LICENSE)
+[![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-3776ab.svg)](pyproject.toml)
+[![47 Notebooks](https://img.shields.io/badge/Notebooks-47-ef542d.svg)](modules/README.md)
+[![繁體中文](https://img.shields.io/badge/教材-繁體中文-242424.svg)](modules/)
 
-- **給誰用**：想轉職 AI 工程師的軟體工程師、學過深度學習但沒做過 LLM 應用的學生、要在公司導入 agent 的團隊，以及想拿現成教材開課的講師。
-- **它解決什麼**：網路上的教學不是停在「呼叫一次 API」，就是一開始就丟一個大框架。這門課先把原理講清楚，再用 2026 年主流工具實作，每一步都看得到中間結果。
-- **有什麼不同**：
-  - 預設全部走本機 Ollama，不用金鑰、不花錢。
-  - 每本 notebook 都實際執行過並存了輸出，打開就能先讀再跑。
-  - 套件全部驗證到 2026-11-19 的最新版。
-  - 效果用實測數字說話，小模型答錯的地方也照實保留，當成教材。
+**這次，把 AI Agent 做出來。**
 
----
+為台灣開發者打造的 **20 小時 AI Agent 工程實戰路線**。從 LLM 原理、RAG 到工具呼叫、人工審批與效果評估，把散落的知識接成一條能動手完成的學習路線。
 
-## 從哪裡開始
+**8 個模組 · 47 本實作 Notebook · 220 頁完整投影片 · 開源免費**
 
-| 你是… | 建議路線 | 大約時間 |
+[**立即開始實作 →**](#快速開始)　[**先看 60 頁精華 →**](docs/slides/lite/deck.pdf)　[**看完整課綱 →**](curriculum-ai-agent-20h.md)
+
+> 20 小時為課綱的講授與實作安排；環境安裝、模型下載、完整跑完 47 本 notebook 與延伸練習另計。模組教材可分別學習，旗艦值班助理仍在整合中。
+
+## 把你的 Python，升級成 Agent 工程力
+
+**給想快速做出第一個 Agent 的你，也給準備轉職、導入企業應用、開設內訓的你。** 先備能力是基本 Python；LLM 與深度學習觀念由教材補上。
+
+- **原理、程式、結果，一次接起來。** 每個模組有原理紀要，47 本 notebook 都保留執行輸出，打開就能讀到實際結果。
+- **本機優先，直接動手。** 文字對話與主要 Agent 練習預設使用 Ollama；雲端 API 範例選填，不需先購買 API 額度。
+- **從會回答，練到會做事。** 查文件、查資料庫、呼叫 MCP 工具，再加入狀態保存與人工審批。
+- **用數字，說明你做了什麼。** 用檢索指標、回歸評估與執行追蹤檢查結果，累積可展示、可解釋的作品素材。
+- **學習、改編、企業內訓都開放。** 本倉庫採 MIT 授權；外部模型、資料與服務另依各自授權及條款。
+
+## 快速開始
+
+先安裝 [uv](https://docs.astral.sh/uv/getting-started/installation/) 與 [Ollama](https://ollama.com/download)，並啟動 Ollama。以下指令使用 macOS／Linux／WSL 的 Bash；Windows PowerShell 請以 `Copy-Item .env.example .env` 複製設定檔。
+
+```bash
+git clone https://github.com/Zenobia000/awesome-ai-agent-tutorials-2026.git
+cd awesome-ai-agent-tutorials-2026
+
+# 安裝 M1 依賴，沿用倉庫鎖定版本
+uv sync --locked --group m1
+
+# 首次設定時複製；已有 .env 請保留原設定
+cp -n .env.example .env
+
+# 下載本機對話模型；Ollama 需保持啟動
+ollama pull qwen2.5:3b
+
+# 保留剛安裝的模組環境，開啟 JupyterLab
+uv run --no-sync jupyter lab modules/module-01-llm-local
+```
+
+開啟 [M1-04：第一次模型對話](modules/module-01-llm-local/04_chat_api.ipynb)，依序執行本機對話段落。**看到模型回覆與串流文字，就完成第一次本機 LLM 呼叫。** 需要雲端金鑰的段落可略過。想從原理開始，先讀 [M1 原理紀要](modules/module-01-llm-local/00_concepts.md)，再從 `01_tokens.ipynb` 依序學習。
+
+接著進入 [M5：打造 Agent](modules/module-05-agent-harness/)，或按下方路線補齊基礎。進入需要 embedding 的練習前，再執行 `ollama pull bge-m3`。
+
+<details>
+<summary><strong>安裝、硬體與相容環境</strong></summary>
+
+- Python 宣告支援 3.11+；實際驗證版本見各模組 README。首次安裝與模型下載需要網路及磁碟空間。
+- 多數練習可使用 CPU；速度與可載入的模型取決於記憶體及硬體。M6 微調建議使用 GPU。
+- 更換模組時，使用對應依賴群組 `m1`～`m8`；跨模組依賴與完整安裝方式見[教材環境說明](modules/README.md#環境)。
+- CrewAI、Opik 使用獨立 `compat` 環境，對應 M5-09、M8-01、M8-04。請依[雙環境說明](modules/README.md#兩個環境主環境與相容環境)安裝。
+- 本機執行不收 API 費；選填雲端 API、雲端算力與付費服務依供應商計費。金鑰請放 `.env`，設定項目見 [.env.example](.env.example)。
+
+</details>
+
+## 選一條路，現在出發
+
+| 你的目標 | 建議路線 | 第一個成果 |
 |---|---|---|
-| **完全沒碰過 AI** | 先看[精簡版投影片](docs/slides/lite/deck.pdf)（60 頁）→ 讀 [M1 原理紀要](modules/module-01-llm-local/00_concepts.md) → 跑 M1-01～04 | 半天 |
-| **學過深度學習，沒做過 LLM 應用** | [完整投影片](docs/slides/deck/deck.pdf)的 M1～M3 → M1、M2、M3 全部 notebook | 2～3 天 |
-| **會寫 Python，想直接做 agent** | M5-01 自己寫 ReAct → M5-02～06（LangGraph、harness）→ M7 MCP → M8 評估 | 2 天 |
-| **準備 AI 工程師面試** | 每個模組的投影片面試頁 → [M8-05 面試沙盤](modules/module-08-eval-career/05_interview_sandbox.ipynb)：把評估結果寫成履歷句，再讓模擬面試官打分 | 1 天 |
-| **講師或企業內訓** | [課綱](curriculum-ai-agent-20h.md)（20 小時排程）＋完整投影片＋[教材總覽](modules/README.md) | 照課綱 |
+| **第一次接觸 LLM** | [60 頁精華](docs/slides/lite/deck.pdf) → [M1](modules/module-01-llm-local/) → [M2](modules/module-02-prompt-structured/) | 在自己電腦上對話，取得結構化輸出 |
+| **直接做 Agent** | [M5](modules/module-05-agent-harness/) → [M7](modules/module-07-mcp/) → [M8](modules/module-08-eval-career/)；需要時回補 M2、M3 | 工具呼叫、審批流程與評估結果 |
+| **打造知識助理** | [M3](modules/module-03-rag/) → [M4](modules/module-04-graphrag/) → [M5](modules/module-05-agent-harness/) | 混合檢索、圖查詢與檢索指標 |
+| **準備轉職與面試** | 實作主線 → [M8-05 面試沙盤](modules/module-08-eval-career/05_interview_sandbox.ipynb) | 用自己的評估結果，整理作品與履歷敘述 |
+| **講師／企業內訓** | [20 小時課綱](curriculum-ai-agent-20h.md)＋[完整投影片](docs/slides/deck/deck.pdf)＋[教材總覽](modules/README.md) | 可按對象選用、改編的教學路線 |
 
----
+## 學完，拿得出這些工程成果
 
-## 課程資訊
-
-| | |
+| 能力 | 你會動手產出的東西 |
 |---|---|
-| **時數** | 20 小時（講授＋實作），8 個模組 |
-| **程度** | 入門到中階；M5、M8 接近實務 |
-| **先修** | 會寫 Python。學過深度學習更好，投影片每章都有「你已經會的」對照框，沒學過也可以跳過 |
-| **語言** | 繁體中文，程式碼註解也是 |
-| **費用** | 免費。雲端 API 只用在少數選填段落，沒有金鑰會自動跳過；全部雲端範例跑一次只要幾美分 |
-| **硬體** | 一般筆電可跑大部分內容；M6 微調建議有 GPU，沒有可租[雲端算力](infra/cloud-gpu.md) |
-| **授權** | MIT，可自由學習、改編、商用 |
-
----
-
-## 學完你會做什麼
-
-1. 說明 LLM 為什麼會幻覺、為什麼記不住對話、為什麼 context 越長越貴，並用 token 數算出 API 費用。
-2. 用 Pydantic 讓模型輸出程式能直接用的結構，並擋下 prompt injection 與危險的 SQL。
-3. 建一條 RAG 管線：混合檢索、重排序，再用 Hit@k／MRR 證明它真的變好。
-4. 自己寫一個 ReAct agent，再用 LangGraph、deepagents、OpenAI／Claude Agent SDK、CrewAI 做同一件事，知道各框架替你做了什麼。
-5. 把公司內部工具包成 MCP server，讓模型能讀、不能亂改；寫入動作一律走「審批 → 執行 → 驗證」。
-6. 用 LLM 評審、回歸測試、Langfuse／Opik 追蹤，讓每次修改都有數字可比。
-
----
+| **LLM 與結構化輸出** | 本地／雲端模型客戶端、Pydantic 輸出驗證、Text2SQL 練習 |
+| **RAG 與 GraphRAG** | Dense＋Sparse＋RRF 混合檢索、重排序、圖查詢，以及 Hit@k／MRR 比較 |
+| **Agent 與狀態管理** | 手寫 ReAct／function calling 迴圈、LangGraph checkpoint 與人工審批 |
+| **MCP 工具整合** | 本機 MCP server、Excel 分析工具與工具存取邊界 |
+| **評估與可觀測性** | LLM 評審、回歸評估、Langfuse／Opik 追蹤練習 |
+| **模型微調** | LoRA adapter、權重合併與 Ollama 匯出流程 |
 
 ## 課程地圖
 
@@ -67,98 +96,63 @@
 | [**M4 GraphRAG**](modules/module-04-graphrag/) | 2h | 用 LLM 抽三元組、多跳查詢、Cypher、圖 vs 向量實測 | networkx、Neo4j |
 | [**M5 Agent**](modules/module-05-agent-harness/) | 5h | **自己寫 ReAct**、function calling 迴圈、狀態與 checkpoint、人工審批、harness、六種框架對照 | LangGraph、deepagents、OpenAI Agents SDK、Claude Agent SDK、CrewAI |
 | [**M6 LoRA 微調**](modules/module-06-lora/) | 2h | 微調 0.5B 小模型、合併權重、匯出給 Ollama、什麼時候不該微調 | PEFT、transformers |
-| [**M7 MCP**](modules/module-07-mcp/) | 1.5h | MCP client、Excel 分析 agent、掛到 Claude Code／Cursor 與安全邊界 | MCP Python SDK 2.x |
+| [**M7 MCP**](modules/module-07-mcp/) | 1.5h | MCP client、Excel 分析 agent、掛到 Claude Code／Cursor 與安全邊界 | MCP Python SDK |
 | [**M8 評估與求職**](modules/module-08-eval-career/) | 1.5h | LLM 當評審、回歸評估、trace、履歷量化、模擬面試 | Langfuse、Opik |
 
 完整 notebook 清單、取材來源與框架對照表見 [modules/README.md](modules/README.md)。
 
----
 
-## 教材形式
+20 小時主線以[課綱](curriculum-ai-agent-20h.md)為準；框架比較、供應商範例與延伸練習可依需求選讀。各模組 README 列出 notebook 前置條件與已驗證環境。
 
-| 教材 | 用途 | 位置 |
-|---|---|---|
-| 完整投影片（220 頁） | 上課主教材，每章有白話入口、選型表、踩坑與面試題 | [docs/slides/deck/deck.pdf](docs/slides/deck/deck.pdf) |
-| 精簡版投影片（60 頁） | 給沒學過 agent 設計的一般讀者 | [docs/slides/lite/deck.pdf](docs/slides/lite/deck.pdf) |
-| 原理紀要（8 份） | 每個模組的「為什麼」：白話、圖解、名詞表、常見坑 | `modules/*/00_concepts.md` |
-| Notebook（47 本） | 動手實作，已存執行結果，可以先讀再跑 | `modules/*/` |
-| 課綱 | 20 小時排程、每堂目標、踩坑、面試題 | [curriculum-ai-agent-20h.md](curriculum-ai-agent-20h.md) |
+## 教材直接拿走
 
----
+| 教材 | 用法 |
+|---|---|
+| [**完整投影片 · 220 頁**](docs/slides/deck/deck.pdf) | 系統學習、授課、內訓 |
+| [**精簡投影片 · 60 頁**](docs/slides/lite/deck.pdf) | 先建立 Agent 工程全貌 |
+| [**實作教材 · 47 本 Notebook**](modules/README.md) | 讀輸出、跑程式、改參數、做練習 |
+| [**20 小時課綱**](curriculum-ai-agent-20h.md) | 安排進度與課堂目標 |
+| [**M1 原理入口**](modules/module-01-llm-local/00_concepts.md) | 每個模組都有一份 `00_concepts.md`：原理、圖解與常見坑 |
 
-## 快速開始
+## 工程習慣，從第一個 Agent 開始練
 
-```bash
-git clone https://github.com/Zenobia000/awesome-ai-agent-tutorials-2026.git
-cd awesome-ai-agent-tutorials-2026
+- **先讀原理，再用工具。** Notebook 使用主流套件，印出中間結果，讓每一步都能解釋。
+- **親手寫一次迴圈。** M5 的 ReAct 與 function calling 練習，幫你看懂框架替你處理的事。
+- **把失敗留下來。** 小模型的幻覺、錯誤工具選擇與評審偏誤，都是觀察與改善的起點。
+- **讓寫入經過審批。** 練習「審批 → 執行 → 驗證」、狀態保存與明確的迴圈上限；防護措施需配合權限及測試。
+- **先掌握單一 Agent。** 再用實驗比較，何時值得加入 skills、subagent 與多 Agent 協作。
 
-uv sync --group m1                 # 每個模組一個依賴群組：m1 … m8
-cp .env.example .env               # 預設連本機 Ollama，不需要金鑰
-ollama pull qwen2.5:3b && ollama pull bge-m3
-uv run jupyter lab modules/module-01-llm-local
-```
+## 下一站：值班助理
 
-- 還沒有 [uv](https://docs.astral.sh/uv/)：`pip install uv`。
-- 還沒有 Ollama：見 [infra/services/ollama.md](infra/services/ollama.md)。
-- CrewAI 與 Opik 的最新版還要求舊版 openai，所以裝在另一個環境，只有 M5-09、M8-01、M8-04 用得到。安裝方式見 [modules/README.md](modules/README.md#兩個環境主環境與相容環境)。
+把查文件、查資料庫、MCP 工具、人工審批與效果評估，接成同一個值班 Agent，是本課的整合方向。
 
----
-
-## 教學設計
-
-- **先原理，後工具。** 原理寫在每個模組的 `00_concepts.md`；notebook 從第一格就用業界套件，並印出套件內部的中間結果，讓原理看得見。
-- **只有一個地方手寫：自己寫 ReAct agent。** 這是看懂所有 agent 框架的基本功。
-- **先看它壞掉，再修。** 沒有檢索時的幻覺、沒有審批的寫入、評審的偏誤，都先跑出來給你看。
-- **單一 agent 優先。** 一個 agent 配 skills 與 MCP 工具；只有在平行、互相獨立的任務才拆多個 agent。M5-09 用實測說明為什麼依角色硬拆多個 agent 不划算。
-- **不教維運花招。** 沒有 Kubernetes、Triton、vLLM 叢集；服務部署另見 [infra/](infra/README.md)。
-
----
-
-## 旗艦專案：值班助理（建置中）
-
-課程的各個模組最後會組成一個值班 agent：
-
-- 帶三個 skill：查文件（M3）、查資料庫（M2 Text2SQL）、運維排錯。
-- 透過 MCP 呼叫日誌與監控工具（M7）。
-- 唯讀的調查交給 subagent 平行處理（M5）。
-- 重啟、改設定一律走「審批 → 執行 → 驗證」，並用評估集證明效果（M8）。
-
-各部分都已經在對應模組裡做出來了，整合版放在 `projects/incident-autonomous-agent/`，目前只有基礎服務設定，整合工作還在進行。
-
----
-
-## 倉庫結構
-
-```text
-├── curriculum-ai-agent-20h.md   20 小時課綱
-├── modules/                     8 個模組：00_concepts.md＋notebook，總覽見 modules/README.md
-├── course_utils/                共用模型客戶端（M1-05 寫出來的成品）
-├── docs/slides/deck/            完整投影片（HTML 原始檔與 deck.pdf）
-├── docs/slides/lite/            精簡版投影片
-├── infra/                       Ollama、Chroma、Neo4j 等服務的部署說明
-├── projects/                    旗艦專案（建置中）
-├── pyproject.toml               依賴群組 m1～m8、compat
-└── AGENTS.md                    給 AI coding agent 的專案規則
-```
-
----
+**目前狀態：各模組提供獨立練習；[旗艦專案](projects/incident-autonomous-agent/)仍在建置，現有基礎服務 Compose 設定，完整整合流程尚未交付。** 學習請以模組教材為入口。
 
 ## 常見問題
 
-**沒有 GPU 可以上嗎？**
-可以。除了 M6 微調，其他模組在一般筆電上都能跑，只是本地模型回答比較慢。
+**20 小時能跑完全部 47 本嗎？** 20 小時是講授與實作課綱；完整教材包含延伸內容，下載、除錯及自主練習需另外安排時間。
 
-**沒有 OpenAI 或其他雲端金鑰呢？**
-不影響。預設全部走本機 Ollama；需要雲端的段落會自動跳過，notebook 照樣跑完。
+**沒有 GPU、沒有雲端金鑰可以開始嗎？** 可以先做本機 CPU 練習，模型速度視硬體而定。主要文字與 Agent 路線使用 Ollama；雲端專屬段落選填，M6 微調建議 GPU。
 
-**小模型常答錯，是不是教材有問題？**
-是刻意的。本課預設用 3B 的本地模型，答錯的地方保留下來，用來說明幻覺、評估與防護為什麼重要。換成更大的模型只要改 `.env` 一行。
+**程式與結果可以直接放作品集嗎？** 可以改編教材，但請使用自己執行的結果，說明資料、模型、測試條件與限制；模型回答每次可能不同。
 
-**套件會不會很快過時？**
-每個模組的 README 都寫了驗證時的套件版本與日期。框架改版時，先看這幾行就知道教材是在哪個版本上跑過的。
+**如何確認套件版本？** [pyproject.toml](pyproject.toml) 定義依賴群組，[uv.lock](uv.lock) 記錄鎖定版本；各模組 README 提供驗證日期與環境。Notebook 已存輸出可先閱讀，實際重跑仍取決於本機環境及外部服務。
 
----
+## 回報問題，一起把教材做好
 
-## 授權
+遇到安裝或 notebook 問題，請到 [GitHub Issues](https://github.com/Zenobia000/awesome-ai-agent-tutorials-2026/issues) 附上作業系統、Python 版本、模組與 notebook 名稱，以及移除金鑰後的錯誤訊息。歡迎透過 Pull Request 修正錯字、補充說明與可重現的相容性修正。
 
-[MIT License](LICENSE)。歡迎拿去上課、改編、做公司內訓。如果這套教材對你有幫助，給個 Star 讓更多人找到它。
+教材取材與改寫來源見[教材總覽](modules/README.md#模組與-notebook)。本倉庫採 [MIT License](LICENSE)，使用及散布時請保留授權要求的聲明；第三方素材另依原始授權。
+
+**準備好了？[打開第一本對話實作 →](modules/module-01-llm-local/04_chat_api.ipynb)**
+
+喜歡這條學習路線，歡迎 Star、分享給一起學 AI 的朋友，或直接拿去安排下一場內訓。
+
+<details>
+<summary>分享這門課</summary>
+
+![這次，把 AI Agent 做出來。20 小時工程實戰，8 個模組、47 本 Notebook，繁體中文、開源免費](assets/marketing/agent-course-social.png)
+
+[下載橫幅](assets/marketing/agent-course-hero.png) · [下載社群宣傳圖](assets/marketing/agent-course-social.png)
+
+</details>
