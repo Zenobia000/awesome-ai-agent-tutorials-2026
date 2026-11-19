@@ -44,7 +44,7 @@ Ollama 安裝與設定見 [infra/services/ollama.md](../infra/services/ollama.md
 
 | 模組 | 內容 |
 |---|---|
-| **M1 LLM 底層與本地環境** | 00 原理：LLM 在算什麼 · 01 token 怎麼切、怎麼算錢 · 02 看 logits、調溫度與 top-p · 03 OpenAI SDK 對話、記不住對話、串流 · 04 Lab 1 雙軌客戶端 · 05 多模態：圖片、語音、生圖 · 06 換供應商：Ollama／OpenRouter／DeepSeek／Anthropic |
+| **M1 LLM 底層與本地環境** | 00 原理：LLM 在算什麼、Hugging Face 生態系、API 計費 · 01 token 怎麼切 · 02 Hugging Face：Hub、transformers、datasets · 03 看 logits、調溫度與 top-p · 04 OpenAI SDK 對話、記不住對話、串流 · 05 Lab 1 雙軌客戶端 · 06 多模態：圖片、語音、生圖 · 07 換供應商：Ollama／OpenRouter／DeepSeek／Anthropic · 08 LiteLLM 統一介面與 API 費用計算 |
 | **M2 提示詞與結構化輸出** | 00 原理 · 01 好 prompt 與壞 prompt · 02 CoT 與 chaining · 03 結構化輸出（Pydantic） · 04 prompt injection 攻防 · 05 Lab 2 Text2SQL · 06 用標註資料評估 prompt |
 | **M3 RAG** | 00 原理（含 PDF 解析、MinerU、多模態 RAG、RAG-Anything 導讀） · 01 embedding · 02 第一個 RAG（Chroma） · 03 分塊策略 · 04 BM25＋向量＋RRF · 05 重排序與查詢改寫 · 06 Lab 3 評估 · 07 LlamaIndex · 08 PDF 解析（選讀） |
 | **M4 GraphRAG** | 00 原理 · 01 LLM 抽三元組 · 02 networkx 多跳查詢 · 03 Neo4j 與 Cypher · 04 圖檢索 vs 向量檢索 |
@@ -59,9 +59,11 @@ Ollama 安裝與設定見 [infra/services/ollama.md](../infra/services/ollama.md
 
 | 框架／服務 | 在哪裡教 | 需要金鑰？ |
 |---|---|---|
-| Ollama | M1-03、04、06（之後全課預設） | 否 |
-| OpenAI API（文字、圖片、語音） | M1-05 | 是（沒有就跳過） |
-| OpenRouter、Anthropic Messages API | M1-06 | 是（沒有就跳過） |
+| Ollama | M1-04、05、07（之後全課預設） | 否 |
+| OpenAI API（文字、圖片、語音） | M1-06 | 是（沒有就跳過） |
+| OpenRouter、Anthropic Messages API | M1-07 | 是（沒有就跳過） |
+| Hugging Face（Hub、transformers、datasets） | M1-02、03，M6 | 否 |
+| LiteLLM（統一介面、費用計算） | M1-08 | 否（雲端部分要金鑰） |
 | Chroma | M3-02 起 | 否 |
 | LlamaIndex | M3-04、07 | 否 |
 | MinerU（PDF 版面解析） | M3-00、08 導讀 | — |

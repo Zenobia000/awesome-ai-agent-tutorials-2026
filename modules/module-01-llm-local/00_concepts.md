@@ -132,7 +132,7 @@ out     = weights @ V              # 按權重把 V 加起來
 - **多頭**（multi-head）：同時做好幾組 Q/K/V，各自學不同的「看法」（有的看語法、有的看指代），最後接起來。
 - **一層 Transformer** ＝ attention（跟別的 token 交換資訊）＋ MLP（每個 token 自己想一想），各自加回原本的輸入（殘差），再加 LayerNorm。Qwen2.5-0.5B 疊了 24 層。
 
-`02_next_token.ipynb` 會用 `output_attentions=True` 畫出真實模型某一層的權重表。你會看到右上角全白（遮罩），也會看到很多 token 都在看第一個 token：這叫 attention sink，是模型「沒什麼要看時」的預設去處。
+`03_next_token.ipynb` 會用 `output_attentions=True` 畫出真實模型某一層的權重表。你會看到右上角全白（遮罩），也會看到很多 token 都在看第一個 token：這叫 attention sink，是模型「沒什麼要看時」的預設去處。
 
 ### 為什麼 context 越長越貴：O(N²)
 
@@ -162,7 +162,7 @@ ChatGPT 看起來記得你，是因為 app 每次都把整段對話歷史一起�
 
 後果：
 
-- **對話越長，每次送出的 token 越多**，成本和延遲一起上升。`03_chat_api.ipynb` 會把每一輪的 `prompt_tokens` 畫出來。
+- **對話越長，每次送出的 token 越多**，成本和延遲一起上升。`04_chat_api.ipynb` 會把每一輪的 `prompt_tokens` 畫出來。
 - **歷史超過 context 上限就得取捨**：只留最近幾輪、把舊對話摘要、或把重要事實存到外部（模組 5 的 agent 記憶）。
 - **三種角色**：`system` 放整段對話都要遵守的規則，`user` 是使用者這一輪說的話，`assistant` 是模型之前的回答（由你重送）。
 
@@ -182,7 +182,109 @@ ChatGPT 看起來記得你，是因為 app 每次都把整段對話歷史一起�
 
 對策不是調參數（溫度 0 也會幻覺），而是**把正確資料放進 prompt**（RAG，模組 3）、**讓模型呼叫工具查證**（模組 5）、**用評估抓出來**（模組 8）。
 
-## 7. 名詞對照
+## 7. Hugging Face 生態系：開放模型從哪裡來
+
+前面提到的 Qwen tokenizer、Qwen2.5-0.5B 模型，都是從 Hugging Face 下載的。它對開放模型的角色，就像 GitHub 對程式碼。
+
+**怎麼來的**：Hugging Face 2016 年成立時做的是給青少年聊天的機器人 App。2018 年 Google 發表 BERT，他們把它移植到 PyTorch 並開源（`pytorch-pretrained-bert`），
+意外成為研究者最常用的版本；這個專案後來改名 `transformers`，納入幾百種架構。公司也順勢轉型：做一個讓大家上傳、下載模型的平台（Hub），再陸續補上資料集、線上 demo 和訓練工具。
+
+![Hugging Face 生態系：上層是 tokenizers、transformers、datasets、peft、accelerate，中間經由 huggingface_hub 下載與快取，底層是放模型、資料集、Spaces 的 Hub](images/hf_ecosystem.jpg)
+
+*圖：上面一排是你在 Python 裡 import 的函式庫，各管一件事；它們都透過中間的 `huggingface_hub` 去 Hub 下載、存進本機快取。權重檔用 `safetensors` 格式。*
+
+| 元件 | 做什麼 | 本課在哪用 |
+|---|---|---|
+| **Hub** | 放模型、資料集、Spaces（線上 demo）的網站；每個模型是一個 git repo，名字是「組織/模型」 | 全課 |
+| `huggingface_hub` | 查模型資訊、下載單一檔案、管本機快取；CLI 指令是 `hf` | M1-02 |
+| `tokenizers` | 用 Rust 寫的快速切詞器，`transformers` 底下在用 | M1-01 |
+| `transformers` | 載入模型與 tokenizer（`AutoModel...`、`AutoTokenizer`）、`generate()`、`pipeline` | M1-02、03，M6 |
+| `datasets` | 載入資料集、`map` 批次轉換、切分；資料存成 Arrow，不必整份進記憶體 | M1-02，M6 |
+| `safetensors` | 權重檔格式：只有索引和數字，不能夾帶程式碼，可以只讀需要的矩陣 | M1-02 |
+| `peft` | 只訓練少量參數（LoRA） | M6 |
+| `accelerate` | 處理裝置與分散：`device_map="auto"`、多 GPU、混合精度 | M1-02，M6 |
+
+一個模型 repo 裡通常是這幾個檔案：
+
+```
+config.json             架構：幾層、向量多寬、幾個頭（不到 1KB，先下載它就能估顯存）
+model.safetensors       權重（佔了 99% 以上的空間）
+tokenizer.json …        詞表、BPE 合併規則
+tokenizer_config.json   特殊 token 與 chat template
+README.md               model card：訓練資料、授權、限制
+```
+
+### 要知道的四件事
+
+1. **授權各不相同。** Apache-2.0、MIT 可以商用；有些模型是自訂授權（限制用途或使用者數），用之前讀 model card。
+2. **gated 模型**要在網頁上同意授權，再用個人 Access Token（環境變數 `HF_TOKEN`，或 `hf auth login`）下載。token 跟 API 金鑰一樣不能寫進程式碼。
+3. **快取會吃光磁碟。** 預設放在 `~/.cache/huggingface`，用 `HF_HOME` 搬到大磁碟；`hf cache ls` 看大小、`hf cache rm` 刪除。
+4. **舊格式 `.bin` 是 pickle，載入時能執行任意程式碼。** 優先選有 `safetensors` 的模型，來路不明的 `.bin` 不要載。
+
+### HF 模型 vs Ollama
+
+| | `transformers` | Ollama |
+|---|---|---|
+| 權重 | safetensors，原始精度（bf16） | GGUF，通常 4-bit 量化，約 1/4 大小 |
+| 看得到 | logits、attention、每一層 | 只有 API 回來的文字 |
+| 訓練 | 可以（LoRA） | 不行 |
+| 適合 | 研究模型內部、微調 | 當服務給程式和 agent 呼叫 |
+
+模組 6 把兩者串起來：用 `transformers` + `peft` 微調，合併後轉 GGUF，交給 Ollama 服務。
+
+## 8. API 怎麼計費
+
+用雲端模型時，帳單幾乎都按 token 算，而且**輸入和輸出分開計價**。
+
+![一次呼叫的費用：輸入 token 和輸出 token 分開計價，快取命中的輸入打折，輸出單價通常是輸入的 4～8 倍；圖片換算成 token，語音按秒或 token](images/api_cost_formula.jpg)
+
+*圖：一次呼叫送出的 token 分成輸入（淺藍）和輸出（朱紅）兩段，各乘各的單價；輸入裡和之前請求相同的開頭可能命中快取、打折計價。*
+
+### 估算公式
+
+```
+費用 = 輸入 token × 輸入單價 + 輸出 token × 輸出單價
+     （有快取時：輸入拆成「快取命中 × 快取單價」＋「其餘 × 原價」）
+```
+
+單價通常寫成「每百萬 token 幾美元」。寫作時的幾個例子（以官網為準，每幾個月就會變）：
+
+| 模型 | 輸入 | 輸出 |
+|---|---|---|
+| gpt-4o-mini | 0.15 | 0.60 |
+| claude-haiku-4-5 | 1.00 | 5.00 |
+| gpt-4o | 2.50 | 10.00 |
+
+例：一個 agent 任務平均 20 輪，每輪輸入 3,000 token（含歷史、工具說明、檢索片段）、輸出 300 token，用 gpt-4o：
+20 × (3,000 × 2.5 + 300 × 10) / 1,000,000 ≈ 0.21 美元。一天 1,000 個任務就是每月約 6,300 美元。換成 gpt-4o-mini 大約是 1/16。
+
+### 各種輸入怎麼算
+
+| 項目 | 怎麼算 |
+|---|---|
+| **輸出 token** | 單價通常是輸入的 4～8 倍；模型要講多長，是你最能控制的成本 |
+| **推理 token** | 推理模型「想」的過程看不到，但按輸出計費，所以同一題可能比非推理模型貴很多 |
+| **快取輸入** | 請求開頭和最近的請求一樣時打折。OpenAI 自動快取（prompt 超過 1024 token 才有），約打 1～5 折；Anthropic 要在請求裡標記，寫入快取稍貴、讀取約 1 折 |
+| **圖片** | 換算成 token：圖切成小方塊，每塊固定多少 token，再加一個基本量；低解析度模式是固定的少量 token |
+| **語音** | 轉文字多半按音訊秒數；文字轉語音按字數或輸出的音訊 token |
+| **批次 API** | 不急著要結果（例如離線評估）可以用 batch，通常半價 |
+
+### 費用從哪裡漏出去
+
+1. **長對話重付歷史。** 模型記不住對話（§5），每輪都重送全部歷史，第 N 輪的輸入包含前 N−1 輪，累計費用約隨輪數平方成長。
+2. **中文比英文多 token。** 同樣的意思，中文常多兩到五成 token（§1）。
+3. **工具說明和 system prompt 每輪都送。** 十幾個工具的 JSON schema 可能就上千 token。
+4. **agent 迴圈卡住。** 沒有上限的迴圈會一直燒錢。
+
+### 省錢方法
+
+- 要求簡短、設 `max_tokens`；能用小模型的步驟就用小模型（分類、抽取、路由）。
+- 固定不變的內容（system prompt、工具說明、範例）放在最前面，讓快取命中；會變的放後面。
+- 只留最近幾輪，舊對話摘要起來（模組 5 的 compaction）；文件先檢索再放（模組 3），不要整份塞。
+- 每次呼叫記帳，設預算上限，超過就停；在供應商後台也設每月上限。
+- 估價用該模型的 tokenizer 數 token，不要用字數；LiteLLM 的 `model_cost`、`completion_cost()` 可以直接查價和算錢（M1-08）。
+
+## 9. 名詞對照
 
 | 名詞 | 白話 |
 |---|---|
@@ -200,8 +302,13 @@ ChatGPT 看起來記得你，是因為 app 每次都把整段對話歷史一起�
 | base model／instruct model | 只做預訓練的模型／再教過對話與指令的模型 |
 | chat template | 把 messages 攤平成一段文字的格式 |
 | 幻覺 | 模型講得很順但內容不實 |
+| Hub／model card | Hugging Face 放模型的平台／模型的說明書（授權、限制） |
+| safetensors | 不能夾帶程式碼的權重檔格式 |
+| gated 模型 | 要先同意授權、用 `HF_TOKEN` 才能下載的模型 |
+| 輸入／輸出單價 | API 對送進去和生成出來的 token 分開計價 |
+| 快取輸入 | 和之前請求相同的開頭，按折扣價計費 |
 
-## 8. 常見坑
+## 10. 常見坑
 
 1. **用字數估費用**：要用該模型的 tokenizer 數 token，中英文、不同模型都不一樣。
 2. **以為溫度 0 就不會亂講**：溫度只管隨機性，不管對錯。
@@ -210,12 +317,14 @@ ChatGPT 看起來記得你，是因為 app 每次都把整段對話歷史一起�
 5. **讓模型數字母、做大數運算**：tokenization 讓這些事天生不穩，交給程式或工具。
 6. **沒檢查 `finish_reason`**：`length` 代表被截斷，半截 JSON 會讓下游程式出錯。
 
-## 9. 接下來
+## 11. 接下來
 
 | notebook | 用上這份的哪一段 |
 |---|---|
 | `01_tokens.ipynb` | §1：用 tiktoken 和 Qwen tokenizer 看切分、比中英文、數 token 估費用 |
-| `02_next_token.ipynb` | §2～4：印 logits 與 top-k 機率、用 `generate()` 調溫度和 top-p、畫真實模型的 attention、看幻覺 |
-| `03_chat_api.ipynb` | §5：用 OpenAI SDK 對話、看原始 JSON、記不住對話與越聊越貴、串流 |
-| `04_dual_track.ipynb` | 把 03 包成本地失敗自動切雲端的客戶端 |
-| `05_multimodal_api.ipynb`、`06_providers.ipynb` | 圖片與語音進出 API、換供應商 |
+| `02_huggingface.ipynb` | §7：在 Hub 查模型、看快取、tokenizer／model／`pipeline`、`datasets`、`safetensors` |
+| `03_next_token.ipynb` | §2～4：印 logits 與 top-k 機率、用 `generate()` 調溫度和 top-p、畫真實模型的 attention、看幻覺 |
+| `04_chat_api.ipynb` | §5：用 OpenAI SDK 對話、看原始 JSON、記不住對話與越聊越貴、串流 |
+| `05_dual_track.ipynb` | 把 04 包成本地失敗自動切雲端的客戶端 |
+| `06_multimodal_api.ipynb`、`07_providers.ipynb` | 圖片與語音進出 API、換供應商 |
+| `08_litellm_and_cost.ipynb` | §8：LiteLLM 統一介面與 fallback、查價、對帳、預算追蹤 |
