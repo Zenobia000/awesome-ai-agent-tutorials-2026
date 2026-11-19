@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>選型：PDF 解析器</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hands{position:absolute;right:110px;top:34px;font-size:22px;line-height:1.4;color:var(--muted);padding:3px 14px;border:2px solid var(--grey)}
+.hands b{font-weight:400;color:var(--ver);margin-right:12px}
+.hands code{font-family:"JetBrains Mono",monospace;font-size:22px}
+.wrap{position:absolute;left:110px;top:280px;width:1700px}
+table.sel{width:1700px;border-collapse:collapse;font-size:26px;line-height:1.35}
+table.sel th{font-weight:400;color:var(--muted);text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:24px}
+table.sel td{padding:12px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.sel td.n{width:470px}
+table.sel td.n .nm{font-size:28px}
+table.sel a{display:block;font-family:"JetBrains Mono",monospace;font-size:22px;color:var(--ind);text-decoration:none;margin-top:2px;word-break:break-all}
+table.sel tr.hi td.n .nm{color:var(--ver)}
+.mk{display:inline-block;font-size:20px;padding:0 8px;margin-left:8px;border:2px solid var(--grey);color:var(--muted);vertical-align:middle}
+.foot{margin-top:18px;font-size:26px;line-height:1.5;color:var(--muted)}
+</style></head><body><div class="slide">
+  <div class="hands"><b>動手</b><code>modules/module-03-rag/08_pdf_parsing.ipynb</code></div>
+  <h1 style="font-size:72px">選型：PDF 解析器</h1>
+  <p class="lead" style="width:1700px">PDF 裡只有「在某個座標畫某個字」。輕量工具讀座標；重型工具跑一條版面模型管線，換來表格與公式。</p>
+  <div class="wrap"><table class="sel"><tr><th>工具</th><th>怎麼做</th><th>什麼時候選它</th><th>授權／狀態</th></tr>
+  <tr class="hi"><td class="n"><span class="nm">PyMuPDF</span><span class="mk">本課用</span><a href="https://github.com/pymupdf/PyMuPDF">github.com/pymupdf/PyMuPDF</a></td><td>讀文字座標；<code>find_tables()</code> 轉 Markdown</td><td>單欄、少量格線表格；不想下載模型</td><td>AGPL-3.0，另售商業授權</td></tr>
+  <tr><td class="n"><span class="nm">Docling</span><a href="https://github.com/docling-project/docling">github.com/docling-project/docling</a></td><td>版面模型：閱讀順序、表格、公式、OCR</td><td>表格多、掃描檔；要寬鬆授權</td><td>MIT；LF AI &amp; Data 託管</td></tr>
+  <tr><td class="n"><span class="nm">MinerU</span><a href="https://github.com/opendatalab/MinerU">github.com/opendatalab/MinerU</a></td><td>版面分析＋表格轉 HTML＋公式轉 LaTeX</td><td>中文、論文、財報等表格公式密集的 PDF</td><td>Apache 2.0 加條件；進階引擎要 GPU</td></tr>
+  <tr><td class="n"><span class="nm">olmOCR</span><a href="https://github.com/allenai/olmocr">github.com/allenai/olmocr</a></td><td>7B 視覺語言模型讀頁面圖片</td><td>有 GPU、大量掃描檔批次轉文字</td><td>Apache-2.0；顯存 ≥ 12 GB</td></tr>
+  </table>
+  <div class="foot">不論哪一種，解析都放離線批次，不放在問答路徑上。表格轉好之後怎麼入庫，見「PDF 表格：轉成 Markdown，再加專用標記」那頁。　<span class="tag">核實 2026-11-19</span></div></div>
+  <div class="read"><em>怎麼讀：</em>由上往下越重：先試第一列，雙欄或表格壞掉才往下換；商用前先看最右欄的授權。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');</script></body></html>

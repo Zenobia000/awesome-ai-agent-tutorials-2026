@@ -1,0 +1,114 @@
+[
+ {
+  "id": "q01",
+  "type": "single",
+  "question": "索隆的夢想是什麼？",
+  "answer_keywords": [
+   "大劍豪"
+  ]
+ },
+ {
+  "id": "q02",
+  "type": "single",
+  "question": "喬巴吃了什麼果實？",
+  "answer_keywords": [
+   "人人果實"
+  ]
+ },
+ {
+  "id": "q03",
+  "type": "single",
+  "question": "羅賓出身哪裡？",
+  "answer_keywords": [
+   "歐哈拉"
+  ]
+ },
+ {
+  "id": "q04",
+  "type": "single",
+  "question": "娜美在船上負責什麼工作？",
+  "answer_keywords": [
+   "航海士"
+  ]
+ },
+ {
+  "id": "q05",
+  "type": "multi",
+  "question": "和索隆同一個海賊團的船長，夢想是什麼？",
+  "answer_keywords": [
+   "海賊王"
+  ]
+ },
+ {
+  "id": "q06",
+  "type": "multi",
+  "question": "騙人布的父親是哪個海賊團的成員？",
+  "answer_keywords": [
+   "紅髮海賊團"
+  ]
+ },
+ {
+  "id": "q07",
+  "type": "multi",
+  "question": "騙人布的父親所在海賊團的船長是誰？",
+  "answer_keywords": [
+   "香克斯"
+  ]
+ },
+ {
+  "id": "q08",
+  "type": "multi",
+  "question": "魯夫的結拜哥哥是哪個海賊團的人？",
+  "answer_keywords": [
+   "白鬍子海賊團"
+  ]
+ },
+ {
+  "id": "q09",
+  "type": "multi",
+  "question": "魯夫的結拜哥哥所屬海賊團的船長吃了什麼果實？",
+  "answer_keywords": [
+   "震震果實"
+  ]
+ },
+ {
+  "id": "q10",
+  "type": "multi",
+  "question": "打倒阿龍的人，夢想是什麼？",
+  "answer_keywords": [
+   "海賊王"
+  ]
+ },
+ {
+  "id": "q11",
+  "type": "multi",
+  "question": "巴托洛米奧所屬大船團的帶頭人，出身哪個村子？",
+  "answer_keywords": [
+   "風車村"
+  ]
+ },
+ {
+  "id": "q12",
+  "type": "multi",
+  "question": "擁有和道一文字的草帽海賊團成員，夢想是什麼？",
+  "answer_keywords": [
+   "大劍豪"
+  ]
+ },
+ {
+  "id": "q13",
+  "type": "multi",
+  "question": "新巨兵海賊團船長的弟弟，他的父親是誰？",
+  "answer_keywords": [
+   "哈拉爾德"
+  ]
+ },
+ {
+  "id": "q14",
+  "type": "multi",
+  "question": "和東利一起擔任巨兵海賊團船長的人是誰？",
+  "answer_keywords": [
+   "布洛基"
+  ]
+ }
+]

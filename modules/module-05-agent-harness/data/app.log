@@ -1,0 +1,47 @@
+2026-11-18T13:40:09 web-gateway INFO GET /api/menu 200 in 45ms
+2026-11-18T13:40:20 order-api INFO POST /orders 201 in 140ms
+2026-11-18T13:43:04 web-gateway INFO GET /api/menu 200 in 54ms
+2026-11-18T13:43:41 order-api INFO POST /orders 201 in 83ms
+2026-11-18T13:44:12 payment-api WARN bank-gateway slow response 1800ms, retry 1/3 succeeded
+2026-11-18T13:46:06 order-api INFO POST /orders 201 in 103ms
+2026-11-18T13:46:37 web-gateway INFO GET /api/menu 200 in 23ms
+2026-11-18T13:49:13 web-gateway INFO GET /api/menu 200 in 22ms
+2026-11-18T13:49:58 order-api INFO POST /orders 201 in 112ms
+2026-11-18T13:51:40 notification INFO push batch sent: 312 messages
+2026-11-18T13:52:05 order-api INFO POST /orders 201 in 107ms
+2026-11-18T13:52:26 web-gateway INFO GET /api/menu 200 in 24ms
+2026-11-18T13:55:03 order-db-proxy INFO pool stats: active=21/50 idle=29
+2026-11-18T13:55:15 order-api INFO POST /orders 201 in 85ms
+2026-11-18T13:55:35 web-gateway INFO GET /api/menu 200 in 47ms
+2026-11-18T13:58:03 order-api INFO POST /orders 201 in 132ms
+2026-11-18T13:58:30 order-db-proxy INFO pool stats: active=34/50 idle=16
+2026-11-18T13:58:36 web-gateway INFO GET /api/menu 200 in 27ms
+2026-11-18T14:00:05 order-db-proxy WARN pool stats: active=46/50 idle=4
+2026-11-18T14:01:10 order-db-proxy WARN slow query 4200ms: SELECT * FROM orders WHERE status='pending' (no index on status)
+2026-11-18T14:02:00 order-db-proxy ERROR connection pool exhausted: active=50/50, waiting=37
+2026-11-18T14:02:14 order-db-proxy ERROR connection pool exhausted: active=50/50, waiting=80
+2026-11-18T14:02:37 web-gateway ERROR 502 Bad Gateway POST /api/orders (upstream order-api)
+2026-11-18T14:02:40 order-api ERROR upstream timeout calling order-db-proxy after 5000ms
+2026-11-18T14:03:20 payment-api WARN bank-gateway slow response 1900ms, retry 1/3 succeeded
+2026-11-18T14:04:03 order-db-proxy ERROR connection pool exhausted: active=50/50, waiting=76
+2026-11-18T14:04:25 web-gateway ERROR 502 Bad Gateway POST /api/orders (upstream order-api)
+2026-11-18T14:04:37 order-api ERROR upstream timeout calling order-db-proxy after 5000ms
+2026-11-18T14:06:02 order-api ERROR upstream timeout calling order-db-proxy after 5000ms
+2026-11-18T14:06:03 order-db-proxy ERROR connection pool exhausted: active=50/50, waiting=54
+2026-11-18T14:06:35 web-gateway ERROR 502 Bad Gateway POST /api/orders (upstream order-api)
+2026-11-18T14:06:45 notification INFO push batch sent: 96 messages
+2026-11-18T14:08:02 order-api WARN circuit breaker OPEN for order-db-proxy
+2026-11-18T14:08:18 order-api ERROR upstream timeout calling order-db-proxy after 5000ms
+2026-11-18T14:08:26 web-gateway ERROR 502 Bad Gateway POST /api/orders (upstream order-api)
+2026-11-18T14:08:54 order-db-proxy ERROR connection pool exhausted: active=50/50, waiting=48
+2026-11-18T14:10:07 order-api ERROR upstream timeout calling order-db-proxy after 5000ms
+2026-11-18T14:10:09 order-db-proxy ERROR connection pool exhausted: active=50/50, waiting=74
+2026-11-18T14:10:33 payment-api INFO POST /pay 200 in 310ms
+2026-11-18T14:10:36 web-gateway ERROR 502 Bad Gateway POST /api/orders (upstream order-api)
+2026-11-18T14:12:19 order-db-proxy ERROR connection pool exhausted: active=50/50, waiting=75
+2026-11-18T14:12:43 web-gateway ERROR 502 Bad Gateway POST /api/orders (upstream order-api)
+2026-11-18T14:12:52 order-api ERROR upstream timeout calling order-db-proxy after 5000ms
+2026-11-18T14:13:15 web-gateway INFO GET /api/menu 200 in 41ms
+2026-11-18T14:14:11 order-db-proxy ERROR connection pool exhausted: active=50/50, waiting=46
+2026-11-18T14:14:36 web-gateway ERROR 502 Bad Gateway POST /api/orders (upstream order-api)
+2026-11-18T14:14:37 order-api ERROR upstream timeout calling order-db-proxy after 5000ms

@@ -1,0 +1,107 @@
+[
+ {
+  "module": 1,
+  "slide": "模組 1 面試題",
+  "question": "請從 next-token 預測與上下文機制，解釋為什麼大模型原生狀態下無法自主「記住」歷史對話？"
+ },
+ {
+  "module": 1,
+  "slide": "模組 1 面試題",
+  "question": "在企業內網沒有外網的環境，如何設計滿足高並發、低延遲的本地大模型私有化部署？"
+ },
+ {
+  "module": 2,
+  "slide": "面試題：輸出與注入",
+  "question": "如何確保大模型的輸出符合後端程式的接口規範？有哪幾種主流的結構化保障策略？"
+ },
+ {
+  "module": 2,
+  "slide": "面試題：輸出與注入",
+  "question": "請闡述思維鏈（CoT）與思維樹（ToT）在複雜任務拆解中的運作原理與局限。"
+ },
+ {
+  "module": 2,
+  "slide": "面試題：輸出與注入",
+  "question": "如何防禦提示詞注入？只用 XML 標籤隔離夠嗎？"
+ },
+ {
+  "module": 3,
+  "slide": "面試：RAG 檢索",
+  "question": "BM25 與向量檢索各有哪些不足？怎麼互補？"
+ },
+ {
+  "module": 3,
+  "slide": "面試：RAG 檢索",
+  "question": "父文檔檢索器怎麼兼顧命中精度與生成上下文的完整？"
+ },
+ {
+  "module": 3,
+  "slide": "面試：RAG 檢索",
+  "question": "已經有向量檢索，為什麼還要 Cross-Encoder 重排？"
+ },
+ {
+  "module": 4,
+  "slide": "模組四 面試題",
+  "question": "向量 RAG 與 GraphRAG 各自的邊界在哪？什麼問題非得用 GraphRAG？"
+ },
+ {
+  "module": 4,
+  "slide": "模組四 面試題",
+  "question": "社群報告怎麼建？它在全局提問裡起什麼作用？"
+ },
+ {
+  "module": 4,
+  "slide": "模組四 面試題",
+  "question": "Microsoft GraphRAG 和 Neo4j 系的做法差在哪？"
+ },
+ {
+  "module": 5,
+  "slide": "模組五 面試題",
+  "question": "AgentExecutor 對比 create_agent（底下是 LangGraph）：狀態控制與容錯差在哪？"
+ },
+ {
+  "module": 5,
+  "slide": "模組五 面試題",
+  "question": "怎麼用 Checkpointer 做人在回路和故障回滾？舉一個生產場景。"
+ },
+ {
+  "module": 5,
+  "slide": "模組五 面試題",
+  "question": "多智能體一定比單一 agent 好嗎？"
+ },
+ {
+  "module": 6,
+  "slide": "模組六面試題",
+  "question": "面對企業垂直問答，怎麼決定用 RAG 還是微調？兩者怎麼結合？"
+ },
+ {
+  "module": 6,
+  "slide": "模組六面試題",
+  "question": "LoRA 相較全參數微調，工程優勢和資源消耗差在哪？"
+ },
+ {
+  "module": 6,
+  "slide": "模組六面試題",
+  "question": "「LoRA 效果等於全量微調」這句話對嗎？"
+ },
+ {
+  "module": 7,
+  "slide": "模組七面試題",
+  "question": "請闡述 MCP 的技術架構，以及它為何被視為大模型時代的外掛整合標準？"
+ },
+ {
+  "module": 7,
+  "slide": "模組七面試題",
+  "question": "在大型企業軟體架構中，如何界定 n8n 等低代碼平台與 LangGraph 純程式碼架構各自的應用邊界？"
+ },
+ {
+  "module": 8,
+  "slide": "模組八面試題",
+  "question": "生產環境中，如何評估與降低大模型應用的幻覺？"
+ },
+ {
+  "module": 8,
+  "slide": "模組八面試題",
+  "question": "面對長流程、多工具的複雜 Agent 任務，如何保證執行穩定？"
+ }
+]

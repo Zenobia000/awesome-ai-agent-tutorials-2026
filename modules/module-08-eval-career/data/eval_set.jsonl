@@ -1,0 +1,40 @@
+{"id": "Q01", "question": "特休要提前幾天申請？", "reference": "要在「嵐葉」提前 3 個工作天申請。", "doc_id": "F01", "tags": ["數字"]}
+{"id": "Q02", "question": "我想連休 7 天特休，需要誰簽核？", "reference": "超過 5 個工作天需部門主管與處長雙重簽核。", "doc_id": "F01", "tags": ["條件"]}
+{"id": "Q03", "question": "今年特休沒休完會怎樣？", "reference": "最多可遞延 5 天到隔年 6 月底。", "doc_id": "F01", "tags": ["事實"]}
+{"id": "Q04", "question": "病假一年有幾天是半薪？", "reference": "一年合計 30 天以內給半薪。", "doc_id": "F02", "tags": ["數字"]}
+{"id": "Q05", "question": "請了 3 天病假，診斷證明要什麼時候交？", "reference": "連續 2 天以上要附診斷證明，復工後 5 個工作天內上傳到「嵐葉」。", "doc_id": "F02", "tags": ["條件"]}
+{"id": "Q06", "question": "一週可以在家上班幾天？", "reference": "每週最多遠端 2 天。", "doc_id": "F03", "tags": ["數字", "改寫"]}
+{"id": "Q07", "question": "星期三可以遠端嗎？", "reference": "不行，週三是全員到班日，不開放遠端。", "doc_id": "F03", "tags": ["條件"]}
+{"id": "Q08", "question": "遠端工作最晚什麼時候要登記？", "reference": "前一天 18:00 前在「嵐葉」登記。", "doc_id": "F03", "tags": ["數字"]}
+{"id": "Q09", "question": "VPN 出現 E-217 是什麼意思？要怎麼處理？", "reference": "裝置憑證過期，到 IT 自助入口重新下載憑證，不需要開單。", "doc_id": "F04", "tags": ["事實"]}
+{"id": "Q10", "question": "VPN 密碼多久要換一次？", "reference": "每 90 天強制重設。", "doc_id": "F04", "tags": ["數字"]}
+{"id": "Q11", "question": "筆電不見了要找誰？期限多久？", "reference": "24 小時內通報資安組（分機 6006）。", "doc_id": "F05", "tags": ["數字"]}
+{"id": "Q12", "question": "筆電用幾年可以換新的？", "reference": "使用滿 3 年可申請汰換。", "doc_id": "F05", "tags": ["數字", "改寫"]}
+{"id": "Q13", "question": "去高雄出差，住宿一晚最多報多少？", "reference": "台北市以外的縣市每晚上限 2,600 元。", "doc_id": "F06", "tags": ["條件"]}
+{"id": "Q14", "question": "出差的單據最晚多久內要上傳？", "reference": "出差結束後 30 天內，逾期不受理。", "doc_id": "F06", "tags": ["數字"]}
+{"id": "Q15", "question": "國內出差一天的膳雜費是多少？", "reference": "每日 800 元。", "doc_id": "F06", "tags": ["數字"]}
+{"id": "Q16", "question": "忘記事前申請加班，可以事後補嗎？", "reference": "不行，事後補申請一律退回。", "doc_id": "F07", "tags": ["條件"]}
+{"id": "Q17", "question": "補休的有效期限是多久？", "reference": "6 個月內要用完，過期按加班費結算。", "doc_id": "F07", "tags": ["數字"]}
+{"id": "Q18", "question": "公司一年補助多少錢讓我上課？", "reference": "每年 15,000 元，課程需與職務相關並經主管同意。", "doc_id": "F08", "tags": ["數字", "改寫"]}
+{"id": "Q19", "question": "考證照的報名費會用掉教育訓練額度嗎？", "reference": "不會，與職務相關的證照報名費另外全額補助，不佔 15,000 元額度。", "doc_id": "F08", "tags": ["條件"]}
+{"id": "Q20", "question": "我 45 歲，多久可以做一次健檢？", "reference": "40 歲以上每年一次。", "doc_id": "F09", "tags": ["條件"]}
+{"id": "Q21", "question": "健檢當天要請假嗎？", "reference": "不用自己請假，給公假半天。", "doc_id": "F09", "tags": ["事實"]}
+{"id": "Q22", "question": "汽車停車位一個月多少錢？", "reference": "抽中者月租 1,500 元，由薪資扣除。", "doc_id": "F10", "tags": ["數字"]}
+{"id": "Q23", "question": "騎機車上班要抽籤嗎？", "reference": "不用抽籤，機車位免費，但要先到總務處登記車牌。", "doc_id": "F10", "tags": ["條件"]}
+{"id": "Q24", "question": "「雲海」會議室可以坐幾個人？", "reference": "可容納 20 人。", "doc_id": "F11", "tags": ["數字"]}
+{"id": "Q25", "question": "小會議室最多可以借多久？", "reference": "單次最多 2 小時。", "doc_id": "F11", "tags": ["數字"]}
+{"id": "Q26", "question": "公司帳號密碼有什麼規定？", "reference": "至少 12 個字元，須包含大小寫英文與數字。", "doc_id": "F12", "tags": ["事實"]}
+{"id": "Q27", "question": "可以把公司簡報存到自己的 Google Drive 嗎？", "reference": "不行，禁止存到個人雲端硬碟，要放在「嵐盤」。", "doc_id": "F12", "tags": ["條件", "改寫"]}
+{"id": "Q28", "question": "付款功能整個掛掉，要在多久內開事故單？", "reference": "屬於 P1 事故，發現者 15 分鐘內在 #incident 頻道開事故單。", "doc_id": "F13", "tags": ["條件"]}
+{"id": "Q29", "question": "P2 事故值班工程師要多快回應？", "reference": "4 小時內回應。", "doc_id": "F13", "tags": ["數字"]}
+{"id": "Q30", "question": "星期五下午四點可以部署到正式環境嗎？", "reference": "不行，週五 15:00 起是部署凍結時段，緊急部署需 CTO 書面核准。", "doc_id": "F14", "tags": ["條件"]}
+{"id": "Q31", "question": "部署凍結什麼時候結束？", "reference": "下週一 10:00。", "doc_id": "F14", "tags": ["數字"]}
+{"id": "Q32", "question": "改帳號服務的 PR 要幾個人 review？", "reference": "核心服務需要 2 位 reviewer 核准。", "doc_id": "F15", "tags": ["條件"]}
+{"id": "Q33", "question": "PR 太大的標準是幾行？", "reference": "超過 400 行變更建議拆分。", "doc_id": "F15", "tags": ["數字"]}
+{"id": "Q34", "question": "新人第一週要上哪些課？", "reference": "4 門線上必修課：資安、個資、行為準則、開發流程。", "doc_id": "F16", "tags": ["事實"]}
+{"id": "Q35", "question": "推薦朋友進來當工程師，獎金怎麼發？", "reference": "獎金 30,000 元，到職滿 3 個月發一半，滿 6 個月發另一半。", "doc_id": "F17", "tags": ["數字"]}
+{"id": "Q36", "question": "結婚有禮金嗎？多少？", "reference": "有，結婚禮金 6,000 元。", "doc_id": "F18", "tags": ["數字"]}
+{"id": "Q37", "question": "公司有提供員工宿舍嗎？", "reference": "資料中沒有提到員工宿舍。", "doc_id": null, "tags": ["無答案"]}
+{"id": "Q38", "question": "年終獎金通常發幾個月？", "reference": "資料中沒有提到年終獎金。", "doc_id": null, "tags": ["無答案"]}
+{"id": "Q39", "question": "可以帶寵物來辦公室嗎？", "reference": "資料中沒有提到寵物規定。", "doc_id": null, "tags": ["無答案"]}
+{"id": "Q40", "question": "育嬰假可以請多久？", "reference": "資料中沒有提到育嬰假。", "doc_id": null, "tags": ["無答案"]}

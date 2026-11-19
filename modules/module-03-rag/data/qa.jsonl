@@ -1,0 +1,38 @@
+{"id": "q01", "question": "TP-4021 是什麼錯誤？可以重試嗎？", "answer": "冪等鍵衝突：同一個 Idempotency-Key 但請求內容不同，是呼叫端程式錯誤，不可重試。", "doc_ids": ["svc-tidepay"], "type": "keyword"}
+{"id": "q02", "question": "TP-4012 每小時多少筆以上才需要處理？", "answer": "每小時超過 300 筆，或比上週同時段高 5 倍以上。", "doc_ids": ["rb-tp-4012-3ds-timeout"], "type": "keyword"}
+{"id": "q03", "question": "出現 TP-5003 時要切換到哪一家收單行？指令是什麼？", "answer": "切換到備援收單行 acq-b，指令 hfctl tidepay failover --to acq-b，需要第二位值班人員核准。", "doc_ids": ["rb-tp-5003-acquirer-failover", "faq-hfctl"], "type": "keyword"}
+{"id": "q04", "question": "AUTH-1107 和 AUTH-1109 差在哪？", "answer": "AUTH-1107 是 access token 過期，屬正常流程，用 refresh token 換新；AUTH-1109 是簽章驗證失敗、找不到 kid，通常是金鑰輪換後 JWKS 快取沒更新。", "doc_ids": ["svc-lighthouse-auth", "rb-auth-1109-jwks"], "type": "keyword"}
+{"id": "q05", "question": "NTF-602 代表什麼？怎麼處理？", "answer": "當日簡訊額度用完；非緊急簡訊延到隔天 00:05 送，緊急可找會員組主管臨時加額度。", "doc_ids": ["svc-gull-notify"], "type": "keyword"}
+{"id": "q06", "question": "STK-310 的比例多高才需要處理？", "answer": "開賣前 5 分鐘內 10% 以下屬正常；超過 30% 或持續超過 15 分鐘才需要處理。", "doc_ids": ["rb-stk-310-lock"], "type": "keyword"}
+{"id": "q07", "question": "ORD-2201 是什麼意思？", "answer": "預留庫存逾時，harbor-stock 沒在 3 秒內回應。", "doc_ids": ["svc-anchor-order"], "type": "keyword"}
+{"id": "q08", "question": "BW-503 出現時應該先查哪裡？", "answer": "BW-503 是熔斷，先從日誌的 upstream= 欄位找出是哪個上游服務，去查那個服務；不要調高錯誤率門檻。", "doc_ids": ["rb-bw-503-circuit", "svc-breakwater"], "type": "keyword"}
+{"id": "q09", "question": "tide-pay v3.4.0 改了什麼導致事故？", "answer": "把冪等鍵保存時間從 24 小時改成 1 小時，導致重複扣款（INC-2026-0314）。", "doc_ids": ["pm-2026-0314-double-charge", "svc-tidepay"], "type": "keyword"}
+{"id": "q10", "question": "INC-2026-0607 停機多久？根本原因是什麼？", "answer": "約 47 分鐘；金鑰輪換後 breakwater 的 JWKS 快取設成 6 小時，不認得新金鑰。", "doc_ids": ["pm-2026-0607-auth-outage"], "type": "keyword"}
+{"id": "q11", "question": "hf.notify.request.v2 有幾個分區？", "answer": "24 個分區。", "doc_ids": ["svc-current-mq", "rb-mq-consumer-lag"], "type": "keyword"}
+{"id": "q12", "question": "breakwater 的 jwks_cache_ttl 現在設多少？", "answer": "10 分鐘。", "doc_ids": ["svc-breakwater", "pm-2026-0607-auth-outage", "rb-auth-1109-jwks"], "type": "keyword"}
+{"id": "q13", "question": "哪一張測試信用卡會觸發 3D 驗證逾時？", "answer": "4000 0000 0000 0028。", "doc_ids": ["faq-local-dev"], "type": "keyword"}
+{"id": "q14", "question": "anchor-order 在本機跑在哪個埠？", "answer": "8081。", "doc_ids": ["faq-local-dev", "svc-anchor-order"], "type": "keyword"}
+{"id": "q15", "question": "WH-KHH1 是哪裡的倉庫？", "answer": "高雄前鎮，處理大型商品。", "doc_ids": ["svc-harbor-stock"], "type": "keyword"}
+{"id": "q16", "question": "使用者付款時一直被扣兩次錢，以前發生過嗎？原因是什麼？", "answer": "發生過（INC-2026-0314），冪等鍵保存時間被改成 1 小時，App 背景補送時鍵已過期，被當成新付款。", "doc_ids": ["pm-2026-0314-double-charge"], "type": "semantic"}
+{"id": "q17", "question": "大家突然一直被登出、登入後又跳回登入頁，可能是什麼原因？", "answer": "多半是金鑰剛輪換、下游 JWKS 快取還是舊的（AUTH-1109），執行 hfctl auth jwks refresh --all。", "doc_ids": ["rb-auth-1109-jwks", "pm-2026-0607-auth-outage"], "type": "semantic"}
+{"id": "q18", "question": "出貨通知寄得很慢，要怎麼加速消化積壓的訊息？", "answer": "擴充消費者數量，上限是分區數（hf.notify.request.v2 最多 24 個）；壞訊息移到死信 topic。", "doc_ids": ["rb-mq-consumer-lag", "pm-2026-0921-mq-lag"], "type": "semantic"}
+{"id": "q19", "question": "什麼時間可以把新版本推上正式環境？", "answer": "每週二、週四 14:00～17:00；週五、週末、假日前一天不部署；凍結期除外。", "doc_ids": ["faq-deploy"], "type": "semantic"}
+{"id": "q20", "question": "雙 11 前後有什麼部署限制？", "answer": "11 月 1 日至 11 月 15 日是凍結期，只允許修 SEV1 的緊急修補，需要 CTO 核准。", "doc_ids": ["faq-deploy", "pm-2026-0921-mq-lag"], "type": "semantic"}
+{"id": "q21", "question": "新版上線後發現有問題，要怎麼退回舊版？需要誰同意？", "answer": "hfctl deploy rollback <服務名> --to <版本>，任何值班人員都可直接執行，不需要核准。", "doc_ids": ["faq-deploy"], "type": "semantic"}
+{"id": "q22", "question": "半夜被叫起來處理嚴重事故，有什麼補償？", "answer": "00:00～07:00 被叫起來處理 SEV1／SEV2，隔天可補休半天；另有每週值班津貼 3,000 元。", "doc_ids": ["faq-oncall"], "type": "semantic"}
+{"id": "q23", "question": "最嚴重等級的事故要多快回應？", "answer": "SEV1 要 5 分鐘內回應，30 分鐘內通知主管。", "doc_ids": ["faq-oncall"], "type": "semantic"}
+{"id": "q24", "question": "我需要登入正式環境的資料庫修資料，流程是什麼？", "answer": "填 ACC 存取申請單，直屬主管與當週 SRE 值班兩人核准，權限有效 8 小時；資料庫手動寫入一律要第二人核准。", "doc_ids": ["faq-prod-access"], "type": "semantic"}
+{"id": "q25", "question": "付款紀錄要保存多久？", "answer": "7 年（會計法規），但個資會替換成匿名代碼。", "doc_ids": ["policy-data-retention"], "type": "semantic"}
+{"id": "q26", "question": "主機日誌把硬碟塞滿了，可以直接刪嗎？", "answer": "主機上的應用日誌只保留 7 天，超過的可以刪；但 Kafka broker 不要手動刪資料檔，資料庫主機不要刪 WAL。", "doc_ids": ["rb-disk-full"], "type": "semantic"}
+{"id": "q27", "question": "搜尋某些商品突然找不到，以前有類似事故嗎？", "answer": "有，INC-2026-1008：同義詞檔誤用單向替換 =>，把「耳機」改寫成「耳罩」。", "doc_ids": ["pm-2026-1008-search-synonym"], "type": "semantic"}
+{"id": "q28", "question": "會員下單後還沒揀貨，可以自己取消嗎？", "answer": "可以。v7.0.0 起 PAID 之後、進入 PICKING 之前可自行取消並自動退款。", "doc_ids": ["svc-anchor-order"], "type": "semantic"}
+{"id": "q29", "question": "限量商品開賣時大家搶不到，可以怎麼緩解？", "answer": "開啟排隊模式 hfctl stock queue-mode on --sku <SKU>；不要把鎖的 TTL 調長。", "doc_ids": ["rb-stk-310-lock"], "type": "semantic"}
+{"id": "q30", "question": "資料倉儲裡的手機號碼會怎麼顯示？", "answer": "只保留後 3 碼，例如 09xx-xxx-123。", "doc_ids": ["svc-sandbar-dw"], "type": "semantic"}
+{"id": "q31", "question": "BW-504 是什麼？", "answer": "上游逾時，超過 upstream_timeout_ms（預設 15 秒，tide-pay 為 30 秒）。", "doc_ids": ["svc-breakwater"], "type": "keyword"}
+{"id": "q32", "question": "NTF-610 要重試嗎？", "answer": "不重試，收件人號碼格式錯誤，直接丟棄。", "doc_ids": ["svc-gull-notify", "pm-2026-0921-mq-lag"], "type": "keyword"}
+{"id": "q33", "question": "TPL-ORDER-003 是什麼範本？", "answer": "出貨通知。", "doc_ids": ["svc-gull-notify"], "type": "keyword"}
+{"id": "q34", "question": "rds-stock-01 延遲多少代表 Redis 吃緊？", "answer": "p99 超過 20 毫秒。", "doc_ids": ["rb-stk-310-lock"], "type": "keyword"}
+{"id": "q35", "question": "acquirer_timeout_ms 設多少？", "answer": "25 秒（25000 毫秒）。", "doc_ids": ["svc-tidepay"], "type": "keyword"}
+{"id": "q36", "question": "pg-pay 做計畫性切換要避開什麼時間？", "answer": "請款批次 02:30～03:30。", "doc_ids": ["rb-pg-failover"], "type": "keyword"}
+{"id": "q37", "question": "4000 0000 0000 0010 這張測試卡會發生什麼事？", "answer": "觸發 TP-4030，被收單行拒絕。", "doc_ids": ["faq-local-dev"], "type": "keyword"}
+{"id": "q38", "question": "hfctl gw breaker reset 什麼時候才可以用？", "answer": "確定上游已經恢復、但熔斷器卡住超過 5 分鐘時才用。", "doc_ids": ["rb-bw-503-circuit", "faq-hfctl"], "type": "keyword"}

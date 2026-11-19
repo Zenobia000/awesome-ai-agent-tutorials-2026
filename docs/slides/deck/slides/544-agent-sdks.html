@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>兩家 Agent SDK 對照</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hands{position:absolute;right:110px;top:34px;font-size:22px;line-height:1.4;color:var(--muted);padding:3px 14px;border:2px solid var(--grey)}
+.hands b{font-weight:400;color:var(--ver);margin-right:12px}
+.hands code{font-family:"JetBrains Mono",monospace;font-size:22px}
+.wrap{position:absolute;left:110px;top:290px;width:1700px}
+table.cmp{width:1700px;border-collapse:collapse;font-size:26px;line-height:1.35}
+table.cmp th{font-weight:400;text-align:left;padding:10px 16px;border-bottom:3px solid var(--ink);font-size:30px;color:var(--ind)}
+table.cmp td{padding:11px 16px;border-bottom:2px solid #d3cdbf;vertical-align:top}
+table.cmp td.k{width:250px;color:var(--muted)}
+table.cmp code{font-family:"JetBrains Mono",monospace;font-size:23px}
+table.cmp b{font-weight:400;color:var(--ver)}
+.dg{position:absolute;top:740px;height:80px;display:flex;align-items:center;justify-content:center;font-size:24px}
+</style></head><body><div class="slide">
+  <div class="hands"><b>動手</b><code>modules/module-05-agent-harness/07_openai_agents_sdk.ipynb、08_claude_agent_sdk.ipynb</code></div>
+  <h1>兩家 Agent SDK：迴圈在誰手上</h1>
+  <p class="lead" style="width:1700px">OpenAI 的 SDK 把你手寫的迴圈換成 Runner；Claude 的 SDK 直接把 Claude Code 整套 harness 交給你驅動。</p>
+  <div class="wrap"><table class="cmp"><tr><th></th><th>OpenAI Agents SDK</th><th>Claude Agent SDK</th></tr>
+  <tr><td class="k">迴圈在哪</td><td>你的程式裡：<code>Runner.run</code>，Agent 只是設定</td><td>Claude Code CLI 裡；你只調 options</td></tr>
+  <tr><td class="k">內建工具</td><td>沒有；用 <code>@function_tool</code> 自己寫</td><td>讀檔、搜尋、shell；自訂工具＝程式內 MCP</td></tr>
+  <tr><td class="k">權限與審批</td><td><code>needs_approval=True</code>＋guardrail</td><td><code>can_use_tool</code> 回呼＋<code>PreToolUse</code> hook</td></tr>
+  <tr><td class="k">子 agent</td><td><code>agent.as_tool()</code></td><td><code>agents={名稱: AgentDefinition}</code></td></tr>
+  <tr><td class="k">換本機模型</td><td>可：改用 Chat Completions，關掉 tracing</td><td><b>不行，綁 Claude</b></td></tr>
+  <tr><td class="k">適合</td><td>OpenAI 生態、需要 guardrail</td><td>要成熟的通用 harness：讀碼、跑指令、接 MCP</td></tr>
+  </table></div>
+  <div class="abs note" style="left:110px;top:872px;width:1700px">兩家都能放進「外殼用流程圖，核心用 harness」那頁的核心那格；寫入動作的審批仍建議寫在外層的固定圖。</div>
+  <div class="dg" style="left:376px;width:330px">你的程式＋Runner 迴圈</div>
+  <div class="dg" style="left:775px;width:80px;font-size:22px">模型</div>
+  <div class="dg" style="left:1068px;width:150px">你的程式</div>
+  <div class="dg" style="left:1270px;width:330px">CLI：迴圈＋內建工具</div>
+  <div class="dg" style="left:1660px;width:120px;font-size:22px">Claude</div>
+  <div class="read"><em>怎麼讀：</em>先看第一列「迴圈在哪」，它決定了下面每一列：迴圈在你手上就自己補，在 CLI 裡就用設定去管。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const S=D.C;
+D.rect(376,740,330,80,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.5});
+D.arrow(712,780,770,780,{strokeWidth:2.5});
+D.ci(815,780,80,'#f7d6cf',{stroke:S.ver,strokeWidth:2.6});
+D.rect(1068,740,150,80,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.5});
+D.arrow(1222,780,1264,780,{strokeWidth:2.5});
+D.rect(1270,740,330,80,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.5});
+D.arrow(1604,780,1660,780,{strokeWidth:2.5});
+D.ci(1720,780,96,'#f7d6cf',{stroke:S.ver,strokeWidth:2.6});
+</script></body></html>

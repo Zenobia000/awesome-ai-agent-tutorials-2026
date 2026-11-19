@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="zh-Hant"><head><meta charset="utf-8"><title>Hugging Face 全家桶</title>
+<link rel="stylesheet" href="../assets/base.css"><script src="../assets/vendor/rough.js"></script><script src="../assets/draw.js"></script>
+<style>
+.hands{position:absolute;right:110px;top:34px;font-size:22px;line-height:1.4;color:var(--muted);padding:3px 14px;border:2px solid var(--grey)}
+.hands b{font-weight:400;color:var(--ver);margin-right:12px}
+.hands code{font-family:"JetBrains Mono",monospace;font-size:22px}
+.m{font-family:"JetBrains Mono",monospace}
+.hub{position:absolute;left:148px;font-size:26px;line-height:1.35;width:350px}
+.lib{position:absolute;left:650px;width:210px;height:62px;display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-size:24px;color:var(--ind)}
+.ds{position:absolute;left:880px;font-size:26px;line-height:62px;height:62px;width:360px}
+.chip{position:absolute;top:368px;height:70px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.card{position:absolute;left:1300px;width:510px;padding:14px 24px;font-size:26px;line-height:1.5}
+.card .h{font-size:28px;margin-bottom:6px}
+</style></head><body><div class="slide">
+  <div class="hands"><b>動手</b><code>modules/module-01-llm-local/02_huggingface.ipynb</code></div>
+  <h1>Hugging Face：模型倉庫＋一組函式庫</h1>
+  <p class="lead">Hub 是放權重和資料集的網站；Python 函式庫負責下載、切 token、跑模型、微調。</p>
+
+  <!-- 左：Hub -->
+  <div class="abs" style="left:136px;top:314px;font-size:30px">Hub <span class="m mut" style="font-size:24px">huggingface.co</span></div>
+  <div class="hub" style="top:378px">模型 repo：權重＋設定檔</div>
+  <div class="hub" style="top:448px">model card：授權與限制</div>
+  <div class="hub" style="top:518px">資料集 repo</div>
+  <div class="hub" style="top:588px">Spaces：線上 demo</div>
+
+  <div class="bridge" style="left:110px;top:690px;width:500px"><span class="k">你已經會的</span>載入預訓練 ResNet 做遷移學習；<br><span class="m" style="font-size:24px">from_pretrained()</span> 是同一件事，<br>換成語言模型而已。</div>
+
+  <!-- 中：函式庫 -->
+  <div class="abs" style="left:670px;top:310px"><span class="m ind" style="font-size:28px">transformers</span></div>
+  <div class="chip m" style="left:670px;width:170px">tokenizer</div>
+  <div class="chip" style="left:885px;width:96px">模型</div>
+  <div class="chip m" style="left:1030px;width:190px">pipeline()</div>
+  <div class="abs lbl mut" style="left:670px;top:448px">pipeline 把切詞、推論、轉回文字包成一行</div>
+
+  <div class="lib" style="top:510px">tokenizers</div><div class="ds" style="top:510px">快速切詞（Rust 寫的）</div>
+  <div class="lib" style="top:588px">safetensors</div><div class="ds" style="top:588px">權重檔：載入不跑程式碼</div>
+  <div class="lib" style="top:666px">datasets</div><div class="ds" style="top:666px">下載、切分、處理資料集</div>
+  <div class="lib" style="top:744px">peft</div><div class="ds" style="top:744px">LoRA 微調（模組六）</div>
+  <div class="lib" style="top:822px">accelerate</div><div class="ds" style="top:822px">同份程式跑單卡或多卡</div>
+
+  <!-- 右：本地跑選哪個 -->
+  <div class="abs ind" style="left:1300px;top:300px;font-size:30px">本地跑模型，選哪個？</div>
+  <div class="card" style="top:360px;height:200px"><div class="h mus">Ollama（GGUF 量化檔）</div>一行指令就跑，顯存吃得少<br>OpenAI 相容 <span class="m" style="font-size:24px">/v1</span>，直接接 app<br>拿不到中間層的東西</div>
+  <div class="card" style="top:590px;height:250px"><div class="h ind">transformers（原始權重）</div>看得到 logits、attention<br>embedding、reranker 也用它<br>要微調（模組六）只能走這條<br>原精度吃顯存，要 GPU</div>
+
+  <div class="read"><em>怎麼讀：</em>左邊的 Hub 是倉庫，中間是取用它的函式庫；只要對話用 Ollama，要動模型內部或微調用 transformers。</div>
+</div><svg class="rough" id="r" width="1920" height="1080"></svg>
+<script>const D=Draw('r');const S=D.C;
+// Hub：方＝資料
+D.rect(110,300,400,360,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.8});
+[372,442,512,582].forEach(y=>D.sq(122,y+12,12,'#b98a12',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:1.5}));
+// transformers 外框與內部：tokenizer（方）→ 模型（圓）→ pipeline 包住兩者
+D.rect(650,300,590,190,'#fbf9f4',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.8});
+D.rect(670,368,170,70,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.4});
+D.arrow(846,403,880,403,{strokeWidth:2.4});
+D.ci(933,403,90,'#f7d6cf',{stroke:S.ver,strokeWidth:2.6});
+D.dash(1030,368,1030,438,{stroke:S.grey,strokeWidth:2});
+// 五個函式庫
+[510,588,666,744,822].forEach(y=>D.rect(650,y,210,62,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.4}));
+// Hub → transformers、Hub → datasets
+D.arrow(516,392,644,392,{strokeWidth:2.6});
+D.curve([[516,532],[580,560],[610,650],[644,697]],{strokeWidth:2.6});
+D.arrow(630,680,646,698,{strokeWidth:2.6});
+// 右側兩張卡
+D.rect(1300,360,510,200,'#f7e7c0',{fillStyle:'solid',stroke:'#b98a12',strokeWidth:2.4});
+D.rect(1300,590,510,250,'#d9e1ee',{fillStyle:'solid',stroke:S.ind,strokeWidth:2.4});
+</script></body></html>
