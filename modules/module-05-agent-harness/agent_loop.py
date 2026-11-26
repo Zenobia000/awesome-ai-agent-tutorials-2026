@@ -8,7 +8,6 @@
 
 from __future__ import annotations
 
-import os
 import time
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -16,11 +15,15 @@ from dataclasses import dataclass
 from openai import OpenAI
 from pydantic import BaseModel, ValidationError
 
-MODEL = os.getenv("LOCAL_MODEL", "qwen2.5:3b")
+from course_utils.llm import make_client as _make_client
+from course_utils.llm import primary_endpoint
+
+_EP = primary_endpoint()  # 有 CLOUD_API_KEY 走雲端，否則本機 Ollama
+MODEL = _EP.model
 
 
 def make_client() -> OpenAI:
-    return OpenAI(base_url=os.getenv("LOCAL_BASE_URL", "http://localhost:11434/v1"), api_key="ollama", timeout=120)
+    return _make_client(_EP, timeout=120)
 
 
 @dataclass(frozen=True)

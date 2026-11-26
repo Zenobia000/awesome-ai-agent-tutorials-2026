@@ -326,6 +326,6 @@ README.md               model card：訓練資料、授權、限制
 | `02_huggingface.ipynb` | §7：在 Hub 查模型、看快取、tokenizer／model／`pipeline`、`datasets`、`safetensors` |
 | `03_next_token.ipynb` | §2～4：印 logits 與 top-k 機率、用 `generate()` 調溫度和 top-p、畫真實模型的 attention、看幻覺 |
 | `04_chat_api.ipynb` | §5：用 OpenAI SDK 對話、看原始 JSON、記不住對話與越聊越貴、串流 |
-| `05_dual_track.ipynb` | 把 04 包成本地失敗自動切雲端的客戶端 |
+| `05_dual_track.ipynb` | 把 04 包成雲端優先、失敗自動退回本地的客戶端 |
 | `06_multimodal_api.ipynb`、`07_providers.ipynb` | 圖片與語音進出 API、換供應商 |
 | `08_litellm_and_cost.ipynb` | §8：LiteLLM 統一介面與 fallback、查價、對帳、預算追蹤 |
