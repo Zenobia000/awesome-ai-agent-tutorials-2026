@@ -129,7 +129,7 @@ uv run --with pillow python contact.py <你的前綴> <scratchpad>/<任意名>.p
 - 115-open-vs-api：開放權重 vs 商業 API（隱私、成本、可客製）；商業模型不寫死型號
 - 116-local-models：依顯存選本地模型（Qwen3.5 小尺寸、`qwen3:14b` 9.3GB、`deepseek-r1:8b` 現在的底模型；4-bit 量化）
 - 117-messages-json：OpenAI 相容 API 的一則 messages JSON 實物；本地端點 `http://localhost:11434/v1`
-- 150-lab1-arch：雙軌客戶端架構（本地 Ollama 為主、雲端備援，故障切換）
+- 150-lab1-arch：雙軌客戶端架構（雲端為主、本地 Ollama 備援，故障切換）
 - 151-lab1-stream：generator 串流的程式片段
 - 180-pitfalls：顯存溢出（OOM）、溫度誤解、`num_ctx` 截斷
 - 190-interview

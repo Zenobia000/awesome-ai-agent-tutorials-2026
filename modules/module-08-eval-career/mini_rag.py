@@ -11,17 +11,17 @@
 from __future__ import annotations
 
 import json
-import os
 import time
 from pathlib import Path
 
 import numpy as np
 from openai import OpenAI
 
-from course_utils.llm import embed
+from course_utils.llm import embed, make_client, primary_endpoint
 
 DATA = Path(__file__).parent / "data"
-MODEL = os.getenv("LOCAL_MODEL", "qwen2.5:3b")
+_EP = primary_endpoint()  # 有 CLOUD_API_KEY 走雲端，否則本機 Ollama
+MODEL = _EP.model
 
 # 兩個 prompt 版本：v1 是基準，v2 是「看起來更親切」的改版（模組 8-02 用來示範回歸）
 PROMPTS = {
@@ -52,12 +52,11 @@ def load_eval_set() -> list[dict]:
 
 
 def client() -> OpenAI:
-    base_url = os.getenv("LOCAL_BASE_URL", "http://localhost:11434/v1")
-    return OpenAI(base_url=base_url, api_key="ollama", timeout=300, max_retries=2)
+    return make_client(_EP, timeout=300, max_retries=2)
 
 
 class MiniRAG:
-    """檢索用 cosine similarity，生成用本地 qwen2.5:3b。"""
+    """檢索用 cosine similarity，生成用 primary_endpoint()（雲端優先、本地備援）。"""
 
     def __init__(self, docs: list[dict]):
         self.docs = docs

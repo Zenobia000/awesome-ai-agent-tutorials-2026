@@ -9,7 +9,7 @@
 3. **一個例外：自己寫一個 ReAct agent。** 模組 5 前兩本手寫 agent 迴圈，這是理解所有 agent 框架的基本功；之後才換 LangGraph、deepagents、OpenAI／Claude Agent SDK、CrewAI。
 4. **一本 notebook 只講一件事。** 20～40 個 cell，跑完不超過 15 分鐘，每一步都印出結果。
 5. **先看它壞掉。** 先跑出錯的版本（沒有檢索的幻覺、沒有審批的寫入），再修。
-6. **本地優先、免費優先。** 預設走 Ollama；雲端 API 只是 `.env` 換一行。
+6. **雲端優先、本地墊底。** `.env` 填了 `CLOUD_API_KEY` 就走雲端（模型大、不吃顯卡）；沒填或雲端斷線就退回本機 Ollama，不花錢也能跑完全部 notebook。
 7. **不教維運花招。** 不碰 Kubernetes、Triton、vLLM 叢集、DeepSpeed、分散式訓練；服務部署另見 `infra/`。
 
 ## 每本 notebook 的固定骨架
