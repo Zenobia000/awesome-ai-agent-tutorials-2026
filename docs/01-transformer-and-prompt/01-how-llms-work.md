@@ -55,7 +55,7 @@ flowchart LR
 
 <sub>資料來源：模組一 `images/token_strip.jpg`；對應投影片「文字進模型前，先切成 token」。</sub>
 
-為什麼不直接用「字」或「單字」當單位？這是一個詞表大小與序列長度的取捨。一個 byte 一格，詞表只有 256 個，但一個中文字在 UTF-8 裡就是 3 個 byte，序列長得驚人，算力全花在長度上。一個單字一格，詞表會膨脹到幾百萬，而且沒看過的新名詞、錯字完全無法表示。業界取中間：**subword**，常見片段一格、罕見字退回 byte。實務上的詞表大小約 5 萬到 15 萬個 token。對你來說最好記的搭橋是：**詞表大小就是最後一層 softmax 的類別數**，這個伏筆在 1.4 節會用到。
+為什麼不直接用「字」或「單字」當單位？這是一個詞表大小與序列長度的取捨。一個 byte 一格，詞表只有 256 個（1 byte 是 8 個 bit，每個 bit 只能是 0 或 1，所以只有 2⁸ = 256 種值，也就是整數 0 到 255；任何文字編成 UTF-8 後都只由這 256 種 byte 組成），但一個中文字在 UTF-8 裡就是 3 個 byte，序列長得驚人，算力全花在長度上。一個單字一格，詞表會膨脹到幾百萬，而且沒看過的新名詞、錯字完全無法表示。業界取中間：**subword**，常見片段一格、罕見字退回 byte。實務上的詞表大小約 5 萬到 15 萬個 token。對你來說最好記的搭橋是：**詞表大小就是最後一層 softmax 的類別數**，這個伏筆在 1.4 節會用到。
 
 最常見的 subword 演算法叫 **BPE**（Byte Pair Encoding）。它的想法很樸素：統計語料裡哪兩個相鄰片段最常黏在一起，就把它們合併成一個新 token、記進詞表，重複幾萬到十幾萬次。
 
@@ -65,7 +65,20 @@ flowchart LR
 
 <sub>資料來源：模組一 `images/bpe_merge_flow.jpg`。為了好讀，圖中一個中文字畫成一格；實際上中文字一開始是 3 個 byte，要先合併成字，再往上合併成詞。</sub>
 
-BPE 有三個性質，直接決定了你會遇到的怪現象。第一，詞表是統計出來的，不是人定的；訓練語料裡英文多，所以英文常見單字幾乎都是一格，中文則常常一字一格，罕見字甚至拆成兩格。第二，它永遠切得了，最差就是一個 byte 一格，所以沒有「未知字」，代價是罕見字很貴。第三，模型看不到字母：`strawberry` 被切成幾個片段後，「裡面有幾個 r」就變成模型很難直接回答的問題。數字也被切得很碎，這是模型算術不穩的原因之一。
+有兩個細節容易誤會。第一，**合併出來的新 token 不是「一個 byte」，而是一個新編號**。前 256 個 id（0 到 255）就是那 256 種 byte 本身，合併出來的 token 從 256 往上編號，一個 id 背後可以代表好幾個 byte。合併之後就不再是「一個 byte 一格」，而是「一個 token id 一格」。第二，**每次合併只把兩個已經在詞表裡的 token 合成一個**，所以長 token 是一輪一輪疊出來的。以英文 `the` 為例：
+
+```text
+初始詞表：t = 116　h = 104　e = 101          （byte 值，同時也是 token id）
+
+第 1 次合併：(116, 104) → 256   "th"
+第 2 次合併：(256, 101) → 257   "the"        ← 拿上一輪合出來的 256 再合併
+
+展開：257 → (256, 101) → (116, 104, 101) → t h e
+```
+
+tokenizer 存的就是這張「兩個 id → 新 id」的合併規則表，任何 token 往回拆，最後都會拆回 byte。中文字也一樣：「中」的 UTF-8 是 228、184、173 三個 byte，要先經過兩次合併變成一個「中」token，才有機會再跟別的字合成詞。模型本身完全不看 byte，它只拿 token id 去 embedding 表查向量，所以 embedding 表的大小是「詞表大小 × 向量維度」。
+
+BPE 有三個性質，直接決定了你會遇到的怪現象。第一，**詞表大小是人定的，詞表內容是統計出來的**。合併要做幾次是事先設好的超參數，跟 hidden size 一樣是取捨；例如 GPT-2 的詞表 50,257 = 256 個 byte + 50,000 次合併 + 1 個特殊 token `<|endoftext|>`。至於這五萬次各自合併了哪一對，才是從語料統計出來的。訓練語料裡英文多，所以英文常見單字幾乎都是一格，中文則常常一字一格，罕見字甚至拆成兩格。第二，它永遠切得了，最差就是一個 byte 一格，所以沒有「未知字」，代價是罕見字很貴。第三，模型看不到字母：`strawberry` 被切成幾個片段後，「裡面有幾個 r」就變成模型很難直接回答的問題。數字也被切得很碎，這是模型算術不穩的原因之一。
 
 這些性質落到工程上就是四條規則。**計費與 context 上限都按 token 算**，同一段文字在不同模型上 token 數不同，估費用要用該模型自己的 tokenizer 數，不能用字數。同樣的意思，中文常比英文多兩到五成 token。**要數字母、做大數運算，交給程式或工具**，不要交給模型。最後，對話格式本身也吃 token：messages 會被 chat template 攤平成一段帶特殊 token 的文字（1.8 節與第 3 章會再看到）。
 
@@ -102,18 +115,35 @@ flowchart LR
 
 這一節是整章的核心。一次前向傳播的流程，和你熟悉的影像分類幾乎逐格對應：
 
-```
-token id ─查表→ 向量 ─→ N 層 Transformer ─→ 最後一層 Linear ─→ logits（詞表大小）─softmax→ 機率
-影像分類： 像素 ─────→ CNN／ViT ────────→ 分類頭 Linear ───→ logits（1000 類）─softmax→ 機率
-```
+**圖 1-5　語言模型和影像分類逐格對應，差別只在類別數**
+
+![上下兩列各五格逐格對齊。語言模型：token id 查表成向量 → N 層 Transformer → 最後一層 Linear → logits（詞表大小，約 15 萬）→ softmax 得到下一個 token 的機率。影像分類：像素 → CNN／ViT → 分類頭 Linear → logits（1000 類）→ softmax 得到類別機率。logits 那一格以紅框標出：唯一差別是類別數](../../modules/module-01-llm-local/images/llm_vs_image_classifier.jpg)
+
+<sub>資料來源：本課整理，模組一 `images/llm_vs_image_classifier.jpg`。「約 15 萬」以 Qwen 系列的詞表為例。</sub>
 
 模型對序列的每個位置都輸出一個長度等於詞表大小的分數向量（**logits**），softmax 之後就是「下一個 token 是詞表裡每一個的機率」。訓練目標就是分類的交叉熵。差別只在兩處：類別數從 1000 變成十幾萬；標籤不需要人標。
+
+**logits 不是機率**，這點常被混用。logits 是最後一層 Linear 直接吐出的原始分數，可以是任意實數、可正可負、加起來也不等於 1，只有「誰比誰高」有意義。softmax 做兩件事把它變成機率：先對每個分數取 e 的次方，全部變成正數；再除以總和，讓加總剛好等於 1。
+
+```text
+p_i = e^(z_i) / Σ_j e^(z_j)
+
+假設詞表只有三個 token，接在「魯夫想成為」後面：
+
+           logits z    e^z      機率 p
+海賊王        5.0      148.4     0.867
+英雄          3.0       20.1     0.117
+廚師          1.0        2.7     0.016
+                     總和 171.2   總和 1.000
+```
+
+分數差 2，機率卻差了 7 倍多，因為 e 的次方會放大差距。這跟你在 PyTorch 的經驗一致：`nn.CrossEntropyLoss` 吃的是 logits 而不是機率，因為它內部會自己做 softmax。分清這兩者，1.5 節的溫度才講得通：溫度是先調 logits、再做 softmax。
 
 標籤不需要人標，是 LLM 讀得了海量文字的原因。影像分類的每張圖都要有人看過、標過，標註是最貴、最慢的一步。語言模型則把每一句話切成好幾道考題：「魯夫」的下一個字是「想」，「魯夫想」的下一個是「成為」，「魯夫想成為」的下一個是「海賊王」。答案直接從原文取，所以叫**自監督**（self-supervised）。網路上每一句話都能這樣出題，這就是**預訓練**（pre-training）。
 
 生成時，把這個分類器放進迴圈：猜一個 token，接到輸入尾巴，再猜下一個，直到抽到結束符號或碰到長度上限。
 
-**圖 1-5　生成是一個迴圈：模型只負責算機率，抽樣決定挑哪一個**
+**圖 1-6　生成是一個迴圈：模型只負責算機率，抽樣決定挑哪一個**
 
 ![生成迴圈：已有的 token 進 LLM，得到詞表機率分布，經溫度與 top-p 抽樣出下一個 token，再接回已有的 token](../../modules/module-01-llm-local/images/generation_loop.jpg)
 
@@ -125,7 +155,7 @@ token id ─查表→ 向量 ─→ N 層 Transformer ─→ 最後一層 Linear
 
 壓下幻覺的方法都不在模型內部：把正確資料查來放進輸入（RAG，第二部）、在提示詞裡給它說「不知道」的合法出口（第 2 章）、讓模型呼叫工具查證（第三部）、上線前用評估集抓出來（第四部）。這一節的觀念也串起了課程的大地圖：以前每個 NLP 任務都要重新標註、從頭訓練一個模型；現在先用生文本練出一個底座，任務只在最後一步分岔成三條路：直接下指令（Prompt）、把資料塞進輸入（RAG）、少量標註再微調（LoRA）。
 
-**圖 1-6　從「一任務一模型」變成「一個底座，三條分岔」**
+**圖 1-7　從「一任務一模型」變成「一個底座，三條分岔」**
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'Noto Sans TC, Helvetica, Arial, sans-serif','fontSize':'15px','primaryColor':'#FFFFFF','primaryTextColor':'#051C2C','primaryBorderColor':'#051C2C','lineColor':'#7A8B99','secondaryColor':'#F0F3F7','tertiaryColor':'#F0F3F7','clusterBkg':'#F7F9FB','clusterBorder':'#C5CED6','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#051C2C','noteBkgColor':'#F0F3F7','noteBorderColor':'#C5CED6'}}}%%
@@ -146,7 +176,7 @@ flowchart LR
 
 模型給出的是機率分佈，接下來要「挑一個」。挑法由幾個抽樣參數控制，它們全部作用在 softmax 那一步，**模型本身完全沒變**。最常調的是**溫度**（temperature）：抽樣前把 logits 除以 T 再做 softmax。T 小於 1 時分佈變尖，幾乎只挑第一名；T 大於 1 時分佈變平，長尾的 token 也常被抽中。這就是知識蒸餾裡 `softmax(z / T)` 的那個 T。
 
-**圖 1-7　抽樣參數都只作用在 softmax 之後，模型權重不動**
+**圖 1-8　抽樣參數都只作用在 softmax 之後，模型權重不動**
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'Noto Sans TC, Helvetica, Arial, sans-serif','fontSize':'15px','primaryColor':'#FFFFFF','primaryTextColor':'#051C2C','primaryBorderColor':'#051C2C','lineColor':'#7A8B99','secondaryColor':'#F0F3F7','tertiaryColor':'#F0F3F7','clusterBkg':'#F7F9FB','clusterBorder':'#C5CED6','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#051C2C','noteBkgColor':'#F0F3F7','noteBorderColor':'#C5CED6'}}}%%
@@ -186,7 +216,7 @@ Transformer 中間那一大段，最核心的元件是 **attention**。要理解
 
 attention 的做法是不再把一切壓進一個向量。處理某個字時，直接回頭看句子裡所有的字，依相關程度決定看誰、看多重。例如處理「牠」時，模型可能把一半的權重放在「動物」、兩成放在「馬路」，新的「牠」向量就是這些字的向量依權重相加。和全連接層對比，差別在一句話：**全連接層的權重訓練完就固定了，attention 的權重每次都依輸入內容重新算。**
 
-**圖 1-8　RNN 把整句擠進一個向量；attention 讓每個位置直接看全部**
+**圖 1-9　RNN 把整句擠進一個向量；attention 讓每個位置直接看全部**
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'Noto Sans TC, Helvetica, Arial, sans-serif','fontSize':'15px','primaryColor':'#FFFFFF','primaryTextColor':'#051C2C','primaryBorderColor':'#051C2C','lineColor':'#7A8B99','secondaryColor':'#F0F3F7','tertiaryColor':'#F0F3F7','clusterBkg':'#F7F9FB','clusterBorder':'#C5CED6','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#051C2C','noteBkgColor':'#F0F3F7','noteBorderColor':'#C5CED6'}}}%%
@@ -218,7 +248,7 @@ weights = softmax(scores)         # 每一列加起來是 1
 out     = weights @ V             # 按權重把 V 加起來
 ```
 
-**圖 1-9　因果 attention：每一列是一個 token 把注意力分給前面的誰**
+**圖 1-10　因果 attention：每一列是一個 token 把注意力分給前面的誰**
 
 ![因果 attention 權重矩陣：列是查詢 Q（魯夫、吃了、橡膠、果實），欄是被看的 K；右上角上鎖表示不准看未來；權重乘上 V 得到輸出](../../modules/module-01-llm-local/images/attention_flow.jpg)
 
@@ -234,7 +264,7 @@ out     = weights @ V             # 按權重把 V 加起來
 
 一層 Transformer 由兩個子層組成：attention 讓 token 之間交換資訊，MLP 讓每個 token 各自「想一想」；兩者都加上殘差連接與 LayerNorm，然後把同樣的結構疊 N 層（Qwen2.5-0.5B 疊了 24 層）。對你來說新的東西只有 attention：殘差就是 ResNet 的 skip connection，LayerNorm 是 BatchNorm 的近親，MLP 就是全連接網路。今天的 LLM 用的是只看前面 token 的 decoder 版本，原始論文那套 encoder-decoder 翻譯架構只留了一半。
 
-**圖 1-10　整個 LLM 的每個積木都對應一個你已經會的元件**
+**圖 1-11　整個 LLM 的每個積木都對應一個你已經會的元件**
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'Noto Sans TC, Helvetica, Arial, sans-serif','fontSize':'15px','primaryColor':'#FFFFFF','primaryTextColor':'#051C2C','primaryBorderColor':'#051C2C','lineColor':'#7A8B99','secondaryColor':'#F0F3F7','tertiaryColor':'#F0F3F7','clusterBkg':'#F7F9FB','clusterBorder':'#C5CED6','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#051C2C','noteBkgColor':'#F0F3F7','noteBorderColor':'#C5CED6'}}}%%
@@ -301,7 +331,7 @@ POST http://localhost:11434/v1/chat/completions
 
 `messages` 是一個陣列，每個元素有角色與內容。`system` 放整段對話都要遵守的規則，`user` 是使用者這一輪說的話，`assistant` 是模型之前的回答，**由你重送**。送進模型之前，這個陣列會被 **chat template**（對話模板）攤平成一條帶特殊 token 的字串，例如 Qwen 系列用 `<|im_start|>user … <|im_end|>` 標出角色。模型看到的永遠只是一條 token 序列，role 只是序列裡的幾個特殊 token。
 
-**圖 1-11　兩次呼叫之間模型什麼都不留，第二次請求要把整段歷史一起送**
+**圖 1-12　兩次呼叫之間模型什麼都不留，第二次請求要把整段歷史一起送**
 
 ![模型不記得對話：第 1 次請求只送「我叫索隆」；第 2 次請求要把 user、assistant、user 三則整段歷史一起送，模型才答得出「索隆」](../../modules/module-01-llm-local/images/stateless_requests.jpg)
 
@@ -309,7 +339,7 @@ POST http://localhost:11434/v1/chat/completions
 
 無狀態帶來三個工程後果。第一，**對話越長，每次送出的 token 越多**，第 N 輪的輸入包含前 N−1 輪，成本和延遲一起上升，累計費用約隨輪數平方成長。OpenAI 的 Responses API 可以用 `previous_response_id` 讓伺服器代存歷史，但官方明講舊輪次的 token 仍照算輸入費用；伺服器代存只是省了你自己搬運，不是讓模型記住。第二，**歷史超過 context 上限就看不到**，必須取捨：只留最近幾輪、把舊對話摘要、或把重要事實存到外部（第三部的 Agent 記憶）。第三，本地部署有一個新手必踩的坑：Ollama 預設 `num_ctx` 是 4096，即使模型本身支援更長的 context，超過的部分照樣被截斷。症狀是「聊著聊著模型像失憶」或「長文件後半被忽略」，修法是設環境變數 `OLLAMA_CONTEXT_LENGTH`，或在請求帶 `num_ctx`。
 
-**圖 1-12　每輪請求比上一輪長，最舊的內容最先掉出窗口**
+**圖 1-13　每輪請求比上一輪長，最舊的內容最先掉出窗口**
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'Noto Sans TC, Helvetica, Arial, sans-serif','fontSize':'15px','primaryColor':'#FFFFFF','primaryTextColor':'#051C2C','primaryBorderColor':'#051C2C','lineColor':'#7A8B99','secondaryColor':'#F0F3F7','tertiaryColor':'#F0F3F7','clusterBkg':'#F7F9FB','clusterBorder':'#C5CED6','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#051C2C','noteBkgColor':'#F0F3F7','noteBorderColor':'#C5CED6'}}}%%
@@ -335,7 +365,7 @@ sequenceDiagram
 
 預訓練完的模型叫 **base model**（基座模型），它很會接龍，但不一定聽指令。你問它「法國的首都是哪裡？」，它可能接出另外三個問題，因為網路上的考卷就長那樣。要變成能直接聊天的模型，還要再經過兩個階段。這個流程你其實很熟：ImageNet 預訓練一個特徵提取器，再用少量你的標註 fine-tune。LLM 是同一套路，只是多了一步。
 
-**圖 1-13　LLM 的訓練階段和 CV 遷移學習一一對應**
+**圖 1-14　LLM 的訓練階段和 CV 遷移學習一一對應**
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'Noto Sans TC, Helvetica, Arial, sans-serif','fontSize':'15px','primaryColor':'#FFFFFF','primaryTextColor':'#051C2C','primaryBorderColor':'#051C2C','lineColor':'#7A8B99','secondaryColor':'#F0F3F7','tertiaryColor':'#F0F3F7','clusterBkg':'#F7F9FB','clusterBorder':'#C5CED6','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#051C2C','noteBkgColor':'#F0F3F7','noteBorderColor':'#C5CED6'}}}%%
@@ -378,7 +408,7 @@ flowchart LR
 
 「開源」不等於隨便商用。同一家族不同尺寸的授權可能不同：Qwen 中小尺寸是 Apache-2.0，最大旗艦另有自訂授權；Llama 是自訂社群授權，有用戶數門檻與標示要求；gpt-oss 是 Apache-2.0，但必須用 harmony 格式，自己拼提示詞會出錯。要商用或對外提供服務，授權要看到「你用的那個尺寸」的 LICENSE 原文。商業 API 那邊，型號大約每季換一次，所以要記家族、看官方型號頁，不要背型號；例如 GPT-4o 曾是課綱裡的商業 API 代表，但 `gpt-4o-2024-05-13` 已在 2026-10-23 關閉，其餘 4o 版本與 4o-mini 將在 2027-01-14 關閉，舊的 Assistants API 也已在 2026-08-26 關閉。本課 notebook 的雲端文字模型一律用 `gpt-5.4-nano`（推理模型，要寫 `max_completion_tokens` 而不是 `max_tokens`）。
 
-**圖 1-14　選本地還是 API，先看資料能不能出門，再看用量**
+**圖 1-15　選本地還是 API，先看資料能不能出門，再看用量**
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'Noto Sans TC, Helvetica, Arial, sans-serif','fontSize':'15px','primaryColor':'#FFFFFF','primaryTextColor':'#051C2C','primaryBorderColor':'#051C2C','lineColor':'#7A8B99','secondaryColor':'#F0F3F7','tertiaryColor':'#F0F3F7','clusterBkg':'#F7F9FB','clusterBorder':'#C5CED6','edgeLabelBackground':'#FFFFFF','actorBkg':'#FFFFFF','actorBorder':'#051C2C','noteBkgColor':'#F0F3F7','noteBorderColor':'#C5CED6'}}}%%
@@ -408,7 +438,7 @@ ollama pull nomic-embed-text    # 英文 embedding 模型；中文語料改用 b
 
 想看模型內部（logits、attention）或要微調時，就要離開 Ollama，走 Hugging Face。它對開放模型的角色就像 GitHub 對程式碼：Hub 放權重和資料集，一組 Python 函式庫負責下載、切 token、跑模型與微調。`from_pretrained()` 和你載入預訓練 ResNet 做遷移學習是同一件事。
 
-**圖 1-15　Hugging Face：上層函式庫各管一件事，經由 huggingface_hub 從 Hub 下載**
+**圖 1-16　Hugging Face：上層函式庫各管一件事，經由 huggingface_hub 從 Hub 下載**
 
 ![Hugging Face 生態系：上排是 tokenizers、transformers、datasets、peft、accelerate，中間是 huggingface_hub（下載與快取），底層 Hub 放模型、資料集、Spaces；transformers 旁附 safetensors 權重檔](../../modules/module-01-llm-local/images/hf_ecosystem.jpg)
 
@@ -442,7 +472,7 @@ r = client.chat.completions.create(model=MODEL[name], messages=messages)
 # Ollama 不檢查金鑰，但 SDK 要求非空字串
 ```
 
-**圖 1-16　同一個客戶端換 base_url 就能連四家；Anthropic 格式要先經過轉換函式**
+**圖 1-17　同一個客戶端換 base_url 就能連四家；Anthropic 格式要先經過轉換函式**
 
 ![一個 OpenAI 相容客戶端分別連到 Ollama 本機、OpenRouter、DeepSeek、OpenAI；下方 OpenAI 格式請求經過轉換函式變成 Anthropic Messages，註明 system 外放、max_tokens 必填](../../modules/module-01-llm-local/images/provider_switch.jpg)
 
@@ -452,7 +482,7 @@ Anthropic 的 Messages API 是主要例外，有三個不同：`system` 放在�
 
 本課 Lab 1 用的就是這個模式：雙軌客戶端。messages 先送本地 Ollama；連不上或逾時，才切到雲端 API；兩邊都失敗就列出每個錯誤。輸出用 Python generator 串流，`yield` 一次交出一小片，呼叫端拿到就立刻顯示。這裡有一個真實的坑：如果切換發生在串流中途，已經顯示給使用者的字收不回來，要另外處理。
 
-**圖 1-17　Lab 1 雙軌客戶端：本地失敗才切雲端**
+**圖 1-18　Lab 1 雙軌客戶端：本地失敗才切雲端**
 
 ![雙軌客戶端：chat(messages) 先送本地 Ollama，成功就回答；失敗則改送雲端 API，成功回答；雲端也失敗就列出每個錯誤](../../modules/module-01-llm-local/images/dual_track_client.jpg)
 
@@ -460,7 +490,7 @@ Anthropic 的 Messages API 是主要例外，有三個不同：`system` 放在�
 
 同一個 client 也能處理圖片與聲音。看圖最簡單：messages 裡的 `content` 從字串變成陣列，圖片是其中一塊（本機檔案用 base64，公開圖片直接給網址）。生成圖片、文字轉語音、語音轉文字則是另外三個端點，共用同一個 client 與金鑰。模型看圖的方式和 ViT 一樣，把圖切成 patch，每塊變成若干 token，所以**圖越大，token 越多、越貴**。第 3 章會看到多模態模型在本地怎麼跑。
 
-**圖 1-18　多模態 API 是四個端點，共用一個 client**
+**圖 1-19　多模態 API 是四個端點，共用一個 client**
 
 ![多模態 API 四個端點：文字加圖片進 chat.completions 出文字；文字進 images.generate 出圖片；文字進 audio.speech 出語音；語音進 audio.transcriptions 出文字；語音輸出再轉回文字形成閉環測試](../../modules/module-01-llm-local/images/multimodal_endpoints.jpg)
 
@@ -468,7 +498,7 @@ Anthropic 的 Messages API 是主要例外，有三個不同：`system` 放在�
 
 最後是帳單。雲端模型幾乎都按 token 計費，**輸入和輸出分開計價**，輸出單價通常是輸入的 4 到 8 倍，因為輸出要一個一個生成。和之前請求相同的開頭可能命中快取、打折計價；OpenAI 是自動快取（prompt 超過 1024 token 才有），Anthropic 要在請求裡標記。圖片、語音也先換算成 token 或按秒計價。
 
-**圖 1-19　一次呼叫的費用＝輸入 token 數 × 輸入單價＋輸出 token 數 × 輸出單價**
+**圖 1-20　一次呼叫的費用＝輸入 token 數 × 輸入單價＋輸出 token 數 × 輸出單價**
 
 ![一次呼叫的費用：輸入 token 分成快取命中（打折）與一般兩段，輸出 token 另計；輸出單價通常是輸入的 4～8 倍；圖片換算成 token，語音按秒或 token](../../modules/module-01-llm-local/images/api_cost_formula.jpg)
 
