@@ -988,14 +988,14 @@
    "relation": "FROM",
    "object": "風車村",
    "paragraph": "01",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "魯夫",
    "relation": "OWNS",
    "object": "橡膠果實",
    "paragraph": "01",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "香克斯",
@@ -1254,7 +1254,7 @@
    "relation": "BROTHER_OF",
    "object": "魯夫",
    "paragraph": "18",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "艾斯",
@@ -1324,21 +1324,21 @@
    "relation": "CAPTAIN_OF",
    "object": "黑桃海賊團",
    "paragraph": "18",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "艾斯",
    "relation": "FROM",
    "object": "哥亞王國",
    "paragraph": "18",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "薩波",
    "relation": "FROM",
    "object": "哥亞王國",
    "paragraph": "18",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "薩波",
@@ -1422,21 +1422,21 @@
    "relation": "DEFEATED",
    "object": "多佛朗明哥",
    "paragraph": "20",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "多佛朗明哥",
    "relation": "OWNS",
    "object": "線線果實",
    "paragraph": "20",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "薩波",
    "relation": "OWNS",
    "object": "燒燒果實",
    "paragraph": "20",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "凱文迪許",
@@ -1450,35 +1450,35 @@
    "relation": "CAPTAIN_OF",
    "object": "八寶水軍",
    "paragraph": "20",
-   "source": "manual"
+   "source": "llm"
   },
   {
    "subject": "伊迪歐",
    "relation": "CAPTAIN_OF",
    "object": "XXX健身武鬥會",
    "paragraph": "20",
-   "source": "manual"
+   "source": "llm"
   },
   {
    "subject": "雷歐",
    "relation": "CAPTAIN_OF",
    "object": "頓塔塔海賊團",
    "paragraph": "20",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "雷歐",
    "relation": "OWNS",
    "object": "縫縫果實",
    "paragraph": "20",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "歐倫波斯",
    "relation": "CAPTAIN_OF",
    "object": "約塔瑪麗亞大船團",
    "paragraph": "20",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "海爾丁",
@@ -2115,7 +2115,7 @@
    "relation": "MEMBER_OF",
    "object": "白鬍子海賊團",
    "paragraph": "32",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "光月御田",
@@ -2136,14 +2136,14 @@
    "relation": "CAPTAIN_OF",
    "object": "百獸海賊團",
    "paragraph": "32",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "凱多",
    "relation": "OWNS",
    "object": "魚魚果實．幻獸種．模型「青龍」",
    "paragraph": "32",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "大和",
@@ -2164,21 +2164,21 @@
    "relation": "OWNS",
    "object": "人人果實．幻獸種．模型「尼卡」",
    "paragraph": "32",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "魯夫",
    "relation": "DEFEATED",
    "object": "凱多",
    "paragraph": "32",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "光月時",
    "relation": "OWNS",
    "object": "時時果實",
    "paragraph": "32",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "香吉士",
@@ -2192,7 +2192,7 @@
    "relation": "OWNS",
    "object": "犬犬果實．幻獸種．模型「大口真神」",
    "paragraph": "32",
-   "source": "llm"
+   "source": "manual"
   },
   {
    "subject": "波妮",
